@@ -1,0 +1,45 @@
+@import url("https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=Noto+Sans+TC:wght@100;300;400;500;700;900&family=Noto+Serif+TC:wght@200;300;400;500;600;700;900&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply font-sans scrollbar-thin scrollbar-thumb-primary
+  }
+}
+@layer components {
+  .imgList {
+    @apply cursor-pointer
+  }
+  .imgList:hover img {
+    @apply scale-110 
+  }
+  .imgList:hover p {
+    @apply bg-slate-900/70 opacity-100
+  }
+}
+
+@layer utilities {
+  .flex-center {
+    @apply flex justify-center items-center
+  }
+  .flex-end {
+    @apply flex justify-center items-end
+  }
+  .before-position-init {
+    @apply before:absolute before:left-0 before:right-0 before:top-0 before:bottom-0
+  }
+  .after-position-init {
+    @apply after:absolute after:left-0 after:right-0 after:top-0 after:bottom-0
+  }
+  
+  .flex-col-center {
+    @apply flex flex-col justify-center items-center
+  }
+}
+
+/* @layer components {
+  
+} */
