@@ -6,8 +6,8 @@ export default defineConfig({
   plugins: [
     react(),
   ],
-  base: "./"
+  // base: "./"
 
-  //for github pages
-  // base: '/RocketTeam-10th/'
+  // for github pages
+  base: '/RocketTeam-10th/'
 });
