@@ -1,4 +1,11 @@
+import { Outlet } from "react-router-dom";
+
 function Nav(): JSX.Element {
-  return <h1>TEST</h1>;
+  return (
+    <>
+      <nav className="bg-black text-white">NAV</nav>
+      <Outlet />
+    </>
+  );
 }
 export default Nav;
