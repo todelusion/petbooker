@@ -13,7 +13,9 @@ module.exports = {
         second: "#6E7D00",
         accent: "#B9C850",
         neutral: "#F5F5F5",
-      },
+      },     spacing: {
+        '160': '640px',
+      }
     },
     fontFamily: {
       sans: ["Noto Sans TC", "Roboto"],
