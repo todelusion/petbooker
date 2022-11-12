@@ -6,7 +6,7 @@
 
 @layer base {
   body {
-    @apply font-sans scrollbar-thin scrollbar-thumb-second select-none
+    @apply font-sans scrollbar-thin scrollbar-thumb-second
   }
 }
 @layer components {}
@@ -29,4 +29,13 @@
   .flex-col-center {
     @apply flex flex-col justify-center items-center
   }
+}
+:root {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
