@@ -6,20 +6,11 @@
 
 @layer base {
   body {
-    @apply font-sans scrollbar-thin scrollbar-thumb-primary
+    @apply font-sans scrollbar-thin scrollbar-thumb-second select-none
   }
 }
-@layer components {
-  .imgList {
-    @apply cursor-pointer
-  }
-  .imgList:hover img {
-    @apply scale-110 
-  }
-  .imgList:hover p {
-    @apply bg-slate-900/70 opacity-100
-  }
-}
+@layer components {}
+
 
 @layer utilities {
   .flex-center {
