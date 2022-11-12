@@ -8,7 +8,7 @@ function Nav(): JSX.Element {
 
   return (
     <>
-      <nav className="absolute top-0 flex w-full items-center justify-between border-b-2 border-gray-200 bg-white py-6 px-20">
+      <nav className="absolute top-0 z-10 flex w-full items-center justify-between border-b-2 border-gray-200 bg-white py-6 px-20">
         <img src={logoSubtitlePath} alt="logo" width="291" />
         {token === undefined ? (
           <div className="flex-center">
