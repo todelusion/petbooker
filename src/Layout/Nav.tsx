@@ -4,7 +4,7 @@ import Button from "../components/Button";
 import AccountMenu from "../components/AccountMenu";
 
 function Nav(): JSX.Element {
-  const token = "fake token";
+  const token = undefined;
 
   return (
     <>

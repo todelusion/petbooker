@@ -1,9 +1,29 @@
 import { AnimatePresence, motion } from "framer-motion";
 import React, { useEffect, useRef, useState } from "react";
-import { memberMenu, accountMenuPath } from "../img/icons/icons";
+import {
+  memberMenu,
+  hotelMemberMenu,
+  accountMenuPath,
+} from "../img/icons/icons";
+
+type Member = "member" | "hotel";
 
 function AccountMenu(): JSX.Element {
   const [toggleAccountMenu, toggleAccountMenuSet] = useState(true);
+  let member: Member;
+  // eslint-disable-next-line prefer-const
+  member = "member";
+
+  const renderMenu = (): typeof memberMenu => {
+    switch (member) {
+      case "member":
+        return memberMenu;
+      case "hotel":
+        return hotelMemberMenu;
+      default:
+        return memberMenu;
+    }
+  };
 
   useEffect(() => {
     const handleClick = (): void => {
@@ -34,7 +54,7 @@ function AccountMenu(): JSX.Element {
             transition={{ duration: 0.3, ease: [0.65, 0.05, 0.36, 1] }}
             className="absolute right-0 w-44 origin-top-right rounded-md border-2 border-black bg-white px-4 py-2"
           >
-            {memberMenu.map((item) => (
+            {renderMenu().map((item) => (
               <li key={item.content} className="py-2">
                 <button type="button" className="flex items-center">
                   <img src={item.logo} alt="userInfo" />

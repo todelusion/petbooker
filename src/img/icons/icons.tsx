@@ -39,6 +39,24 @@ export const memberMenu = [
   },
 ];
 
+export const hotelMemberMenu = [
+  {
+    logo: userPath,
+    content: "帳戶資訊",
+    navigate: null,
+  },
+  {
+    logo: fileTextPath,
+    content: "我的房間管理",
+    navigate: null,
+  },
+  {
+    logo: logOutPath,
+    content: "登出",
+    navigate: null,
+  },
+];
+
 export {
   heartPath,
   logOutPath,
