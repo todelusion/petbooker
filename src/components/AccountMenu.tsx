@@ -15,6 +15,7 @@ function AccountMenu(): JSX.Element {
   member = "member";
 
   const renderMenu = (): typeof memberMenu => {
+    // 根據會員身分來顯示可用的功能列表
     switch (member) {
       case "member":
         return memberMenu;

@@ -5,37 +5,38 @@ import userPath from "./User.svg";
 import fileTextPath from "./File-text.svg";
 import creditCardPath from "./Credit-card.svg";
 import accountMenuPath from "./Account-Menu.svg";
+import PetsPath from "./Pets.svg";
 
 export const memberMenu = [
   {
     logo: userPath,
     content: "帳戶資訊",
-    navigate: null,
+    navigatePath: null,
   },
   {
     logo: creditCardPath,
     content: "我的寵物名片",
-    navigate: null,
+    navigatePath: null,
   },
   {
     logo: fileTextPath,
     content: "查看我的訂單",
-    navigate: null,
+    navigatePath: null,
   },
   {
     logo: heartPath,
     content: "收藏店家",
-    navigate: null,
+    navigatePath: null,
   },
   {
     logo: messageSquarePath,
     content: "安心評價",
-    navigate: null,
+    navigatePath: null,
   },
   {
     logo: logOutPath,
     content: "登出",
-    navigate: null,
+    navigatePath: null,
   },
 ];
 
@@ -43,17 +44,17 @@ export const hotelMemberMenu = [
   {
     logo: userPath,
     content: "帳戶資訊",
-    navigate: null,
+    navigatePath: null,
   },
   {
     logo: fileTextPath,
     content: "我的房間管理",
-    navigate: null,
+    navigatePath: null,
   },
   {
     logo: logOutPath,
     content: "登出",
-    navigate: null,
+    navigatePath: null,
   },
 ];
 
@@ -65,4 +66,5 @@ export {
   fileTextPath,
   creditCardPath,
   accountMenuPath,
+  PetsPath,
 };

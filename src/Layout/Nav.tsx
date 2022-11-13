@@ -2,8 +2,10 @@ import { Outlet } from "react-router-dom";
 import logoSubtitlePath from "../img/logo-subtitle.svg";
 import Button from "../components/Button";
 import AccountMenu from "../components/AccountMenu";
+import Footer from "./Footer";
 
 function Nav(): JSX.Element {
+  // 根據有無 token 來顯示會員選單與否
   const token = undefined;
 
   return (
@@ -12,14 +14,20 @@ function Nav(): JSX.Element {
         <img src={logoSubtitlePath} alt="logo" width="291" />
         {token === undefined ? (
           <div className="flex-center">
-            <Button type="Primary" text="登入" />
-            <Button type="Secondary" text="註冊" className="ml-4" />
+            <Button type="Primary" text="登入" navigatePath="/login" />
+            <Button
+              type="Secondary"
+              text="註冊"
+              className="ml-4"
+              navigatePath="/regist"
+            />
           </div>
         ) : (
           <AccountMenu />
         )}
       </nav>
       <Outlet />
+      <Footer />
     </>
   );
 }
