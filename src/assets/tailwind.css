@@ -6,7 +6,7 @@
 
 @layer base {
   body {
-    @apply font-sans scrollbar-thin scrollbar-thumb-second
+    @apply font-sans scrollbar-thin scrollbar-thumb-accent
   }
 }
 @layer components {}
