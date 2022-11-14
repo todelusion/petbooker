@@ -6,20 +6,11 @@
 
 @layer base {
   body {
-    @apply font-sans scrollbar-thin scrollbar-thumb-primary
+    @apply font-sans scrollbar-thin scrollbar-thumb-accent
   }
 }
-@layer components {
-  .imgList {
-    @apply cursor-pointer
-  }
-  .imgList:hover img {
-    @apply scale-110 
-  }
-  .imgList:hover p {
-    @apply bg-slate-900/70 opacity-100
-  }
-}
+@layer components {}
+
 
 @layer utilities {
   .flex-center {
@@ -39,7 +30,12 @@
     @apply flex flex-col justify-center items-center
   }
 }
-
-/* @layer components {
-  
-} */
+:root {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}

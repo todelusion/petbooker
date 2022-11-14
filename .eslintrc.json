@@ -14,7 +14,7 @@
   "parserOptions": {
     "ecmaVersion": "latest",
     "sourceType": "module",
-    "project": "/workspaces/petbooker/tsconfig.json"
+    "project": "./tsconfig.json"
   },
   "plugins": [
     "react",

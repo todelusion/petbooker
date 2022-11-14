@@ -5,10 +5,18 @@ module.exports = {
       screens: {
         xs: "384px",
       },
+      fontSize: {
+        "5.5xl": "3.5rem",
+      },
       colors: {
-        primary: "#3F20FF",
-        second: "#F5F5F5",
-        third: "#F498D1",
+        primary: "#FFB423",
+        primary_A11y: "#332200",
+        second: "#6E7D00",
+        accent: "#B9C850",
+        neutral: "#F5F5F5",
+      },
+      spacing: {
+        160: "640px",
       },
     },
     fontFamily: {
