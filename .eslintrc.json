@@ -18,9 +18,9 @@
   },
   "plugins": [
     "react",
-    "react-hooks",
-    "prettier"
-  ],
+     "react-hooks",
+      "prettier"
+    ],
   "rules": {
     "linebreak-style": "off",
     "react/react-in-jsx-scope": "off",
