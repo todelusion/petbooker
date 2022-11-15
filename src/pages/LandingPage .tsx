@@ -1,4 +1,5 @@
 // import { Outlet } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import PetsImg from "../img/Pets.png";
 import Benner from "../img/Benner.png";
 import PetCardImg from "../img/PetCardImg.png";
@@ -10,6 +11,7 @@ import Divider1 from "../img/Divider1.svg";
 import Divider2 from "../img/Divider2.svg";
 
 function LandingPage(): JSX.Element {
+  const navigate = useNavigate();
   const loadingPageInfo = [
     {
       title: "依寵物需求，打造篩選條件",
@@ -59,6 +61,7 @@ function LandingPage(): JSX.Element {
           <button
             type="button"
             className="ml-8 w-40 rounded-3xl bg-second px-2  py-1.5"
+            onClick={() => navigate("/home")}
           >
             <img src={PetsImg} alt="PetImg" className="y-6 inline-block w-6" />
             <h3 className="ml-4 inline-block text-white ">立即註冊試用</h3>
@@ -97,6 +100,7 @@ function LandingPage(): JSX.Element {
           <button
             type="button"
             className="ml-8 w-40 rounded-3xl bg-second px-2  py-1.5"
+            onClick={() => navigate("/home")}
           >
             <img src={PetsImg} alt="PetImg" className="y-6 inline-block  w-6" />
             <h3 className="ml-1 inline-block text-white ">立即註冊試用</h3>

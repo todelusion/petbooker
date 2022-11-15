@@ -14,6 +14,7 @@ export default function UserLogin(): JSX.Element {
           type="email"
           name="email"
           id="email"
+          autoComplete="on"
           placeholder="請輸入正確的信箱格式"
           className="h-10 rounded  border border-solid border-black p-2"
         />
@@ -22,6 +23,7 @@ export default function UserLogin(): JSX.Element {
           type="password"
           name="password"
           id="password"
+          autoComplete="on"
           placeholder="請輸入密碼"
           className="h-10 rounded  border border-solid border-black p-2"
         />
