@@ -2,9 +2,7 @@ import React from "react";
 import logoWhitePath from "../img/logo-white.svg";
 import { PetsPath } from "../img/icons/icons";
 
-interface Props {}
-
-function Footer({}: Props): JSX.Element {
+function Footer(): JSX.Element {
   return (
     <footer className="flex-col-center relative h-80 bg-primary_A11y text-white">
       <div className="flex w-1/2 items-center">
