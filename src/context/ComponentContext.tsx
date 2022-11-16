@@ -28,10 +28,9 @@ const componentReducer = (
   }
 };
 
-export const ComponentContext = createContext<IComponentContextProps>({
-  ...initCompoentState,
-  dispatch: () => {},
-});
+export const ComponentContext = createContext<IComponentContextProps | null>(
+  null
+);
 
 export function ComponentProvider({
   children,

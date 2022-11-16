@@ -7,8 +7,8 @@ import {
 const useComponent = (): IComponentContextProps => {
   const context = useContext(ComponentContext);
 
-  if (context === undefined) {
-    throw new Error("usePost() muse be used inside a BlogContext");
+  if (context === null) {
+    throw new Error("useComponent() muse be used inside a BlogContext");
   }
   return context;
 };
