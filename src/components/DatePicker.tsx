@@ -98,6 +98,7 @@ function DatePicker(): JSX.Element {
       monthDisplayFormat="yyyy / M"
       locale={locales.zhTW}
       direction="horizontal"
+      rangeColors={["#B9C850", "#B9C850"]}
     />
   );
 }

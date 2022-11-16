@@ -1,3 +1,15 @@
 .rdrDateRangePickerWrapper > .rdrCalendarWrapper {
   font-size: 0.875rem
 }
+button > .rdrEndEdge {
+  color: rgb(148, 156, 124) !important;
+}
+button > .rdrInRange {
+  color: #d7dace !important;
+}
+.rdrDayDisabled > .rdrDayNumber > span {
+  text-decoration-line: line-through;
+}
+.rdrDayToday > .rdrDayNumber > span:after {
+  background: rgb(56, 71, 11);
+}
