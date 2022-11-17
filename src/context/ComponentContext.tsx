@@ -1,15 +1,19 @@
-import React, { createContext, useReducer, useState } from "react";
+import React, { createContext, useMemo, useReducer } from "react";
 import type { IDateRangePickerOutput } from "../components/DatePicker";
 
 interface IComponentProviderProps {
   children: JSX.Element;
 }
-interface ComponentAction {
-  type: "PICK_DATERANGE";
-  payload: IDateRangePickerOutput;
-}
-export interface IComponentContextProps {
-  // color: string;
+type ComponentAction =
+  | {
+      type: "PICK_DATERANGE";
+      payload: IDateRangePickerOutput;
+    }
+  | {
+      type: "the other";
+      payload: string;
+    };
+export interface IComponentContextProps extends IDateRangePickerOutput {
   dispatch: React.Dispatch<ComponentAction>;
 }
 
@@ -41,10 +45,12 @@ export function ComponentProvider({
   children,
 }: IComponentProviderProps): JSX.Element {
   const [state, dispatch] = useReducer(componentReducer, initCompoentState);
+  // console.log(state);
+
+  const value = useMemo(() => ({ ...state, dispatch }), [state]);
 
   return (
-    // eslint-disable-next-line react/jsx-no-constructed-context-values
-    <ComponentContext.Provider value={{ ...state, dispatch }}>
+    <ComponentContext.Provider value={value}>
       {children}
     </ComponentContext.Provider>
   );
