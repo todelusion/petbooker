@@ -1,5 +1,5 @@
-import { addDays, addMonths, format, subMonths } from "date-fns";
-import React, { useCallback, useEffect, useState } from "react";
+import { addMonths, format, subMonths } from "date-fns";
+import React, { useEffect } from "react";
 import * as locales from "react-date-range/dist/locale";
 import { DateRangePicker, CalendarProps } from "react-date-range";
 import "react-date-range/dist/styles.css"; // main style file
@@ -10,6 +10,7 @@ import {
   faChevronLeft,
   faChevronRight,
 } from "@fortawesome/free-solid-svg-icons";
+import useComponent from "../hooks/useComponent";
 
 export interface IDateRangePickerOutput {
   selection: {
@@ -29,17 +30,9 @@ type NavigatorRenderer = (
 ) => JSX.Element;
 
 function DatePicker(): JSX.Element {
-  const [dateRange, dateRangeSet] = useState([
-    {
-      startDate: new Date(),
-      endDate: addDays(new Date(), 7),
-      key: "selection",
-    },
-  ]);
-
+  const { dispatch, selection } = useComponent();
   const onDateChange = (item: IDateRangePickerOutput): void => {
-    console.log(item.selection);
-    dateRangeSet([item.selection]);
+    dispatch({ type: "PICK_DATERANGE", payload: item });
   };
 
   const onNavigatorRenderer: NavigatorRenderer = (
@@ -94,7 +87,21 @@ function DatePicker(): JSX.Element {
       navigatorRenderer={onNavigatorRenderer}
       moveRangeOnFirstSelection={false}
       months={2}
-      ranges={dateRange}
+      /* 
+      問題： React偵測到狀態改變而重新渲染套件，
+      導致 上一次與下一次的selection 記憶體位置不同，而變undefined
+
+      解決方案：
+        1. ranges這邊不建議直接用 [selection] 帶入
+        2. 將 selection物件值帶入新的物件即可，如下
+      */
+      ranges={[
+        {
+          startDate: selection.startDate,
+          endDate: selection.endDate,
+          key: "selection",
+        },
+      ]}
       monthDisplayFormat="yyyy / M"
       locale={locales.zhTW}
       direction="horizontal"
