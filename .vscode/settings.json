@@ -17,6 +17,11 @@
   "eslint.options": {
     "overrideConfigFile": ".eslintrc.json"
   },
+"editor.quickSuggestions": {
+    "strings": true
+},
+"css.validate": false,
+"editor.inlineSuggest.enabled": true,
   "editor.tabSize": 2,
   "javascript.preferences.quoteStyle": "double",
   "prettier.configPath": ".prettierrc"

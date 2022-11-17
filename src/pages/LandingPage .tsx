@@ -38,7 +38,7 @@ function LandingPage(): JSX.Element {
             {index + 1}
           </p>
 
-          <h2 className="mt-9 text-2xl">{loadingPageInfo[index].title}</h2>
+          <h2 className="mt-1 text-2xl">{loadingPageInfo[index].title}</h2>
           <h3 className="text-base">{loadingPageInfo[index].text}</h3>
         </div>
         <img src={loadingPageInfo[index].img} alt="infoimg" className="mt-16" />
@@ -48,7 +48,7 @@ function LandingPage(): JSX.Element {
 
   return (
     <div className="flex flex-col">
-      <header className="relative h-160 w-full ">
+      <header className="relative h-160 w-full">
         <img
           src={Benner}
           alt="BennerImg"
@@ -69,7 +69,7 @@ function LandingPage(): JSX.Element {
         </div>
       </header>
 
-      <main className="flex flex-col items-center ">
+      <main className="flex  flex-col items-center px-28 ">
         <section className="mt-28">
           <img src={TitleImg} alt="Titleimg" />
         </section>
