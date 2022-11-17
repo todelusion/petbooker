@@ -11,7 +11,7 @@ import {
   faChevronRight,
 } from "@fortawesome/free-solid-svg-icons";
 
-interface IDateRangePickerOutput {
+export interface IDateRangePickerOutput {
   selection: {
     startDate: Date;
     endDate: Date;
