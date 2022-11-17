@@ -1,9 +1,9 @@
 .rdrDateRangePickerWrapper > .rdrCalendarWrapper {
   font-size: 0.875rem
 }
-button > .rdrEndEdge {
+/* button > .rdrEndEdge {
   color: rgb(148, 156, 124) !important;
-}
+} */
 button > .rdrInRange {
   color: #d7dace !important;
 }

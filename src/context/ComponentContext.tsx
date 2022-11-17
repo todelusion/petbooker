@@ -1,28 +1,33 @@
 import React, { createContext, useReducer, useState } from "react";
+import type { IDateRangePickerOutput } from "../components/DatePicker";
 
 interface IComponentProviderProps {
   children: JSX.Element;
 }
-interface IComponentAction {
-  type: "CHANGE_COLOR";
-  payload: string;
+interface ComponentAction {
+  type: "PICK_DATERANGE";
+  payload: IDateRangePickerOutput;
 }
 export interface IComponentContextProps {
-  color: string;
-  dispatch: React.Dispatch<IComponentAction>;
+  // color: string;
+  dispatch: React.Dispatch<ComponentAction>;
 }
 
 const initCompoentState = {
-  color: "blue",
+  selection: {
+    startDate: new Date(),
+    endDate: new Date(),
+    key: "",
+  },
 };
 
 const componentReducer = (
   state: typeof initCompoentState,
-  action: IComponentAction
+  action: ComponentAction
 ): typeof initCompoentState => {
   switch (action.type) {
-    case "CHANGE_COLOR":
-      return { ...state, color: action.payload };
+    case "PICK_DATERANGE":
+      return { ...state, selection: action.payload.selection };
     default:
       return state;
   }
