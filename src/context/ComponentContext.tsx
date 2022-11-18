@@ -4,6 +4,11 @@ import type { IDateRangePickerOutput } from "../components/DatePicker";
 interface IComponentProviderProps {
   children: JSX.Element;
 }
+
+export interface IComponentContextProps extends IDateRangePickerOutput {
+  dispatch: React.Dispatch<ComponentAction>;
+}
+
 type ComponentAction =
   | {
       type: "PICK_DATERANGE";
@@ -13,9 +18,6 @@ type ComponentAction =
       type: "the other";
       payload: string;
     };
-export interface IComponentContextProps extends IDateRangePickerOutput {
-  dispatch: React.Dispatch<ComponentAction>;
-}
 
 const initCompoentState = {
   selection: {

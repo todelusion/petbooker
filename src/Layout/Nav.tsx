@@ -16,11 +16,16 @@ function Nav(): JSX.Element {
         </Link>
         {token === undefined ? (
           <div className="flex-center">
-            <Button type="Primary" text="登入" navigatePath="/login" />
+            <Button
+              type="Primary"
+              text="登入"
+              navigatePath="/login"
+              className="px-4 py-2"
+            />
             <Button
               type="Secondary"
               text="註冊"
-              className="ml-4"
+              className="ml-4 px-4 py-2"
               navigatePath="/regist"
             />
           </div>

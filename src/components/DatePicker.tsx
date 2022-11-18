@@ -106,6 +106,7 @@ function DatePicker(): JSX.Element {
       locale={locales.zhTW}
       direction="horizontal"
       rangeColors={["#B9C850"]}
+      className="rounded-sm border-2 border-black bg-white py-4"
     />
   );
 }

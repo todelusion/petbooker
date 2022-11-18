@@ -6,6 +6,9 @@ import fileTextPath from "./File-text.svg";
 import creditCardPath from "./Credit-card.svg";
 import accountMenuPath from "./Account-Menu.svg";
 import PetsPath from "./Pets.svg";
+import searchPath from "./Search.svg";
+import mapPinPath from "./Map-pin.svg";
+import calendarPath from "./Calendar.svg";
 
 export const memberMenu = [
   {
@@ -67,4 +70,7 @@ export {
   creditCardPath,
   accountMenuPath,
   PetsPath,
+  searchPath,
+  mapPinPath,
+  calendarPath,
 };
