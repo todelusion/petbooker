@@ -12,10 +12,10 @@ function Nav(): JSX.Element {
     <>
       <nav className="absolute top-0 z-10 flex w-full items-center justify-between border-b-2 border-gray-200 bg-white py-6 px-20">
         <Link to="/">
-          <img src={logoSubtitlePath} alt="logo" width="291" />
+          <img src={logoSubtitlePath} alt="logo" className=" w-60" />
         </Link>
         {token === undefined ? (
-          <div className="flex-center">
+          <div className="flex-center pt-5">
             <Button
               type="Primary"
               text="登入"
@@ -30,7 +30,9 @@ function Nav(): JSX.Element {
             />
           </div>
         ) : (
-          <AccountMenu />
+          <div className="pt-5">
+            <AccountMenu />
+          </div>
         )}
       </nav>
       <Outlet />

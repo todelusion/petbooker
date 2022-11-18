@@ -34,8 +34,10 @@ function AccountMenu(): JSX.Element {
   }, []);
 
   return (
-    // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
     <div
+      role="button"
+      tabIndex={0}
+      onKeyUp={(e) => e.stopPropagation()}
       className="relative"
       onClick={(e: React.MouseEvent<HTMLElement>) => e.stopPropagation()}
     >

@@ -1,4 +1,4 @@
-import React, { useReducer } from "react";
+import React, { useEffect, useReducer } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronUp, faChevronDown } from "@fortawesome/free-solid-svg-icons";
 import { AnimatePresence, motion } from "framer-motion";
@@ -53,8 +53,26 @@ function SearchBar(): JSX.Element {
     initSearchBarState
   );
 
+  useEffect(() => {
+    const handleClose = (): void => {
+      document.addEventListener("click", () => {
+        dispatch({ type: "TOGGLE_LOCATION", payload: false });
+        dispatch({ type: "TOGGLE_CALENDAR", payload: false });
+        dispatch({ type: "TOGGLE_PETCARD", payload: false });
+      });
+    };
+
+    return handleClose;
+  }, []);
+
   return (
-    <div className="relative">
+    <div
+      role="button"
+      tabIndex={0}
+      onKeyUp={(e) => e.stopPropagation()}
+      onClick={(e) => e.stopPropagation()}
+      className="relative"
+    >
       <div className="flex-center mb-2 rounded-full border-4 border-primary px-4">
         <button type="button" className="flex-center">
           <img src={mapPinPath} alt="map" />
@@ -67,14 +85,14 @@ function SearchBar(): JSX.Element {
         />
         <button
           type="button"
-          className="flex-center"
+          className="flex-center outline-none"
           onClick={() =>
             dispatch({ type: "TOGGLE_CALENDAR", payload: !showCalendar })
           }
         >
           <img src={calendarPath} alt="calendar" />
           <span className="px-3">選擇入住－退房日期</span>
-          <FontAwesomeIcon icon={faChevronDown} />
+          <FontAwesomeIcon icon={showCalendar ? faChevronUp : faChevronDown} />
         </button>
         <hr
           style={{ borderStyle: "solid" }}
