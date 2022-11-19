@@ -15,6 +15,9 @@ module.exports = {
         accent: "#B9C850",
         neutral: "#F5F5F5",
       },
+      padding: {
+        3.5: "0.875rem",
+      },
       spacing: {
         160: "640px",
       },
@@ -25,5 +28,5 @@ module.exports = {
       dela: ["Dela Gothic One"],
     },
   },
-  plugins: [require("tailwind-scrollbar")],
+  plugins: [require("tailwind-scrollbar")({ nocompatible: true })],
 };

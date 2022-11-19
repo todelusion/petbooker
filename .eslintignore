@@ -4,3 +4,4 @@
 /postcss.config.cjs
 /vite.config.ts
 /tailwind.config.cjs
+/src/utils/xml2json.js

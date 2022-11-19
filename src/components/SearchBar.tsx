@@ -2,6 +2,7 @@ import React, { useEffect, useReducer } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronUp, faChevronDown } from "@fortawesome/free-solid-svg-icons";
 import { AnimatePresence, motion } from "framer-motion";
+
 import {
   searchPath,
   mapPinPath,
@@ -10,6 +11,7 @@ import {
 } from "../img/icons/icons";
 import Button from "./Button";
 import DatePicker from "./DatePicker";
+import CountryList from "./CountryList";
 
 type SearchBarAction =
   | {
@@ -117,6 +119,7 @@ function SearchBar(): JSX.Element {
               initial={{ opacity: 0, scale: 0.5 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.5 }}
+              key="DatePicker"
               transition={{ duration: 0.3, ease: [0.65, 0.05, 0.36, 1] }}
               className="origin-top"
             >
@@ -125,6 +128,7 @@ function SearchBar(): JSX.Element {
           )}
         </AnimatePresence>
       </div>
+      <CountryList key="CountryList" />
     </div>
   );
 }
