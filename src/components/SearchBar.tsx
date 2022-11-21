@@ -3,6 +3,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronUp, faChevronDown } from "@fortawesome/free-solid-svg-icons";
 import { AnimatePresence, motion } from "framer-motion";
 
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
 import {
   searchPath,
   mapPinPath,
@@ -13,6 +15,8 @@ import Button from "./Button";
 import DatePicker from "./DatePicker";
 import CountryList from "./CountryList";
 import PetCard from "./PetCard";
+import { xml2json, parseXml } from "../utils/xml2json";
+import { countySchema } from "../types/schema";
 
 type SearchBarAction =
   | {
@@ -71,11 +75,23 @@ const searchBarReducer = (
   }
 };
 
-function SearchBar(): JSX.Element {
+function SearchBar({ className }: { className?: string }): JSX.Element {
   const [{ showLocation, showCalendar, showPetCard }, dispatch] = useReducer(
     searchBarReducer,
     initSearchBarState
   );
+
+  const { data: countryData } = useQuery(["country"], async () =>
+    axios
+      .get("https://api.nlsc.gov.tw/other/ListCounty")
+      .then((res) => xml2json(parseXml(res.data), " "))
+      .catch((err) => err)
+  );
+
+  let countryList;
+  if (countryData !== undefined) {
+    countryList = countySchema.parse(JSON.parse(countryData));
+  }
 
   useEffect(() => {
     const handleClose = (): void => {
@@ -93,7 +109,7 @@ function SearchBar(): JSX.Element {
       tabIndex={0}
       onKeyUp={(e) => e.stopPropagation()}
       onClick={(e) => e.stopPropagation()}
-      className="relative cursor-default"
+      className={`relative cursor-default ${className as string}`}
     >
       <div className="flex-center mb-2 rounded-full border-4 border-primary px-4">
         <button
@@ -171,7 +187,9 @@ function SearchBar(): JSX.Element {
               transition={{ duration: 0.3, ease: [0.65, 0.05, 0.36, 1] }}
               className="origin-top"
             >
-              <CountryList key="CountryList" />
+              {countryList !== undefined && (
+                <CountryList countryList={countryList} key="CountryList" />
+              )}
             </motion.div>
           )}
         </AnimatePresence>
@@ -195,5 +213,9 @@ function SearchBar(): JSX.Element {
     </div>
   );
 }
+
+SearchBar.defaultProps = {
+  className: "",
+};
 
 export default SearchBar;

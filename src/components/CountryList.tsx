@@ -1,21 +1,11 @@
-import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
-import { xml2json, parseXml } from "../utils/xml2json";
-import { countySchema } from "../types/schema";
+import { CountyList } from "../types/schema";
 
-function CountryList(): JSX.Element {
-  const { data: countryData } = useQuery(["country"], async () =>
-    axios
-      .get("https://api.nlsc.gov.tw/other/ListCounty")
-      .then((res) => xml2json(parseXml(res.data), " "))
-      .catch((err) => err)
-  );
+interface ICountryListProps {
+  countryList: CountyList;
+}
 
-  if (countryData === undefined) return <h1>loading</h1>;
-
-  const { countyItems } = countySchema.parse(JSON.parse(countryData));
-  console.log(countyItems);
-
+function CountryList({ countryList }: ICountryListProps): JSX.Element {
+  const { countyItems } = countryList;
   return (
     <select
       size={5}

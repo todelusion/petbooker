@@ -1,6 +1,5 @@
 import { z } from "zod";
 
-// eslint-disable-next-line import/prefer-default-export
 export const countySchema = z.object({
   countyItems: z.object({
     countyItem: z.array(
@@ -12,3 +11,5 @@ export const countySchema = z.object({
     ),
   }),
 });
+
+export type CountyList = z.infer<typeof countySchema>;
