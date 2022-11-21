@@ -1,6 +1,7 @@
 import { addMonths, format, subMonths } from "date-fns";
 import React, { useEffect } from "react";
-import * as locales from "react-date-range/dist/locale";
+// import * as locales from "react-date-range/dist/locale";
+import { zhTW } from "date-fns/locale";
 import { DateRangePicker, CalendarProps } from "react-date-range";
 import "react-date-range/dist/styles.css"; // main style file
 import "react-date-range/dist/theme/default.css"; // theme css file
@@ -103,7 +104,7 @@ function DatePicker(): JSX.Element {
         },
       ]}
       monthDisplayFormat="yyyy / M"
-      locale={locales.zhTW}
+      locale={zhTW}
       direction="horizontal"
       rangeColors={["#B9C850"]}
       className="rounded-sm border-2 border-black bg-white py-4"

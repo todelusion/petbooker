@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faCheck } from "@fortawesome/free-solid-svg-icons";
+import useSearchBar from "../hooks/useComponent";
+import type { SearchBarAction } from "./SearchBar";
 
-interface IPet {
-  name: string;
-  photo?: string;
+interface IPetCardProps {
+  dispatchSearchBar: React.Dispatch<SearchBarAction>;
 }
 
 const petList = [
@@ -22,8 +23,8 @@ const petList = [
   },
 ];
 
-function PetCard(): JSX.Element {
-  const [selectedPet, selectedPetSet] = useState("");
+function PetCard({ dispatchSearchBar }: IPetCardProps): JSX.Element {
+  const { pet: selectedPet, dispatch } = useSearchBar();
 
   return (
     <div className="w-60 rounded-md border-2 border-black bg-white">
@@ -40,10 +41,13 @@ function PetCard(): JSX.Element {
         {petList.map((pet) => (
           <li
             key={pet.name}
-            className="relative flex items-center justify-between py-2 px-4"
+            className="relative flex items-center justify-between py-2 px-4 hover:bg-gray-300"
           >
             <button
-              onClick={() => selectedPetSet(pet.name)}
+              onClick={() => {
+                dispatch({ type: "PICK_PET", payload: pet.name });
+                dispatchSearchBar({ type: "TOGGLE_PETCARD", payload: false });
+              }}
               type="button"
               className="flex w-full items-center"
             >

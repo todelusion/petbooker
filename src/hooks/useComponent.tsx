@@ -1,16 +1,16 @@
 import React, { useContext } from "react";
 import {
-  ComponentContext,
-  IComponentContextProps,
-} from "../context/ComponentContext";
+  SearchBarContext,
+  ISearchBarContextProps,
+} from "../context/SearchBarContext";
 
-const useComponent = (): IComponentContextProps => {
-  const context = useContext(ComponentContext);
+const useSearchBar = (): ISearchBarContextProps => {
+  const context = useContext(SearchBarContext);
 
   if (context === null) {
-    throw new Error("useComponent() muse be used inside a BlogContext");
+    throw new Error("useSearchBar() muse be used inside a BlogContext");
   }
   return context;
 };
 
-export default useComponent;
+export default useSearchBar;

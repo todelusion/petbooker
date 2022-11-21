@@ -1,6 +1,6 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Routes, Route } from "react-router-dom";
-import { ComponentProvider } from "./context/ComponentContext";
+import { SearchBarProvider } from "./context/SearchBarContext";
 import Nav from "./Layout/Nav";
 import ContextTest from "./pages/ContextTest";
 import Home from "./pages/Home";
@@ -20,17 +20,17 @@ export default function Router(): JSX.Element {
           <Route
             path="/home"
             element={
-              <ComponentProvider>
+              <SearchBarProvider>
                 <Home />
-              </ComponentProvider>
+              </SearchBarProvider>
             }
           />
           <Route
             path="/contextTest"
             element={
-              <ComponentProvider>
+              <SearchBarProvider>
                 <ContextTest />
-              </ComponentProvider>
+              </SearchBarProvider>
             }
           />
           <Route path="/login" element={<UserLogin />} />;
