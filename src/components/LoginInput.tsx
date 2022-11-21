@@ -6,16 +6,17 @@ interface Props {
   name: string;
   id: string;
   inputPlaceHolder: string | undefined;
-  setInputValue: React.Dispatch<React.SetStateAction<{}>>;
+  inputValueHandler: (e: React.FormEvent) => void;
 }
 
 function Input(props: Props): JSX.Element {
-  const { inputType, name, id, inputPlaceHolder, title, setInputValue } = props;
+  const { inputType, name, id, inputPlaceHolder, title, inputValueHandler } =
+    props;
   return (
     <label className="mb-2 mt-4 flex flex-col text-base " htmlFor={id}>
       {title}
       <input
-        onChange={setInputValue}
+        onChange={inputValueHandler}
         type={inputType}
         name={name}
         id={id}

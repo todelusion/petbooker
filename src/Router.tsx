@@ -6,6 +6,7 @@ import ContextTest from "./pages/ContextTest";
 import Home from "./pages/Home";
 import LandingPage from "./pages/LandingPage ";
 import UserLogin from "./pages/UserLogin";
+import UserRegist from "./pages/UserRegist";
 
 export default function Router(): JSX.Element {
   const client = new QueryClient();
@@ -31,6 +32,7 @@ export default function Router(): JSX.Element {
             }
           />
           <Route path="/login" element={<UserLogin />} />;
+          <Route path="/regist" element={<UserRegist />} />;
         </Route>
       </Routes>
     </QueryClientProvider>
