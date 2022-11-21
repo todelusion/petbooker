@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 // import { string } from "zod"
 import LoginInput from "../components/LoginInput";
 
-export default function UserRegist(): JSX.Element {
+export default function UserModifyPassword(): JSX.Element {
   const [inputValue, setInputValue] = useState({});
   const inputValueHandler = (event: React.FormEvent): void => {
     const { name, value } = event.target as HTMLInputElement;

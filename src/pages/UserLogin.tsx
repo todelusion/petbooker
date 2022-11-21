@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 // import { string } from "zod"
+import { Link } from "react-router-dom";
+
 import LoginInput from "../components/LoginInput";
 
 export default function UserLogin(): JSX.Element {
@@ -41,13 +43,18 @@ export default function UserLogin(): JSX.Element {
           登入
         </button>
         <span className="mt-3 flex justify-between">
+          
           <span>
             還沒有帳號？{" "}
             <a href="#1234" className="underline">
               註冊
             </a>
           </span>
-          <span>忘記密碼？</span>
+          <span>
+            <Link to="/forgetPassword" className="underline">
+              忘記密碼
+            </Link>
+          </span>
         </span>
         <div className=" relative text-center">
           <div
