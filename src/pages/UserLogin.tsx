@@ -1,31 +1,46 @@
-import React from "react";
+import React, { useState } from "react";
+import { string } from "zod";
+import LoginInput from "../components/LoginInput";
 
 export default function UserLogin(): JSX.Element {
+  const [inputValue, setInputValue] = useState({});
+  const inputValueHandler = (event: React.FormEvent): void => {
+    const { name, value } = event.target as HTMLInputElement;
+    console.log(name, value);
+    // setInputValue(prventValue => ({...prventValue,inputValue[name]:value}))
+    // if (name === "email") {
+    //   setInputValue({ email: value });
+    // }
+  };
+
   return (
     <div className=" flex flex-col items-center  py-60">
-      <form
-        action="#"
-        className="flex w-1/3 flex-col pt-4
-"
-      >
+      <form action="#" className="flex w-1/3 flex-col pt-4">
         <h1 className="text-center  text-4xl">登入</h1>
-        <h3 className="mt-4 mb-2  text-base">電子信箱</h3>
+        <LoginInput
+          title="帳號"
+          inputType="email"
+          name="email"
+          id="email"
+          inputPlaceHolder="請輸入正確的信箱格式"
+          setInputValue={setInputValue}
+        />
+        <LoginInput
+          title="密碼"
+          inputType="password"
+          name="password"
+          id="password"
+          inputPlaceHolder="請輸入密碼"
+          setInputValue={setInputValue}
+        />
         <input
-          type="email"
+          type="eamil"
           name="email"
           id="email"
           autoComplete="on"
-          placeholder="請輸入正確的信箱格式"
-          className="h-10 rounded  border border-solid border-black p-2"
-        />
-        <h3 className="mb-2 mt-4 text-base">密碼</h3>
-        <input
-          type="password"
-          name="password"
-          id="password"
-          autoComplete="on"
-          placeholder="請輸入密碼"
-          className="h-10 rounded  border border-solid border-black p-2"
+          placeholder=""
+          className="mt-2 h-10  rounded  border border-solid border-black p-2"
+          onChange={inputValueHandler}
         />
         <button
           type="button"
