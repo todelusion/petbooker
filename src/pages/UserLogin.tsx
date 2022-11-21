@@ -7,11 +7,12 @@ export default function UserLogin(): JSX.Element {
   const inputValueHandler = (event: React.FormEvent): void => {
     const { name, value } = event.target as HTMLInputElement;
     console.log(name, value);
-    // setInputValue(prventValue => ({...prventValue,inputValue[name]:value}))
+    setInputValue((prventValue) => ({ ...prventValue, [name]: value }));
     // if (name === "email") {
     //   setInputValue({ email: value });
     // }
   };
+  console.log(inputValue);
 
   return (
     <div className=" flex flex-col items-center  py-60">
@@ -42,6 +43,16 @@ export default function UserLogin(): JSX.Element {
           className="mt-2 h-10  rounded  border border-solid border-black p-2"
           onChange={inputValueHandler}
         />
+        <input
+          type="password"
+          name="password"
+          id="password"
+          autoComplete="on"
+          placeholder=""
+          className="mt-2 h-10  rounded  border border-solid border-black p-2"
+          onChange={inputValueHandler}
+        />
+        ;
         <button
           type="button"
           className="mt-8 rounded-full bg-second py-2 text-white"
