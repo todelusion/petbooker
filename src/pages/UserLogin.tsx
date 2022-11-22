@@ -46,9 +46,10 @@ export default function UserLogin(): JSX.Element {
           
           <span>
             還沒有帳號？{" "}
-            <a href="#1234" className="underline">
-              註冊
-            </a>
+            <Link to="/regist" className="underline">
+               註冊
+            </Link>
+             
           </span>
           <span>
             <Link to="/forgetPassword" className="underline">
