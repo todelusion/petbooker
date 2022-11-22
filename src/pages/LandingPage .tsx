@@ -47,8 +47,8 @@ function LandingPage(): JSX.Element {
   }
 
   return (
-    <div className="flex flex-col">
-      <header className="relative h-160 w-full">
+    <div className="flex flex-col items-center">
+      <header className=" mt-[114px] relative h-160 w-full">
         <img
           src={Benner}
           alt="BennerImg"
@@ -69,7 +69,7 @@ function LandingPage(): JSX.Element {
         </div>
       </header>
 
-      <main className="flex  flex-col items-center px-28 ">
+      <main className="flex max-w-[1440px] flex-col items-center px-28 ">
         <section className="mt-28">
           <img src={TitleImg} alt="Titleimg" />
         </section>
