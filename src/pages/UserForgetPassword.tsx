@@ -10,7 +10,6 @@ export default function UserForgetPassword(): JSX.Element {
 
     setInputValue((prventValue) => ({ ...prventValue, [name]: value }));
   };
-  console.log(inputValue);
   return (
     <div className=" flex flex-col items-center  py-40">
       <form action="#" className="flex w-1/3 max-w-md flex-col pt-4">
@@ -22,6 +21,7 @@ export default function UserForgetPassword(): JSX.Element {
           id="email"
           inputPlaceHolder="請輸入正確的信箱格式"
           inputValueHandler={inputValueHandler}
+           inputValue={inputValue}
         />
 
         <button

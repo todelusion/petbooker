@@ -22,6 +22,7 @@ export default function UserRegist(): JSX.Element {
           id="email"
           inputPlaceHolder="請輸入正確的信箱格式"
           inputValueHandler={inputValueHandler}
+           inputValue={inputValue}
         />
         <LoginInput
           title="會員姓名"
@@ -30,6 +31,7 @@ export default function UserRegist(): JSX.Element {
           id="userName"
           inputPlaceHolder="請輸入您的姓名"
           inputValueHandler={inputValueHandler}
+           inputValue={inputValue}
         />
         <LoginInput
           title="密碼"
@@ -38,6 +40,7 @@ export default function UserRegist(): JSX.Element {
           id="password"
           inputPlaceHolder="請輸入 8 位以上英數字元，且包含各一個大小寫英文的密碼"
           inputValueHandler={inputValueHandler}
+           inputValue={inputValue}
         />
         <LoginInput
           title="確認密碼"
@@ -46,6 +49,7 @@ export default function UserRegist(): JSX.Element {
           id="confirmPassword"
           inputPlaceHolder="再次輸入密碼"
           inputValueHandler={inputValueHandler}
+           inputValue={inputValue}
         />
         <div>
           <h2 className="mb-2 mt-4">會員身份</h2>
