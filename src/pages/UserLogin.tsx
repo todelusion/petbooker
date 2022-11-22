@@ -46,7 +46,6 @@ export default function UserLogin(): JSX.Element {
           登入
         </button>
         <span className="mt-3 flex justify-between">
-          
           <span>
             還沒有帳號？{" "}
             <Link to="/regist" className="underline">

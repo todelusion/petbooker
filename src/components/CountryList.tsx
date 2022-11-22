@@ -11,7 +11,6 @@ function CountryList({
   countryList,
   dispatchSearchBar,
 }: ICountryListProps): JSX.Element {
-  console.log(dispatchSearchBar);
   const { dispatch } = useSearchBar();
   const { countyItems } = countryList;
   return (
@@ -32,7 +31,7 @@ function CountryList({
         <option
           key={country.countyname}
           value={country.countyname}
-          className="py-3.5 px-4 focus:bg-accent hover:bg-gray-300"
+          className="py-3.5 px-4 hover:bg-gray-300"
         >
           {country.countyname}
         </option>

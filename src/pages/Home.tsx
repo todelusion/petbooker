@@ -1,13 +1,18 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import DropDownList from "../components/DropDownList";
+import Filter from "../components/Filter";
 import HotelCard from "../components/HotelCard";
 import SearchBar from "../components/SearchBar";
 
 function Home(): JSX.Element {
   return (
-    <div className="pt-40">
-      <Link to="/contextTest">點此進行換頁，測試狀態是否保留</Link>
+    <div className="relative flex justify-evenly pt-40">
+      <Link to="/contextTest" className=" absolute right-0">
+        點此進行換頁，測試狀態是否保留
+      </Link>
+      <Filter />
+
       <div className="flex-col-center">
         <SearchBar className="mb-16" />
         <div className="flex flex-col items-end">
