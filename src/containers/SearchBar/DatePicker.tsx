@@ -5,7 +5,7 @@ import { zhTW } from "date-fns/locale";
 import { DateRangePicker, CalendarProps } from "react-date-range";
 import "react-date-range/dist/styles.css"; // main style file
 import "react-date-range/dist/theme/default.css"; // theme css file
-import "../assets/DatePicker.css"; // custom css file
+import "./DatePicker.css"; // custom css file
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faChevronLeft,
