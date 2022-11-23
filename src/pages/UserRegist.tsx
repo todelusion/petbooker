@@ -59,7 +59,7 @@ export default function UserRegist(): JSX.Element {
                 type="radio"
                 name="identify"
                 id="petOwner"
-                className="mr-2"
+                className="mr-2 h-5 w-5 cursor-pointer appearance-none rounded-full border-2 border-black duration-150 checked:border-4 checked:border-primary checked:ring-2 checked:ring-primary_Dark hover:border-primary"
               />
               我是飼主
             </label>
@@ -68,7 +68,7 @@ export default function UserRegist(): JSX.Element {
                 type="radio"
                 name="identify"
                 id="hotelier"
-                className="mr-2"
+                className="mr-2 h-5 w-5 cursor-pointer appearance-none rounded-full border-2 border-black duration-150 checked:border-4 checked:border-primary checked:ring-2 checked:ring-primary_Dark hover:border-primary"
               />
               我是寵物旅館業者
             </label>

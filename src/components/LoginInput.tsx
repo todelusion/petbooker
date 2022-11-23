@@ -46,7 +46,7 @@ function Input(props: Props): JSX.Element {
   return (
     
     <div className=" relative ">
-      <div>{validInput(inputValue)?'true':'false'}</div>
+      {/* <div>{validInput(inputValue)?'true':'false'}</div> */}
       <img src={alertIcon} alt="alertIcon" className=" absolute right-[9.5px] bottom-[15px] z-20" />
     <label className="mb-2 mt-4 flex flex-col text-base " htmlFor={id}>
       {title}
