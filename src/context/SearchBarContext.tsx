@@ -1,5 +1,5 @@
 import React, { createContext, useMemo, useReducer } from "react";
-import type { IDateRangePickerOutput } from "../components/DatePicker";
+import type { IDateRangePickerOutput } from "../containers/SearchBar/DatePicker";
 
 interface ISearchBarProviderProps {
   children: JSX.Element;

@@ -1,5 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import buttonStyle from "./style";
 
 type ButtonPropsType = "Primary" | "Secondary";
 
@@ -21,11 +22,11 @@ function Button({
   const renderButtonPropsType = (): string => {
     switch (type) {
       case "Primary":
-        return "border-2 border-primary text-black";
+        return buttonStyle.Primary;
       case "Secondary":
-        return "bg-second text-white border-2 border-second";
+        return buttonStyle.Secondary;
       default:
-        return "border-2 border-primary text-black";
+        return buttonStyle.Primary;
     }
   };
 

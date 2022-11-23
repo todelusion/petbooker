@@ -11,7 +11,7 @@ import {
   faChevronLeft,
   faChevronRight,
 } from "@fortawesome/free-solid-svg-icons";
-import useComponent from "../hooks/useComponent";
+import useComponent from "../../hooks/useComponent";
 
 export interface IDateRangePickerOutput {
   selection: {

@@ -1,5 +1,5 @@
-import useSearchBar from "../hooks/useComponent";
-import { CountyList } from "../types/schema";
+import useSearchBar from "../../hooks/useComponent";
+import { CountyList } from "../../types/schema";
 import type { SearchBarAction } from "./SearchBar";
 
 interface ICountryListProps {

@@ -1,4 +1,5 @@
 import React, { useReducer, useState } from "react";
+import { footLists, petLists } from "./data";
 import FilterInput from "./FilterInput";
 
 interface IinitFilterData {
@@ -15,44 +16,6 @@ export type FilterAction =
       type: "FOODTYPES";
       payload: string[];
     };
-
-const petLists = [
-  {
-    type: "smallDog",
-    descript: "小型犬 ( 體重 < 8 公斤 )",
-  },
-  {
-    type: "mediumDog",
-    descript: "中型犬 ( 體重 8 - 20 公斤 )",
-  },
-  {
-    type: "largeDog",
-    descript: "大型犬 ( 體重 > 20 公斤 )",
-  },
-  {
-    type: "cat",
-    descript: "貓",
-  },
-];
-
-const footLists = [
-  {
-    type: "wetFood",
-    descript: "濕食",
-  },
-  {
-    type: "freshFood",
-    descript: "鮮食",
-  },
-  {
-    type: "dryFood",
-    descript: "濕食",
-  },
-  {
-    type: "myOwnFood",
-    descript: "自行攜帶",
-  },
-];
 
 const filterDataReducer = (
   state: IinitFilterData,
@@ -125,29 +88,6 @@ function Filter(): JSX.Element {
         inputName="FOODTYPES"
         inputType="checkbox"
       />
-
-      {/* <li className="p-4">
-        <p className="font-bold">寵物類型</p>
-        <form name="FoodTypes">
-          {footLists.map((food) => (
-            <div className="py-4">
-              <label
-                htmlFor={food.footType}
-                className="inline-flex w-full cursor-pointer items-center text-sm"
-              >
-                <input
-                  type="checkbox"
-                  value={food.footType}
-                  onClick={handleCheckBox}
-                  id={food.footType}
-                  className="h-5 w-5 cursor-pointer appearance-none border-2 border-black duration-100 checked:border-4 checked:border-primary checked:bg-primary checked:ring-2 checked:ring-primary_Dark   hover:border-primary"
-                />
-                <span className="ml-2">{food.descript}</span>
-              </label>
-            </div>
-          ))}
-        </form>
-      </li> */}
     </ul>
   );
 }

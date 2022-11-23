@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faCheck } from "@fortawesome/free-solid-svg-icons";
-import useSearchBar from "../hooks/useComponent";
+import useSearchBar from "../../hooks/useComponent";
 import type { SearchBarAction } from "./SearchBar";
 
 interface IPetCardProps {

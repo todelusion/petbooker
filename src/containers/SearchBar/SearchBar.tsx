@@ -2,24 +2,22 @@ import React, { useEffect, useReducer } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronUp, faChevronDown } from "@fortawesome/free-solid-svg-icons";
 import { AnimatePresence, motion } from "framer-motion";
-import { zhTW } from "date-fns/locale";
 
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { format } from "date-fns";
 import {
   searchPath,
   mapPinPath,
   calendarPath,
   creditCardPath,
-} from "../img/icons/icons";
-import Button from "./Button";
+} from "../../img/icons/icons";
+import Button from "../../components/Button/Button";
 import DatePicker from "./DatePicker";
 import CountryList from "./CountryList";
 import PetCard from "./PetCard";
-import { xml2json, parseXml } from "../utils/xml2json";
-import { countySchema } from "../types/schema";
-import useSearchBar from "../hooks/useComponent";
+import { xml2json, parseXml } from "../../utils/xml2json";
+import { countySchema } from "../../types/schema";
+import useSearchBar from "../../hooks/useComponent";
 
 export type SearchBarAction =
   | {

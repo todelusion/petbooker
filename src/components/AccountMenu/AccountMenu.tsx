@@ -1,14 +1,11 @@
 import { AnimatePresence, motion } from "framer-motion";
 import React, { useEffect, useRef, useState } from "react";
-import {
-  memberMenu,
-  hotelMemberMenu,
-  accountMenuPath,
-} from "../img/icons/icons";
+import { memberMenu, hotelMemberMenu, accountMenuPath } from "./data";
 
 type Member = "member" | "hotel";
 
 function AccountMenu(): JSX.Element {
+  // 用is .... 如果是 boolean
   const [toggleAccountMenu, toggleAccountMenuSet] = useState(true);
   let member: Member;
   // eslint-disable-next-line prefer-const
