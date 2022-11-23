@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 // import { string } from "zod"
-import LoginInput from "../components/LoginInput";
+import LoginInput from "../components/UserInput";
 
 export default function UserRegist(): JSX.Element {
   const [inputValue, setInputValue] = useState({});
