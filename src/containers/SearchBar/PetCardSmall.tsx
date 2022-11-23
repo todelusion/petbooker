@@ -23,7 +23,7 @@ const petList = [
   },
 ];
 
-function PetCard({ dispatchSearchBar }: IPetCardProps): JSX.Element {
+function PetCardSmall({ dispatchSearchBar }: IPetCardProps): JSX.Element {
   const { pet: selectedPet, dispatch } = useSearchBar();
 
   return (
@@ -75,4 +75,4 @@ function PetCard({ dispatchSearchBar }: IPetCardProps): JSX.Element {
   );
 }
 
-export default PetCard;
+export default PetCardSmall;

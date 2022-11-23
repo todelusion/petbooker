@@ -14,7 +14,7 @@ import {
 import Button from "../../components/Button/Button";
 import DatePicker from "./DatePicker";
 import CountryList from "./CountryList";
-import PetCard from "./PetCard";
+import PetCardSmall from "./PetCardSmall";
 import { xml2json, parseXml } from "../../utils/xml2json";
 import { countySchema } from "../../types/schema";
 import useSearchBar from "../../hooks/useSearchBar";
@@ -29,7 +29,7 @@ export type SearchBarAction =
       payload: boolean;
     }
   | {
-      type: "TOGGLE_PETCARD";
+      type: "TOGGLE_PETCARD-SMALL";
       payload: boolean;
     }
   | {
@@ -39,7 +39,7 @@ export type SearchBarAction =
 const initSearchBarState = {
   showLocation: false,
   showCalendar: false,
-  showPetCard: false,
+  showPetCardSmall: false,
 };
 
 const searchBarReducer = (
@@ -51,17 +51,17 @@ const searchBarReducer = (
       return {
         showLocation: action.payload,
         showCalendar: false,
-        showPetCard: false,
+        showPetCardSmall: false,
       };
     case "TOGGLE_CALENDAR":
       return {
         showCalendar: action.payload,
         showLocation: false,
-        showPetCard: false,
+        showPetCardSmall: false,
       };
-    case "TOGGLE_PETCARD":
+    case "TOGGLE_PETCARD-SMALL":
       return {
-        showPetCard: action.payload,
+        showPetCardSmall: action.payload,
         showCalendar: false,
         showLocation: false,
       };
@@ -69,7 +69,7 @@ const searchBarReducer = (
       return {
         showCalendar: false,
         showLocation: false,
-        showPetCard: false,
+        showPetCardSmall: false,
       };
     default:
       return state;
@@ -78,10 +78,8 @@ const searchBarReducer = (
 
 function SearchBar({ className }: { className?: string }): JSX.Element {
   const { area, selection, pet } = useSearchBar();
-  const [{ showLocation, showCalendar, showPetCard }, dispatch] = useReducer(
-    searchBarReducer,
-    initSearchBarState
-  );
+  const [{ showLocation, showCalendar, showPetCardSmall }, dispatch] =
+    useReducer(searchBarReducer, initSearchBarState);
 
   const { data: countryData } = useQuery(["country"], async () =>
     axios
@@ -172,14 +170,19 @@ function SearchBar({ className }: { className?: string }): JSX.Element {
         />
         <button
           onClick={() =>
-            dispatch({ type: "TOGGLE_PETCARD", payload: !showPetCard })
+            dispatch({
+              type: "TOGGLE_PETCARD-SMALL",
+              payload: !showPetCardSmall,
+            })
           }
           type="button"
           className="flex-center"
         >
           <img src={creditCardPath} alt="creditCard" />
           <span className="px-3">{pet === "" ? "選擇寵物名片" : pet}</span>
-          <FontAwesomeIcon icon={showPetCard ? faChevronUp : faChevronDown} />
+          <FontAwesomeIcon
+            icon={showPetCardSmall ? faChevronUp : faChevronDown}
+          />
         </button>
         <Button
           text="搜尋"
@@ -229,7 +232,7 @@ function SearchBar({ className }: { className?: string }): JSX.Element {
       </section>
       <section className="absolute right-2 z-10">
         <AnimatePresence>
-          {showPetCard && (
+          {showPetCardSmall && (
             <motion.div
               initial={{ opacity: 0, scale: 0.5 }}
               animate={{ opacity: 1, scale: 1 }}
@@ -238,7 +241,7 @@ function SearchBar({ className }: { className?: string }): JSX.Element {
               transition={{ duration: 0.3, ease: [0.65, 0.05, 0.36, 1] }}
               className="origin-top"
             >
-              <PetCard dispatchSearchBar={dispatch} />
+              <PetCardSmall dispatchSearchBar={dispatch} />
             </motion.div>
           )}
         </AnimatePresence>
