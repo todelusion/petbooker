@@ -1,40 +1,25 @@
 import React, { useState } from "react";
-// import { string } from "zod"
 import { Link } from "react-router-dom";
+// import { string } from "zod"
+import UserInput from "../../components/Input/UserInput";
 
-import UserInput from "../components/UserInput";
-
-export default function UserLogin(): JSX.Element {
+export default function UserForgetPassword(): JSX.Element {
   const [inputValue, setInputValue] = useState({});
   const inputValueHandler = (event: React.FormEvent): void => {
     const { name, value } = event.target as HTMLInputElement;
 
     setInputValue((prventValue) => ({ ...prventValue, [name]: value }));
   };
-  console.log(Object.keys(inputValue).length===0?'true':'false');
   return (
-    <div className=" flex flex-col items-center  py-60">
-      <form
-        action="#"
-        className="flex w-1/3 max-w-md
- flex-col pt-4"
-      >
-        <h1 className="text-center  text-4xl">登入</h1>
+    <div className=" flex flex-col items-center  py-40">
+      <form action="#" className="flex w-1/3 max-w-md flex-col pt-4">
+        <h1 className="text-center  text-4xl">忘記密碼</h1>
         <UserInput
-          title="帳號"
+          title="電子信箱"
           inputType="email"
           name="email"
           id="email"
           inputPlaceHolder="請輸入正確的信箱格式"
-          inputValueHandler={inputValueHandler}
-          inputValue={inputValue}
-        />
-        <UserInput
-          title="密碼"
-          inputType="password"
-          name="password"
-          id="password"
-          inputPlaceHolder="請輸入密碼"
           inputValueHandler={inputValueHandler}
            inputValue={inputValue}
         />
@@ -43,19 +28,13 @@ export default function UserLogin(): JSX.Element {
           type="button"
           className="mt-8 rounded-full bg-second py-2 text-white"
         >
-          登入
+          送出
         </button>
-        <span className="mt-3 flex justify-between">
+        <span className="mt-3 flex justify-center">
           <span>
-            還沒有帳號？{" "}
-            <Link to="/regist" className="underline">
-               註冊
-            </Link>
-             
-          </span>
-          <span>
-            <Link to="/forgetPassword" className="underline">
-              忘記密碼
+            已有帳號？{" "}
+            <Link to="/login" className="underline">
+              登入
             </Link>
           </span>
         </span>

@@ -7,10 +7,10 @@ import Nav from "./Layout/Nav";
 import ContextTest from "./pages/ContextTest";
 import Home from "./pages/Home";
 import LandingPage from "./pages/LandingPage ";
-import UserForgetPassword from "./pages/UserForgetPassword";
-import UserLogin from "./pages/UserLogin";
-import UserModifyPassword from "./pages/UserModifyPassword";
-import UserRegist from "./pages/UserRegist";
+import UserForgetPassword from "./pages/User/UserForgetPassword";
+import UserLogin from "./pages/User/UserLogin";
+import UserModifyPassword from "./pages/User/UserModifyPassword";
+import UserRegist from "./pages/User/UserRegist";
 
 export default function Router(): JSX.Element {
   const client = new QueryClient();

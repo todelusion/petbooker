@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 // import { string } from "zod"
-import UserInput from "../components/UserInput";
+import UserInput from "../../components/Input/UserInput";
 
-export default function UserModifyPassword(): JSX.Element {
+export default function UserRegist(): JSX.Element {
   const [inputValue, setInputValue] = useState({});
   const inputValueHandler = (event: React.FormEvent): void => {
     const { name, value } = event.target as HTMLInputElement;
@@ -15,13 +15,39 @@ export default function UserModifyPassword(): JSX.Element {
     <div className=" flex flex-col items-center  py-40">
       <form action="#" className="flex w-1/3 max-w-md flex-col pt-4">
         <h1 className="text-center  text-4xl">註冊</h1>
-    
+        <UserInput
+          title="電子信箱"
+          inputType="email"
+          name="email"
+          id="email"
+          inputPlaceHolder="請輸入正確的信箱格式"
+          inputValueHandler={inputValueHandler}
+           inputValue={inputValue}
+        />
+        <UserInput
+          title="會員姓名"
+          inputType="text"
+          name="userName"
+          id="userName"
+          inputPlaceHolder="請輸入您的姓名"
+          inputValueHandler={inputValueHandler}
+           inputValue={inputValue}
+        />
         <UserInput
           title="密碼"
           inputType="password"
           name="password"
           id="password"
           inputPlaceHolder="請輸入 8 位以上英數字元，且包含各一個大小寫英文的密碼"
+          inputValueHandler={inputValueHandler}
+           inputValue={inputValue}
+        />
+        <UserInput
+          title="確認密碼"
+          inputType="password"
+          name="confirmPassword"
+          id="confirmPassword"
+          inputPlaceHolder="再次輸入密碼"
           inputValueHandler={inputValueHandler}
            inputValue={inputValue}
         />
@@ -33,7 +59,7 @@ export default function UserModifyPassword(): JSX.Element {
                 type="radio"
                 name="identify"
                 id="petOwner"
-                className="mr-2"
+                className="mr-2 h-5 w-5 cursor-pointer appearance-none rounded-full border-2 border-black duration-150 checked:border-4 checked:border-primary checked:ring-2 checked:ring-primary_Dark hover:border-primary"
               />
               我是飼主
             </label>
@@ -42,7 +68,7 @@ export default function UserModifyPassword(): JSX.Element {
                 type="radio"
                 name="identify"
                 id="hotelier"
-                className="mr-2"
+                className="mr-2 h-5 w-5 cursor-pointer appearance-none rounded-full border-2 border-black duration-150 checked:border-4 checked:border-primary checked:ring-2 checked:ring-primary_Dark hover:border-primary"
               />
               我是寵物旅館業者
             </label>
