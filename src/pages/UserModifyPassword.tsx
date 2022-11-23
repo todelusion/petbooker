@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 // import { string } from "zod"
-import LoginInput from "../components/UserInput";
+import UserInput from "../components/UserInput";
 
 export default function UserModifyPassword(): JSX.Element {
   const [inputValue, setInputValue] = useState({});
@@ -16,7 +16,7 @@ export default function UserModifyPassword(): JSX.Element {
       <form action="#" className="flex w-1/3 max-w-md flex-col pt-4">
         <h1 className="text-center  text-4xl">註冊</h1>
     
-        <LoginInput
+        <UserInput
           title="密碼"
           inputType="password"
           name="password"

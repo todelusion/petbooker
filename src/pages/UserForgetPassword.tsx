@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 // import { string } from "zod"
-import LoginInput from "../components/UserInput";
+import UserInput from "../components/UserInput";
 
 export default function UserForgetPassword(): JSX.Element {
   const [inputValue, setInputValue] = useState({});
@@ -14,7 +14,7 @@ export default function UserForgetPassword(): JSX.Element {
     <div className=" flex flex-col items-center  py-40">
       <form action="#" className="flex w-1/3 max-w-md flex-col pt-4">
         <h1 className="text-center  text-4xl">忘記密碼</h1>
-        <LoginInput
+        <UserInput
           title="電子信箱"
           inputType="email"
           name="email"

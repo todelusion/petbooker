@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 // import { string } from "zod"
-import LoginInput from "../components/UserInput";
+import UserInput from "../components/UserInput";
 
 export default function UserRegist(): JSX.Element {
   const [inputValue, setInputValue] = useState({});
@@ -15,7 +15,7 @@ export default function UserRegist(): JSX.Element {
     <div className=" flex flex-col items-center  py-40">
       <form action="#" className="flex w-1/3 max-w-md flex-col pt-4">
         <h1 className="text-center  text-4xl">註冊</h1>
-        <LoginInput
+        <UserInput
           title="電子信箱"
           inputType="email"
           name="email"
@@ -24,7 +24,7 @@ export default function UserRegist(): JSX.Element {
           inputValueHandler={inputValueHandler}
            inputValue={inputValue}
         />
-        <LoginInput
+        <UserInput
           title="會員姓名"
           inputType="text"
           name="userName"
@@ -33,7 +33,7 @@ export default function UserRegist(): JSX.Element {
           inputValueHandler={inputValueHandler}
            inputValue={inputValue}
         />
-        <LoginInput
+        <UserInput
           title="密碼"
           inputType="password"
           name="password"
@@ -42,7 +42,7 @@ export default function UserRegist(): JSX.Element {
           inputValueHandler={inputValueHandler}
            inputValue={inputValue}
         />
-        <LoginInput
+        <UserInput
           title="確認密碼"
           inputType="password"
           name="confirmPassword"

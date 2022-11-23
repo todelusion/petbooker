@@ -2,7 +2,7 @@ import React, { useState } from "react";
 // import { string } from "zod"
 import { Link } from "react-router-dom";
 
-import LoginInput from "../components/UserInput";
+import UserInput from "../components/UserInput";
 
 export default function UserLogin(): JSX.Element {
   const [inputValue, setInputValue] = useState({});
@@ -20,7 +20,7 @@ export default function UserLogin(): JSX.Element {
  flex-col pt-4"
       >
         <h1 className="text-center  text-4xl">登入</h1>
-        <LoginInput
+        <UserInput
           title="帳號"
           inputType="email"
           name="email"
@@ -29,7 +29,7 @@ export default function UserLogin(): JSX.Element {
           inputValueHandler={inputValueHandler}
           inputValue={inputValue}
         />
-        <LoginInput
+        <UserInput
           title="密碼"
           inputType="password"
           name="password"
