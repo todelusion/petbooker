@@ -17,7 +17,7 @@ import CountryList from "./CountryList";
 import PetCard from "./PetCard";
 import { xml2json, parseXml } from "../../utils/xml2json";
 import { countySchema } from "../../types/schema";
-import useSearchBar from "../../hooks/useComponent";
+import useSearchBar from "../../hooks/useSearchBar";
 
 export type SearchBarAction =
   | {

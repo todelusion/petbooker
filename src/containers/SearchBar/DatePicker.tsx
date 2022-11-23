@@ -11,7 +11,7 @@ import {
   faChevronLeft,
   faChevronRight,
 } from "@fortawesome/free-solid-svg-icons";
-import useComponent from "../../hooks/useComponent";
+import useSearchBar from "../../hooks/useSearchBar";
 
 export interface IDateRangePickerOutput {
   selection: {
@@ -31,7 +31,7 @@ type NavigatorRenderer = (
 ) => JSX.Element;
 
 function DatePicker(): JSX.Element {
-  const { dispatch, selection } = useComponent();
+  const { dispatch, selection } = useSearchBar();
   const onDateChange = (item: IDateRangePickerOutput): void => {
     dispatch({ type: "PICK_DATERANGE", payload: item });
   };

@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import DropDownList from "../components/DropDownList";
-import Filter from "../components/Filter/Filter";
+import Filter from "../containers/Filter/Filter";
 import HotelCard from "../components/HotelCard/HotelCard";
 import SearchBar from "../containers/SearchBar/SearchBar";
 

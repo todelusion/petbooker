@@ -8,7 +8,7 @@ const useSearchBar = (): ISearchBarContextProps => {
   const context = useContext(SearchBarContext);
 
   if (context === null) {
-    throw new Error("useSearchBar() muse be used inside a BlogContext");
+    throw new Error("useSearchBar() muse be used inside a FilterContext");
   }
   return context;
 };

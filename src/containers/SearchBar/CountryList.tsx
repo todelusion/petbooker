@@ -1,4 +1,4 @@
-import useSearchBar from "../../hooks/useComponent";
+import useSearchBar from "../../hooks/useSearchBar";
 import { CountyList } from "../../types/schema";
 import type { SearchBarAction } from "./SearchBar";
 
