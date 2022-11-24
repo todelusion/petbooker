@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState } from "react";
+// import { boolean } from "zod";
 import alertIcon from '../../img/icons/Icon/Alert-triangle.svg'
 import Regex from "./data";
 
@@ -13,26 +14,40 @@ interface Props {
 }
 
 function Input(props: Props): JSX.Element {
+  const [isValid,setIsValid]=useState<boolean>();
   const { inputType, name, id, inputPlaceHolder, title, inputValueHandler,inputValue } =
     props;
  
   
-  function validInput(InputValue:{[index:string]:string},InputName:string):boolean{ 
-    console.log(Regex[InputName].regex.test(InputValue[InputName]));
+  function validInput():void{ 
+    if(inputValue[name]!==undefined &&name!=='userName'){
+    const result =Regex[name].regex.test(inputValue[name])
     
-   return !!Regex[InputName].regex.test(InputValue[InputName])
-   
+    setIsValid(result) 
+    }
+    
+  }
+  console.log(isValid,name,inputValue)
+  function handleBlur ():void{
+    validInput()
   }
   
 
   return (
     
     <div className=" relative ">
-     
-      <img src={alertIcon} alt="alertIcon" className={`${validInput(inputValue,name)==='true'?'hidden':'block'} absolute right-[9.5px] bottom-[15px] z-20`} />
+      {/* 判斷是否inputValue為空物件 */}
+    
+    {Object.keys(inputValue).length===0
+    ?''
+    :<img src={alertIcon} alt="alertIcon" className=
+    {`${isValid===true || isValid===undefined ?'hidden':'block'} absolute right-[9.5px] bottom-[15px] z-20`} />
+    } 
+    
     <label className="mb-2 mt-4 flex flex-col text-base " htmlFor={id}>
       {title}
       <input
+        onBlur={handleBlur}
         onChange={inputValueHandler}
         type={inputType}
         name={name}

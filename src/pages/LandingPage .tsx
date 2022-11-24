@@ -60,11 +60,11 @@ function LandingPage(): JSX.Element {
           </h1>
           <button
             type="button"
-            className="ml-8 w-40 rounded-3xl bg-second px-2  py-1.5"
+            className="ml-8 mt-8 w-40 rounded-3xl bg-second px-2  py-1.5"
             onClick={() => navigate("/home")}
           >
             <img src={PetsImg} alt="PetImg" className="y-6 inline-block w-6" />
-            <h3 className="ml-4 inline-block text-white ">立即註冊試用</h3>
+            <h3 className="ml-4  inline-block text-white ">立即註冊試用</h3>
           </button>
         </div>
       </header>
@@ -73,6 +73,7 @@ function LandingPage(): JSX.Element {
         <section className="mt-28">
           <img src={TitleImg} alt="Titleimg" />
         </section>
+
 
         <section className="mt-80 flex flex-col items-center">
           <img src={PetcityIcon} alt="PetcityIcon" />
@@ -90,7 +91,7 @@ function LandingPage(): JSX.Element {
       <div className="my-36 flex flex-col items-center">
         <p className="text-5.5xl">寵物坊城市，只為您與毛小孩著想</p>
 
-        <span>
+        <span className="mt-8">
           <button
             type="button"
             className=" p w-40 rounded-3xl border-2 border-solid border-primary py-1.5"
