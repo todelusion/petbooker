@@ -1,14 +1,17 @@
 import React, { useReducer, useState } from "react";
 import { FilterAction } from "../../context/FilterContext";
 import useFilter from "../../hooks/useFilter";
-import { footLists, petLists } from "./data";
+import { foodLists, petLists, pricesLists } from "./data";
 import FilterInput from "./FilterInput";
 
 function Filter(): JSX.Element {
-  const { filterDispatch, foodTypes, petType } = useFilter();
+  const { filterDispatch, FoodTypes, PetType, RoomPrices } = useFilter();
+  console.log({ FoodTypes, PetType, RoomPrices });
 
   const handleFilterValue = (e: React.FormEvent): void => {
     const { name, value, checked } = e.target as HTMLInputElement;
+    // console.log({ name, value, checked });
+
     const type = name as unknown as FilterAction["type"];
 
     // 為了避免變數重複宣告，因此在 case 後加上{}花括號，來限制作用域
@@ -20,12 +23,25 @@ function Filter(): JSX.Element {
         if (checked) {
           filterDispatch({
             type,
-            payload: [...foodTypes, value],
+            payload: [...FoodTypes, value],
           });
         } else {
           filterDispatch({
             type,
-            payload: foodTypes.filter((foodType) => foodType !== value),
+            payload: FoodTypes.filter((FoodType) => FoodType !== value),
+          });
+        }
+        break;
+      case "ROOMPRICES":
+        if (checked) {
+          filterDispatch({
+            type,
+            payload: [...RoomPrices, value],
+          });
+        } else {
+          filterDispatch({
+            type,
+            payload: RoomPrices.filter((RoomPrice) => RoomPrice !== value),
           });
         }
         break;
@@ -48,9 +64,16 @@ function Filter(): JSX.Element {
       />
       <FilterInput
         filterTitle="飲食偏好"
-        filterList={footLists}
+        filterList={foodLists}
         handleInputValue={handleFilterValue}
         inputName="FOODTYPES"
+        inputType="checkbox"
+      />
+      <FilterInput
+        filterTitle="房間價位"
+        filterList={pricesLists}
+        handleInputValue={handleFilterValue}
+        inputName="ROOMPRICES"
         inputType="checkbox"
       />
     </ul>

@@ -48,7 +48,7 @@ function LandingPage(): JSX.Element {
 
   return (
     <div className="flex flex-col items-center">
-      <header className=" mt-[114px] relative h-160 w-full">
+      <header className=" relative mt-[114px] h-160 w-full">
         <img
           src={Benner}
           alt="BennerImg"
@@ -60,8 +60,8 @@ function LandingPage(): JSX.Element {
           </h1>
           <button
             type="button"
-            className="ml-8 mt-8 w-40 rounded-3xl bg-second px-2  py-1.5"
-            onClick={() => navigate("/home")}
+            className="ml-8 w-40 rounded-3xl bg-second px-2  py-1.5"
+            onClick={() => navigate("/regist")}
           >
             <img src={PetsImg} alt="PetImg" className="y-6 inline-block w-6" />
             <h3 className="ml-4  inline-block text-white ">立即註冊試用</h3>
@@ -73,7 +73,6 @@ function LandingPage(): JSX.Element {
         <section className="mt-28">
           <img src={TitleImg} alt="Titleimg" />
         </section>
-
 
         <section className="mt-80 flex flex-col items-center">
           <img src={PetcityIcon} alt="PetcityIcon" />
@@ -94,14 +93,15 @@ function LandingPage(): JSX.Element {
         <span className="mt-8">
           <button
             type="button"
-            className=" p w-40 rounded-3xl border-2 border-solid border-primary py-1.5"
+            className="w-40 rounded-3xl border-2 border-solid border-primary py-1.5"
+            onClick={() => navigate("/home")}
           >
             了解更多
           </button>
           <button
             type="button"
             className="ml-8 w-40 rounded-3xl bg-second px-2  py-1.5"
-            onClick={() => navigate("/home")}
+            onClick={() => navigate("/regist")}
           >
             <img src={PetsImg} alt="PetImg" className="y-6 inline-block  w-6" />
             <h3 className="ml-1 inline-block text-white ">立即註冊試用</h3>

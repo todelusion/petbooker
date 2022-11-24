@@ -4,10 +4,13 @@ interface IFilterProviderProps {
   children: JSX.Element;
 }
 
-interface IinitFilter {
-  petType: string;
-  foodTypes: string[];
-}
+const initFilter = {
+  PetType: "",
+  FoodTypes: [] as string[],
+  RoomPrices: [] as string[],
+};
+
+type IinitFilter = typeof initFilter;
 
 export type FilterAction =
   | {
@@ -16,6 +19,10 @@ export type FilterAction =
     }
   | {
       type: "FOODTYPES";
+      payload: string[];
+    }
+  | {
+      type: "ROOMPRICES";
       payload: string[];
     };
 
@@ -31,9 +38,11 @@ const filterReducer = (
 ): IinitFilter => {
   switch (action.type) {
     case "PETTYPE":
-      return { ...state, petType: action.payload };
+      return { ...state, PetType: action.payload };
     case "FOODTYPES":
-      return { ...state, foodTypes: action.payload };
+      return { ...state, FoodTypes: action.payload };
+    case "ROOMPRICES":
+      return { ...state, RoomPrices: action.payload };
     default:
       return state;
   }
@@ -42,10 +51,7 @@ const filterReducer = (
 export function FilterProvider({
   children,
 }: IFilterProviderProps): JSX.Element {
-  const [filter, filterDispatch] = useReducer(filterReducer, {
-    petType: "",
-    foodTypes: [],
-  });
+  const [filter, filterDispatch] = useReducer(filterReducer, initFilter);
 
   const value = useMemo(() => ({ ...filter, filterDispatch }), [filter]);
 
