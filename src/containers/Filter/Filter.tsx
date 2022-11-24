@@ -1,25 +1,31 @@
 import React, { useReducer, useState } from "react";
 import { FilterAction } from "../../context/FilterContext";
 import useFilter from "../../hooks/useFilter";
-import { foodLists, petLists, pricesLists } from "./data";
+import { foodLists, petLists, pricesLists, serviceLists } from "./data";
 import FilterInput from "./FilterInput";
+
+interface IFilterInput extends React.HTMLAttributes<HTMLInputElement> {
+  "data-action"?: string;
+}
 
 function Filter(): JSX.Element {
   const { filterDispatch, FoodTypes, PetType, RoomPrices } = useFilter();
   console.log({ FoodTypes, PetType, RoomPrices });
 
   const handleFilterValue = (e: React.FormEvent): void => {
+    console.log(e.target);
     const { name, value, checked } = e.target as HTMLInputElement;
+    console.log(test);
     // console.log({ name, value, checked });
-
+    return;
     const type = name as unknown as FilterAction["type"];
 
     // 為了避免變數重複宣告，因此在 case 後加上{}花括號，來限制作用域
     switch (type) {
-      case "PETTYPE":
+      case "PICK-PetType":
         filterDispatch({ type, payload: value });
         break;
-      case "FOODTYPES":
+      case "PICK-FoodTypes":
         if (checked) {
           filterDispatch({
             type,
@@ -32,7 +38,7 @@ function Filter(): JSX.Element {
           });
         }
         break;
-      case "ROOMPRICES":
+      case "PICK-RoomPrices":
         if (checked) {
           filterDispatch({
             type,
@@ -56,26 +62,35 @@ function Filter(): JSX.Element {
         透過以下分類搜尋
       </li>
       <FilterInput
-        filterTitle="寵物類型"
-        filterList={petLists}
-        inputName="PETTYPE"
+        action="PICK-PetType"
+        title={petLists.title}
+        contents={petLists.contents}
         handleInputValue={handleFilterValue}
-        inputType="radio"
+        type={petLists.type}
       />
       <FilterInput
-        filterTitle="飲食偏好"
-        filterList={foodLists}
+        action="PICK-FoodTypes"
+        title={foodLists.title}
+        contents={foodLists.contents}
         handleInputValue={handleFilterValue}
-        inputName="FOODTYPES"
-        inputType="checkbox"
+        type={foodLists.type}
       />
       <FilterInput
-        filterTitle="房間價位"
-        filterList={pricesLists}
+        action="PICK-RoomPrices"
+        title={petLists.title}
+        contents={pricesLists.contents}
         handleInputValue={handleFilterValue}
-        inputName="ROOMPRICES"
-        inputType="checkbox"
+        type={pricesLists.type}
       />
+      {serviceLists.map((item) => (
+        <FilterInput
+          action="ServiceTypes"
+          title={petLists.title}
+          contents={pricesLists.contents}
+          handleInputValue={handleFilterValue}
+          type={pricesLists.type}
+        />
+      ))}
     </ul>
   );
 }

@@ -14,15 +14,19 @@ type IinitFilter = typeof initFilter;
 
 export type FilterAction =
   | {
-      type: "PETTYPE";
+      type: "PICK-PetType";
       payload: string;
     }
   | {
-      type: "FOODTYPES";
+      type: "PICK-FoodTypes";
       payload: string[];
     }
   | {
-      type: "ROOMPRICES";
+      type: "PICK-RoomPrices";
+      payload: string[];
+    }
+  | {
+      type: "ServiceTypes";
       payload: string[];
     };
 
@@ -37,11 +41,11 @@ const filterReducer = (
   action: FilterAction
 ): IinitFilter => {
   switch (action.type) {
-    case "PETTYPE":
+    case "PICK-PetType":
       return { ...state, PetType: action.payload };
-    case "FOODTYPES":
+    case "PICK-FoodTypes":
       return { ...state, FoodTypes: action.payload };
-    case "ROOMPRICES":
+    case "PICK-RoomPrices":
       return { ...state, RoomPrices: action.payload };
     default:
       return state;
