@@ -1,8 +1,7 @@
 import React from "react";
 import type { FilterAction } from "../../context/FilterContext";
-import type { pricesLists, serviceLists } from "./data";
 
-type Filter =
+type Content =
   | {
       value: string;
       descript: string;
@@ -14,6 +13,7 @@ type Filter =
 
 interface IFilterInputProps {
   action: FilterAction["type"];
+  keyname: string;
   title: string;
   contents:
     | Array<{
@@ -30,21 +30,22 @@ interface IFilterInputProps {
 }
 
 function FilterInput({
+  keyname,
   title,
   action,
   type,
   contents,
   handleInputValue,
 }: IFilterInputProps): JSX.Element {
-  const renderInput = (filter: Filter): JSX.Element => {
+  const renderInput = (content: Content): JSX.Element => {
     switch (type) {
       case "radio":
         return (
           <input
             data-action={action}
             name={action}
-            id={filter.descript}
-            value={filter.value}
+            id={content.descript}
+            value={content.value}
             onClick={handleInputValue}
             type={type}
             className="h-5 w-5 cursor-pointer appearance-none rounded-full border-2 border-black duration-150 checked:border-4 checked:border-primary checked:ring-2 checked:ring-primary_Dark hover:border-primary"
@@ -55,8 +56,9 @@ function FilterInput({
         return (
           <input
             data-action={action}
-            id={filter.descript}
-            value={filter.value}
+            name={keyname}
+            id={content.descript}
+            value={content.value}
             onClick={handleInputValue}
             type={type}
             className="relative h-5 w-5 cursor-pointer appearance-none rounded-sm border-2 border-black duration-150 before:absolute before:top-1/2 before:-translate-y-1/2 before:text-white checked:border-4 checked:border-primary checked:bg-primary checked:ring-2 checked:ring-primary_Dark before:checked:content-['✔'] hover:border-primary"
@@ -67,8 +69,8 @@ function FilterInput({
         return (
           <input
             data-action={action}
-            id={filter.descript}
-            value={filter.value}
+            id={content.descript}
+            value={content.value}
             onClick={handleInputValue}
             type={type}
             className="relative h-5 w-5 cursor-pointer appearance-none rounded-sm border-2 border-black duration-150 before:absolute before:top-1/2 before:-translate-y-1/2 before:text-white checked:border-4 checked:border-primary checked:bg-primary checked:ring-2 checked:ring-primary_Dark before:checked:content-['✔'] hover:border-primary"
