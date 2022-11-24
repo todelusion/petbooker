@@ -137,10 +137,6 @@ export const serviceLists = [
         value: "yard",
         descript: "廣大庭院",
       },
-      {
-        value: "pickup",
-        descript: "接送服務",
-      },
     ],
   },
 ];

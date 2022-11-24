@@ -42,7 +42,7 @@ function FilterInput({
         return (
           <input
             data-action={action}
-            // name={action}
+            name={action}
             id={filter.descript}
             value={filter.value}
             onClick={handleInputValue}
@@ -54,7 +54,7 @@ function FilterInput({
       case "checkbox":
         return (
           <input
-            name={action}
+            data-action={action}
             id={filter.descript}
             value={filter.value}
             onClick={handleInputValue}
@@ -66,7 +66,7 @@ function FilterInput({
       default:
         return (
           <input
-            name={action}
+            data-action={action}
             id={filter.descript}
             value={filter.value}
             onClick={handleInputValue}

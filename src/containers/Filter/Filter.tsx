@@ -4,36 +4,30 @@ import useFilter from "../../hooks/useFilter";
 import { foodLists, petLists, pricesLists, serviceLists } from "./data";
 import FilterInput from "./FilterInput";
 
-interface IFilterInput extends React.HTMLAttributes<HTMLInputElement> {
-  "data-action"?: string;
-}
-
 function Filter(): JSX.Element {
   const { filterDispatch, FoodTypes, PetType, RoomPrices } = useFilter();
-  console.log({ FoodTypes, PetType, RoomPrices });
+  // console.log({ FoodTypes, PetType, RoomPrices });
 
   const handleFilterValue = (e: React.FormEvent): void => {
-    console.log(e.target);
-    const { name, value, checked } = e.target as HTMLInputElement;
-    console.log(test);
-    // console.log({ name, value, checked });
-    return;
-    const type = name as unknown as FilterAction["type"];
+    const element = e.target as HTMLInputElement;
+    const { value, checked } = element;
+    const action = element.getAttribute("data-action");
+    console.log({ value, checked, action });
 
     // 為了避免變數重複宣告，因此在 case 後加上{}花括號，來限制作用域
-    switch (type) {
+    switch (action) {
       case "PICK-PetType":
-        filterDispatch({ type, payload: value });
+        filterDispatch({ type: action, payload: value });
         break;
       case "PICK-FoodTypes":
         if (checked) {
           filterDispatch({
-            type,
+            type: action,
             payload: [...FoodTypes, value],
           });
         } else {
           filterDispatch({
-            type,
+            type: action,
             payload: FoodTypes.filter((FoodType) => FoodType !== value),
           });
         }
@@ -41,18 +35,19 @@ function Filter(): JSX.Element {
       case "PICK-RoomPrices":
         if (checked) {
           filterDispatch({
-            type,
+            type: action,
             payload: [...RoomPrices, value],
           });
         } else {
           filterDispatch({
-            type,
+            type: action,
             payload: RoomPrices.filter((RoomPrice) => RoomPrice !== value),
           });
         }
         break;
 
       default:
+        break;
     }
   };
 
@@ -84,11 +79,12 @@ function Filter(): JSX.Element {
       />
       {serviceLists.map((item) => (
         <FilterInput
+          key={item.keyname}
           action="ServiceTypes"
-          title={petLists.title}
-          contents={pricesLists.contents}
+          title={item.title}
+          contents={item.contents}
           handleInputValue={handleFilterValue}
-          type={pricesLists.type}
+          type={item.type}
         />
       ))}
     </ul>

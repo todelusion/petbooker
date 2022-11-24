@@ -7,7 +7,7 @@ import SearchBar from "../containers/SearchBar/SearchBar";
 
 function Home(): JSX.Element {
   return (
-    <div className="relative flex justify-evenly pt-40">
+    <div className="relative flex items-start justify-evenly pt-40">
       <Link to="/contextTest" className=" absolute right-0">
         點此進行換頁，測試狀態是否保留
       </Link>
