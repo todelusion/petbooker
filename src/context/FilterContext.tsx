@@ -4,12 +4,6 @@ interface IFilterProviderProps {
   children: JSX.Element;
 }
 
-// const ServiceTypes: { [index: string]: string[] } = {
-//   services: [] as string[],
-//   facilities: [] as string[],
-//   specials: [] as string[],
-// };
-
 const initFilter = {
   PetType: "",
   FoodTypes: [] as string[],
@@ -81,7 +75,8 @@ export function FilterProvider({
   const [filter, filterDispatch] = useReducer(filterReducer, initFilter);
 
   const value = useMemo(() => ({ ...filter, filterDispatch }), [filter]);
-  console.log({ filter: value });
+  const { FoodTypes, PetType, RoomPrices, ServiceTypes } = value;
+  console.log({ FoodTypes, PetType, RoomPrices, ServiceTypes });
 
   return (
     <FilterContext.Provider value={value}>{children}</FilterContext.Provider>

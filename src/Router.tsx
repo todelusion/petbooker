@@ -32,9 +32,11 @@ export default function Router(): JSX.Element {
           <Route
             path="/contextTest"
             element={
-              <SearchBarProvider>
-                <ContextTest />
-              </SearchBarProvider>
+              <FilterProvider>
+                <SearchBarProvider>
+                  <ContextTest />
+                </SearchBarProvider>
+              </FilterProvider>
             }
           />
           <Route path="/login" element={<UserLogin />} />;
