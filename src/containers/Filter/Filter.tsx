@@ -1,127 +1,130 @@
 import React from "react";
-import { FilterAction } from "../../context/FilterContext";
+import { FilterAction, IFilterContextProps } from "../../context/FilterContext";
 import useFilter from "../../hooks/useFilter";
 import { foodLists, petLists, pricesLists, serviceLists } from "./data";
 import FilterInput from "./FilterInput";
 
-function Filter(): JSX.Element {
+const handleFilterValue = (
+  e: React.FormEvent,
+  filterContextProps: IFilterContextProps
+): void => {
   const { filterDispatch, FoodTypes, PetType, RoomPrices, ServiceTypes } =
-    useFilter();
+    filterContextProps;
+  const element = e.target as HTMLInputElement;
+  const { value, checked, name } = element;
+  const action = element.getAttribute("data-action") as FilterAction["type"];
+  // console.log({ value, checked, action, name });
 
-  const handleFilterValue = (e: React.FormEvent): void => {
-    const element = e.target as HTMLInputElement;
-    const { value, checked, name } = element;
-    const action = element.getAttribute("data-action") as FilterAction["type"];
-    // console.log({ value, checked, action, name });
+  // 為了避免變數重複宣告，因此在 case 後加上{}花括號，來限制作用域
+  if (action === "PICK-PetType") {
+    filterDispatch({ type: action, payload: value });
+  }
 
-    // 為了避免變數重複宣告，因此在 case 後加上{}花括號，來限制作用域
-    if (action === "PICK-PetType") {
-      filterDispatch({ type: action, payload: value });
-    }
+  if (checked) {
+    switch (action) {
+      case "PICK-FoodTypes":
+        filterDispatch({
+          type: action,
+          payload: [...FoodTypes, value],
+        });
+        break;
+      case "PICK-RoomPrices":
+        filterDispatch({
+          type: action,
+          payload: [...RoomPrices, value],
+        });
+        break;
+      case "PICK-ServiceTypes": {
+        const keyname = name as "services" | "facilities" | "specials";
+        const { services, facilities, specials } = ServiceTypes;
 
-    if (checked) {
-      switch (action) {
-        case "PICK-FoodTypes":
-          filterDispatch({
-            type: action,
-            payload: [...FoodTypes, value],
-          });
-          break;
-        case "PICK-RoomPrices":
-          filterDispatch({
-            type: action,
-            payload: [...RoomPrices, value],
-          });
-          break;
-        case "PICK-ServiceTypes": {
-          const keyname = name as "services" | "facilities" | "specials";
-          const { services, facilities, specials } = ServiceTypes;
-
-          switch (keyname) {
-            case "services":
-              filterDispatch({
-                type: "PICK-ServiceTypes",
-                payload: { keyname, contents: [...services, value] },
-              });
-              break;
-            case "facilities":
-              filterDispatch({
-                type: "PICK-ServiceTypes",
-                payload: { keyname, contents: [...facilities, value] },
-              });
-              break;
-            case "specials":
-              filterDispatch({
-                type: "PICK-ServiceTypes",
-                payload: { keyname, contents: [...specials, value] },
-              });
-              break;
-            default:
-              break;
-          }
-          break;
+        switch (keyname) {
+          case "services":
+            filterDispatch({
+              type: "PICK-ServiceTypes",
+              payload: { keyname, contents: [...services, value] },
+            });
+            break;
+          case "facilities":
+            filterDispatch({
+              type: "PICK-ServiceTypes",
+              payload: { keyname, contents: [...facilities, value] },
+            });
+            break;
+          case "specials":
+            filterDispatch({
+              type: "PICK-ServiceTypes",
+              payload: { keyname, contents: [...specials, value] },
+            });
+            break;
+          default:
+            break;
         }
-
-        default:
-          break;
+        break;
       }
-    }
-    if (!checked) {
-      switch (action) {
-        case "PICK-FoodTypes":
-          filterDispatch({
-            type: action,
-            payload: FoodTypes.filter((FoodType) => FoodType !== value),
-          });
-          break;
-        case "PICK-RoomPrices":
-          filterDispatch({
-            type: action,
-            payload: RoomPrices.filter((RoomPrice) => RoomPrice !== value),
-          });
-          break;
-        case "PICK-ServiceTypes": {
-          const keyname = name as "services" | "facilities" | "specials";
-          const { services, facilities, specials } = ServiceTypes;
 
-          switch (keyname) {
-            case "services":
-              filterDispatch({
-                type: "PICK-ServiceTypes",
-                payload: {
-                  keyname,
-                  contents: services.filter((item) => item !== value),
-                },
-              });
-              break;
-            case "facilities":
-              filterDispatch({
-                type: "PICK-ServiceTypes",
-                payload: {
-                  keyname,
-                  contents: facilities.filter((facility) => facility !== value),
-                },
-              });
-              break;
-            case "specials":
-              filterDispatch({
-                type: "PICK-ServiceTypes",
-                payload: {
-                  keyname,
-                  contents: specials.filter((special) => special !== value),
-                },
-              });
-              break;
-            default:
-              break;
-          }
-          break;
+      default:
+        break;
+    }
+  }
+  if (!checked) {
+    switch (action) {
+      case "PICK-FoodTypes":
+        filterDispatch({
+          type: action,
+          payload: FoodTypes.filter((FoodType) => FoodType !== value),
+        });
+        break;
+      case "PICK-RoomPrices":
+        filterDispatch({
+          type: action,
+          payload: RoomPrices.filter((RoomPrice) => RoomPrice !== value),
+        });
+        break;
+      case "PICK-ServiceTypes": {
+        const keyname = name as "services" | "facilities" | "specials";
+        const { services, facilities, specials } = ServiceTypes;
+
+        switch (keyname) {
+          case "services":
+            filterDispatch({
+              type: "PICK-ServiceTypes",
+              payload: {
+                keyname,
+                contents: services.filter((item) => item !== value),
+              },
+            });
+            break;
+          case "facilities":
+            filterDispatch({
+              type: "PICK-ServiceTypes",
+              payload: {
+                keyname,
+                contents: facilities.filter((facility) => facility !== value),
+              },
+            });
+            break;
+          case "specials":
+            filterDispatch({
+              type: "PICK-ServiceTypes",
+              payload: {
+                keyname,
+                contents: specials.filter((special) => special !== value),
+              },
+            });
+            break;
+          default:
+            break;
         }
-        default:
-          break;
+        break;
       }
+      default:
+        break;
     }
-  };
+  }
+};
+function Filter(): JSX.Element {
+  const FilterContextProps = useFilter();
 
   return (
     <ul className="w-60 rounded-md border-2 border-black">
