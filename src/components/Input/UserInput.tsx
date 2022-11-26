@@ -20,14 +20,15 @@ function Input(props: Props): JSX.Element {
  
   
   function validInput():void{ 
-    if(inputValue[name]!==undefined &&name!=='userName'){
+    if(inputValue[name]!==undefined &&name!=='userName'&&name!=='confirmPassword'){
     const result =Regex[name].regex.test(inputValue[name])
     
     setIsValid(result) 
     }
     
   }
-  console.log(isValid,name,inputValue)
+
+
   function handleBlur ():void{
     validInput()
   }
