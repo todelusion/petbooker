@@ -11,6 +11,7 @@ import UserForgetPassword from "./pages/User/UserForgetPassword";
 import UserLogin from "./pages/User/UserLogin";
 import UserModifyPassword from "./pages/User/UserModifyPassword";
 import UserRegist from "./pages/User/UserRegist";
+import Hotel from "./pages/Hotel";
 
 export default function Router(): JSX.Element {
   const client = new QueryClient();
@@ -37,6 +38,14 @@ export default function Router(): JSX.Element {
                   <ContextTest />
                 </SearchBarProvider>
               </FilterProvider>
+            }
+          />
+          <Route
+            path="/hotel/:id"
+            element={
+              <SearchBarProvider>
+                <Hotel />
+              </SearchBarProvider>
             }
           />
           <Route path="/login" element={<UserLogin />} />;
