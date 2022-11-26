@@ -1,19 +1,43 @@
-export const hotelList = [
+import { v4 as uuidv4 } from "uuid";
+// 透過 uuid 套件產生 id 值，並暫時寫死在本機data上
+
+export const Hotels = [
   {
+    Id: "2f782934-07a3-4620-8998-5c4c1764769f",
     HotelName: "小室照護",
+    HotelPhone: "0950764810",
+    HotelAddress: "高雄市前鎮區復興四路10號",
+    HotelStartTime: "08:30",
+    HotelEndTime: "21:30",
     HotelInfo:
       "杜莉德寵物旅館，給毛寶貝們最棒的度假體驗，也給主人最放心的安親空間",
+    HotelPhoto: "",
+    AreaId: "台北市",
+
+    // price 應關聯至 RoomPrice
     price: 1000,
-    score: 9.6,
-    thumbnail: undefined,
+
+    // 資料表尚缺 HotelScore欄位
+    HotelScore: 9.6,
+
+    // FoodTypes 在 Filter資料夾
+    // ServicesTypes 在 Filter資料夾
+    // HotelAccount 前端不能知道
+    // HotelPassword 前端不能知道
   },
   {
+    Id: "220ce67e-086c-471f-be93-5c19c4447948",
     HotelName: "寵 hostel",
+    HotelPhone: "0950764810",
+    HotelAddress: "高雄市前鎮區復興四路10號",
+    HotelStartTime: "08:30",
+    HotelEndTime: "21:30",
     HotelInfo:
       "杜莉德寵物旅館，給毛寶貝們最棒的度假體驗，也給主人最放心的安親空間",
+    HotelPhoto: "",
+    AreaId: "台北市",
     price: 500,
-    score: 9.1,
-    thumbnail: undefined,
+    HotelScore: 9.1,
   },
 ];
 

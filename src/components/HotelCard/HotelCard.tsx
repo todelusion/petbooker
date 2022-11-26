@@ -1,6 +1,6 @@
 import React from "react";
 import Button from "../Button/Button";
-import { fakeText, hotelList } from "./data";
+import { fakeText, Hotels as hotelList } from "./data";
 
 function HotelCard(): JSX.Element {
   return (
@@ -11,13 +11,13 @@ function HotelCard(): JSX.Element {
           className="mb-6 flex h-96 w-[960px] border-2"
         >
           <div className="relative w-1/2 max-w-md ">
-            {hotel.thumbnail !== undefined ? (
+            {hotel.HotelPhoto !== "" ? (
               <img src="" alt="thumbnail" className="h-full w-full" />
             ) : (
               <div className="h-full w-full bg-gray-100" />
             )}
             <div className="absolute left-6 top-6 rounded-3xl bg-primary p-4 text-4xl font-bold text-white">
-              {hotel.score}
+              {hotel.HotelScore}
             </div>
           </div>
           <ul className="flex w-1/2 flex-col justify-between p-6 ">
@@ -32,6 +32,7 @@ function HotelCard(): JSX.Element {
                 type="Secondary"
                 text="選擇房間"
                 className="py-2 px-5 text-sm"
+                navigatePath={`/hotel/${hotel.Id}`}
               />
             </li>
           </ul>
