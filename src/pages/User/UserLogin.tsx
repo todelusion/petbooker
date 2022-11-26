@@ -11,6 +11,7 @@ export default function UserLogin(): JSX.Element {
 
     setInputValue((prventValue) => ({ ...prventValue, [name]: value }));
   };
+  
   return (
     <div className=" flex flex-col items-center  py-60">
       <form
@@ -20,6 +21,7 @@ export default function UserLogin(): JSX.Element {
       >
         <h1 className="text-center  text-4xl">登入</h1>
         <UserInput
+       
           title="帳號"
           inputType="email"
           name="email"
@@ -29,6 +31,7 @@ export default function UserLogin(): JSX.Element {
           inputValue={inputValue}
         />
         <UserInput
+        
           title="密碼"
           inputType="password"
           name="password"
@@ -41,6 +44,7 @@ export default function UserLogin(): JSX.Element {
         <button
           type="button"
           className="mt-8 rounded-full bg-second py-2 text-white"
+         
         >
           登入
         </button>

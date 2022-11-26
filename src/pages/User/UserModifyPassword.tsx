@@ -17,6 +17,7 @@ export default function UserModifyPassword(): JSX.Element {
         <h1 className="text-center  text-4xl">註冊</h1>
     
         <UserInput
+       
           title="密碼"
           inputType="password"
           name="password"
