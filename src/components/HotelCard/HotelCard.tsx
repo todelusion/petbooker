@@ -11,8 +11,12 @@ function HotelCard(): JSX.Element {
           className="mb-6 flex h-96 w-[960px] border-2"
         >
           <div className="relative w-1/2 max-w-md ">
-            {hotel.HotelPhoto !== "" ? (
-              <img src="" alt="thumbnail" className="h-full w-full" />
+            {hotel.HotelPhoto[0] !== "" ? (
+              <img
+                src={hotel.HotelPhoto[0]}
+                alt="thumbnail"
+                className="h-full w-full"
+              />
             ) : (
               <div className="h-full w-full bg-gray-100" />
             )}
