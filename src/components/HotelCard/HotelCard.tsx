@@ -36,7 +36,7 @@ function HotelCard(): JSX.Element {
                 type="Secondary"
                 text="選擇房間"
                 className="py-2 px-5 text-sm"
-                navigatePath={`/hotel/${hotel.Id as string}`}
+                navigatePath={`/hotel/${hotel.Id}`}
               />
             </li>
           </ul>
