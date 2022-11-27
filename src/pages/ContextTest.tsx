@@ -1,10 +1,10 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import FilterInput from "../containers/Filter/FilterInput";
-import SearchBar from "../containers/SearchBar/SearchBar";
+import SearchBar from "../containers/SearchBar";
 import useFilter from "../hooks/useFilter";
 import { foodLists, petLists, serviceLists } from "../containers/Filter/data";
-import { handleFilterValue } from "../containers/Filter/Filter";
+import { handleFilterValue } from "../containers/Filter";
 
 function ContextTest(): JSX.Element {
   return (

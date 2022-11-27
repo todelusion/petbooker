@@ -1,7 +1,7 @@
 import { Link, Outlet } from "react-router-dom";
 import logoSubtitlePath from "../img/logo-subtitle.svg";
-import Button from "../components/Button/Button";
-import AccountMenu from "../components/AccountMenu/AccountMenu";
+import Button from "../components/Button";
+import AccountMenu from "../components/AccountMenu";
 import Footer from "./Footer";
 
 function Nav(): JSX.Element {

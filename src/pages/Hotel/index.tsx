@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 import { Hotels } from "../../components/HotelCard/data";
-import SearchBar from "../../containers/SearchBar/SearchBar";
+import SearchBar from "../../containers/SearchBar";
 import Image from "./Image";
 import Info from "./Info";
 

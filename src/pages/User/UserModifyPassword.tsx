@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 // import { string } from "zod"
-import UserInput from "../../components/Input/UserInput";
+import UserInput from "../../components/Input";
 
 export default function UserModifyPassword(): JSX.Element {
   const [inputValue, setInputValue] = useState({});
@@ -15,16 +15,15 @@ export default function UserModifyPassword(): JSX.Element {
     <div className=" flex flex-col items-center  py-40">
       <form action="#" className="flex w-1/3 max-w-md flex-col pt-4">
         <h1 className="text-center  text-4xl">註冊</h1>
-    
+
         <UserInput
-       
           title="密碼"
           inputType="password"
           name="password"
           id="password"
           inputPlaceHolder="請輸入 8 位以上英數字元，且包含各一個大小寫英文的密碼"
           inputValueHandler={inputValueHandler}
-           inputValue={inputValue}
+          inputValue={inputValue}
         />
         <div>
           <h2 className="mb-2 mt-4">會員身份</h2>

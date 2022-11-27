@@ -12,7 +12,7 @@ import {
   calendarPath,
   creditCardPath,
 } from "../../img/icons/icons";
-import Button from "../../components/Button/Button";
+import Button from "../../components/Button";
 import DatePicker from "./DatePicker";
 import CountryList from "./CountryList";
 import PetCardSmall from "./PetCardSmall";

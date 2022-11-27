@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 // import { string } from "zod"
-import UserInput from "../../components/Input/UserInput";
+import UserInput from "../../components/Input";
 
 export default function UserRegist(): JSX.Element {
   const [inputValue, setInputValue] = useState({});
@@ -12,69 +12,63 @@ export default function UserRegist(): JSX.Element {
     setInputValue((prventValue) => ({ ...prventValue, [name]: value }));
   };
 
-  function regist (event:React.FormEvent):void{
+  function regist(event: React.FormEvent): void {
     event.preventDefault();
-
-
   }
-    const validpassword =():boolean=>{
-      const {password,confirmPassword}=inputValue;
-      let result;
-   if(password ===undefined ||confirmPassword===undefined){
-    result= true
-   }else{
-    result=password===confirmPassword
-   }
-     return result
-  }
+  const validpassword = (): boolean => {
+    const { password, confirmPassword } = inputValue;
+    let result;
+    if (password === undefined || confirmPassword === undefined) {
+      result = true;
+    } else {
+      result = password === confirmPassword;
+    }
+    return result;
+  };
   console.log(inputValue);
-  
+
   return (
     <div className=" flex flex-col items-center  py-40">
       <form action="#" className="flex w-1/3 max-w-md flex-col pt-4">
         <h1 className="text-center  text-4xl">註冊</h1>
         <UserInput
-         
           title="電子信箱"
           inputType="email"
           name="email"
           id="email"
           inputPlaceHolder="請輸入正確的信箱格式"
           inputValueHandler={inputValueHandler}
-           inputValue={inputValue}
+          inputValue={inputValue}
         />
         <UserInput
-         
           title="會員姓名"
           inputType="text"
           name="userName"
           id="userName"
           inputPlaceHolder="請輸入您的姓名"
           inputValueHandler={inputValueHandler}
-           inputValue={inputValue}
+          inputValue={inputValue}
         />
         <UserInput
-        
           title="密碼"
           inputType="password"
           name="password"
           id="password"
           inputPlaceHolder="請輸入 8 位以上英數字元，且包含各一個大小寫英文的密碼"
           inputValueHandler={inputValueHandler}
-           inputValue={inputValue}
+          inputValue={inputValue}
         />
         <UserInput
-      
           title="確認密碼"
           inputType="password"
           name="confirmPassword"
           id="confirmPassword"
           inputPlaceHolder="再次輸入密碼"
           inputValueHandler={inputValueHandler}
-           inputValue={inputValue}
+          inputValue={inputValue}
         />
         <span className="text-red-500">
-        {validpassword()?null:'密碼不符合'}
+          {validpassword() ? null : "密碼不符合"}
         </span>
         <div>
           <h2 className="mb-2 mt-4">會員身份</h2>
