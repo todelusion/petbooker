@@ -1,4 +1,5 @@
 import { v4 as uuidv4 } from "uuid";
+import { serviceLists } from "../../containers/Filter/data";
 // 透過 uuid 套件產生 id 值，並暫時寫死在本機data上
 
 export const Hotels = [

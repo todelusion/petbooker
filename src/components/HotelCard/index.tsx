@@ -1,5 +1,5 @@
 import React from "react";
-import Button from "../Button/Button";
+import Button from "../Button";
 import { fakeText, Hotels as hotelList } from "./data";
 
 function HotelCard(): JSX.Element {

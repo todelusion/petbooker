@@ -2,7 +2,7 @@ import React, { useState } from "react";
 // import { string } from "zod"
 import { Link } from "react-router-dom";
 
-import UserInput from "../../components/Input/UserInput";
+import UserInput from "../../components/Input";
 
 export default function UserLogin(): JSX.Element {
   const [inputValue, setInputValue] = useState({});
@@ -11,7 +11,7 @@ export default function UserLogin(): JSX.Element {
 
     setInputValue((prventValue) => ({ ...prventValue, [name]: value }));
   };
-  
+
   return (
     <div className=" flex flex-col items-center  py-60">
       <form
@@ -21,7 +21,6 @@ export default function UserLogin(): JSX.Element {
       >
         <h1 className="text-center  text-4xl">登入</h1>
         <UserInput
-       
           title="帳號"
           inputType="email"
           name="email"
@@ -31,20 +30,18 @@ export default function UserLogin(): JSX.Element {
           inputValue={inputValue}
         />
         <UserInput
-        
           title="密碼"
           inputType="password"
           name="password"
           id="password"
           inputPlaceHolder="請輸入密碼"
           inputValueHandler={inputValueHandler}
-           inputValue={inputValue}
+          inputValue={inputValue}
         />
 
         <button
           type="button"
           className="mt-8 rounded-full bg-second py-2 text-white"
-         
         >
           登入
         </button>
@@ -52,9 +49,8 @@ export default function UserLogin(): JSX.Element {
           <span>
             還沒有帳號？{" "}
             <Link to="/regist" className="underline">
-               註冊
+              註冊
             </Link>
-             
           </span>
           <span>
             <Link to="/forgetPassword" className="underline">

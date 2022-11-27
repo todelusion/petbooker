@@ -2,7 +2,7 @@ import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faCheck } from "@fortawesome/free-solid-svg-icons";
 import useSearchBar from "../../hooks/useSearchBar";
-import type { SearchBarAction } from "./SearchBar";
+import type { SearchBarAction } from ".";
 
 interface IPetCardProps {
   dispatchSearchBar: React.Dispatch<SearchBarAction>;

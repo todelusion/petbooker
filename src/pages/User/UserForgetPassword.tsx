@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 // import { string } from "zod"
-import UserInput from "../../components/Input/UserInput";
+import UserInput from "../../components/Input";
 
 export default function UserForgetPassword(): JSX.Element {
   const [inputValue, setInputValue] = useState({});
@@ -22,7 +22,7 @@ export default function UserForgetPassword(): JSX.Element {
           id="email"
           inputPlaceHolder="請輸入正確的信箱格式"
           inputValueHandler={inputValueHandler}
-           inputValue={inputValue}
+          inputValue={inputValue}
         />
 
         <button
