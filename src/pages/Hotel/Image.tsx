@@ -1,18 +1,5 @@
 import React from "react";
-
-interface IHotel {
-  Id: string;
-  HotelName: string;
-  HotelPhone: string;
-  HotelAddress: string;
-  HotelStartTime: string;
-  HotelEndTime: string;
-  HotelInfo: string;
-  HotelPhoto: string[];
-  AreaId: string;
-  price: number;
-  HotelScore: number;
-}
+import type { IHotel } from "./index";
 
 interface IImageProps {
   hotel: IHotel;
