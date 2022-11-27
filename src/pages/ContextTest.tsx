@@ -7,12 +7,11 @@ import { foodLists, petLists, serviceLists } from "../containers/Filter/data";
 import { handleFilterValue } from "../containers/Filter/Filter";
 
 function ContextTest(): JSX.Element {
-  const { FoodTypes, PetType, ServiceTypes } = useFilter();
   return (
     <div className="flex-col-center pt-40">
       <Link to="/home">點此返回home頁</Link>
       <SearchBar />
-      <FilterInput
+      {/* <FilterInput
         action="PICK-PetType"
         keyname={petLists.keyname}
         checked={PetType}
@@ -54,7 +53,7 @@ function ContextTest(): JSX.Element {
             type={item.type}
           />
         );
-      })}
+      })} */}
     </div>
   );
 }

@@ -11,7 +11,7 @@ export const Hotels = [
     HotelEndTime: "21:30",
     HotelInfo:
       "杜莉德寵物旅館，給毛寶貝們最棒的度假體驗，也給主人最放心的安親空間",
-    HotelPhoto: "",
+    HotelPhoto: [""],
     AreaId: "台北市",
 
     // price 應關聯至 RoomPrice
@@ -34,7 +34,7 @@ export const Hotels = [
     HotelEndTime: "21:30",
     HotelInfo:
       "杜莉德寵物旅館，給毛寶貝們最棒的度假體驗，也給主人最放心的安親空間",
-    HotelPhoto: "",
+    HotelPhoto: [""],
     AreaId: "台北市",
     price: 500,
     HotelScore: 9.1,

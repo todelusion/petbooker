@@ -5,6 +5,7 @@ import { AnimatePresence, motion } from "framer-motion";
 
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
+import { useLocation } from "react-router-dom";
 import {
   searchPath,
   mapPinPath,
@@ -77,10 +78,12 @@ const searchBarReducer = (
 };
 
 function SearchBar({ className }: { className?: string }): JSX.Element {
+  const { pathname } = useLocation();
   const { area, selection, pet } = useSearchBar();
   const [{ showLocation, showCalendar, showPetCardSmall }, dispatch] =
     useReducer(searchBarReducer, initSearchBarState);
 
+  // GET countryData
   const { data: countryData } = useQuery(["country"], async () =>
     axios
       .get("https://api.nlsc.gov.tw/other/ListCounty")
@@ -119,6 +122,14 @@ function SearchBar({ className }: { className?: string }): JSX.Element {
     );
   };
 
+  // UI render
+  const renderBorder = (): string => {
+    if (pathname.includes("/hotel")) return "border-2 border-black";
+
+    return "border-4 border-primary";
+  };
+
+  // close all modal
   useEffect(() => {
     const handleClose = (): void => {
       document.addEventListener("click", () => {
@@ -135,24 +146,31 @@ function SearchBar({ className }: { className?: string }): JSX.Element {
       tabIndex={0}
       onKeyUp={(e) => e.stopPropagation()}
       onClick={(e) => e.stopPropagation()}
-      className={`relative cursor-default ${className as string}`}
+      className={`relative cursor-default ${className as string} w-max`}
     >
-      <div className="flex-center mb-2 rounded-full border-4 border-primary px-4">
-        <button
-          onClick={() =>
-            dispatch({ type: "TOGGLE_LOCATION", payload: !showLocation })
-          }
-          type="button"
-          className="flex-center"
-        >
-          <img src={mapPinPath} alt="map" />
-          <span className="px-3">{area === "" ? "選擇地點" : area}</span>
-          <FontAwesomeIcon icon={showLocation ? faChevronUp : faChevronDown} />
-        </button>
-        <hr
-          style={{ borderStyle: "solid" }}
-          className="my-3 mx-4 block h-10 border-r-2"
-        />
+      <div className={`flex-center mb-2 rounded-full px-4 ${renderBorder()}`}>
+        {!pathname.includes("/hotel") && (
+          <>
+            <button
+              onClick={() =>
+                dispatch({ type: "TOGGLE_LOCATION", payload: !showLocation })
+              }
+              type="button"
+              className="flex-center"
+            >
+              <img src={mapPinPath} alt="map" />
+              <span className="px-3">{area === "" ? "選擇地點" : area}</span>
+              <FontAwesomeIcon
+                icon={showLocation ? faChevronUp : faChevronDown}
+              />
+            </button>
+
+            <hr
+              style={{ borderStyle: "solid" }}
+              className="my-3 mx-4 block h-10 border-r-2"
+            />
+          </>
+        )}
         <button
           type="button"
           className="flex-center outline-none"
