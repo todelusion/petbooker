@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 // import { boolean } from "zod";
-import alertIcon from '../../img/icons/Icon/Alert-triangle.svg'
+import Alerttriangle from '../../img/icons/Icon/Alert-triangle.svg'
+import Alertvector from '../../img/icons/Icon/Alert-vector.svg'
 import Regex from "./data";
 
 interface Props {
@@ -40,11 +41,12 @@ function Input(props: Props): JSX.Element {
       {/* 判斷是否inputValue為空物件 */}
     
     {Object.keys(inputValue).length===0
-    ?''
-    :<img src={alertIcon} alt="alertIcon" className=
-    {`${isValid===true || isValid===undefined ?'hidden':'block'} absolute right-[9.5px] bottom-[15px] z-20`} />
+    ?null
+    :
+    <img src={(isValid ?? false)?Alertvector:Alerttriangle} alt="alertIcon" className=
+    {`${ isValid===undefined ?'hidden':'block'} w-6 h-6 absolute right-[9.5px] bottom-[15px] z-20`} />
     } 
-    
+   
     <label className="mb-2 mt-4 flex flex-col text-base " htmlFor={id}>
       {title}
       <input
@@ -55,7 +57,7 @@ function Input(props: Props): JSX.Element {
         id={id}
         autoComplete="on"
         placeholder={inputPlaceHolder}
-        className="z-10  mt-2 h-10 relative rounded  border border-solid border-black p-2"
+        className="z-10 mt-2 h-10 relative rounded  border border-solid border-black py-2.5 pr-10 pl-2"
 
       />
     </label>
