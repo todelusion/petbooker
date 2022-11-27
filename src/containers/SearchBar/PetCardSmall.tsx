@@ -46,7 +46,10 @@ function PetCardSmall({ dispatchSearchBar }: IPetCardProps): JSX.Element {
             <button
               onClick={() => {
                 dispatch({ type: "PICK_PET", payload: pet.name });
-                dispatchSearchBar({ type: "TOGGLE_PETCARD", payload: false });
+                dispatchSearchBar({
+                  type: "TOGGLE_PETCARD-SMALL",
+                  payload: false,
+                });
               }}
               type="button"
               className="flex w-full items-center"
