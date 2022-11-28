@@ -8,7 +8,7 @@ interface IInfoProps {
 
 function Info({ hotel, className }: IInfoProps): JSX.Element {
   return (
-    <div className={className}>
+    <section className={className}>
       <ul className="mb-4 flex h-20">
         <li className="rounded-3xl bg-primary p-4 text-4xl font-bold text-white">
           {hotel.HotelScore}
@@ -31,7 +31,7 @@ function Info({ hotel, className }: IInfoProps): JSX.Element {
         </li>
       </ul>
       <p className="mb-4 pl-1 text-sm text-stone-600">{hotel.HotelInfo}</p>
-      <ul className="mb-11 flex flex-wrap">
+      <ul className="flex flex-wrap">
         {hotel.serviceLists.map((item) =>
           item.contents.map((content) => (
             <li
@@ -44,7 +44,7 @@ function Info({ hotel, className }: IInfoProps): JSX.Element {
           ))
         )}
       </ul>
-    </div>
+    </section>
   );
 }
 

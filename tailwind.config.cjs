@@ -20,7 +20,10 @@ module.exports = {
         3.5: "0.875rem",
       },
       spacing: {
-        160: "640px",
+        70: "17.5rem",
+        100: "25rem",
+        120: "30rem",
+        160: "40rem",
       },
     },
     fontFamily: {
@@ -29,5 +32,8 @@ module.exports = {
       dela: ["Dela Gothic One"],
     },
   },
-  plugins: [require("tailwind-scrollbar")({ nocompatible: true })],
+  plugins: [
+    require("tailwind-scrollbar")({ nocompatible: true }),
+    require("@tailwindcss/line-clamp"),
+  ],
 };

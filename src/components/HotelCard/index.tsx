@@ -26,7 +26,7 @@ function HotelCard(): JSX.Element {
           </div>
           <ul className="flex w-1/2 flex-col justify-between p-6 ">
             <li className="text-2xl font-bold">{hotel.HotelName}</li>
-            <li className="text-overflow mb-4 w-96 break-all">{fakeText}</li>
+            <li className="mb-4 w-96 break-all line-clamp-[7]">{fakeText}</li>
             <li className="inline-flex items-center justify-between">
               <p className="text-xl font-bold tracking-wide text-gray-600">
                 NTD&nbsp;&nbsp;{hotel.price}

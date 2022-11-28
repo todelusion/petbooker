@@ -6,31 +6,34 @@
 
 @layer base {
   body {
-    @apply font-sans scrollbar-thin scrollbar-thumb-accent box-border
+    @apply box-border font-sans scrollbar-thin scrollbar-thumb-accent;
   }
 }
-@layer components {}
-
+@layer components {
+}
 
 @layer utilities {
   .flex-center {
-    @apply flex justify-center items-center
+    @apply flex items-center justify-center;
   }
   .flex-end {
-    @apply flex justify-center items-end
+    @apply flex items-end justify-center;
   }
   .before-position-init {
-    @apply before:absolute before:left-0 before:right-0 before:top-0 before:bottom-0
+    @apply before:absolute before:left-0 before:right-0 before:top-0 before:bottom-0;
   }
   .after-position-init {
-    @apply after:absolute after:left-0 after:right-0 after:top-0 after:bottom-0
+    @apply after:absolute after:left-0 after:right-0 after:top-0 after:bottom-0;
   }
-  
+
   .flex-col-center {
-    @apply flex flex-col justify-center items-center
+    @apply flex flex-col items-center justify-center;
   }
 }
+
 :root {
+  --swiper-theme-color: #000;
+  --swiper-navigation-size: 1.5rem;
   -webkit-tap-highlight-color: transparent;
   -webkit-touch-callout: none;
   -webkit-user-select: none;
@@ -38,11 +41,4 @@
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
-}
-.text-overflow {
-  text-overflow: ellipsis;
-  overflow: hidden;
-  display: -webkit-box;
-  -webkit-line-clamp: 7;
-  -webkit-box-orient: vertical;
 }
