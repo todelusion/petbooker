@@ -11,7 +11,6 @@ export default function UserLogin(): JSX.Element {
 
     setInputValue((prventValue) => ({ ...prventValue, [name]: value }));
   };
-
   return (
     <div className=" flex flex-col items-center  py-60">
       <form

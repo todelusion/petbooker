@@ -3,46 +3,46 @@ import { Link } from "react-router-dom";
 // import { string } from "zod"
 import UserInput from "../../components/Input";
 
-
 export default function UserRegist(): JSX.Element {
-  const [inputValue, setInputValue] = useState<{[index:string]:string}>({});
+  const [inputValue, setInputValue] = useState<{ [index: string]: string }>({});
 
   const inputValueHandler = (event: React.FormEvent): void => {
     const { name, value } = event.target as HTMLInputElement;
-    setInputValue((prventValue) => ({ ...prventValue, [name]: value.replace(/\s*/g,"") }));
-    
-    
+    setInputValue((prventValue) => ({
+      ...prventValue,
+      [name]: value.replace(/\s*/g, ""),
+    }));
   };
 
-  function regist (event:React.FormEvent):void{
-
+  function regist(event: React.FormEvent): void {
     event.preventDefault();
     console.log(inputValue);
-    
-    if(Object.values(inputValue).length<4){
+
+    if (Object.values(inputValue).length < 4) {
       // 彈窗
-      alert('有欄位尚未填寫')
-    }else{
-      console.log('填完了')
+      alert("有欄位尚未填寫");
+    } else {
+      console.log("填完了");
     }
-   
-    
   }
-    const validpassword =():boolean=>{
-      const {password,confirmPassword}=inputValue;
-      let result;
-   if(password ===undefined ||confirmPassword===undefined){
-    result= true
-   }else{
-    result=password===confirmPassword
-   }
-     return result
-  }
-  
-  
+  const validpassword = (): boolean => {
+    const { password, confirmPassword } = inputValue;
+    let result;
+    if (password === undefined || confirmPassword === undefined) {
+      result = true;
+    } else {
+      result = password === confirmPassword;
+    }
+    return result;
+  };
+
   return (
     <div className=" flex flex-col items-center  py-40">
-      <form  onSubmit={regist} action="onSubmit" className="flex w-1/3 max-w-md flex-col pt-4">
+      <form
+        onSubmit={regist}
+        action="onSubmit"
+        className="flex w-1/3 max-w-md flex-col pt-4"
+      >
         <h1 className="text-center  text-4xl">註冊</h1>
         <UserInput
           title="電子信箱"
@@ -91,7 +91,7 @@ export default function UserRegist(): JSX.Element {
                 type="radio"
                 name="identify"
                 id="petOwner"
-                value='petOwner'
+                value="petOwner"
                 className="mr-2 h-5 w-5 cursor-pointer appearance-none rounded-full border-2 border-black duration-150 checked:border-4 checked:border-primary checked:ring-2 checked:ring-primary_Dark hover:border-primary"
               />
               我是飼主
@@ -101,7 +101,7 @@ export default function UserRegist(): JSX.Element {
                 type="radio"
                 name="identify"
                 id="hotelier"
-                value='hotelier'
+                value="hotelier"
                 className="mr-2 h-5 w-5 cursor-pointer appearance-none rounded-full border-2 border-black duration-150 checked:border-4 checked:border-primary checked:ring-2 checked:ring-primary_Dark hover:border-primary"
               />
               我是寵物旅館業者
@@ -111,7 +111,7 @@ export default function UserRegist(): JSX.Element {
         <input
           type="submit"
           className="mt-8 rounded-full bg-second py-2 text-white"
-          value= '註冊'
+          value="註冊"
         />
         <span className="mt-3 flex justify-center">
           <span>
