@@ -9,57 +9,13 @@ import PetsPath from "./Pets.svg";
 import searchPath from "./Search.svg";
 import mapPinPath from "./Map-pin.svg";
 import calendarPath from "./Calendar.svg";
-
-// export const memberMenu = [
-//   {
-//     logo: userPath,
-//     content: "帳戶資訊",
-//     navigatePath: null,
-//   },
-//   {
-//     logo: creditCardPath,
-//     content: "我的寵物名片",
-//     navigatePath: null,
-//   },
-//   {
-//     logo: fileTextPath,
-//     content: "查看我的訂單",
-//     navigatePath: null,
-//   },
-//   {
-//     logo: heartPath,
-//     content: "收藏店家",
-//     navigatePath: null,
-//   },
-//   {
-//     logo: messageSquarePath,
-//     content: "安心評價",
-//     navigatePath: null,
-//   },
-//   {
-//     logo: logOutPath,
-//     content: "登出",
-//     navigatePath: null,
-//   },
-// ];
-
-// export const hotelMemberMenu = [
-//   {
-//     logo: userPath,
-//     content: "帳戶資訊",
-//     navigatePath: null,
-//   },
-//   {
-//     logo: fileTextPath,
-//     content: "我的房間管理",
-//     navigatePath: null,
-//   },
-//   {
-//     logo: logOutPath,
-//     content: "登出",
-//     navigatePath: null,
-//   },
-// ];
+import boxPath from "./Box.svg";
+import ClinicPath from "./Clinic.svg";
+import EyePath from "./Eye.svg";
+import GrassPath from "./Grass.svg";
+import HomePath from "./Home.svg";
+import ShowerPath from "./Shower.svg";
+import CameraPath from "./Camera.svg";
 
 export {
   heartPath,
@@ -73,4 +29,11 @@ export {
   searchPath,
   mapPinPath,
   calendarPath,
+  boxPath,
+  ClinicPath,
+  EyePath,
+  GrassPath,
+  HomePath,
+  ShowerPath,
+  CameraPath,
 };

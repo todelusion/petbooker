@@ -1,3 +1,16 @@
+import {
+  fileTextPath,
+  ShowerPath,
+  PetsPath,
+  EyePath,
+  userPath,
+  CameraPath,
+  ClinicPath,
+  GrassPath,
+  boxPath,
+  HomePath,
+} from "../../img/icons/icons";
+
 // filter資料有順序關係，因此需要使用陣列定義資料結構
 
 export const petLists = {
@@ -86,18 +99,22 @@ export const serviceLists = [
       {
         value: "contract",
         descript: "簽署合約",
+        logo: fileTextPath,
       },
       {
         value: "shower",
         descript: "洗澡服務",
+        logo: ShowerPath,
       },
       {
         value: "walkdog",
         descript: "遛狗服務",
+        logo: PetsPath,
       },
       {
         value: "pickup",
         descript: "接送服務",
+        logo: HomePath,
       },
     ],
   },
@@ -109,14 +126,17 @@ export const serviceLists = [
       {
         value: "24hrMonitor",
         descript: "24小時寵物監視器",
+        logo: EyePath,
       },
       {
         value: "24hrClerk",
         descript: "24小時人員駐店",
+        logo: userPath,
       },
       {
         value: "hospital",
         descript: "與醫療院所配合",
+        logo: ClinicPath,
       },
     ],
   },
@@ -128,14 +148,17 @@ export const serviceLists = [
       {
         value: "lifeRecord",
         descript: "提供寵物生活紀錄",
+        logo: CameraPath,
       },
       {
         value: "independentZone",
         descript: "生活空間與其他寵物分開",
+        logo: boxPath,
       },
       {
         value: "yard",
         descript: "廣大庭院",
+        logo: GrassPath,
       },
     ],
   },

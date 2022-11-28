@@ -3,6 +3,7 @@ import { Hotels } from "../../components/HotelCard/data";
 import SearchBar from "../../containers/SearchBar";
 import Image from "./Image";
 import Info from "./Info";
+import type { serviceLists } from "../../containers/Filter/data";
 
 export interface IHotel {
   Id: string;
@@ -16,6 +17,7 @@ export interface IHotel {
   AreaId: string;
   price: number;
   HotelScore: number;
+  serviceLists: typeof serviceLists;
 }
 
 function Hotel(): JSX.Element {

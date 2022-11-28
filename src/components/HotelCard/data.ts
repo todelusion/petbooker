@@ -23,6 +23,7 @@ export const Hotels = [
 
     // FoodTypes 在 Filter資料夾
     // ServicesTypes 在 Filter資料夾
+    serviceLists,
     // HotelAccount 前端不能知道
     // HotelPassword 前端不能知道
   },
@@ -39,6 +40,7 @@ export const Hotels = [
     AreaId: "台北市",
     price: 500,
     HotelScore: 9.1,
+    serviceLists,
   },
 ];
 
