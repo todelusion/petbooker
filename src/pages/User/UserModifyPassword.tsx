@@ -17,6 +17,7 @@ export default function UserModifyPassword(): JSX.Element {
         <h1 className="text-center  text-4xl">註冊</h1>
 
         <UserInput
+       
           title="密碼"
           inputType="password"
           name="password"
@@ -63,13 +64,13 @@ export default function UserModifyPassword(): JSX.Element {
           </span>
         </span>
         <div className=" relative text-center">
-          <div
+          {/* <div
             className="after:1/2 my-4 before:absolute before:top-1/2 before:left-4 
           before:h-0.5 before:w-5/12 before:bg-gray-300 before:content-[''] after:absolute after:right-4 
           after:top-1/2 after:h-0.5 after:w-5/12 after:bg-gray-300 after:content-['']"
           >
             或
-          </div>
+          </div> */}
         </div>
       </form>
     </div>

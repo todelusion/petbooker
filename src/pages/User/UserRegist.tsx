@@ -4,16 +4,26 @@ import { Link } from "react-router-dom";
 import UserInput from "../../components/Input";
 
 export default function UserRegist(): JSX.Element {
-  const [inputValue, setInputValue] = useState({});
+  const [inputValue, setInputValue] = useState<{ [index: string]: string }>({});
 
   const inputValueHandler = (event: React.FormEvent): void => {
     const { name, value } = event.target as HTMLInputElement;
-
-    setInputValue((prventValue) => ({ ...prventValue, [name]: value }));
+    setInputValue((prventValue) => ({
+      ...prventValue,
+      [name]: value.replace(/\s*/g, ""),
+    }));
   };
 
   function regist(event: React.FormEvent): void {
     event.preventDefault();
+    console.log(inputValue);
+
+    if (Object.values(inputValue).length < 4) {
+      // 彈窗
+      alert("有欄位尚未填寫");
+    } else {
+      console.log("填完了");
+    }
   }
   const validpassword = (): boolean => {
     const { password, confirmPassword } = inputValue;
@@ -25,11 +35,14 @@ export default function UserRegist(): JSX.Element {
     }
     return result;
   };
-  console.log(inputValue);
 
   return (
     <div className=" flex flex-col items-center  py-40">
-      <form action="#" className="flex w-1/3 max-w-md flex-col pt-4">
+      <form
+        onSubmit={regist}
+        action="onSubmit"
+        className="flex w-1/3 max-w-md flex-col pt-4"
+      >
         <h1 className="text-center  text-4xl">註冊</h1>
         <UserInput
           title="電子信箱"
@@ -78,6 +91,7 @@ export default function UserRegist(): JSX.Element {
                 type="radio"
                 name="identify"
                 id="petOwner"
+                value="petOwner"
                 className="mr-2 h-5 w-5 cursor-pointer appearance-none rounded-full border-2 border-black duration-150 checked:border-4 checked:border-primary checked:ring-2 checked:ring-primary_Dark hover:border-primary"
               />
               我是飼主
@@ -87,19 +101,18 @@ export default function UserRegist(): JSX.Element {
                 type="radio"
                 name="identify"
                 id="hotelier"
+                value="hotelier"
                 className="mr-2 h-5 w-5 cursor-pointer appearance-none rounded-full border-2 border-black duration-150 checked:border-4 checked:border-primary checked:ring-2 checked:ring-primary_Dark hover:border-primary"
               />
               我是寵物旅館業者
             </label>
           </span>
         </div>
-        <button
-          type="button"
+        <input
+          type="submit"
           className="mt-8 rounded-full bg-second py-2 text-white"
-          onSubmit={regist}
-        >
-          註冊
-        </button>
+          value="註冊"
+        />
         <span className="mt-3 flex justify-center">
           <span>
             已有帳號？{" "}
@@ -109,13 +122,13 @@ export default function UserRegist(): JSX.Element {
           </span>
         </span>
         <div className=" relative text-center">
-          <div
+          {/* <div
             className="after:1/2 my-4 before:absolute before:top-1/2 before:left-4 
           before:h-0.5 before:w-5/12 before:bg-gray-300 before:content-[''] after:absolute after:right-4 
           after:top-1/2 after:h-0.5 after:w-5/12 after:bg-gray-300 after:content-['']"
           >
             或
-          </div>
+          </div> */}
         </div>
       </form>
     </div>
