@@ -61,6 +61,7 @@ export function SearchBarProvider({
   const [state, dispatch] = useReducer(searchBarReducer, initSearchBarState);
 
   const value = useMemo(() => ({ ...state, dispatch }), [state]);
+  console.log(value);
 
   return (
     <SearchBarContext.Provider value={value}>

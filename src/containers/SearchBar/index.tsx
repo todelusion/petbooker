@@ -111,11 +111,11 @@ function SearchBar({ className }: { className?: string }): JSX.Element {
     return (
       <>
         <span>
-          {`${startDate.getMonth()}月 ${startDate.getDate()}
+          {`${startDate.getMonth() + 1}月 ${startDate.getDate()}
           日（${week[startDate.getDay()]}）`}
         </span>
         <span>－</span>
-        <span>{`${endDate.getMonth()}月 ${endDate.getDate()}日（${
+        <span>{`${endDate.getMonth() + 1}月 ${endDate.getDate()}日（${
           week[endDate.getDay()]
         }）`}</span>
       </>

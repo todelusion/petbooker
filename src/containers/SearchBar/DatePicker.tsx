@@ -35,6 +35,7 @@ function DatePicker(): JSX.Element {
   const onDateChange = (item: IDateRangePickerOutput): void => {
     dispatch({ type: "PICK_DATERANGE", payload: item });
   };
+  console.log(selection);
 
   const onNavigatorRenderer: NavigatorRenderer = (
     currFocusedDate,
@@ -87,6 +88,7 @@ function DatePicker(): JSX.Element {
       }
       navigatorRenderer={onNavigatorRenderer}
       moveRangeOnFirstSelection={false}
+      minDate={new Date()}
       months={2}
       /* 
       問題： React偵測到狀態改變而重新渲染套件，
