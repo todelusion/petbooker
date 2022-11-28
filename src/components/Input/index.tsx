@@ -16,38 +16,26 @@ interface Props {
 
 function Input(props: Props): JSX.Element {
   const [isValid,setIsValid]=useState<boolean>();
+  const [alertMessage,setAlertMessage]=useState<string>();
   const { inputType, name, id, inputPlaceHolder, title, inputValueHandler,inputValue } =
     props;
  
-  
   function validInput():void{ 
     if(inputValue[name]!==undefined &&name!=='userName'&&name!=='confirmPassword'){
     const result =Regex[name].regex.test(inputValue[name])
-    
     setIsValid(result) 
+    if(!result){
+      setAlertMessage(Regex[name].message)
     }
-    
+    }
   }
-
-
   function handleBlur ():void{
     validInput()
   }
   
-
   return (
-    
-    <div className=" relative ">
-      {/* 判斷是否inputValue為空物件 */}
-    
-    {Object.keys(inputValue).length===0
-    ?null
-    :
-    <img src={(isValid ?? false)?Alertvector:Alerttriangle} alt="alertIcon" className=
-    {`${ isValid===undefined ?'hidden':'block'} w-6 h-6 absolute right-[9.5px] bottom-[15px] z-20`} />
-    } 
-   
-    <label className="mb-2 mt-4 flex flex-col text-base " htmlFor={id}>
+    <div>
+    <label className="mb-2 mt-4 relative flex flex-col text-base " htmlFor={id}>
       {title}
       <input
         onBlur={handleBlur}
@@ -57,11 +45,19 @@ function Input(props: Props): JSX.Element {
         id={id}
         autoComplete="on"
         placeholder={inputPlaceHolder}
-        className="z-10 mt-2 h-10 relative rounded  border border-solid border-black py-2.5 pr-10 pl-2"
-
+        className="z-10 mt-2 h-10  rounded  border border-solid border-black py-2.5 pr-10 pl-2"
       />
+    {/* 判斷是否inputValue為空物件 */}
+    {Object.keys(inputValue).length===0
+    ?null
+    :
+    <img src={(isValid ?? false)?Alertvector:Alerttriangle} alt="alertIcon" className=
+    {`${ isValid===undefined ?'hidden':'block'} w-6 h-6 absolute right-[9.5px] bottom-[10px] z-20`} />
+    } 
     </label>
-    {/* <div>{validInput(inputValue,name)==='true'?'':Regex[name].message}</div> */}
+    <span className="text-red-500">
+      {isValid===undefined||isValid?null:alertMessage}
+    </span>
     </div>
   );
 }

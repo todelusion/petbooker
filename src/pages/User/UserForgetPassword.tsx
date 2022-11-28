@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
 // import { string } from "zod"
 import UserInput from "../../components/Input";
 
@@ -15,7 +14,6 @@ export default function UserForgetPassword(): JSX.Element {
       <form action="#" className="flex w-1/3 max-w-md flex-col pt-4">
         <h1 className="text-center  text-4xl">忘記密碼</h1>
         <UserInput
-          page="Forget"
           title="電子信箱"
           inputType="email"
           name="email"
@@ -31,23 +29,8 @@ export default function UserForgetPassword(): JSX.Element {
         >
           送出
         </button>
-        <span className="mt-3 flex justify-center">
-          <span>
-            已有帳號？{" "}
-            <Link to="/login" className="underline">
-              登入
-            </Link>
-          </span>
-        </span>
-        <div className=" relative text-center">
-          <div
-            className="after:1/2 my-4 before:absolute before:top-1/2 before:left-4 
-          before:h-0.5 before:w-5/12 before:bg-gray-300 before:content-[''] after:absolute after:right-4 
-          after:top-1/2 after:h-0.5 after:w-5/12 after:bg-gray-300 after:content-['']"
-          >
-            或
-          </div>
-        </div>
+     
+      
       </form>
     </div>
   );
