@@ -5,7 +5,7 @@ import UserInput from "../../components/Input";
 
 export default function UserRegist(): JSX.Element {
   const [inputValue, setInputValue] = useState<{ [index: string]: string }>({});
-
+  const [group,setGroup]=useState<string>('');
   const inputValueHandler = (event: React.FormEvent): void => {
     const { name, value } = event.target as HTMLInputElement;
     setInputValue((prventValue) => ({
@@ -17,13 +17,14 @@ export default function UserRegist(): JSX.Element {
   function regist(event: React.FormEvent): void {
     event.preventDefault();
     console.log(inputValue);
-
+    
     if (Object.values(inputValue).length < 4) {
       // 彈窗
       alert("有欄位尚未填寫");
-    } else {
-      console.log("填完了");
+      return;
     }
+    console.log('123')
+    
   }
   const validpassword = (): boolean => {
     const { password, confirmPassword } = inputValue;
@@ -35,7 +36,12 @@ export default function UserRegist(): JSX.Element {
     }
     return result;
   };
+  const setgroup =(event:React.FormEvent):void=>{
+    const {value}=event.target as HTMLInputElement
+    setGroup(value)
 
+  }
+  console.log(group)
   return (
     <div className=" flex flex-col items-center  py-40">
       <form
@@ -92,6 +98,7 @@ export default function UserRegist(): JSX.Element {
                 name="identify"
                 id="petOwner"
                 value="petOwner"
+                onChange={setgroup}
                 className="mr-2 h-5 w-5 cursor-pointer appearance-none rounded-full border-2 border-black duration-150 checked:border-4 checked:border-primary checked:ring-2 checked:ring-primary_Dark hover:border-primary"
               />
               我是飼主
@@ -102,6 +109,7 @@ export default function UserRegist(): JSX.Element {
                 name="identify"
                 id="hotelier"
                 value="hotelier"
+                 onChange={setgroup}
                 className="mr-2 h-5 w-5 cursor-pointer appearance-none rounded-full border-2 border-black duration-150 checked:border-4 checked:border-primary checked:ring-2 checked:ring-primary_Dark hover:border-primary"
               />
               我是寵物旅館業者

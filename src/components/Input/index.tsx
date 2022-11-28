@@ -40,7 +40,6 @@ function Input(props: Props): JSX.Element {
       }
     }
   }
-  console.log(isValid, name, inputValue);
   function handleBlur(): void {
     validInput();
   }

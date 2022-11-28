@@ -14,7 +14,6 @@ export default function UserForgetPassword(): JSX.Element {
       <form action="#" className="flex w-1/3 max-w-md flex-col pt-4">
         <h1 className="text-center  text-4xl">忘記密碼</h1>
         <UserInput
-          page="Forget"
           title="電子信箱"
           inputType="email"
           name="email"
