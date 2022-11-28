@@ -6,11 +6,8 @@ function HotelCard(): JSX.Element {
   return (
     <>
       {hotelList.map((hotel) => (
-        <div
-          key={hotel.HotelName}
-          className="mb-6 flex h-96 w-[960px] border-2"
-        >
-          <div className="relative w-1/2 max-w-md ">
+        <div key={hotel.HotelName} className="mb-6 flex h-96 border-2">
+          <div className="relative basis-1/2 ">
             {hotel.HotelPhoto[0] !== "" ? (
               <img
                 src={hotel.HotelPhoto[0]}
@@ -24,9 +21,9 @@ function HotelCard(): JSX.Element {
               {hotel.HotelScore}
             </div>
           </div>
-          <ul className="flex w-1/2 flex-col justify-between p-6 ">
+          <ul className="flex basis-1/2 flex-col justify-between p-6 ">
             <li className="text-2xl font-bold">{hotel.HotelName}</li>
-            <li className="mb-4 w-96 break-all line-clamp-[7]">{fakeText}</li>
+            <li className="mb-4 line-clamp-[7]">{fakeText}</li>
             <li className="inline-flex items-center justify-between">
               <p className="text-xl font-bold tracking-wide text-gray-600">
                 NTD&nbsp;&nbsp;{hotel.price}

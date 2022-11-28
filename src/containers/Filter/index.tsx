@@ -4,12 +4,12 @@ import useFilter from "../../hooks/useFilter";
 import { foodLists, petLists, pricesLists, serviceLists } from "./data";
 import FilterInput from "./FilterInput";
 
-function Filter(): JSX.Element {
+function Filter({ className }: { className: string }): JSX.Element {
   const FilterContextProps = useFilter();
   const { PetType, FoodTypes, RoomPrices, ServiceTypes } = FilterContextProps;
 
   return (
-    <ul className="w-60 rounded-md border-2 border-black">
+    <ul className={`${className} rounded-md border-2 border-black`}>
       <li className="bg-black py-2 text-center text-xl text-white">
         透過以下分類搜尋
       </li>

@@ -16,8 +16,10 @@ import GrassPath from "./Grass.svg";
 import HomePath from "./Home.svg";
 import ShowerPath from "./Shower.svg";
 import CameraPath from "./Camera.svg";
+import Pets2Path from "./Pets2.svg";
 
 export {
+  Pets2Path,
   heartPath,
   logOutPath,
   messageSquarePath,

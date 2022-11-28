@@ -9,6 +9,7 @@ interface ButtonProps {
   text: string;
   icon?: string;
   className: string;
+  textSize?: string;
   navigatePath?: string;
 }
 function Button({
@@ -16,6 +17,7 @@ function Button({
   text,
   icon,
   className,
+  textSize,
   navigatePath,
 }: ButtonProps): JSX.Element {
   const navigate = useNavigate();
@@ -40,7 +42,7 @@ function Button({
       className={`${renderButtonPropsType()} ${className} flex-center h-max rounded-full`}
     >
       {icon !== undefined && <img src={icon} alt="icon" className="mr-2" />}
-      {text}
+      <span className={textSize}>{text}</span>
     </button>
   );
 }
@@ -48,6 +50,7 @@ function Button({
 Button.defaultProps = {
   navigatePath: undefined,
   icon: undefined,
+  textSize: "text-base",
 };
 
 export default Button;

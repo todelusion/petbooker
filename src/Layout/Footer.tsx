@@ -1,6 +1,6 @@
 import React from "react";
 import logoWhitePath from "../img/logo-white.svg";
-import { PetsPath } from "../img/icons/icons";
+import { Pets2Path } from "../img/icons/icons";
 
 function Footer(): JSX.Element {
   return (
@@ -19,7 +19,7 @@ function Footer(): JSX.Element {
         <li>相關條款</li>
       </ul>
       <img
-        src={PetsPath}
+        src={Pets2Path}
         alt="pets icon"
         className="absolute bottom-9 right-10"
       />

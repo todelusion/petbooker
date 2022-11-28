@@ -1,12 +1,12 @@
 import React from "react";
 import type { IHotel } from "./index";
 
-interface IImageProps {
-  hotel: IHotel;
+interface IPhotoProps {
+  data: IHotel["HotelPhoto"];
   className?: string;
 }
 
-function Image({ hotel, className }: IImageProps): JSX.Element {
+function Photo({ data, className }: IPhotoProps): JSX.Element {
   return (
     <ul
       className={`grid h-96 w-full grid-cols-4 grid-rows-2 gap-4 ${
@@ -14,13 +14,13 @@ function Image({ hotel, className }: IImageProps): JSX.Element {
       }`}
     >
       <li className="col-span-2 row-span-2 border-2 border-black">
-        {hotel.HotelPhoto[0] !== "" ? (
-          <img src={hotel.HotelPhoto[0]} alt="thumbnail" />
+        {data[0] !== "" ? (
+          <img src={data[0]} alt="thumbnail" />
         ) : (
           <div className="h-full w-full bg-gray-100" />
         )}
       </li>
-      {hotel.HotelPhoto.map((photo, index) => {
+      {data.map((photo, index) => {
         // eslint-disable-next-line react/no-array-index-key
         if (index < 1) return <li key={index} className="hidden" />;
         if (photo !== "")
@@ -40,8 +40,8 @@ function Image({ hotel, className }: IImageProps): JSX.Element {
   );
 }
 
-Image.defaultProps = {
+Photo.defaultProps = {
   className: "",
 };
 
-export default Image;
+export default Photo;

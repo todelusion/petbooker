@@ -9,7 +9,9 @@ interface ICommentProps {
 function Comment({ data, className }: ICommentProps): JSX.Element {
   return (
     <div
-      className={`h-40 w-100 rounded-xl border-2 p-6 ${className as string} `}
+      className={`h-40 max-w-[400px] rounded-xl border-2 p-6 ${
+        className as string
+      } `}
     >
       <ul>
         <li className="mb-4 flex justify-between">
