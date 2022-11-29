@@ -1,27 +1,33 @@
-import React, { useContext, useState } from "react"
+import React, { useContext, useState } from "react";
 // import { string } from "zod"
-import { Link } from "react-router-dom"
-import axios from "axios"
-import UserAuth, { UserAuthContetxt } from "../../context/UserAuthContext"
-import UserInput from "../../components/Input"
+import { Link } from "react-router-dom";
+import axios from "axios";
+import UserAuth, { UserAuthContetxt } from "../../context/UserAuthContext";
+import UserInput from "../../components/Input";
 
 export default function UserLogin(): JSX.Element {
-  const { authToken, setAuthToken } = useContext(UserAuth)
-  const [inputValue, setInputValue] = useState({})
+  const { authToken, setAuthToken } = useContext(UserAuth);
+  const [inputValue, setInputValue] = useState({});
+  const [identity, setIdentity] = useState<string>("");
   const inputValueHandler = (event: React.FormEvent): void => {
-    const { name, value } = event.target as HTMLInputElement
+    const { name, value } = event.target as HTMLInputElement;
 
-    setInputValue((prventValue) => ({ ...prventValue, [name]: value }))
-  }
+    setInputValue((prventValue) => ({ ...prventValue, [name]: value }));
+  };
   const Login = (): void => {
     axios
       .post("https://petcity.rocket-coding.com/user/login", {
-        UserAccount: "qqq123@gmail.com",
+        UserAccount: "qqq123gmail.com",
         UserPassWord: "Wang1234",
+        Identity: "customer",
       })
       .then((res) => console.log(res))
-      .catch((err) => console.log(err))
-  }
+      .catch((err) => console.log(err));
+  };
+  const setidentity = (event: React.FormEvent): void => {
+    const { value } = event.target as HTMLInputElement;
+    setIdentity(value);
+  };
   return (
     <div className=" flex flex-col items-center  py-60">
       <form action="#" className="flex w-1/3 max-w-md flex-col pt-4">
@@ -44,6 +50,33 @@ export default function UserLogin(): JSX.Element {
           inputValueHandler={inputValueHandler}
           inputValue={inputValue}
         />
+        <div>
+          <h2 className="mb-2 mt-4">會員身份</h2>
+          <span>
+            <label htmlFor="petOwner">
+              <input
+                type="radio"
+                name="identify"
+                id="customer"
+                value="customer"
+                onChange={setidentity}
+                className="mr-2 h-5 w-5 cursor-pointer appearance-none rounded-full border-2 border-black duration-150 checked:border-4 checked:border-primary checked:ring-2 checked:ring-primary_Dark hover:border-primary"
+              />
+              我是飼主
+            </label>
+            <label htmlFor="Owner" className="ml-10">
+              <input
+                type="radio"
+                name="identify"
+                id="hotel"
+                value="hotel"
+                onChange={setidentity}
+                className="mr-2 h-5 w-5 cursor-pointer appearance-none rounded-full border-2 border-black duration-150 checked:border-4 checked:border-primary checked:ring-2 checked:ring-primary_Dark hover:border-primary"
+              />
+              我是寵物旅館業者
+            </label>
+          </span>
+        </div>
 
         <button
           type="button"
@@ -76,5 +109,5 @@ export default function UserLogin(): JSX.Element {
         </div>
       </form>
     </div>
-  )
+  );
 }
