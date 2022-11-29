@@ -64,6 +64,7 @@ function AccountMenu(): JSX.Element {
                     if (item.navigatePath === null)
                       throw new Error("navigatePath is null");
                     navigate(item.navigatePath);
+                    toggleAccountMenuSet(false);
                   }}
                   type="button"
                   className="flex items-center"

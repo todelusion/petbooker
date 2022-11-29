@@ -10,17 +10,21 @@ interface Content {
   descript: string;
 }
 
-interface IFilterInputProps {
-  action: FilterAction["type"];
+interface IFilterList {
   keyname: string;
   title: string;
-  checked: string | string[];
   contents: Array<{
     value: string;
     descript: string;
   }>;
-
   type: React.HTMLInputTypeAttribute;
+}
+
+interface IFilterInputProps {
+  action: FilterAction["type"];
+  filterList: IFilterList;
+  horizontal?: boolean;
+  checked: string | string[];
 }
 
 export const handleFilterValue = (
@@ -144,15 +148,15 @@ export const handleFilterValue = (
 };
 
 function FilterInput({
-  keyname,
-  title,
   action,
-  type,
+  filterList,
   checked,
-  contents,
+  horizontal,
 }: IFilterInputProps): JSX.Element {
   const FilterContextProps = useFilter();
+  const { keyname, title, type, contents } = filterList;
 
+  // renderUI
   const renderInput = (content: Content): JSX.Element => {
     switch (type) {
       case "radio":
@@ -199,7 +203,7 @@ function FilterInput({
   };
 
   return (
-    <li className="p-4">
+    <div className="p-4">
       <p className="font-bold">{title}</p>
       <form name={action}>
         {contents.map((content) => (
@@ -215,8 +219,12 @@ function FilterInput({
           </div>
         ))}
       </form>
-    </li>
+    </div>
   );
 }
+
+FilterInput.defaultProps = {
+  horizontal: false,
+};
 
 export default FilterInput;

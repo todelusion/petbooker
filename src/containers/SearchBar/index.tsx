@@ -11,7 +11,7 @@ import {
   mapPinPath,
   calendarPath,
   creditCardPath,
-} from "../../img/icons/icons";
+} from "../../img/icons";
 import Button from "../../components/Button";
 import DatePicker from "./DatePicker";
 import CountryList from "./CountryList";
@@ -101,11 +101,11 @@ function SearchBar({ className }: { className?: string }): JSX.Element {
 
     if (key === "")
       return (
-        <>
+        <p className="text-sm xl:text-base">
           <span>選擇入住</span>
           <span>－</span>
           <span>退房日期</span>
-        </>
+        </p>
       );
 
     return (
@@ -159,7 +159,9 @@ function SearchBar({ className }: { className?: string }): JSX.Element {
               className="flex-center"
             >
               <img src={mapPinPath} alt="map" />
-              <span className="px-3">{area === "" ? "選擇地點" : area}</span>
+              <span className="px-3 text-sm xl:text-base">
+                {area === "" ? "選擇地點" : area}
+              </span>
               <FontAwesomeIcon
                 icon={showLocation ? faChevronUp : faChevronDown}
               />
@@ -197,7 +199,9 @@ function SearchBar({ className }: { className?: string }): JSX.Element {
           className="flex-center"
         >
           <img src={creditCardPath} alt="creditCard" />
-          <span className="px-3">{pet === "" ? "選擇寵物名片" : pet}</span>
+          <span className="px-3 text-sm xl:text-base">
+            {pet === "" ? "選擇寵物名片" : pet}
+          </span>
           <FontAwesomeIcon
             icon={showPetCardSmall ? faChevronUp : faChevronDown}
           />
