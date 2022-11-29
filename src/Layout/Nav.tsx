@@ -1,12 +1,14 @@
 import { Link, Outlet } from "react-router-dom";
+import { useContext } from "react";
 import logoSubtitlePath from "../img/logo-subtitle.svg";
 import Button from "../components/Button";
 import AccountMenu from "../components/AccountMenu";
 import Footer from "./Footer";
+import UserAuth from "../context/UserAuthContext";
 
 function Nav(): JSX.Element {
   // 根據有無 token 來顯示會員選單與否
-  const token = "token";
+  const token = useContext(UserAuth)
 
   return (
     <>
