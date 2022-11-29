@@ -9,7 +9,7 @@ import {
   GrassPath,
   boxPath,
   HomePath,
-} from "../../img/icons/icons";
+} from "../../img/icons";
 
 // filter資料有順序關係，因此需要使用陣列定義資料結構
 

@@ -1,5 +1,4 @@
 import React from "react";
-import { FilterAction, IFilterContextProps } from "../../context/FilterContext";
 import useFilter from "../../hooks/useFilter";
 import { foodLists, petLists, pricesLists, serviceLists } from "./data";
 import FilterInput from "./FilterInput";
@@ -15,31 +14,22 @@ function Filter({ className }: { className: string }): JSX.Element {
       </li>
       <FilterInput
         action="PICK-PetType"
-        keyname={petLists.keyname}
         checked={PetType}
-        title={petLists.title}
-        contents={petLists.contents}
-        type={petLists.type}
+        filterList={petLists}
       />
       <FilterInput
         action="PICK-FoodTypes"
-        keyname={foodLists.keyname}
-        title={foodLists.title}
-        contents={foodLists.contents}
+        filterList={foodLists}
         checked={FoodTypes}
-        type={foodLists.type}
       />
       <FilterInput
         action="PICK-RoomPrices"
-        keyname={pricesLists.keyname}
-        title={pricesLists.title}
+        filterList={pricesLists}
         checked={RoomPrices}
-        contents={pricesLists.contents}
-        type={pricesLists.type}
       />
-      {serviceLists.map((item) => {
+      {serviceLists.map((list) => {
         let checkArray = [""];
-        switch (item.keyname) {
+        switch (list.keyname) {
           case "services":
             checkArray = ServiceTypes.services;
             break;
@@ -55,12 +45,9 @@ function Filter({ className }: { className: string }): JSX.Element {
         return (
           <FilterInput
             action="PICK-ServiceTypes"
+            filterList={list}
             checked={checkArray}
-            key={item.keyname}
-            keyname={item.keyname}
-            title={item.title}
-            contents={item.contents}
-            type={item.type}
+            key={list.keyname}
           />
         );
       })}

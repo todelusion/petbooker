@@ -39,7 +39,9 @@ function LandingPage(): JSX.Element {
           </p>
           <h2 className="mt-1 text-2xl">
             {loadingPageInfo[index].title}
-            <h3 className="text-base">{loadingPageInfo[index].text}</h3>
+            <span className="block text-base">
+              {loadingPageInfo[index].text}
+            </span>
           </h2>
         </div>
         <img src={loadingPageInfo[index].img} alt="infoimg" className="mt-16" />

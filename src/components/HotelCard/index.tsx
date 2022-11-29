@@ -6,7 +6,7 @@ function HotelCard(): JSX.Element {
   return (
     <>
       {hotelList.map((hotel) => (
-        <div key={hotel.HotelName} className="mb-6 flex h-96 border-2">
+        <div key={hotel.HotelName} className="mb-6 flex border-2 lg:h-96">
           <div className="relative basis-1/2 ">
             {hotel.HotelPhoto[0] !== "" ? (
               <img

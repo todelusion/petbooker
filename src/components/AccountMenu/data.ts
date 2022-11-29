@@ -6,7 +6,7 @@ import {
   messageSquarePath,
   userPath,
   accountMenuPath,
-} from "../../img/icons/icons";
+} from "../../img/icons";
 
 export { accountMenuPath };
 
@@ -14,7 +14,7 @@ export const memberMenu = [
   {
     logo: userPath,
     content: "帳戶資訊",
-    navigatePath: null,
+    navigatePath: "./member",
   },
   {
     logo: creditCardPath,

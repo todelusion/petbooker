@@ -4,32 +4,27 @@ import FilterInput from "../containers/Filter/FilterInput";
 import SearchBar from "../containers/SearchBar";
 import useFilter from "../hooks/useFilter";
 import { foodLists, petLists, serviceLists } from "../containers/Filter/data";
-import { handleFilterValue } from "../containers/Filter";
 
 function ContextTest(): JSX.Element {
+  const { PetType, FoodTypes, ServiceTypes } = useFilter();
+
   return (
     <div className="flex-col-center pt-40">
       <Link to="/home">點此返回home頁</Link>
       <SearchBar />
-      {/* <FilterInput
+      <FilterInput
         action="PICK-PetType"
-        keyname={petLists.keyname}
+        filterList={petLists}
         checked={PetType}
-        title={petLists.title}
-        contents={petLists.contents}
-        type={petLists.type}
       />
       <FilterInput
         action="PICK-FoodTypes"
-        keyname={foodLists.keyname}
+        filterList={foodLists}
         checked={FoodTypes}
-        title={foodLists.title}
-        contents={foodLists.contents}
-        type={foodLists.type}
       />
-      {serviceLists.map((item) => {
+      {serviceLists.map((list) => {
         let checkArray = [""];
-        switch (item.keyname) {
+        switch (list.keyname) {
           case "services":
             checkArray = ServiceTypes.services;
             break;
@@ -45,15 +40,12 @@ function ContextTest(): JSX.Element {
         return (
           <FilterInput
             action="PICK-ServiceTypes"
+            filterList={list}
             checked={checkArray}
-            key={item.keyname}
-            keyname={item.keyname}
-            title={item.title}
-            contents={item.contents}
-            type={item.type}
+            key={list.keyname}
           />
         );
-      })} */}
+      })}
     </div>
   );
 }

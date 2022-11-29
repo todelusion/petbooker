@@ -14,6 +14,11 @@ function Nav(): JSX.Element {
         <Link to="/home">
           <img src={logoSubtitlePath} alt="logo" className=" w-60" />
         </Link>
+        <Link to="/contextTest">
+          <span className=" rounded-3xl bg-slate-800 p-2 text-white">
+            Context Test
+          </span>
+        </Link>
         {token === undefined ? (
           <div className="flex-center pt-5">
             <Button

@@ -1,6 +1,6 @@
 import React from "react";
 import logoWhitePath from "../img/logo-white.svg";
-import { Pets2Path } from "../img/icons/icons";
+import { Pets2Path } from "../img/icons";
 
 function Footer(): JSX.Element {
   return (
