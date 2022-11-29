@@ -6,6 +6,9 @@ import  {UserAuthContetxt}  from "./context/UserAuthContext";
 import "swiper/css";
 import "swiper/css/navigation";
 
+import "swiper/css";
+import "swiper/css/navigation";
+
 import "./tailwind.css";
 import Router from "./Router";
 
