@@ -1,17 +1,20 @@
 import { AnimatePresence, motion } from "framer-motion";
 import React, { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { memberMenu, hotelMemberMenu, accountMenuPath } from "./data";
 
 type Member = "member" | "hotel";
 
 function AccountMenu(): JSX.Element {
+  const navigate = useNavigate();
+
   // 用is .... 如果是 boolean
-  const [toggleAccountMenu, toggleAccountMenuSet] = useState(true);
+  const [toggleAccountMenu, toggleAccountMenuSet] = useState(false);
   let member: Member;
   // eslint-disable-next-line prefer-const
-  member = "member";
+  member = "hotel";
 
-  const renderMenu = (): typeof memberMenu => {
+  const renderMenu = (): typeof hotelMemberMenu => {
     // 根據會員身分來顯示可用的功能列表
     switch (member) {
       case "member":
@@ -56,7 +59,15 @@ function AccountMenu(): JSX.Element {
           >
             {renderMenu().map((item) => (
               <li key={item.content} className="py-2">
-                <button type="button" className="flex items-center">
+                <button
+                  onClick={() => {
+                    if (item.navigatePath === null)
+                      throw new Error("navigatePath is null");
+                    navigate(item.navigatePath);
+                  }}
+                  type="button"
+                  className="flex items-center"
+                >
                   <img src={item.logo} alt="userInfo" />
                   <span className="ml-2">{item.content}</span>
                 </button>

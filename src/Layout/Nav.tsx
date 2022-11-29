@@ -6,7 +6,7 @@ import Footer from "./Footer";
 
 function Nav(): JSX.Element {
   // 根據有無 token 來顯示會員選單與否
-  const token = undefined;
+  const token = "token";
 
   return (
     <>

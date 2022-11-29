@@ -33,13 +33,14 @@ function LandingPage(): JSX.Element {
   function renderInfo(index: number): JSX.Element {
     return (
       <section className="mt-20 flex w-4/5 flex-col ">
-        <div className="w-full ">
+        <div className="flex w-full items-center">
           <p className="top-0 float-left mr-8  text-9xl text-primary ">
             {index + 1}
           </p>
-
-          <h2 className="mt-1 text-2xl">{loadingPageInfo[index].title}</h2>
-          <h3 className="text-base">{loadingPageInfo[index].text}</h3>
+          <h2 className="mt-1 text-2xl">
+            {loadingPageInfo[index].title}
+            <h3 className="text-base">{loadingPageInfo[index].text}</h3>
+          </h2>
         </div>
         <img src={loadingPageInfo[index].img} alt="infoimg" className="mt-16" />
       </section>
@@ -70,13 +71,13 @@ function LandingPage(): JSX.Element {
       </header>
 
       <main className="flex max-w-[1440px] flex-col items-center px-28 ">
-        <section className="mt-28">
+        <section className="mt-28 max-w-3xl">
           <img src={TitleImg} alt="Titleimg" />
         </section>
 
         <section className="mt-80 flex flex-col items-center">
           <img src={PetcityIcon} alt="PetcityIcon" />
-          <p className="mt-14 text-5.5xl font-bold">
+          <p className="mt-14 text-4xl font-bold lg:text-5xl">
             我們為提供您能更安心選擇寵物旅館
           </p>
         </section>
@@ -88,7 +89,9 @@ function LandingPage(): JSX.Element {
       </main>
 
       <div className="my-36 flex flex-col items-center">
-        <p className="text-5.5xl">寵物坊城市，只為您與毛小孩著想</p>
+        <p className="text-4xl font-bold lg:text-5xl">
+          寵物坊城市，只為您與毛小孩著想
+        </p>
 
         <span className="mt-8">
           <button
