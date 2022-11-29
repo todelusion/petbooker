@@ -9,5 +9,5 @@ export default defineConfig({
   // base: "./"
 
   // for github pages
-  base: '/RocketTeam-10th/'
+  base: '/petbooker/'
 });

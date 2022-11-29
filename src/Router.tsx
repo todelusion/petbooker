@@ -1,25 +1,25 @@
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { Routes, Route } from "react-router-dom";
-import ComponentProvicer from "./context";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
+import { Routes, Route } from "react-router-dom"
+import ComponentProvicer from "./context"
 
-import Nav from "./Layout/Nav";
-import ContextTest from "./pages/ContextTest";
-import Home from "./pages/Home";
-import LandingPage from "./pages/LandingPage ";
-import UserForgetPassword from "./pages/User/UserForgetPassword";
-import UserLogin from "./pages/User/UserLogin";
-import UserModifyPassword from "./pages/User/UserModifyPassword";
-import UserRegist from "./pages/User/UserRegist";
-import Hotel from "./pages/Hotel";
-import NavBackend from "./Layout/NavBackend";
-import Cms from "./pages/Cms/CmsInfo";
+import Nav from "./Layout/Nav"
+import ContextTest from "./pages/ContextTest"
+import Home from "./pages/Home"
+import LandingPage from "./pages/LandingPage "
+import UserForgetPassword from "./pages/User/UserForgetPassword"
+import UserLogin from "./pages/User/UserLogin"
+import UserModifyPassword from "./pages/User/UserModifyPassword"
+import UserRegist from "./pages/User/UserRegist"
+import Hotel from "./pages/Hotel"
+import NavBackend from "./Layout/NavBackend"
+import CmsInfo from "./pages/Cms/CmsInfo"
 
-import { cmsMenu, memberMenu } from "./Layout/data";
-import MemberInfo from "./pages/Member/MemberInfo";
-import { FilterProvider } from "./context/FilterContext";
+import { cmsMenu, memberMenu } from "./Layout/data"
+import MemberInfo from "./pages/Member/MemberInfo"
+import { FilterProvider } from "./context/FilterContext"
 
 export default function Router(): JSX.Element {
-  const client = new QueryClient();
+  const client = new QueryClient()
   return (
     <QueryClientProvider client={client}>
       <Routes>
@@ -61,7 +61,7 @@ export default function Router(): JSX.Element {
               index
               element={
                 <FilterProvider>
-                  <Cms />
+                  <CmsInfo />
                 </FilterProvider>
               }
             />
@@ -69,5 +69,5 @@ export default function Router(): JSX.Element {
         </Route>
       </Routes>
     </QueryClientProvider>
-  );
+  )
 }

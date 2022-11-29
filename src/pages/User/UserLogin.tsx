@@ -1,38 +1,30 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState } from "react"
 // import { string } from "zod"
-import { Link } from "react-router-dom";
-import axios from "axios";
-import  UserAuth, {UserAuthContetxt}  from '../../context/UserAuthContext';
-import UserInput from "../../components/Input";
+import { Link } from "react-router-dom"
+import axios from "axios"
+import UserAuth, { UserAuthContetxt } from "../../context/UserAuthContext"
+import UserInput from "../../components/Input"
 
 export default function UserLogin(): JSX.Element {
-  const {authToken,setAuthToken}=useContext(UserAuth)
-  const [inputValue, setInputValue] = useState({});
+  const { authToken, setAuthToken } = useContext(UserAuth)
+  const [inputValue, setInputValue] = useState({})
   const inputValueHandler = (event: React.FormEvent): void => {
-    const { name, value } = event.target as HTMLInputElement;
+    const { name, value } = event.target as HTMLInputElement
 
-    setInputValue((prventValue) => ({ ...prventValue, [name]: value }));
-  };
-  console.log(authToken,setAuthToken);
-  const  Login=():void=> {
-    axios.post('https://petcity.rocket-coding.com/user/signup',{
-  "UserAccount": "qqq123@gmail.com",
-  "UserName": "www",
-  "UserPassWord": "Wang1234",
-  "ConfirmedPassword": "Wang1234",
-  "Identity": "1"
-}).then(res=>{
-  console.log(res)
-}).catch(err => {
-  console.log(err);
-})
+    setInputValue((prventValue) => ({ ...prventValue, [name]: value }))
+  }
+  const Login = (): void => {
+    axios
+      .post("https://petcity.rocket-coding.com/user/login", {
+        UserAccount: "qqq123@gmail.com",
+        UserPassWord: "Wang1234",
+      })
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err))
   }
   return (
     <div className=" flex flex-col items-center  py-60">
-      <form
-        action="#"
-        className="flex w-1/3 max-w-md flex-col pt-4"
-      >
+      <form action="#" className="flex w-1/3 max-w-md flex-col pt-4">
         <h1 className="text-center  text-4xl">登入</h1>
         <UserInput
           title="帳號"
@@ -84,5 +76,5 @@ export default function UserLogin(): JSX.Element {
         </div>
       </form>
     </div>
-  );
+  )
 }

@@ -1,16 +1,16 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import DropDownList from "../components/DropDownList";
-import Filter from "../containers/Filter";
-import HotelCard from "../components/HotelCard";
-import SearchBar from "../containers/SearchBar";
+import React from "react"
+import { Link } from "react-router-dom"
+import DropDownList from "../components/DropDownList"
+import Filter from "../containers/Filter"
+import HotelCard from "../components/HotelCard"
+import SearchBar from "../containers/SearchBar"
 
 function Home(): JSX.Element {
   return (
     <div className="relative flex w-full items-start justify-evenly px-20 pt-40">
       <Filter className="max-w-xs" />
 
-      <div className="flex max-w-2xl flex-col items-center border-2 xl:max-w-4xl">
+      <div className="flex max-w-2xl flex-col items-center xl:max-w-4xl">
         <SearchBar className="mb-16" />
         <div className="flex flex-col items-end">
           <DropDownList className="mb-3" />
@@ -18,7 +18,7 @@ function Home(): JSX.Element {
         </div>
       </div>
     </div>
-  );
+  )
 }
 
-export default Home;
+export default Home

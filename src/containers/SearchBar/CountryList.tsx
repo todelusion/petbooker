@@ -4,14 +4,16 @@ import type { SearchBarAction } from ".";
 
 interface ICountryListProps {
   countryList: CountyList;
-  dispatchSearchBar: React.Dispatch<SearchBarAction>;
+  dispatchSearchBar?: React.Dispatch<SearchBarAction>;
 }
 
 function CountryList({
   countryList,
   dispatchSearchBar,
 }: ICountryListProps): JSX.Element {
+  console.log(useSearchBar);
   const { dispatch } = useSearchBar();
+
   const { countyItems } = countryList;
   return (
     <select
@@ -21,6 +23,8 @@ function CountryList({
           type: "PICK_COUNTRY",
           payload: (e.target as HTMLSelectElement).value,
         });
+
+        if (dispatchSearchBar === undefined) return;
         dispatchSearchBar({ type: "TOGGLE_LOCATION", payload: false });
       }}
       name="country"
@@ -39,5 +43,9 @@ function CountryList({
     </select>
   );
 }
+
+CountryList.defaultProps = {
+  dispatchSearchBar: undefined,
+};
 
 export default CountryList;
