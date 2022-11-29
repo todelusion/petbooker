@@ -7,8 +7,9 @@ type ButtonPropsType = "Primary" | "Secondary";
 interface ButtonProps {
   type: ButtonPropsType;
   text: string;
-  icon?: string;
   className: string;
+  onClick?: () => void;
+  icon?: string;
   textSize?: string;
   navigatePath?: string;
 }
@@ -16,6 +17,7 @@ function Button({
   type,
   text,
   icon,
+  onClick,
   className,
   textSize,
   navigatePath,
@@ -32,12 +34,19 @@ function Button({
     }
   };
 
+  const onNavigate = (): void => {
+    if (navigatePath === undefined) return;
+    navigate(navigatePath);
+  };
+
   return (
     <button
       type="button"
       onClick={() => {
-        if (navigatePath === undefined) return;
-        navigate(navigatePath);
+        onNavigate();
+        if (onClick === undefined) return;
+        console.log("test");
+        onClick();
       }}
       className={`${renderButtonPropsType()} ${className} flex-center h-max rounded-full`}
     >
@@ -49,6 +58,7 @@ function Button({
 
 Button.defaultProps = {
   navigatePath: undefined,
+  onClick: () => {},
   icon: undefined,
   textSize: "text-base",
 };

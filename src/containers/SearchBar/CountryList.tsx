@@ -4,28 +4,16 @@ import type { SearchBarAction } from ".";
 
 interface ICountryListProps {
   countryList: CountyList;
-  dispatchSearchBar?: React.Dispatch<SearchBarAction>;
+  onClick: (e: React.MouseEvent<HTMLSelectElement, MouseEvent>) => void;
 }
 
-function CountryList({
-  countryList,
-  dispatchSearchBar,
-}: ICountryListProps): JSX.Element {
-  console.log(useSearchBar);
-  const { dispatch } = useSearchBar();
-
+function CountryList({ countryList, onClick }: ICountryListProps): JSX.Element {
   const { countyItems } = countryList;
   return (
     <select
       size={5}
       onClick={(e) => {
-        dispatch({
-          type: "PICK_COUNTRY",
-          payload: (e.target as HTMLSelectElement).value,
-        });
-
-        if (dispatchSearchBar === undefined) return;
-        dispatchSearchBar({ type: "TOGGLE_LOCATION", payload: false });
+        onClick(e);
       }}
       name="country"
       id="country_select"

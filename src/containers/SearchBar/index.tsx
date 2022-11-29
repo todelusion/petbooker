@@ -3,8 +3,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronUp, faChevronDown } from "@fortawesome/free-solid-svg-icons";
 import { AnimatePresence, motion } from "framer-motion";
 
-import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
 import { useLocation } from "react-router-dom";
 import {
   searchPath,
@@ -16,9 +14,8 @@ import Button from "../../components/Button";
 import DatePicker from "./DatePicker";
 import CountryList from "./CountryList";
 import PetCardSmall from "./PetCardSmall";
-import { xml2json, parseXml } from "../../utils/xml2json";
-import { countySchema } from "../../types/schema";
 import useSearchBar from "../../hooks/useSearchBar";
+import getCountry from "../../utils/getCountry";
 
 export type SearchBarAction =
   | {
@@ -79,21 +76,11 @@ const searchBarReducer = (
 
 function SearchBar({ className }: { className?: string }): JSX.Element {
   const { pathname } = useLocation();
-  const { area, selection, pet } = useSearchBar();
-  const [{ showLocation, showCalendar, showPetCardSmall }, dispatch] =
-    useReducer(searchBarReducer, initSearchBarState);
+  const countryList = getCountry();
 
-  // GET countryData
-  const { data: countryData } = useQuery(["country"], async () =>
-    axios
-      .get("https://api.nlsc.gov.tw/other/ListCounty")
-      .then((res) => xml2json(parseXml(res.data), " "))
-      .catch((err) => err)
-  );
-  let countryList;
-  if (countryData !== undefined) {
-    countryList = countySchema.parse(JSON.parse(countryData));
-  }
+  const { area, selection, pet, dispatch } = useSearchBar();
+  const [{ showLocation, showCalendar, showPetCardSmall }, dispatchSearchBar] =
+    useReducer(searchBarReducer, initSearchBarState);
 
   const renderDateRange = (): JSX.Element => {
     const { startDate, endDate, key } = selection;
@@ -133,7 +120,7 @@ function SearchBar({ className }: { className?: string }): JSX.Element {
   useEffect(() => {
     const handleClose = (): void => {
       document.addEventListener("click", () => {
-        dispatch({ type: "TOGGLE_ALL" });
+        dispatchSearchBar({ type: "TOGGLE_ALL" });
       });
     };
 
@@ -153,7 +140,10 @@ function SearchBar({ className }: { className?: string }): JSX.Element {
           <>
             <button
               onClick={() =>
-                dispatch({ type: "TOGGLE_LOCATION", payload: !showLocation })
+                dispatchSearchBar({
+                  type: "TOGGLE_LOCATION",
+                  payload: !showLocation,
+                })
               }
               type="button"
               className="flex-center"
@@ -177,7 +167,10 @@ function SearchBar({ className }: { className?: string }): JSX.Element {
           type="button"
           className="flex-center outline-none"
           onClick={() =>
-            dispatch({ type: "TOGGLE_CALENDAR", payload: !showCalendar })
+            dispatchSearchBar({
+              type: "TOGGLE_CALENDAR",
+              payload: !showCalendar,
+            })
           }
         >
           <img src={calendarPath} alt="calendar" />
@@ -190,7 +183,7 @@ function SearchBar({ className }: { className?: string }): JSX.Element {
         />
         <button
           onClick={() =>
-            dispatch({
+            dispatchSearchBar({
               type: "TOGGLE_PETCARD-SMALL",
               payload: !showPetCardSmall,
             })
@@ -227,7 +220,16 @@ function SearchBar({ className }: { className?: string }): JSX.Element {
             >
               {countryList !== undefined && (
                 <CountryList
-                  dispatchSearchBar={dispatch}
+                  onClick={(e) => {
+                    dispatchSearchBar({
+                      type: "TOGGLE_LOCATION",
+                      payload: false,
+                    });
+                    dispatch({
+                      type: "PICK_COUNTRY",
+                      payload: (e.target as HTMLSelectElement).value,
+                    });
+                  }}
                   countryList={countryList}
                   key="CountryList"
                 />
@@ -263,7 +265,7 @@ function SearchBar({ className }: { className?: string }): JSX.Element {
               transition={{ duration: 0.3, ease: [0.65, 0.05, 0.36, 1] }}
               className="origin-top"
             >
-              <PetCardSmall dispatchSearchBar={dispatch} />
+              <PetCardSmall dispatchSearchBar={dispatchSearchBar} />
             </motion.div>
           )}
         </AnimatePresence>

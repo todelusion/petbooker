@@ -43,7 +43,7 @@ function Hotel(): JSX.Element {
           className="flex w-full"
         >
           {comments.map((comment) => (
-            <SwiperSlide>
+            <SwiperSlide key={comment.UserName}>
               <Comment data={comment} className="mx-auto" />
             </SwiperSlide>
           ))}
@@ -57,7 +57,7 @@ function Hotel(): JSX.Element {
 
       <section className="flex flex-col">
         {rooms.map((room) => (
-          <Room data={room} />
+          <Room key={room.RoomName} data={room} />
         ))}
       </section>
     </div>

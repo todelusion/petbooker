@@ -49,19 +49,19 @@ export const Comments = [
     descript: "非常貼心的寵物旅館~服務超級棒！空間也寬敞舒適，環境好！",
   },
   {
-    UserName: "Sansdy",
+    UserName: "山口",
     UserPhoto: "",
     Score: "9.6",
     descript: "專業的服務，狗狗都來這邊住宿。",
   },
   {
-    UserName: "Sansdy",
+    UserName: "Alice",
     UserPhoto: "",
     Score: "9.6",
     descript: "專業的服務，狗狗都來這邊住宿。",
   },
   {
-    UserName: "Sansdy",
+    UserName: "Linux",
     UserPhoto: "",
     Score: "9.6",
     descript: "專業的服務，狗狗都來這邊住宿。",
