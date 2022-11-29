@@ -2,10 +2,11 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 // import { string } from "zod"
 import UserInput from "../../components/Input";
-
+import InputRegex from "../../components/Input/data"
+import axios from "axios";
 export default function UserRegist(): JSX.Element {
   const [inputValue, setInputValue] = useState<{ [index: string]: string }>({});
-  const [group,setGroup]=useState<string>('');
+  const [identity,setIdentity]=useState<string>('');
   const inputValueHandler = (event: React.FormEvent): void => {
     const { name, value } = event.target as HTMLInputElement;
     setInputValue((prventValue) => ({
@@ -18,14 +19,31 @@ export default function UserRegist(): JSX.Element {
     event.preventDefault();
     console.log(inputValue);
     
-    if (Object.values(inputValue).length < 4) {
-      // 彈窗
-      alert("有欄位尚未填寫");
-      return;
-    }
-    console.log('123')
-    
+    if (Object.values(inputValue).length < 4) {// 彈窗//
+      alert("有欄位尚未填寫");return}
+      const{email,password,userName,confirmPassword}=inputValue
+      if(email===""||password===""){alert('帳號密碼不能為空');return}
+      if(!InputRegex.email.regex.test(email)){alert('帳號格式錯誤');return}
+      if(!InputRegex.password.regex.test(password)){alert('密碼格式錯誤');return}
+      if(identity===""){alert('請填寫會員身分');return}
+      if(password!==confirmPassword){alert('確認密碼不相符')}
+      axios
+      .post(`https://petcity.rocket-coding.com/${identity==='customer'?'user':'hotel'}/signup`, {
+        UserAccount:email,
+        UserName:userName,
+        UserPassWord:password,
+        ConfirmedPassword:confirmPassword,
+        Identity:identity,
+      })
+      .then((res) =>{
+        console.log(res)
+       
+        // navigate('/home')
+      })
+      .catch((err) =>
+      console.log(err));
   }
+
   const validpassword = (): boolean => {
     const { password, confirmPassword } = inputValue;
     let result;
@@ -38,10 +56,9 @@ export default function UserRegist(): JSX.Element {
   };
   const setgroup =(event:React.FormEvent):void=>{
     const {value}=event.target as HTMLInputElement
-    setGroup(value)
+    setIdentity(value)
 
   }
-  console.log(group)
   return (
     <div className=" flex flex-col items-center  py-40">
       <form
