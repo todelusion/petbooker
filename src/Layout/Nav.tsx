@@ -10,7 +10,7 @@ function Nav(): JSX.Element {
   // 根據有無 token 來顯示會員選單與否
   const { authToken, setAuthToken } = useContext(UserAuth);
   useEffect(() => {
-    setAuthToken("123f");
+    setAuthToken("");
   });
 
   console.log(authToken);
