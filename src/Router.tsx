@@ -11,6 +11,8 @@ import UserLogin from "./pages/User/UserLogin";
 import UserModifyPassword from "./pages/User/UserModifyPassword";
 import UserRegist from "./pages/User/UserRegist";
 import Hotel from "./pages/Hotel";
+import NavCms from "./Layout/NavCms";
+import Cms from "./pages/Cms";
 
 export default function Router(): JSX.Element {
   const client = new QueryClient();
@@ -47,6 +49,9 @@ export default function Router(): JSX.Element {
           <Route path="/regist" element={<UserRegist />} />;
           <Route path="/forgetPassword" element={<UserForgetPassword />} />;
           <Route path="/modifyPassword" element={<UserModifyPassword />} />;
+          <Route path="/cms" element={<NavCms />}>
+            <Route index element={<Cms />} />
+          </Route>
         </Route>
       </Routes>
     </QueryClientProvider>
