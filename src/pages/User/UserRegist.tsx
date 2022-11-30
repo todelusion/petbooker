@@ -26,37 +26,45 @@ export default function UserRegist(): JSX.Element {
       return;
     }
     const { email, password, userName, confirmPassword } = inputValue;
-    if (email === "" || password === "") {
-      alert("帳號密碼不能為空");
-      return;
-    }
-    if (!InputRegex.email.regex.test(email)) {
-      alert("帳號格式錯誤");
-      return;
-    }
-    if (!InputRegex.password.regex.test(password)) {
-      alert("密碼格式錯誤");
-      return;
-    }
-    if (identity === "") {
-      alert("請填寫會員身分");
-      return;
-    }
-    if (password !== confirmPassword) {
-      alert("確認密碼不相符");
-    }
+    // if (email === "" || password === "") {
+    //   alert("帳號密碼不能為空");
+    //   return;
+    // }
+    // if (!InputRegex.email.regex.test(email)) {
+    //   alert("帳號格式錯誤");
+    //   return;
+    // }
+    // if (!InputRegex.password.regex.test(password)) {
+    //   alert("密碼格式錯誤");
+    //   return;
+    // }
+    // if (identity === "") {
+    //   alert("請填寫會員身分");
+    //   return;
+    // }
+    // if (password !== confirmPassword) {
+    //   alert("確認密碼不相符");
+    // }
+    const Userdata = {
+      UserAccount: "icecream9106011@gmail.com",
+      UserName: "doog",
+      UserPassWord: "Ee123456",
+      ConfirmedPassword: "Ee123456",
+      Identity: "customer",
+    };
+    const Hoteldata = {
+      HotelAccount: "icecream9106011@gmail.com",
+      HotelName: "doog",
+      HotelPassWord: "Ee123456",
+      ConfirmedPassword: "Ee123456",
+      Identity: "hotel",
+    };
     axios
       .post(
         `https://petcity.rocket-coding.com/${
-          identity === "customer" ? "user" : "hotel"
+          identity === "User" ? "user" : "hotel"
         }/signup`,
-        {
-          UserAccount: email,
-          UserName: userName,
-          UserPassWord: password,
-          ConfirmedPassword: confirmPassword,
-          Identity: identity,
-        }
+        identity === "User" ? Userdata : Hoteldata
       )
       .then((res) => {
         console.log(res);
@@ -135,7 +143,7 @@ export default function UserRegist(): JSX.Element {
                 type="radio"
                 name="identify"
                 id="customer"
-                value="customer"
+                value="User"
                 onChange={setgroup}
                 className="mr-2 h-5 w-5 cursor-pointer appearance-none rounded-full border-2 border-black duration-150 checked:border-4 checked:border-primary checked:ring-2 checked:ring-primary_Dark hover:border-primary"
               />
@@ -146,7 +154,7 @@ export default function UserRegist(): JSX.Element {
                 type="radio"
                 name="identify"
                 id="hotelier"
-                value="hotelier"
+                value="Hotel"
                 onChange={setgroup}
                 className="mr-2 h-5 w-5 cursor-pointer appearance-none rounded-full border-2 border-black duration-150 checked:border-4 checked:border-primary checked:ring-2 checked:ring-primary_Dark hover:border-primary"
               />

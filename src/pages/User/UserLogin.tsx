@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useLayoutEffect, useState } from "react";
 // import { string } from "zod"
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -20,6 +20,11 @@ export default function UserLogin(): JSX.Element {
 
     setInputValue((prventValue) => ({ ...prventValue, [name]: value }));
   };
+  useLayoutEffect(() => {
+    if (authToken !== "") {
+      navigate("/home");
+    }
+  });
   const Login = (): void => {
     if (Object.keys(inputValue).length < 2) {
       alert("請填寫帳號密碼");
