@@ -4,6 +4,7 @@ import {
   HomePath,
   logOutPath,
   messageSquarePath,
+  userPath,
 } from "../img/icons";
 
 import { memberMenu } from "../components/AccountMenu/data";
@@ -12,7 +13,7 @@ export const cmsMenu = [
   {
     logo: HomePath,
     content: "旅館資訊",
-    navigatePath: null,
+    navigatePath: "/cms/info",
   },
   {
     logo: fileTextPath,
