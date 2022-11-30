@@ -42,7 +42,6 @@ export default function UserLogin(): JSX.Element {
       alert("請填寫會員身分");
       return;
     }
-    console.log("showmodal");
     axios
       .post(
         `https://petcity.rocket-coding.com/${
