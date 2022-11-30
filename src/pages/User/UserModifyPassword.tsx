@@ -40,7 +40,7 @@ export default function UserModifyPassword(): JSX.Element {
           type="button"
           onClick={() => {
             axios
-              .post(
+              .put(
                 `https://petcity.rocket-coding.com/user/resetpassword?guid=${
                   id as string
                 }`,
