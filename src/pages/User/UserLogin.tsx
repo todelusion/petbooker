@@ -6,13 +6,13 @@ import UserAuth, { UserAuthContetxt } from "../../context/UserAuthContext";
 import UserInput from "../../components/Input";
 import InputRegex from "../../components/Input/data";
 
-interface value {
+interface typpingValue {
   [key: string]: any;
 }
 
 export default function UserLogin(): JSX.Element {
   const { authToken, setAuthToken } = useContext(UserAuth);
-  const [inputValue, setInputValue] = useState<value>({});
+  const [inputValue, setInputValue] = useState<typpingValue>({});
   const [identity, setIdentity] = useState<string>("");
   const navigate = useNavigate();
   const inputValueHandler = (event: React.FormEvent): void => {
@@ -53,9 +53,9 @@ export default function UserLogin(): JSX.Element {
           identity === "customer" ? "user" : "hotel"
         }/login`,
         {
-          UserAccount: "qqq123@gmail.com",
-          UserPassWord: "Wang1234",
-          Identity: "customer",
+          UserAccount: email,
+          UserPassWord: password,
+          Identity: identity,
         }
       )
       .then((res) => {

@@ -26,37 +26,37 @@ export default function UserRegist(): JSX.Element {
       return;
     }
     const { email, password, userName, confirmPassword } = inputValue;
-    // if (email === "" || password === "") {
-    //   alert("帳號密碼不能為空");
-    //   return;
-    // }
-    // if (!InputRegex.email.regex.test(email)) {
-    //   alert("帳號格式錯誤");
-    //   return;
-    // }
-    // if (!InputRegex.password.regex.test(password)) {
-    //   alert("密碼格式錯誤");
-    //   return;
-    // }
-    // if (identity === "") {
-    //   alert("請填寫會員身分");
-    //   return;
-    // }
-    // if (password !== confirmPassword) {
-    //   alert("確認密碼不相符");
-    // }
+    if (email === "" || password === "") {
+      alert("帳號密碼不能為空");
+      return;
+    }
+    if (!InputRegex.email.regex.test(email)) {
+      alert("帳號格式錯誤");
+      return;
+    }
+    if (!InputRegex.password.regex.test(password)) {
+      alert("密碼格式錯誤");
+      return;
+    }
+    if (identity === "") {
+      alert("請填寫會員身分");
+      return;
+    }
+    if (password !== confirmPassword) {
+      alert("確認密碼不相符");
+    }
     const Userdata = {
-      UserAccount: "icecream9106011@gmail.com",
-      UserName: "doog",
-      UserPassWord: "Ee123456",
-      ConfirmedPassword: "Ee123456",
+      UserAccount: email,
+      UserName: userName,
+      UserPassWord: password,
+      ConfirmedPassword: confirmPassword,
       Identity: "customer",
     };
     const Hoteldata = {
-      HotelAccount: "icecream9106011@gmail.com",
-      HotelName: "doog",
-      HotelPassWord: "Ee123456",
-      ConfirmedPassword: "Ee123456",
+      HotelAccount: email,
+      HotelName: userName,
+      HotelPassWord: password,
+      ConfirmedPassword: confirmPassword,
       Identity: "hotel",
     };
     axios
