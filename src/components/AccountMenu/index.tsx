@@ -68,10 +68,6 @@ function AccountMenu(): JSX.Element {
                     toggleAccountMenuSet(false);
                     navigate(item.navigatePath);
                     if (item.navigatePath === "/login") setAuthToken("");
-                    // if (item.content === "登出") {
-                    //   setAuthToken("");
-                    //   navigate("/login");
-                    // }
                   }}
                   type="button"
                   className="flex items-center"
