@@ -7,7 +7,7 @@ import UserInput from "../../components/Input";
 export default function UserModifyPassword(): JSX.Element {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [inputValue, setInputValue] = useState({});
+  const [inputValue, setInputValue] = useState<{ [index: string]: string }>({});
   const inputValueHandler = (event: React.FormEvent): void => {
     const { name, value } = event.target as HTMLInputElement;
 
