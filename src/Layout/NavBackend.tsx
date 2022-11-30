@@ -21,7 +21,7 @@ function NavBackend({ menus }: INavBackendProps): JSX.Element {
     <div className="flex min-h-screen justify-evenly px-20 pt-42">
       <ul className="w-full max-w-[200px] basis-3/12 ">
         {menus.map((menu) => (
-          <li>
+          <li key={menu.content}>
             <button
               type="button"
               className="flex w-full items-center rounded-3xl py-3 pl-6 pr-18 duration-75 hover:bg-gray-200"

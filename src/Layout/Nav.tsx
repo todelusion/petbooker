@@ -9,11 +9,6 @@ import UserAuth from "../context/UserAuthContext";
 function Nav(): JSX.Element {
   // 根據有無 token 來顯示會員選單與否
   const { authToken, setAuthToken } = useContext(UserAuth);
-  useEffect(() => {
-    setAuthToken("");
-  });
-
-  console.log(authToken);
 
   return (
     <>

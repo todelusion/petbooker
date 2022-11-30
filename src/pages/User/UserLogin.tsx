@@ -4,41 +4,62 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import UserAuth, { UserAuthContetxt } from "../../context/UserAuthContext";
 import UserInput from "../../components/Input";
-import InputRegex from '../../components/Input/data'
-interface value{
-  [key: string]: any
+import InputRegex from "../../components/Input/data";
+
+interface value {
+  [key: string]: any;
 }
 
 export default function UserLogin(): JSX.Element {
   const { authToken, setAuthToken } = useContext(UserAuth);
   const [inputValue, setInputValue] = useState<value>({});
   const [identity, setIdentity] = useState<string>("");
-  let navigate =useNavigate();
+  const navigate = useNavigate();
   const inputValueHandler = (event: React.FormEvent): void => {
     const { name, value } = event.target as HTMLInputElement;
 
     setInputValue((prventValue) => ({ ...prventValue, [name]: value }));
   };
   const Login = (): void => {
-    if(Object.keys(inputValue).length<2){alert('請填寫帳號密碼');return}
-    const{email,password}=inputValue
-    if(email===""||password===""){alert('帳號密碼不能為空');return}
-    if(!InputRegex.email.regex.test(email)){alert('帳號格式錯誤');return}
-    if(!InputRegex.password.regex.test(password)){alert('密碼格式錯誤');return}
-    if(identity===""){alert('請填寫會員身分');return}
+    if (Object.keys(inputValue).length < 2) {
+      alert("請填寫帳號密碼");
+      return;
+    }
+    const { email, password } = inputValue;
+    if (email === "" || password === "") {
+      alert("帳號密碼不能為空");
+      return;
+    }
+    if (!InputRegex.email.regex.test(email)) {
+      alert("帳號格式錯誤");
+      return;
+    }
+    if (!InputRegex.password.regex.test(password)) {
+      alert("密碼格式錯誤");
+      return;
+    }
+    if (identity === "") {
+      alert("請填寫會員身分");
+      return;
+    }
+    console.log("showmodal");
     axios
-      .post(`https://petcity.rocket-coding.com/${identity==='customer'?'user':'hotel'}/login`, {
-        UserAccount: "qqq123@gmail.com",
-        UserPassWord: "Wang1234",
-        Identity: "customer",
-      })
-      .then((res) =>{
-        console.log(res)
+      .post(
+        `https://petcity.rocket-coding.com/${
+          identity === "customer" ? "user" : "hotel"
+        }/login`,
+        {
+          UserAccount: "qqq123@gmail.com",
+          UserPassWord: "Wang1234",
+          Identity: "customer",
+        }
+      )
+      .then((res) => {
+        console.log(res);
         setAuthToken(res.data.JwtToken);
-        // navigate('/home')
+        navigate("/home");
       })
-      .catch((err) =>
-      console.log(err));
+      .catch((err) => console.log(err));
   };
   const setidentity = (event: React.FormEvent): void => {
     const { value } = event.target as HTMLInputElement;
