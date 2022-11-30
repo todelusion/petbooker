@@ -8,6 +8,7 @@ import { foodLists, petLists, serviceLists } from "../containers/Filter/data";
 import CountryList from "../containers/SearchBar/CountryList";
 import getCountry from "../utils/getCountry";
 import Button from "../components/Button";
+import { useNavContext } from "../Layout/Nav";
 
 function ContextTest(): JSX.Element {
   const { PetType, FoodTypes, ServiceTypes } = useFilter();

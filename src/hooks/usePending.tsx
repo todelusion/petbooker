@@ -1,9 +1,14 @@
-// axios狀態管理鉤子，用在handlePromiseResult()
+import { useReducer } from "react";
 
-import { useReducer, useState } from "react";
-// import { PendingType } from "../types/Enum";
-
-const initialState = {
+interface IPending {
+  status: {
+    isError: { status: boolean; message: string };
+    isLoading: { status: boolean; message: string };
+    isSuccess: { status: boolean; message: string };
+  };
+  dispatchPending: React.Dispatch<PendingAction>;
+}
+const initialStatus = {
   isLoading: {
     status: false,
     message: "",
@@ -18,9 +23,9 @@ const initialState = {
   },
 };
 
-type InitialState = typeof initialState;
+export type InitialStatus = typeof initialStatus;
 
-type PendingAction =
+export type PendingAction =
   | {
       type: "IS_LOADING";
       payload: {
@@ -43,9 +48,9 @@ type PendingAction =
       };
     };
 const pendingReducer = (
-  state: InitialState,
+  state: InitialStatus,
   action: PendingAction
-): InitialState => {
+): InitialStatus => {
   switch (action.type) {
     case "IS_LOADING":
       return {
@@ -76,13 +81,8 @@ const pendingReducer = (
   }
 };
 
-export default function usePendingStatus(): void {
-  const [{ isError, isLoading, isSuccess }, dispatchPending] = useReducer(
-    pendingReducer,
-    initialState
-  );
+export default function usePendingStatus(): IPending {
+  const [status, dispatchPending] = useReducer(pendingReducer, initialStatus);
 
-  // const [Result, setResult] = useState(initialState);
-
-  return { isError, isLoading, isSuccess, dispatchPending };
+  return { status, dispatchPending };
 }

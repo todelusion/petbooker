@@ -5,12 +5,14 @@ import axios from "axios";
 import UserAuth, { UserAuthContetxt } from "../../context/UserAuthContext";
 import UserInput from "../../components/Input";
 import InputRegex from "../../components/Input/data";
+import { useNavContext } from "../../Layout/Nav";
 
 interface typpingValue {
   [key: string]: any;
 }
 
 export default function UserLogin(): JSX.Element {
+  const { dispatchPending } = useNavContext();
   const { authToken, setAuthToken } = useContext(UserAuth);
   const [inputValue, setInputValue] = useState<typpingValue>({});
   const [identity, setIdentity] = useState<string>("");

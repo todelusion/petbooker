@@ -17,6 +17,29 @@ import HomePath from "./Home.svg";
 import ShowerPath from "./Shower.svg";
 import CameraPath from "./Camera.svg";
 import Pets2Path from "./Pets2.svg";
+import SuccessPath from "./Success.svg";
+import ErrorPath from "./Error.svg";
+import LoadingPath from "./Loading.svg";
+
+interface ILoadingProps {
+  className?: string;
+}
+export function Loading({ className }: ILoadingProps): JSX.Element {
+  return (
+    <div className={className}>
+      <div className="grid gap-2">
+        <div className="flex animate-pulse items-center justify-center space-x-2">
+          <div className="h-3 w-3 rounded-full bg-white" />
+          <div className="h-3 w-3 rounded-full bg-white" />
+          <div className="h-3 w-3 rounded-full bg-white" />
+        </div>
+      </div>
+    </div>
+  );
+}
+Loading.defaultProps = {
+  className: "",
+};
 
 export {
   Pets2Path,
@@ -38,4 +61,7 @@ export {
   HomePath,
   ShowerPath,
   CameraPath,
+  SuccessPath,
+  ErrorPath,
+  LoadingPath,
 };
