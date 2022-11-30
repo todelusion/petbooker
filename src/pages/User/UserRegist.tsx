@@ -9,7 +9,6 @@ export default function UserRegist(): JSX.Element {
   const navigate = useNavigate();
   const [inputValue, setInputValue] = useState<{ [index: string]: string }>({});
   const [identity, setIdentity] = useState<string>("");
-  const navigate = useNavigate();
   const inputValueHandler = (event: React.FormEvent): void => {
     const { name, value } = event.target as HTMLInputElement;
     setInputValue((prventValue) => ({
