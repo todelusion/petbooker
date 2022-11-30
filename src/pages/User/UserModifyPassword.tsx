@@ -1,9 +1,11 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 // import { string } from "zod"
 import UserInput from "../../components/Input";
 
 export default function UserModifyPassword(): JSX.Element {
+  const { id } = useParams();
+  console.log(id);
   const [inputValue, setInputValue] = useState({});
   const inputValueHandler = (event: React.FormEvent): void => {
     const { name, value } = event.target as HTMLInputElement;
@@ -14,10 +16,9 @@ export default function UserModifyPassword(): JSX.Element {
   return (
     <div className=" flex flex-col items-center  py-40">
       <form action="#" className="flex w-1/3 max-w-md flex-col pt-4">
-        <h1 className="text-center  text-4xl">註冊</h1>
+        <h1 className="text-center  text-4xl">修改密碼</h1>
 
         <UserInput
-       
           title="密碼"
           inputType="password"
           name="password"
@@ -26,43 +27,22 @@ export default function UserModifyPassword(): JSX.Element {
           inputValueHandler={inputValueHandler}
           inputValue={inputValue}
         />
-        <div>
-          <h2 className="mb-2 mt-4">會員身份</h2>
-          <span>
-            <label htmlFor="petOwner">
-              <input
-                type="radio"
-                name="identify"
-                id="petOwner"
-                className="mr-2"
-              />
-              我是飼主
-            </label>
-            <label htmlFor="Owner" className="ml-10">
-              <input
-                type="radio"
-                name="identify"
-                id="hotelier"
-                className="mr-2"
-              />
-              我是寵物旅館業者
-            </label>
-          </span>
-        </div>
+        <UserInput
+          title="確認密碼"
+          inputType="password"
+          name="confirmPassword"
+          id="confirmPassword"
+          inputPlaceHolder=""
+          inputValueHandler={inputValueHandler}
+          inputValue={inputValue}
+        />
         <button
           type="button"
           className="mt-8 rounded-full bg-second py-2 text-white"
         >
-          註冊
+          送出
         </button>
-        <span className="mt-3 flex justify-center">
-          <span>
-            已有帳號？{" "}
-            <Link to="/login" className="underline">
-              登入
-            </Link>
-          </span>
-        </span>
+
         <div className=" relative text-center">
           {/* <div
             className="after:1/2 my-4 before:absolute before:top-1/2 before:left-4 

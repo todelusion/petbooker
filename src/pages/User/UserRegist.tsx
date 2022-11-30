@@ -1,11 +1,12 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 // import { string } from "zod"
 import axios from "axios";
 import UserInput from "../../components/Input";
 import InputRegex from "../../components/Input/data";
 
 export default function UserRegist(): JSX.Element {
+  const navigate = useNavigate();
   const [inputValue, setInputValue] = useState<{ [index: string]: string }>({});
   const [identity, setIdentity] = useState<string>("");
   const inputValueHandler = (event: React.FormEvent): void => {
@@ -68,8 +69,7 @@ export default function UserRegist(): JSX.Element {
       )
       .then((res) => {
         console.log(res);
-
-        // navigate('/home')
+        navigate("/login");
       })
       .catch((err) => console.log(err));
   }

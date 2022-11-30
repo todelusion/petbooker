@@ -57,7 +57,7 @@ export default function Router(): JSX.Element {
           <Route path="/login" element={<UserLogin />} />;
           <Route path="/regist" element={<UserRegist />} />;
           <Route path="/forgetPassword" element={<UserForgetPassword />} />;
-          <Route path="/modifyPassword" element={<UserModifyPassword />} />;
+          <Route path="/modifyPassword/:id" element={<UserModifyPassword />} />;
           <Route path="/cms" element={<NavBackend menus={cmsMenu} />}>
             <Route
               path="/cms/info"

@@ -65,9 +65,14 @@ function AccountMenu(): JSX.Element {
                   onClick={() => {
                     if (item.navigatePath === null)
                       throw new Error("navigatePath is null");
+
                     toggleAccountMenuSet(false);
+                    if (item.navigatePath === "/home") {
+                      setAuthToken("");
+                      navigate(item.navigatePath);
+                      return;
+                    }
                     navigate(item.navigatePath);
-                    if (item.navigatePath === "/login") setAuthToken("");
                   }}
                   type="button"
                   className="flex items-center"
