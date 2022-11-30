@@ -1,12 +1,14 @@
 import { AnimatePresence, motion } from "framer-motion";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import UserAuth from "../../context/UserAuthContext";
 import { memberMenu, hotelMemberMenu, accountMenuPath } from "./data";
 
 type Member = "member" | "hotel";
 
 function AccountMenu(): JSX.Element {
   const navigate = useNavigate();
+  const { setAuthToken } = useContext(UserAuth);
 
   // 用is .... 如果是 boolean
   const [toggleAccountMenu, toggleAccountMenuSet] = useState(false);
@@ -63,8 +65,14 @@ function AccountMenu(): JSX.Element {
                   onClick={() => {
                     if (item.navigatePath === null)
                       throw new Error("navigatePath is null");
-                    navigate(item.navigatePath);
+
                     toggleAccountMenuSet(false);
+                    if (item.navigatePath === "/home") {
+                      setAuthToken("");
+                      navigate(item.navigatePath);
+                      return;
+                    }
+                    navigate(item.navigatePath);
                   }}
                   type="button"
                   className="flex items-center"

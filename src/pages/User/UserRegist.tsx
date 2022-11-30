@@ -1,11 +1,14 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 // import { string } from "zod"
+import axios from "axios";
 import UserInput from "../../components/Input";
+import InputRegex from "../../components/Input/data";
 
 export default function UserRegist(): JSX.Element {
+  const navigate = useNavigate();
   const [inputValue, setInputValue] = useState<{ [index: string]: string }>({});
-  const [group,setGroup]=useState<string>('');
+  const [identity, setIdentity] = useState<string>("");
   const inputValueHandler = (event: React.FormEvent): void => {
     const { name, value } = event.target as HTMLInputElement;
     setInputValue((prventValue) => ({
@@ -16,16 +19,61 @@ export default function UserRegist(): JSX.Element {
 
   function regist(event: React.FormEvent): void {
     event.preventDefault();
-    console.log(inputValue);
-    
+    console.log(inputValue, identity);
+
     if (Object.values(inputValue).length < 4) {
-      // 彈窗
+      // 彈窗//
       alert("有欄位尚未填寫");
       return;
     }
-    console.log('123')
-    
+    const { email, password, userName, confirmPassword } = inputValue;
+    if (email === "" || password === "") {
+      alert("帳號密碼不能為空");
+      return;
+    }
+    if (!InputRegex.email.regex.test(email)) {
+      alert("帳號格式錯誤");
+      return;
+    }
+    if (!InputRegex.password.regex.test(password)) {
+      alert("密碼格式錯誤");
+      return;
+    }
+    if (identity === "") {
+      alert("請填寫會員身分");
+      return;
+    }
+    if (password !== confirmPassword) {
+      alert("確認密碼不相符");
+    }
+    const Userdata = {
+      UserAccount: email,
+      UserName: userName,
+      UserPassWord: password,
+      ConfirmedPassword: confirmPassword,
+      Identity: "customer",
+    };
+    const Hoteldata = {
+      HotelAccount: email,
+      HotelName: userName,
+      HotelPassWord: password,
+      ConfirmedPassword: confirmPassword,
+      Identity: "hotel",
+    };
+    axios
+      .post(
+        `https://petcity.rocket-coding.com/${
+          identity === "User" ? "user" : "hotel"
+        }/signup`,
+        identity === "User" ? Userdata : Hoteldata
+      )
+      .then((res) => {
+        console.log(res);
+        navigate("/login");
+      })
+      .catch((err) => console.log(err));
   }
+
   const validpassword = (): boolean => {
     const { password, confirmPassword } = inputValue;
     let result;
@@ -36,12 +84,10 @@ export default function UserRegist(): JSX.Element {
     }
     return result;
   };
-  const setgroup =(event:React.FormEvent):void=>{
-    const {value}=event.target as HTMLInputElement
-    setGroup(value)
-
-  }
-  console.log(group)
+  const setgroup = (event: React.FormEvent): void => {
+    const { value } = event.target as HTMLInputElement;
+    setIdentity(value);
+  };
   return (
     <div className=" flex flex-col items-center  py-40">
       <form
@@ -96,8 +142,8 @@ export default function UserRegist(): JSX.Element {
               <input
                 type="radio"
                 name="identify"
-                id="petOwner"
-                value="petOwner"
+                id="customer"
+                value="User"
                 onChange={setgroup}
                 className="mr-2 h-5 w-5 cursor-pointer appearance-none rounded-full border-2 border-black duration-150 checked:border-4 checked:border-primary checked:ring-2 checked:ring-primary_Dark hover:border-primary"
               />
@@ -108,8 +154,8 @@ export default function UserRegist(): JSX.Element {
                 type="radio"
                 name="identify"
                 id="hotelier"
-                value="hotelier"
-                 onChange={setgroup}
+                value="Hotel"
+                onChange={setgroup}
                 className="mr-2 h-5 w-5 cursor-pointer appearance-none rounded-full border-2 border-black duration-150 checked:border-4 checked:border-primary checked:ring-2 checked:ring-primary_Dark hover:border-primary"
               />
               我是寵物旅館業者

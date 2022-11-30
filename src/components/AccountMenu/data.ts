@@ -57,6 +57,6 @@ export const hotelMemberMenu = [
   {
     logo: logOutPath,
     content: "登出",
-    navigatePath: null,
+    navigatePath: "/home",
   },
 ];

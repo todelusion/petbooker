@@ -1,27 +1,68 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useLayoutEffect, useState } from "react";
 // import { string } from "zod"
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import UserAuth, { UserAuthContetxt } from "../../context/UserAuthContext";
 import UserInput from "../../components/Input";
+import InputRegex from "../../components/Input/data";
+
+interface typpingValue {
+  [key: string]: any;
+}
 
 export default function UserLogin(): JSX.Element {
   const { authToken, setAuthToken } = useContext(UserAuth);
-  const [inputValue, setInputValue] = useState({});
+  const [inputValue, setInputValue] = useState<typpingValue>({});
   const [identity, setIdentity] = useState<string>("");
+  const navigate = useNavigate();
   const inputValueHandler = (event: React.FormEvent): void => {
     const { name, value } = event.target as HTMLInputElement;
 
     setInputValue((prventValue) => ({ ...prventValue, [name]: value }));
   };
+  useLayoutEffect(() => {
+    if (authToken !== "") {
+      navigate("/home");
+    }
+  });
   const Login = (): void => {
+    if (Object.keys(inputValue).length < 2) {
+      alert("請填寫帳號密碼");
+      return;
+    }
+    const { email, password } = inputValue;
+    if (email === "" || password === "") {
+      alert("帳號密碼不能為空");
+      return;
+    }
+    if (!InputRegex.email.regex.test(email)) {
+      alert("帳號格式錯誤");
+      return;
+    }
+    if (!InputRegex.password.regex.test(password)) {
+      alert("密碼格式錯誤");
+      return;
+    }
+    if (identity === "") {
+      alert("請填寫會員身分");
+      return;
+    }
     axios
-      .post("https://petcity.rocket-coding.com/user/login", {
-        UserAccount: "qqq123gmail.com",
-        UserPassWord: "Wang1234",
-        Identity: "customer",
+      .post(
+        `https://petcity.rocket-coding.com/${
+          identity === "customer" ? "user" : "hotel"
+        }/login`,
+        {
+          UserAccount: email,
+          UserPassWord: password,
+          Identity: identity,
+        }
+      )
+      .then((res) => {
+        console.log(res);
+        setAuthToken(res.data.JwtToken);
+        navigate("/home");
       })
-      .then((res) => console.log(res))
       .catch((err) => console.log(err));
   };
   const setidentity = (event: React.FormEvent): void => {
