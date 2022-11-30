@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 // import { string } from "zod"
 import axios from "axios";
 import UserInput from "../../components/Input";
@@ -8,6 +8,7 @@ import InputRegex from "../../components/Input/data";
 export default function UserRegist(): JSX.Element {
   const [inputValue, setInputValue] = useState<{ [index: string]: string }>({});
   const [identity, setIdentity] = useState<string>("");
+  const navigate = useNavigate();
   const inputValueHandler = (event: React.FormEvent): void => {
     const { name, value } = event.target as HTMLInputElement;
     setInputValue((prventValue) => ({
@@ -68,8 +69,7 @@ export default function UserRegist(): JSX.Element {
       )
       .then((res) => {
         console.log(res);
-
-        // navigate('/home')
+        navigate("/home");
       })
       .catch((err) => console.log(err));
   }

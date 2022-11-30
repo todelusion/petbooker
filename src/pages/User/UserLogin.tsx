@@ -135,7 +135,7 @@ export default function UserLogin(): JSX.Element {
           </span>
           <span>
             <Link to="/forgetPassword" className="underline">
-              忘記密碼/修改密碼
+              忘記密碼
             </Link>
           </span>
         </span>
