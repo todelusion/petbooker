@@ -5,12 +5,12 @@ const initialPending = {
   message: "",
 };
 
-export type InitialPending = {
+export interface InitialPending {
   status: "isLoading" | "isSuccess" | "isError" | "";
   message: string;
-};
+}
 
-export interface IPendingProps {
+export interface IModalProps {
   pending: InitialPending;
   dispatchPending: React.Dispatch<PendingAction>;
 }
@@ -33,7 +33,7 @@ export type PendingAction =
       payload?: string;
     };
 const pendingReducer = (
-  state: InitialPending,
+  pending: InitialPending,
   action: PendingAction
 ): InitialPending => {
   switch (action.type) {
@@ -58,16 +58,15 @@ const pendingReducer = (
         message: action.payload ?? "",
       };
     default:
-      return state;
+      return pending;
   }
 };
 
-export default function usePending(): IPendingProps {
-  const [state, dispatchPending] = useReducer(
+export default function usePending(): IModalProps {
+  const [pending, dispatchPending] = useReducer(
     pendingReducer,
     initialPending as InitialPending
   );
-  const pending = useMemo(() => state, [state]);
 
   return { pending, dispatchPending };
 }

@@ -8,14 +8,17 @@ import "swiper/css/navigation";
 
 import "./tailwind.css";
 import Router from "./Router";
+import ModalProvider from "./context/ModalContext";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
     <HashRouter>
       <UserAuthContetxt>
-        <ScrollToTop>
-          <Router />
-        </ScrollToTop>
+        <ModalProvider>
+          <ScrollToTop>
+            <Router />
+          </ScrollToTop>
+        </ModalProvider>
       </UserAuthContetxt>
     </HashRouter>
   </React.StrictMode>

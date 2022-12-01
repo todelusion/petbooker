@@ -1,18 +1,14 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import DropDownList from "../components/DropDownList";
 import Filter from "../containers/Filter";
 import HotelCard from "../components/HotelCard";
 import SearchBar from "../containers/SearchBar";
-import usePending from "../hooks/usePending";
 import StatusModal from "../Layout/StatusModal";
-
-let render = 0;
+import useModal from "../hooks/useModal";
 
 function Home(): JSX.Element {
-  const { pending, dispatchPending } = usePending();
-  render += 1;
-  console.log(render);
+  const { pending, dispatchPending } = useModal();
+  console.log("render Home");
 
   return (
     <div className="relative flex w-full items-start justify-evenly px-20 pt-40">
