@@ -4,21 +4,23 @@ import React, { ChangeEvent, useState } from "react";
 function UploadImage(): JSX.Element {
   const [imgData, setImgData] = useState<string>();
   const [imges, setImges] = useState<string[]>();
+
   const handleSetImage = (event: ChangeEvent<HTMLInputElement>): void => {
     if (event.target.files === null) return;
-    console.log(event.target.value);
     const resultAry = Object.values(event.target.files).map((item) => item);
     const urlAry = resultAry.map((item) => URL.createObjectURL(item));
     const url = URL.createObjectURL(event.target.files[0]);
     console.log(urlAry);
+
     setImgData(url);
     setImges(urlAry);
+    // eslint-disable-next-line no-param-reassign
+    event.target.value = "";
   };
   const deleteImg = (img: string): void => {
     const newAry = imges?.filter((item) => item !== img);
     setImges(newAry);
   };
-  console.log(imges);
 
   return (
     <div>
