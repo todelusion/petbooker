@@ -1,88 +1,73 @@
 import { useReducer } from "react";
 
-interface IPending {
-  status: {
-    isError: { status: boolean; message: string };
-    isLoading: { status: boolean; message: string };
-    isSuccess: { status: boolean; message: string };
-  };
-  dispatchPending: React.Dispatch<PendingAction>;
-}
-const initialStatus = {
-  isLoading: {
-    status: false,
-    message: "",
-  },
-  isSuccess: {
-    status: false,
-    message: "",
-  },
-  isError: {
-    status: false,
-    message: "",
-  },
+const initialPending = {
+  status: "",
+  message: "",
 };
 
-export type InitialStatus = typeof initialStatus;
+export type InitialPending = {
+  status: "isLoading" | "isSuccess" | "isError" | "";
+  message: string;
+};
+
+interface IPendingProps {
+  pending: InitialPending;
+  dispatchPending: React.Dispatch<PendingAction>;
+}
 
 export type PendingAction =
   | {
       type: "IS_LOADING";
-      payload: {
-        status: boolean;
-        message: string;
-      };
+      payload?: string;
     }
   | {
       type: "IS_SUCCESS";
-      payload: {
-        status: boolean;
-        message: string;
-      };
+      payload?: string;
     }
   | {
       type: "IS_ERROR";
-      payload: {
-        status: boolean;
-        message: string;
-      };
+      payload?: string;
+    }
+  | {
+      type: "CLOSE_ALL";
+      payload?: string;
     };
 const pendingReducer = (
-  state: InitialStatus,
+  state: InitialPending,
   action: PendingAction
-): InitialStatus => {
+): InitialPending => {
   switch (action.type) {
     case "IS_LOADING":
       return {
-        ...state,
-        isLoading: {
-          status: action.payload.status,
-          message: action.payload.message,
-        },
+        status: "isLoading",
+        message: action.payload ?? "",
       };
     case "IS_SUCCESS":
       return {
-        ...state,
-        isSuccess: {
-          status: action.payload.status,
-          message: action.payload.message,
-        },
+        status: "isSuccess",
+        message: action.payload ?? "",
       };
     case "IS_ERROR":
       return {
-        ...state,
-        isError: {
-          status: action.payload.status,
-          message: action.payload.message,
-        },
+        status: "isError",
+        message: action.payload ?? "",
+      };
+    case "CLOSE_ALL":
+      return {
+        status: "",
+        message: action.payload ?? "",
       };
     default:
       return state;
   }
 };
 
-export default function usePendingStatus(): IPending {
-  const [status, dispatchPending] = useReducer(pendingReducer, initialStatus);
+export default function usePendingStatus(): IPendingProps {
+  const [pending, dispatchPending] = useReducer(
+    pendingReducer,
+    initialPending as InitialPending
+  );
+  console.log(pending);
 
-  return { status, dispatchPending };
+  return { pending, dispatchPending };
 }
