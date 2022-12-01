@@ -64,6 +64,7 @@ export const SearchBarContext = createContext<ISearchBarContextProps | null>(
 export function SearchBarProvider({
   children,
 }: ISearchBarProviderProps): JSX.Element {
+  console.log("renderSearchBarProvider");
   const [state, dispatch] = useReducer(searchBarReducer, initSearchBarState);
 
   const value = useMemo(() => ({ ...state, dispatch }), [state]);

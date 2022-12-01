@@ -9,11 +9,11 @@ import CountryList from "../containers/SearchBar/CountryList";
 import getCountry from "../utils/getCountry";
 import Button from "../components/Button";
 import StatusModal from "../Layout/StatusModal";
-import { useNavContext } from "../Layout/Nav";
+import useModal from "../hooks/useModal";
 
 function ContextTest(): JSX.Element {
   const { PetType, FoodTypes, ServiceTypes } = useFilter();
-  const { pending, dispatchPending } = useNavContext();
+  const { pending, dispatchPending } = useModal();
   console.log(pending);
   const countryList = getCountry();
 
