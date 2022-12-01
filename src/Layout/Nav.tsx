@@ -13,12 +13,12 @@ import MotionFade from "../containers/MotionFade";
 function Nav(): JSX.Element {
   // 根據有無 token 來顯示會員選單與否
   const { authToken } = useContext(UserAuth);
-  const { status, dispatchPending } = usePending();
-  const { isLoading, isSuccess, isError } = status;
+  const { pending, dispatchPending } = usePending();
+  console.log(pending);
 
   return (
     <>
-      <StatusModal type={status} />
+      <StatusModal pending={pending} />
       <nav className="absolute top-0 z-10 flex w-full items-center justify-between border-b-2 border-gray-200 bg-white py-6 px-20">
         <Link to="/home">
           <img src={logoSubtitlePath} alt="logo" className=" w-60" />
@@ -26,12 +26,12 @@ function Nav(): JSX.Element {
         <button
           type="button"
           className="rounded-3xl bg-slate-800 p-2 text-white"
-          onClick={() =>
-            dispatchPending({
-              type: "IS_LOADING",
-              payload: { status: !isLoading.status, message: "" },
-            })
-          }
+          onClick={() => {
+            if (pending.status === "")
+              return dispatchPending({ type: "IS_LOADING" });
+
+            return dispatchPending({ type: "CLOSE_ALL" });
+          }}
         >
           toggle Modal
         </button>
@@ -64,7 +64,7 @@ function Nav(): JSX.Element {
       </nav>
 
       <div className="relative min-h-screen">
-        <Outlet context={{ status, dispatchPending }} />
+        <Outlet context={{ pending, dispatchPending }} />
       </div>
       <Footer />
     </>
