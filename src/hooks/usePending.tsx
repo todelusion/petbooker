@@ -1,4 +1,4 @@
-import { useReducer } from "react";
+import { useReducer, useMemo } from "react";
 
 const initialPending = {
   status: "",
@@ -62,11 +62,12 @@ const pendingReducer = (
   }
 };
 
-export default function usePendingStatus(): IPendingProps {
-  const [pending, dispatchPending] = useReducer(
+export default function usePending(): IPendingProps {
+  const [state, dispatchPending] = useReducer(
     pendingReducer,
     initialPending as InitialPending
   );
+  const pending = useMemo(() => state, [state]);
 
   return { pending, dispatchPending };
 }
