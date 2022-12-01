@@ -4,12 +4,8 @@ import DropDownList from "../components/DropDownList";
 import Filter from "../containers/Filter";
 import HotelCard from "../components/HotelCard";
 import SearchBar from "../containers/SearchBar";
-import { useNavContext } from "../Layout/Nav";
 
 function Home(): JSX.Element {
-  const { status, dispatchPending } = useNavContext();
-  const { isLoading } = status;
-
   return (
     <div className="relative flex w-full items-start justify-evenly px-20 pt-40">
       <Filter className="max-w-xs" />

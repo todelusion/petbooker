@@ -4,28 +4,38 @@ import type { InitialStatus } from "../hooks/usePending";
 import { SuccessPath, ErrorPath, LoadingPath, Loading } from "../img/icons";
 
 interface IPendingModalProps {
-  type: InitialStatus;
+  pending: InitialStatus;
 }
 
 export default function PendingModal({
-  type,
+  pending,
 }: IPendingModalProps): JSX.Element {
-  const { isSuccess, isError, isLoading } = type;
+  const { status, message } = pending;
+  console.log(pending);
 
   return (
     <div className="pointer-events-none fixed z-20 min-h-screen w-full">
       <AnimatePresence>
-        {isLoading.status && (
+        {status === "isLoading" && (
           <MotionFade>
-            <div key="loading" className="relative">
+            <div key={status} className="relative">
               <img src={LoadingPath} alt="" className="w-28 " />
               <Loading className=" absolute left-1/2 bottom-0 -translate-x-1/2 -translate-y-1/2" />
             </div>
           </MotionFade>
         )}
-        {isSuccess.status && (
-          <MotionFade key="SDF">
-            <div className="relative">TEST</div>
+        {status === "isSuccess" && (
+          <MotionFade>
+            <div key={status} className="relative">
+              <img src={SuccessPath} alt="" className="w-28" />
+            </div>
+          </MotionFade>
+        )}
+        {status === "isError" && (
+          <MotionFade>
+            <div key={status} className="relative">
+              <img src={ErrorPath} alt="" className="w-28" />
+            </div>
           </MotionFade>
         )}
       </AnimatePresence>
