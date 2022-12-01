@@ -1,12 +1,12 @@
 import { Link, Outlet, useOutletContext } from "react-router-dom";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useMemo } from "react";
 import { AnimatePresence } from "framer-motion";
 import logoSubtitlePath from "../img/logo-subtitle.svg";
 import Button from "../components/Button";
 import AccountMenu from "../components/AccountMenu";
 import Footer from "./Footer";
 import UserAuth from "../context/UserAuthContext";
-import usePending, { PendingAction } from "../hooks/usePending";
+import usePending, { IPendingProps, PendingAction } from "../hooks/usePending";
 import StatusModal from "./StatusModal";
 import MotionFade from "../containers/MotionFade";
 
@@ -14,7 +14,10 @@ function Nav(): JSX.Element {
   // 根據有無 token 來顯示會員選單與否
   const { authToken } = useContext(UserAuth);
   const { pending, dispatchPending } = usePending();
-  console.log(pending);
+  const value = useMemo(
+    () => ({ pending, dispatchPending }),
+    [dispatchPending, pending]
+  );
 
   return (
     <>
@@ -27,8 +30,10 @@ function Nav(): JSX.Element {
           type="button"
           className="rounded-3xl bg-slate-800 p-2 text-white"
           onClick={() => {
-            if (pending.status === "")
-              return dispatchPending({ type: "IS_LOADING" });
+            if (pending.status === "") {
+              dispatchPending({ type: "IS_LOADING" });
+              return undefined;
+            }
 
             return dispatchPending({ type: "CLOSE_ALL" });
           }}
@@ -64,7 +69,7 @@ function Nav(): JSX.Element {
       </nav>
 
       <div className="relative min-h-screen">
-        <Outlet context={{ pending, dispatchPending }} />
+        <Outlet context={value} />
       </div>
       <Footer />
     </>
@@ -73,24 +78,6 @@ function Nav(): JSX.Element {
 
 export default Nav;
 
-interface IUseNav {
-  status: {
-    isError: {
-      status: boolean;
-      message: string;
-    };
-    isLoading: {
-      status: boolean;
-      message: string;
-    };
-    isSuccess: {
-      status: boolean;
-      message: string;
-    };
-  };
-  dispatchPending: React.Dispatch<PendingAction>;
-}
-
-export function useNavContext(): IUseNav {
-  return useOutletContext<IUseNav>();
+export function useNavContext(): IPendingProps {
+  return useOutletContext<IPendingProps>();
 }

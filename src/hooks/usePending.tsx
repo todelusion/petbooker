@@ -10,7 +10,7 @@ export type InitialPending = {
   message: string;
 };
 
-interface IPendingProps {
+export interface IPendingProps {
   pending: InitialPending;
   dispatchPending: React.Dispatch<PendingAction>;
 }
@@ -67,7 +67,6 @@ export default function usePendingStatus(): IPendingProps {
     pendingReducer,
     initialPending as InitialPending
   );
-  console.log(pending);
 
   return { pending, dispatchPending };
 }
