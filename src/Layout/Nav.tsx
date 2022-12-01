@@ -13,11 +13,8 @@ import MotionFade from "../containers/MotionFade";
 function Nav(): JSX.Element {
   // 根據有無 token 來顯示會員選單與否
   const { authToken } = useContext(UserAuth);
+
   const { pending, dispatchPending } = usePending();
-  const value = useMemo(
-    () => ({ pending, dispatchPending }),
-    [dispatchPending, pending]
-  );
 
   return (
     <>
@@ -31,7 +28,7 @@ function Nav(): JSX.Element {
           className="rounded-3xl bg-slate-800 p-2 text-white"
           onClick={() => {
             if (pending.status === "") {
-              dispatchPending({ type: "IS_LOADING" });
+              dispatchPending({ type: "IS_SUCCESS", payload: "成功" });
               return undefined;
             }
 
@@ -69,7 +66,7 @@ function Nav(): JSX.Element {
       </nav>
 
       <div className="relative min-h-screen">
-        <Outlet context={value} />
+        <Outlet context={{ pending, dispatchPending }} />
       </div>
       <Footer />
     </>
