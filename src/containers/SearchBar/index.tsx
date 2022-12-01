@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer } from "react";
+import React, { useCallback, useEffect, useReducer } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronUp, faChevronDown } from "@fortawesome/free-solid-svg-icons";
 import { AnimatePresence, motion } from "framer-motion";
@@ -16,6 +16,7 @@ import CountryList from "./CountryList";
 import PetCardSmall from "./PetCardSmall";
 import useSearchBar from "../../hooks/useSearchBar";
 import getCountry from "../../utils/getCountry";
+import { useNavContext } from "../../Layout/Nav";
 
 export type SearchBarAction =
   | {
@@ -76,6 +77,7 @@ const searchBarReducer = (
 
 function SearchBar({ className }: { className?: string }): JSX.Element {
   const { pathname } = useLocation();
+  const { dispatchPending } = useNavContext();
   const countryList = getCountry();
 
   const { area, selection, pet, dispatch } = useSearchBar();
@@ -116,6 +118,12 @@ function SearchBar({ className }: { className?: string }): JSX.Element {
     return "border-4 border-primary";
   };
 
+  const renderModal = useCallback((): void => {
+    if (countryList === undefined)
+      return dispatchPending({ type: "IS_LOADING" });
+    return dispatchPending({ type: "CLOSE_ALL" });
+  }, [countryList, dispatchPending]);
+
   // close all modal
   useEffect(() => {
     const handleClose = (): void => {
@@ -123,9 +131,10 @@ function SearchBar({ className }: { className?: string }): JSX.Element {
         dispatchSearchBar({ type: "TOGGLE_ALL" });
       });
     };
+    // renderModal();
 
     return handleClose;
-  }, []);
+  });
 
   return (
     <div
@@ -150,7 +159,7 @@ function SearchBar({ className }: { className?: string }): JSX.Element {
             >
               <img src={mapPinPath} alt="map" />
               <span className="px-3 text-sm xl:text-base">
-                {area === "" ? "選擇地點" : area}
+                {area.name === "" ? "選擇地點" : area.name}
               </span>
               <FontAwesomeIcon
                 icon={showLocation ? faChevronUp : faChevronDown}
@@ -221,13 +230,18 @@ function SearchBar({ className }: { className?: string }): JSX.Element {
               {countryList !== undefined && (
                 <CountryList
                   onClick={(e) => {
+                    const { textContent, value } =
+                      e.target as HTMLSelectElement;
                     dispatchSearchBar({
                       type: "TOGGLE_LOCATION",
                       payload: false,
                     });
                     dispatch({
                       type: "PICK_COUNTRY",
-                      payload: (e.target as HTMLSelectElement).value,
+                      payload: {
+                        name: textContent ?? "",
+                        value,
+                      },
                     });
                   }}
                   countryList={countryList}

@@ -6,7 +6,10 @@ interface ISearchBarProviderProps {
 }
 
 const initSearchBarState = {
-  area: "",
+  area: {
+    name: "",
+    value: "",
+  },
   pet: "",
   selection: {
     startDate: new Date(),
@@ -28,7 +31,10 @@ type SearchBarAction =
     }
   | {
       type: "PICK_COUNTRY";
-      payload: string;
+      payload: {
+        name: string;
+        value: string;
+      };
     }
   | {
       type: "PICK_PET";

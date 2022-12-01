@@ -8,32 +8,28 @@ interface ICountryListProps {
 }
 
 function CountryList({ countryList, onClick }: ICountryListProps): JSX.Element {
-  const { countyItems } = countryList;
   return (
     <select
       size={5}
       onClick={(e) => {
+        e.preventDefault();
         onClick(e);
       }}
       name="country"
       id="country_select"
       className="w-40 rounded-md border-2 border-black outline-none scrollbar-thin scrollbar-thumb-gray-400 scrollbar-thumb-rounded-xl"
     >
-      {countyItems.countyItem.map((country) => (
+      {countryList.map((country) => (
         <option
-          key={country.countyname}
-          value={country.countyname}
+          key={country.Id}
+          value={country.Id}
           className="py-3.5 px-4 hover:bg-gray-300"
         >
-          {country.countyname}
+          {country.Areas}
         </option>
       ))}
     </select>
   );
 }
-
-CountryList.defaultProps = {
-  dispatchSearchBar: undefined,
-};
 
 export default CountryList;
