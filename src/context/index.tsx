@@ -8,9 +8,9 @@ interface IComponentProvicerProps {
 
 function ComponentProvicer({ children }: IComponentProvicerProps): JSX.Element {
   return (
-    <FilterProvider>
-      <SearchBarProvider>{children}</SearchBarProvider>
-    </FilterProvider>
+    <SearchBarProvider>
+      <FilterProvider>{children}</FilterProvider>
+    </SearchBarProvider>
   );
 }
 

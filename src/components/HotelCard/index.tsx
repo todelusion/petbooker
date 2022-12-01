@@ -2,7 +2,8 @@ import React from "react";
 import Button from "../Button";
 import { fakeText, Hotels as hotelList } from "./data";
 
-function HotelCard(): JSX.Element {
+const HotelCard = React.memo((): JSX.Element => {
+  console.log("renderHotelCard");
   return (
     <>
       {hotelList.map((hotel) => (
@@ -41,6 +42,6 @@ function HotelCard(): JSX.Element {
       ))}
     </>
   );
-}
+});
 
 export default HotelCard;

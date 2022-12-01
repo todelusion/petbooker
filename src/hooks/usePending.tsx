@@ -1,16 +1,16 @@
-import { useReducer } from "react";
+import { useReducer, useMemo } from "react";
 
 const initialPending = {
   status: "",
   message: "",
 };
 
-export type InitialPending = {
+export interface InitialPending {
   status: "isLoading" | "isSuccess" | "isError" | "";
   message: string;
-};
+}
 
-interface IPendingProps {
+export interface IModalProps {
   pending: InitialPending;
   dispatchPending: React.Dispatch<PendingAction>;
 }
@@ -33,7 +33,7 @@ export type PendingAction =
       payload?: string;
     };
 const pendingReducer = (
-  state: InitialPending,
+  pending: InitialPending,
   action: PendingAction
 ): InitialPending => {
   switch (action.type) {
@@ -58,16 +58,15 @@ const pendingReducer = (
         message: action.payload ?? "",
       };
     default:
-      return state;
+      return pending;
   }
 };
 
-export default function usePendingStatus(): IPendingProps {
+export default function usePending(): IModalProps {
   const [pending, dispatchPending] = useReducer(
     pendingReducer,
     initialPending as InitialPending
   );
-  console.log(pending);
 
   return { pending, dispatchPending };
 }
