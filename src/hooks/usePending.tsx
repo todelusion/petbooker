@@ -29,7 +29,7 @@ export type PendingAction =
       payload?: string;
     }
   | {
-      type: "CLOSE_ALL";
+      type: "DONE";
       payload?: string;
     };
 const pendingReducer = (
@@ -52,7 +52,7 @@ const pendingReducer = (
         status: "isError",
         message: action.payload ?? "",
       };
-    case "CLOSE_ALL":
+    case "DONE":
       return {
         status: "",
         message: action.payload ?? "",

@@ -11,12 +11,20 @@ interface IPendingModalProps {
 export default function PendingModal({
   children,
 }: IPendingModalProps): JSX.Element {
-  const { pending } = useModal();
+  const { dispatchPending, pending } = useModal();
   const { status, message } = pending;
 
   return (
     <>
-      <div className="pointer-events-none fixed z-20 min-h-screen w-full">
+      <div
+        role="button"
+        onClick={() => dispatchPending({ type: "DONE" })}
+        onKeyUp={() => dispatchPending({ type: "DONE" })}
+        tabIndex={0}
+        className={`fixed z-20 min-h-screen w-full ${
+          status === "" ? "pointer-events-none" : "pointer-events-auto"
+        }`}
+      >
         <AnimatePresence>
           {status === "isLoading" && (
             <MotionFade>

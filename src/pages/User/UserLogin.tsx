@@ -5,14 +5,17 @@ import axios from "axios";
 import UserAuth, { UserAuthContetxt } from "../../context/UserAuthContext";
 import UserInput from "../../components/Input";
 import InputRegex from "../../components/Input/data";
+import useModal from "../../hooks/useModal";
 
-interface typpingValue {
+interface ITyppingValue {
   [key: string]: any;
 }
 
 export default function UserLogin(): JSX.Element {
+  console.log("render Login");
+  const { dispatchPending } = useModal();
   const { authToken, setAuthToken } = useContext(UserAuth);
-  const [inputValue, setInputValue] = useState<typpingValue>({});
+  const [inputValue, setInputValue] = useState<ITyppingValue>({});
   const [identity, setIdentity] = useState<string>("");
   const navigate = useNavigate();
   const inputValueHandler = (event: React.FormEvent): void => {
@@ -27,26 +30,32 @@ export default function UserLogin(): JSX.Element {
   });
   const Login = (): void => {
     if (Object.keys(inputValue).length < 2) {
-      alert("請填寫帳號密碼");
+      dispatchPending({ type: "IS_ERROR", payload: "請填寫帳號密碼" });
+      setTimeout(() => dispatchPending({ type: "DONE" }), 1000);
       return;
     }
     const { email, password } = inputValue;
     if (email === "" || password === "") {
-      alert("帳號密碼不能為空");
+      dispatchPending({ type: "IS_ERROR", payload: "帳號密碼不能為空" });
+      setTimeout(() => dispatchPending({ type: "DONE" }), 1000);
       return;
     }
     if (!InputRegex.email.regex.test(email)) {
-      alert("帳號格式錯誤");
+      dispatchPending({ type: "IS_ERROR", payload: "帳號格式錯誤" });
+      setTimeout(() => dispatchPending({ type: "DONE" }), 1000);
       return;
     }
     if (!InputRegex.password.regex.test(password)) {
-      alert("密碼格式錯誤");
+      dispatchPending({ type: "IS_ERROR", payload: "密碼格式錯誤" });
+      setTimeout(() => dispatchPending({ type: "DONE" }), 1000);
       return;
     }
     if (identity === "") {
-      alert("請填寫會員身分");
+      dispatchPending({ type: "IS_ERROR", payload: "請填寫會員身份" });
+      setTimeout(() => dispatchPending({ type: "DONE" }), 1000);
       return;
     }
+    dispatchPending({ type: "IS_LOADING" });
     axios
       .post(
         `https://petcity.rocket-coding.com/${
@@ -61,9 +70,17 @@ export default function UserLogin(): JSX.Element {
       .then((res) => {
         console.log(res);
         setAuthToken(res.data.JwtToken);
+        dispatchPending({ type: "DONE" });
         navigate("/home");
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        dispatchPending({
+          type: "IS_ERROR",
+          payload: err.response.data.Message,
+        });
+        setTimeout(() => dispatchPending({ type: "DONE" }), 1000);
+        console.log(err);
+      });
   };
   const setidentity = (event: React.FormEvent): void => {
     const { value } = event.target as HTMLInputElement;

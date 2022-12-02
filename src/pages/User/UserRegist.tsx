@@ -4,8 +4,10 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import UserInput from "../../components/Input";
 import InputRegex from "../../components/Input/data";
+import useModal from "../../hooks/useModal";
 
 export default function UserRegist(): JSX.Element {
+  const { dispatchPending } = useModal();
   const navigate = useNavigate();
   const [inputValue, setInputValue] = useState<{ [index: string]: string }>({});
   const [identity, setIdentity] = useState<string>("");
@@ -22,29 +24,35 @@ export default function UserRegist(): JSX.Element {
     console.log(inputValue, identity);
 
     if (Object.values(inputValue).length < 4) {
-      // 彈窗//
-      alert("有欄位尚未填寫");
+      dispatchPending({ type: "IS_ERROR", payload: "有欄位尚未填寫" });
+      setTimeout(() => dispatchPending({ type: "DONE" }), 1000);
       return;
     }
     const { email, password, userName, confirmPassword } = inputValue;
     if (email === "" || password === "") {
-      alert("帳號密碼不能為空");
+      dispatchPending({ type: "IS_ERROR", payload: "帳號密碼不能為空" });
+      setTimeout(() => dispatchPending({ type: "DONE" }), 1000);
       return;
     }
     if (!InputRegex.email.regex.test(email)) {
-      alert("帳號格式錯誤");
+      dispatchPending({ type: "IS_ERROR", payload: "帳號格式錯誤" });
+      setTimeout(() => dispatchPending({ type: "DONE" }), 1000);
       return;
     }
     if (!InputRegex.password.regex.test(password)) {
-      alert("密碼格式錯誤");
+      dispatchPending({ type: "IS_ERROR", payload: "密碼格式錯誤" });
+      setTimeout(() => dispatchPending({ type: "DONE" }), 1000);
       return;
     }
     if (identity === "") {
-      alert("請填寫會員身分");
+      dispatchPending({ type: "IS_ERROR", payload: "請填寫會員身分" });
+      setTimeout(() => dispatchPending({ type: "DONE" }), 1000);
       return;
     }
     if (password !== confirmPassword) {
-      alert("確認密碼不相符");
+      dispatchPending({ type: "IS_ERROR", payload: "確認密碼不相符" });
+      setTimeout(() => dispatchPending({ type: "DONE" }), 1000);
+      return;
     }
     const Userdata = {
       UserAccount: email,
@@ -60,6 +68,7 @@ export default function UserRegist(): JSX.Element {
       ConfirmedPassword: confirmPassword,
       Identity: "hotel",
     };
+    dispatchPending({ type: "IS_LOADING" });
     axios
       .post(
         `https://petcity.rocket-coding.com/${
@@ -69,9 +78,16 @@ export default function UserRegist(): JSX.Element {
       )
       .then((res) => {
         console.log(res);
+        dispatchPending({ type: "DONE" });
         navigate("/login");
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        dispatchPending({
+          type: "IS_ERROR",
+          payload: err.response.data.Message,
+        });
+        setTimeout(() => dispatchPending({ type: "DONE" }), 1000);
+      });
   }
 
   const validpassword = (): boolean => {

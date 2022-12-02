@@ -1,14 +1,18 @@
 import React, { useState } from "react";
 // import { string } from "zod"
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import UserInput from "../../components/Input";
 import InputRegex from "../../components/Input/data";
+import useModal from "../../hooks/useModal";
 
-interface typpingValue {
-  [key: string]: any;
+interface ITyppingValue {
+  [key: string]: string;
 }
 export default function UserForgetPassword(): JSX.Element {
-  const [inputValue, setInputValue] = useState<typpingValue>({});
+  const { dispatchPending } = useModal();
+  const navigate = useNavigate();
+  const [inputValue, setInputValue] = useState<ITyppingValue>({});
   const [identity, setIdentity] = useState<string>("");
   const inputValueHandler = (event: React.FormEvent): void => {
     const { name, value } = event.target as HTMLInputElement;
@@ -22,23 +26,24 @@ export default function UserForgetPassword(): JSX.Element {
   };
   const sendForget = (): void => {
     if (Object.keys(inputValue).length < 1) {
-      alert("請填寫帳號密碼");
+      dispatchPending({ type: "IS_ERROR", payload: "請填寫帳號密碼" });
       return;
     }
     const { email } = inputValue;
     if (email === "") {
-      alert("帳號密碼不能為空");
+      dispatchPending({ type: "IS_ERROR", payload: "帳號密碼不能為空" });
       return;
     }
     if (!InputRegex.email.regex.test(email)) {
-      alert("帳號格式錯誤");
+      dispatchPending({ type: "IS_ERROR", payload: "帳號格式錯誤" });
       return;
     }
 
     if (identity === "") {
-      alert("請填寫會員身分");
+      dispatchPending({ type: "IS_ERROR", payload: "請填寫會員身分" });
       return;
     }
+    dispatchPending({ type: "IS_LOADING" });
     axios
       .post(
         `https://petcity.rocket-coding.com/${
@@ -50,8 +55,16 @@ export default function UserForgetPassword(): JSX.Element {
       )
       .then((res) => {
         console.log(res);
+        dispatchPending({ type: "DONE" });
+        navigate("/success");
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        dispatchPending({
+          type: "IS_ERROR",
+          payload: err.response.data.Message,
+        });
+        setTimeout(() => dispatchPending({ type: "DONE" }), 1000);
+      });
   };
   return (
     <div className=" flex flex-col items-center  py-40">
