@@ -1,3 +1,4 @@
+import { type } from "os";
 import React, { ChangeEvent, useState } from "react";
 
 function UploadImage(): JSX.Element {
@@ -6,12 +7,16 @@ function UploadImage(): JSX.Element {
 
   const handleSetImage = (event: ChangeEvent<HTMLInputElement>): void => {
     if (event.target.files === null) return;
-    // const formData = new FormData();
-    const resultAry = Object.values(event.target.files).map((item) => item);
+    const Formdata = new FormData();
+    const resultAry = Object.values(event.target.files).map((item) => {
+      Formdata.append("HotelPhoto", item);
+      return item;
+    });
+
     const urlAry = resultAry.map((item) => URL.createObjectURL(item));
     const url = URL.createObjectURL(event.target.files[0]);
-    console.log(urlAry);
-    console.log(resultAry);
+    console.log(resultAry, typeof Formdata);
+
     setImgData(url);
     setImges(urlAry);
     // eslint-disable-next-line no-param-reassign
