@@ -1,4 +1,7 @@
+/* eslint-disable @typescript-eslint/restrict-template-expressions */
+/* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import React from "react";
+import { useLocation } from "react-router-dom";
 import type {
   FilterAction,
   IFilterContextProps,
@@ -23,8 +26,9 @@ interface IFilterList {
 interface IFilterInputProps {
   action: FilterAction["type"];
   filterList: IFilterList;
-  horizontal?: boolean;
+  horizontal?: true;
   checked: string | string[];
+  className?: string;
 }
 
 export const handleFilterValue = (
@@ -152,6 +156,7 @@ function FilterInput({
   filterList,
   checked,
   horizontal,
+  className,
 }: IFilterInputProps): JSX.Element {
   const FilterContextProps = useFilter();
   const { keyname, title, type, contents } = filterList;
@@ -203,18 +208,31 @@ function FilterInput({
   };
 
   return (
-    <div className="p-4">
-      <p className="font-bold">{title}</p>
-      <form name={action}>
+    <div className={`${horizontal ? "" : "p-4"}${className}`}>
+      {!horizontal && <p className="relative font-bold">{title}</p>}
+      <form
+        name={action}
+        className={horizontal === true ? "flex items-center" : ""}
+      >
+        {horizontal && (
+          <p className="relative mr-5">
+            {title}
+            {action === "PICK-FoodTypes" && (
+              <span className=" absolute -top-1 -right-2 text-lg">*</span>
+            )}
+          </p>
+        )}
         {contents.map((content) => (
-          <div key={content.descript} className="py-4">
+          <div key={content.descript} className={`${horizontal ? "" : "p-4"}`}>
             <label
               key={content.descript}
               htmlFor={content.descript}
-              className="inline-flex w-full cursor-pointer items-center text-sm"
+              className="flex w-full cursor-pointer items-center text-sm"
             >
               {renderInput(content)}
-              <span className="ml-2">{content.descript}</span>
+              <span className={`ml-2 ${horizontal === true ? "mx-5" : ""}`}>
+                {content.descript}
+              </span>
             </label>
           </div>
         ))}
@@ -225,6 +243,7 @@ function FilterInput({
 
 FilterInput.defaultProps = {
   horizontal: false,
+  className: "",
 };
 
 export default FilterInput;

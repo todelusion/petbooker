@@ -37,9 +37,9 @@ export default function Router(): JSX.Element {
           <Route
             path="/contextTest"
             element={
-              <FilterProvider>
+              <ComponentProvicer>
                 <ContextTest />
-              </FilterProvider>
+              </ComponentProvicer>
             }
           />
           <Route

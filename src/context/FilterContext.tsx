@@ -1,4 +1,5 @@
-import React, { createContext, useMemo, useReducer } from "react";
+import React, { createContext, useEffect, useMemo, useReducer } from "react";
+import { useLocation } from "react-router-dom";
 
 interface IFilterProviderProps {
   children: JSX.Element;
@@ -15,9 +16,12 @@ const initFilter = {
   },
 };
 
-type IinitFilter = typeof initFilter;
+export type IinitFilter = typeof initFilter;
 
 export type FilterAction =
+  | {
+      type: "CLEAR";
+    }
   | {
       type: "PICK-PetType";
       payload: string;
@@ -49,6 +53,8 @@ const filterReducer = (
   action: FilterAction
 ): IinitFilter => {
   switch (action.type) {
+    case "CLEAR":
+      return initFilter;
     case "PICK-PetType":
       return { ...state, PetType: action.payload };
     case "PICK-FoodTypes":
@@ -56,12 +62,16 @@ const filterReducer = (
     case "PICK-RoomPrices":
       return { ...state, RoomPrices: action.payload };
     case "PICK-ServiceTypes": {
-      const { ServiceTypes } = state;
       const { keyname, contents } = action.payload;
-      ServiceTypes[keyname] = contents;
+      const newServiceTypes = {
+        services: [""],
+        facilities: [""],
+        specials: [""],
+      };
+      newServiceTypes[keyname] = contents;
       return {
         ...state,
-        ServiceTypes,
+        ServiceTypes: newServiceTypes,
       };
     }
     default:
@@ -72,11 +82,20 @@ const filterReducer = (
 export function FilterProvider({
   children,
 }: IFilterProviderProps): JSX.Element {
+  const { pathname } = useLocation();
   const [filter, filterDispatch] = useReducer(filterReducer, initFilter);
 
   const value = useMemo(() => ({ ...filter, filterDispatch }), [filter]);
-  const { FoodTypes, PetType, RoomPrices, ServiceTypes } = value;
-  console.log({ FoodTypes, PetType, RoomPrices, ServiceTypes });
+  // const { FoodTypes, PetType, RoomPrices, ServiceTypes } = value;
+  // console.log({ FoodTypes, PetType, RoomPrices, ServiceTypes });
+
+  // useEffect(() => {
+  //   if (!pathname.includes("/cms")) return;
+  //   console.log("in FilterContext");
+  //   filterDispatch({ type: "CLEAR" });
+  // }, [pathname, value]);
+
+  console.log(value);
 
   return (
     <FilterContext.Provider value={value}>{children}</FilterContext.Provider>
