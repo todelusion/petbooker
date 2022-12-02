@@ -3,11 +3,13 @@ import React, { useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 // import { string } from "zod"
 import UserInput from "../../components/Input";
+import useModal from "../../hooks/useModal";
 
 export default function UserModifyPassword(): JSX.Element {
+  const { dispatchPending } = useModal();
   const { id } = useParams();
   const navigate = useNavigate();
-  const [inputValue, setInputValue] = useState({});
+  const [inputValue, setInputValue] = useState<{ [index: string]: string }>({});
   const inputValueHandler = (event: React.FormEvent): void => {
     const { name, value } = event.target as HTMLInputElement;
 
@@ -39,6 +41,7 @@ export default function UserModifyPassword(): JSX.Element {
         <button
           type="button"
           onClick={() => {
+            dispatchPending({ type: "IS_LOADING" });
             axios
               .post(
                 `https://petcity.rocket-coding.com/user/resetpassword?guid=${
@@ -51,11 +54,15 @@ export default function UserModifyPassword(): JSX.Element {
               )
               .then((res) => {
                 console.log(res);
+                dispatchPending({ type: "DONE" });
                 navigate("/login");
               })
               .catch((err) => {
-                console.log(err);
-                throw new Error(err);
+                dispatchPending({
+                  type: "IS_ERROR",
+                  payload: err.response.data.Message,
+                });
+                setTimeout(() => dispatchPending({ type: "DONE" }), 1000);
               });
           }}
           className="mt-8 rounded-full bg-second py-2 text-white"

@@ -12,19 +12,6 @@ function Home(): JSX.Element {
 
   return (
     <div className="relative flex w-full items-start justify-evenly px-20 pt-40">
-      <button
-        type="button"
-        onClick={() => {
-          if (pending.status === "") {
-            dispatchPending({ type: "IS_SUCCESS", payload: "成功" });
-            return undefined;
-          }
-
-          return dispatchPending({ type: "CLOSE_ALL" });
-        }}
-      >
-        Toggle
-      </button>
       <Filter className="max-w-xs" />
       <div className="flex max-w-2xl flex-col items-center xl:max-w-4xl">
         <SearchBar className="mb-16" />
