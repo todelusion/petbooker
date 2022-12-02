@@ -10,61 +10,61 @@ import getCountry from "../utils/getCountry";
 import Button from "../components/Button";
 import StatusModal from "../Layout/StatusModal";
 import useModal from "../hooks/useModal";
+import Filter from "../containers/Filter";
 
 function ContextTest(): JSX.Element {
   const { PetType, FoodTypes, ServiceTypes } = useFilter();
   const { pending, dispatchPending } = useModal();
-  console.log(pending);
   const countryList = getCountry();
 
   return (
-    <>
-      <StatusModal pending={pending} />
-      <div className="flex-col-center min-h-screen pt-40">
-        {/* <Link to="/home">點此返回home頁</Link> */}
-        {countryList !== undefined && (
-          <CountryList
-            onClick={(e) => console.log((e.target as HTMLSelectElement).value)}
-            countryList={countryList}
-          />
-        )}
-
-        <Button
-          text="登入測試"
-          className="mb-5 p-5"
-          type="Primary"
-          onClick={() => {
-            console.log("test");
-            axios
-              .post("https://petcity.rocket-coding.com/user/login", {
-                UserAccount: "qqq123gmail.com",
-                UserPassWord: "Wang1234",
-                Identity: "customer",
-              })
-              .then((res) => console.log(res))
-              .catch((err) => console.log(err));
-          }}
+    <div className="flex-col-center min-h-screen pt-40">
+      {/* <Link to="/home">點此返回home頁</Link> */}
+      {countryList !== undefined && (
+        <CountryList
+          onClick={(e) => console.log((e.target as HTMLSelectElement).value)}
+          countryList={countryList}
         />
+      )}
+      <Filter onChange={(e) => console.log(e)} />
+      <SearchBar className="mb-16" />
 
-        <Button
-          text="註冊測試"
-          className="p-5"
-          type="Secondary"
-          onClick={() => {
-            axios
-              .post("https://petcity.rocket-coding.com/user/signup", {
-                UserAccount: "fasFSDF31WE7fwer@gmail.com",
-                UserName: "fasFSDF31WE7fwer",
-                UserPassWord: "fasFSDF31WE7fwer",
-                ConfirmedPassword: "fasFSDF31WE7fwer",
-                Identity: "customer",
-              })
-              .then((res) => console.log(res))
-              .catch((err) => console.log(err));
-          }}
-        />
+      <Button
+        text="登入測試"
+        className="mb-5 p-5"
+        type="Primary"
+        onClick={() => {
+          console.log("test");
+          axios
+            .post("https://petcity.rocket-coding.com/user/login", {
+              UserAccount: "qqq123gmail.com",
+              UserPassWord: "Wang1234",
+              Identity: "customer",
+            })
+            .then((res) => console.log(res))
+            .catch((err) => console.log(err));
+        }}
+      />
 
-        {/* <FilterInput
+      <Button
+        text="註冊測試"
+        className="p-5"
+        type="Secondary"
+        onClick={() => {
+          axios
+            .post("https://petcity.rocket-coding.com/user/signup", {
+              UserAccount: "fasFSDF31WE7fwer@gmail.com",
+              UserName: "fasFSDF31WE7fwer",
+              UserPassWord: "fasFSDF31WE7fwer",
+              ConfirmedPassword: "fasFSDF31WE7fwer",
+              Identity: "customer",
+            })
+            .then((res) => console.log(res))
+            .catch((err) => console.log(err));
+        }}
+      />
+
+      {/* <FilterInput
         action="PICK-PetType"
         filterList={petLists}
         checked={PetType}
@@ -98,8 +98,7 @@ function ContextTest(): JSX.Element {
           />
         );
       })} */}
-      </div>
-    </>
+    </div>
   );
 }
 

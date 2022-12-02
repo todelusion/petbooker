@@ -5,12 +5,18 @@ import UploadImage from "../../../components/UploadImage";
 import CountryList from "../../../containers/SearchBar/CountryList";
 import { countySchema } from "../../../types/schema";
 import { xml2json, parseXml } from "../../../utils/xml2json";
-import Filter from "./Filter";
+import Filter from "../../../containers/Filter";
 
 function CmsInfo(): JSX.Element {
   return (
-    <div className="w-full max-w-3xl">
-      <Filter />
+    <div className="w-full">
+      <Filter
+        horizontal
+        closePet
+        closeRoomPrices
+        className="my-5"
+        onChange={(filter) => console.log(filter)}
+      />
       <div className="flex ">
         <UploadImage />
       </div>
