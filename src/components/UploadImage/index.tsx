@@ -1,31 +1,50 @@
-import { type } from "os";
-import React, { ChangeEvent, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 
 function UploadImage(): JSX.Element {
-  const [imgData, setImgData] = useState<string>();
-  const [imges, setImges] = useState<string[]>();
+  const [imageFile, setImageFile] = useState<File[]>();
 
+  const [previewImage, setPreviewImage] = useState<string[]>();
+
+  //接收上傳圖片
   const handleSetImage = (event: ChangeEvent<HTMLInputElement>): void => {
-    if (event.target.files === null) return;
-    const Formdata = new FormData();
-    const resultAry = Object.values(event.target.files).map((item) => {
-      Formdata.append("HotelPhoto", item);
-      return item;
-    });
+    const { files } = event.target;
+    if (files === null) return;
+    if (
+      files.length > 4 ||
+      (imageFile ? imageFile.length + files.length : 0) > 4
+    ) {
+      alert("照片數量不可大於4張");
+      return;
+    }
+    console.log(files);
 
-    const urlAry = resultAry.map((item) => URL.createObjectURL(item));
-    const url = URL.createObjectURL(event.target.files[0]);
-    console.log(resultAry, typeof Formdata);
+    // 建立postRequest的FormData
 
-    setImgData(url);
-    setImges(urlAry);
+    const imageFormData = imageFile
+      ? [...imageFile, ...files]
+      : Object.values(files).map((item) => item);
+    setImageFile(imageFormData);
+    // 建立previewImage
+    const previewData = imageFormData?.map((item) => URL.createObjectURL(item));
+    setPreviewImage(previewData);
     // eslint-disable-next-line no-param-reassign
     event.target.value = "";
   };
-  const deleteImg = (img: string): void => {
-    const newAry = imges?.filter((item) => item !== img);
-    setImges(newAry);
+
+  //點擊刪除previewImg&imageflie
+  const deleteImg = (img: string, index: number): void => {
+    const previewData = previewImage?.filter((item) => item !== img);
+    const imagefile = imageFile?.filter(
+      (_item, fileindex) => fileindex !== index
+    );
+    setPreviewImage(previewData);
+    setImageFile(imagefile);
   };
+
+  useEffect(() => {
+    console.log(imageFile);
+    console.log(previewImage);
+  }, [imageFile, previewImage]);
 
   return (
     <div>
@@ -46,10 +65,10 @@ function UploadImage(): JSX.Element {
         />
       </label>
       <span className="flex ">
-        {imges !== null && imges !== undefined
-          ? imges.map((item) => (
-              <button onClick={() => deleteImg(item)} type="button">
-                <img src={item} alt="123" className="h-20 w-20 " />
+        {previewImage !== null && previewImage !== undefined
+          ? previewImage.map((item, index) => (
+              <button onClick={() => deleteImg(item, index)} type="button">
+                <img src={item} alt="previewImage" className="h-20 w-20 " />
               </button>
             ))
           : ""}
