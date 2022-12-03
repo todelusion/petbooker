@@ -20,8 +20,8 @@ function NavBackend({ menus }: INavBackendProps): JSX.Element {
   const navigate = useNavigate();
 
   return (
-    <div className="flex min-h-screen justify-evenly px-20 pt-42">
-      <ul className="w-full max-w-[200px] basis-3/12 ">
+    <div className="min-h-screen px-20 pt-42">
+      <ul className="inline-block w-full max-w-[200px] basis-3/12 ">
         {menus.map((menu) => (
           <li key={menu.content}>
             <button
@@ -38,7 +38,9 @@ function NavBackend({ menus }: INavBackendProps): JSX.Element {
           </li>
         ))}
       </ul>
-      <Outlet />
+      <div className="inline-block">
+        <Outlet />
+      </div>
     </div>
   );
 }

@@ -18,6 +18,7 @@ import CmsInfo from "./pages/Cms/CmsInfo";
 import { cmsMenu, memberMenu } from "./Layout/data";
 import MemberInfo from "./pages/Member/MemberInfo";
 import { FilterProvider } from "./context/FilterContext";
+import CmsOrder from "./pages/Cms/CmsOrder";
 
 export default function Router(): JSX.Element {
   const client = new QueryClient();
@@ -67,6 +68,7 @@ export default function Router(): JSX.Element {
                 </FilterProvider>
               }
             />
+            <Route path="/cms/order" element={<CmsOrder />} />
           </Route>
         </Route>
       </Routes>

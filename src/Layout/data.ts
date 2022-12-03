@@ -23,7 +23,7 @@ export const cmsMenu = [
   {
     logo: calendarPath,
     content: "訂單管理",
-    navigatePath: null,
+    navigatePath: "/cms/order",
   },
   {
     logo: messageSquarePath,
