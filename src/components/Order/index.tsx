@@ -1,10 +1,10 @@
 import React from "react";
 import Button from "../Button";
 import { cmsList } from "./data";
-import type { CmsOrder } from "./data";
+import type { CMSOrder } from "./data";
 
 interface IOrderProps {
-  data: CmsOrder;
+  data: CMSOrder;
 }
 
 function Order({ data }: IOrderProps): JSX.Element {
@@ -12,7 +12,7 @@ function Order({ data }: IOrderProps): JSX.Element {
     <div className="overflow-hidden rounded-lg border-2 border-black">
       <ul className="grid grid-cols-7 justify-items-center gap-x-14 border-b-2 border-stone-200 bg-stone-100 py-7 text-lg font-bold">
         {cmsList.map((list) => (
-          <li>{list}</li>
+          <li key={list}>{list}</li>
         ))}
       </ul>
       {data.map((item) => (
@@ -33,7 +33,7 @@ function Order({ data }: IOrderProps): JSX.Element {
                 <div className="h-full w-full bg-stone-200" />
               )}
             </div>
-            <span>{item.PetName}</span>
+            <span className="ml-2">{item.PetName}</span>
           </li>
           <li>{item.RoomId}</li>
           <li>{item.CheckInDate}</li>

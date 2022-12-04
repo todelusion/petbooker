@@ -31,9 +31,42 @@ export const cmsOrder = [
     Status: "待入住",
     ReservedListId: "2",
   },
+  {
+    UserName: "大傑比利",
+    PedCardId: "B",
+    PetName: "咖哩",
+    PetPhoto: "",
+    RoomId: "經典小貓房 B",
+    CheckInDate: "2022/11/12",
+    CheckOutDate: "2022/11/13",
+    Status: "已入住",
+    ReservedListId: "3",
+  },
+  {
+    UserName: "大傑比利",
+    PedCardId: "B",
+    PetName: "咖哩",
+    PetPhoto: "",
+    RoomId: "經典小貓房 B",
+    CheckInDate: "2022/11/12",
+    CheckOutDate: "2022/11/13",
+    Status: "完成訂單",
+    ReservedListId: "4",
+  },
+  {
+    UserName: "大傑比利",
+    PedCardId: "B",
+    PetName: "咖哩",
+    PetPhoto: "",
+    RoomId: "經典小貓房 B",
+    CheckInDate: "2022/11/12",
+    CheckOutDate: "2022/11/13",
+    Status: "取消訂單",
+    ReservedListId: "5",
+  },
 ];
 
-export type CmsOrder = typeof cmsOrder;
+export type CMSOrder = typeof cmsOrder;
 
 export const user = {
   Petphoto: "",
