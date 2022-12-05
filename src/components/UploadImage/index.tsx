@@ -5,13 +5,13 @@ function UploadImage(): JSX.Element {
 
   const [previewImage, setPreviewImage] = useState<string[]>();
 
-  //接收上傳圖片
+  // 接收上傳圖片
   const handleSetImage = (event: ChangeEvent<HTMLInputElement>): void => {
     const { files } = event.target;
     if (files === null) return;
     if (
       files.length > 4 ||
-      (imageFile ? imageFile.length + files.length : 0) > 4
+      (imageFile != null ? imageFile.length + files.length : 0) > 4
     ) {
       alert("照片數量不可大於4張");
       return;
@@ -20,9 +20,10 @@ function UploadImage(): JSX.Element {
 
     // 建立postRequest的FormData
 
-    const imageFormData = imageFile
-      ? [...imageFile, ...files]
-      : Object.values(files).map((item) => item);
+    const imageFormData =
+      imageFile != null
+        ? [...imageFile, ...files]
+        : Object.values(files).map((item) => item);
     setImageFile(imageFormData);
     // 建立previewImage
     const previewData = imageFormData?.map((item) => URL.createObjectURL(item));
@@ -31,7 +32,7 @@ function UploadImage(): JSX.Element {
     event.target.value = "";
   };
 
-  //點擊刪除previewImg&imageflie
+  // 點擊刪除previewImg&imageflie
   const deleteImg = (img: string, index: number): void => {
     const previewData = previewImage?.filter((item) => item !== img);
     const imagefile = imageFile?.filter(
