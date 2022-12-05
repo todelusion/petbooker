@@ -99,9 +99,9 @@ function UploadImage(): JSX.Element {
             ))
           : ""}
       </span>
-      <button type="button" onClick={sendPhoto} className="mt-4">
+      {/* <button type="button" onClick={sendPhoto} className="mt-4">
         打都打！
-      </button>
+      </button> */}
     </div>
   );
 }
