@@ -35,7 +35,6 @@ function DatePicker(): JSX.Element {
   const onDateChange = (item: IDateRangePickerOutput): void => {
     dispatch({ type: "PICK_DATERANGE", payload: item });
   };
-  console.log(selection);
 
   const onNavigatorRenderer: NavigatorRenderer = (
     currFocusedDate,

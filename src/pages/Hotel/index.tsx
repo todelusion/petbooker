@@ -33,7 +33,10 @@ function Hotel(): JSX.Element {
   return (
     <div className="px-20 pt-40">
       <div className="flex-col-center ">
-        <SearchBar className="mb-12" />
+        <SearchBar
+          onChange={(searchBar) => console.log(searchBar)}
+          className="mb-12"
+        />
         <Photo data={hotel.HotelPhoto} className="mb-12" />
         <Info hotel={hotel} className="mb-12" />
         <Swiper

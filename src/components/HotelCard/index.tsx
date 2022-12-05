@@ -2,7 +2,11 @@ import React from "react";
 import Button from "../Button";
 import { fakeText, Hotels as hotelList } from "./data";
 
-const HotelCard = React.memo((): JSX.Element => {
+interface IHotelCardProps {
+  onClick?: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
+}
+
+const HotelCard = React.memo(({ onClick }: IHotelCardProps): JSX.Element => {
   console.log("renderHotelCard");
   return (
     <>
@@ -35,6 +39,10 @@ const HotelCard = React.memo((): JSX.Element => {
                 text="選擇房間"
                 className="py-2 px-5 text-sm"
                 navigatePath={`/hotel/${hotel.Id}`}
+                onClick={(e) => {
+                  if (onClick === undefined) return;
+                  onClick(e);
+                }}
               />
             </li>
           </ul>

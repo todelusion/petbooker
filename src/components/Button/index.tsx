@@ -1,5 +1,7 @@
+import { format } from "date-fns";
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import useSearchBar from "../../hooks/useSearchBar";
 import buttonStyle from "./style";
 
 type ButtonPropsType = "Primary" | "Secondary" | "Transparent";
@@ -8,7 +10,7 @@ interface ButtonProps {
   type: ButtonPropsType;
   text: string;
   className: string;
-  onClick?: () => void;
+  onClick?: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
   icon?: string;
   textSize?: string;
   navigatePath?: string;
@@ -23,6 +25,7 @@ function Button({
   navigatePath,
 }: ButtonProps): JSX.Element {
   const navigate = useNavigate();
+  const { selection } = useSearchBar();
   const renderButtonPropsType = (): string => {
     switch (type) {
       case "Primary":
@@ -44,11 +47,15 @@ function Button({
   return (
     <button
       type="button"
-      onClick={() => {
-        onNavigate();
+      onClick={(e) => {
         if (onClick === undefined) return;
+        onClick(e);
+        if (selection.startDate.getTime() === selection.endDate.getTime())
+          return;
+
+        onNavigate();
+
         console.log("test");
-        onClick();
       }}
       className={`${renderButtonPropsType()} ${className} flex-center h-max rounded-full`}
     >

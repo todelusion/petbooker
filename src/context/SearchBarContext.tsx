@@ -18,7 +18,7 @@ const initSearchBarState = {
   },
 };
 
-type InitSearchBarState = typeof initSearchBarState;
+export type InitSearchBarState = typeof initSearchBarState;
 
 export interface ISearchBarContextProps extends InitSearchBarState {
   dispatch: React.Dispatch<SearchBarAction>;
@@ -68,7 +68,6 @@ export function SearchBarProvider({
   const [state, dispatch] = useReducer(searchBarReducer, initSearchBarState);
 
   const value = useMemo(() => ({ ...state, dispatch }), [state]);
-  console.log(value);
 
   return (
     <SearchBarContext.Provider value={value}>

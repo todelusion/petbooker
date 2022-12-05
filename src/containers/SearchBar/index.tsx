@@ -16,6 +16,7 @@ import CountryList from "./CountryList";
 import PetCardSmall from "./PetCardSmall";
 import useSearchBar from "../../hooks/useSearchBar";
 import getCountry from "../../utils/getCountry";
+import { InitSearchBarState } from "../../context/SearchBarContext";
 
 export type SearchBarAction =
   | {
@@ -74,14 +75,27 @@ const searchBarReducer = (
   }
 };
 
+export interface ISearchBarProps {
+  onChange: (searchBarState: InitSearchBarState) => void;
+  className?: string;
+}
+
 const SearchBar = React.memo(
-  // eslint-disable-next-line react/require-default-props
-  ({ className }: { className?: string }): JSX.Element => {
-    // console.log("renderSearchBar");
+  ({ className, onChange }: ISearchBarProps): JSX.Element => {
     const { pathname } = useLocation();
     const countryList = getCountry();
 
     const { area, selection, pet, dispatch } = useSearchBar();
+
+    const handleChange = useCallback((): void => {
+      const searchBarState = {
+        area,
+        selection,
+        pet,
+      };
+      onChange(searchBarState);
+    }, [area, onChange, pet, selection]);
+
     const [
       { showLocation, showCalendar, showPetCardSmall },
       dispatchSearchBar,
@@ -128,10 +142,16 @@ const SearchBar = React.memo(
       }
     }, [showCalendar, showLocation, showPetCardSmall]);
 
-    useEffect(() => {
-      document.addEventListener("click", () => closeAllModal());
+    handleChange();
 
-      return document.removeEventListener("click", () => closeAllModal());
+    useEffect(() => {
+      document.addEventListener("click", () => {
+        closeAllModal();
+      });
+
+      return document.removeEventListener("click", () => {
+        closeAllModal();
+      });
     }, [closeAllModal]);
 
     return (
