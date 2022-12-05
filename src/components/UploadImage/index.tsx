@@ -1,3 +1,4 @@
+import axios from "axios";
 import React, { ChangeEvent, useEffect, useState } from "react";
 
 function UploadImage(): JSX.Element {
@@ -10,8 +11,8 @@ function UploadImage(): JSX.Element {
     const { files } = event.target;
     if (files === null) return;
     if (
-      files.length > 4 ||
-      (imageFile != null ? imageFile.length + files.length : 0) > 4
+      files.length > 5 ||
+      (imageFile != null ? imageFile.length + files.length : 0) > 5
     ) {
       alert("照片數量不可大於4張");
       return;
@@ -40,6 +41,30 @@ function UploadImage(): JSX.Element {
     );
     setPreviewImage(previewData);
     setImageFile(imagefile);
+  };
+  const sendPhoto = (): void => {
+    const PhotoFormData = new FormData();
+    imageFile?.forEach((item) => {
+      PhotoFormData.append("Image", item);
+    });
+    console.log(PhotoFormData);
+    void axios
+      .post(
+        "https://petcity.rocket-coding.com/hotel/uploadhotelphotos",
+        PhotoFormData,
+        {
+          headers: {
+            Authorization:
+              "Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJJZCI6MTAsIkFjY291bnQiOiJrd2VpZm9uMTk5OEBnbWFpbC5jb20iLCJOYW1lIjoid2FuZyIsIkltYWdlIjpudWxsLCJJZGVudGl0eSI6ImhvdGVsIiwiRXhwIjoiMTIvNS8yMDIyIDM6NTY6MDggQU0ifQ.JICJ5pw1p8SbtS49_cKXgrIZgiy6lM1iIl_nNB87eaBkR1PyUlh7RgcYyFSouSgDM3McUGbi22lpz7rWSGmK4A",
+          },
+        }
+      )
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   useEffect(() => {
@@ -74,6 +99,9 @@ function UploadImage(): JSX.Element {
             ))
           : ""}
       </span>
+      <button type="button" onClick={sendPhoto} className="mt-4">
+        打都打！
+      </button>
     </div>
   );
 }
