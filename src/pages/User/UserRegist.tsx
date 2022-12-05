@@ -66,13 +66,13 @@ export default function UserRegist(): JSX.Element {
       HotelName: userName,
       HotelPassWord: password,
       ConfirmedPassword: confirmPassword,
-      Identity: "hotel",
+      Identity: "Hotel",
     };
     dispatchPending({ type: "IS_LOADING" });
     axios
       .post(
         `https://petcity.rocket-coding.com/${
-          identity === "User" ? "user" : "hotel"
+          identity === "User" ? "user" : "Hotel"
         }/signup`,
         identity === "User" ? Userdata : Hoteldata
       )

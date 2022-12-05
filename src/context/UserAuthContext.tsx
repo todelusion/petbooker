@@ -1,4 +1,10 @@
-import React, { useMemo, useState, createContext, SetStateAction } from "react";
+import React, {
+  useMemo,
+  useState,
+  createContext,
+  SetStateAction,
+  useEffect,
+} from "react";
 
 interface UserAuthProps {
   children: JSX.Element;
@@ -13,8 +19,11 @@ const UserAuth = createContext({
 export default UserAuth;
 
 export function UserAuthContetxt({ children }: UserAuthProps): JSX.Element {
-  const [authToken, setAuthToken] = useState("");
-  const [identity, setIdentity] = useState("");
+  const initToken = localStorage.getItem("token") ?? "";
+  const initIdentity = localStorage.getItem("identity") ?? "";
+
+  const [authToken, setAuthToken] = useState(initToken);
+  const [identity, setIdentity] = useState(initIdentity);
   const value = useMemo(
     () => ({
       authToken,
@@ -24,6 +33,12 @@ export function UserAuthContetxt({ children }: UserAuthProps): JSX.Element {
     }),
     [authToken, identity]
   );
+  console.log({ authToken, identity });
+
+  useEffect(() => {
+    localStorage.setItem("token", authToken);
+    localStorage.setItem("identity", identity);
+  });
 
   return <UserAuth.Provider value={value}>{children}</UserAuth.Provider>;
 }

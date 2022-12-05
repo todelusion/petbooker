@@ -7,7 +7,7 @@ import {
   userPath,
 } from "../img/icons";
 
-import { memberMenu } from "../components/AccountMenu/data";
+import { customerMenu } from "../components/AccountMenu/data";
 
 export const cmsMenu = [
   {
@@ -23,7 +23,7 @@ export const cmsMenu = [
   {
     logo: calendarPath,
     content: "訂單管理",
-    navigatePath: null,
+    navigatePath: "/cms/order",
   },
   {
     logo: messageSquarePath,
@@ -37,4 +37,4 @@ export const cmsMenu = [
   },
 ];
 
-export { memberMenu };
+export { customerMenu };
