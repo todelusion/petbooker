@@ -1,11 +1,14 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 // import { string } from "zod"
 import UserInput from "../../components/Input";
+import UserAuth from "../../context/UserAuthContext";
 import useModal from "../../hooks/useModal";
 
 export default function UserModifyPassword(): JSX.Element {
+  const { identity } = useContext(UserAuth);
+  console.log("in UserModified", identity);
   const { dispatchPending } = useModal();
   const { id } = useParams();
   const navigate = useNavigate();
@@ -43,10 +46,10 @@ export default function UserModifyPassword(): JSX.Element {
           onClick={() => {
             dispatchPending({ type: "IS_LOADING" });
             axios
-              .post(
-                `https://petcity.rocket-coding.com/user/resetpassword?guid=${
-                  id as string
-                }`,
+              .put(
+                `https://petcity.rocket-coding.com/${
+                  identity === "customer" ? "user" : "hotel"
+                }/resetpassword?guid=${id as string}`,
                 {
                   NewPassword: inputValue.password,
                   ConfirmedPassword: inputValue.confirmPassword,

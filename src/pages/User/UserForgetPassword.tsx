@@ -1,15 +1,17 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 // import { string } from "zod"
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import UserInput from "../../components/Input";
 import InputRegex from "../../components/Input/data";
 import useModal from "../../hooks/useModal";
+import UserAuth from "../../context/UserAuthContext";
 
 interface ITyppingValue {
   [key: string]: string;
 }
 export default function UserForgetPassword(): JSX.Element {
+  const { setIdentity: setIdentityContext } = useContext(UserAuth);
   const { dispatchPending } = useModal();
   const navigate = useNavigate();
   const [inputValue, setInputValue] = useState<ITyppingValue>({});
@@ -49,14 +51,19 @@ export default function UserForgetPassword(): JSX.Element {
         `https://petcity.rocket-coding.com/${
           identity === "customer" ? "user" : "hotel"
         }/forgetpassword`,
-        {
-          UserAccount: email,
-        }
+        identity === "customer"
+          ? {
+              UserAccount: email,
+            }
+          : {
+              HotelAccount: email,
+            }
       )
       .then((res) => {
         console.log(res);
+        setIdentityContext(identity);
         dispatchPending({ type: "DONE" });
-        navigate("/success");
+        navigate("/login");
       })
       .catch((err) => {
         dispatchPending({

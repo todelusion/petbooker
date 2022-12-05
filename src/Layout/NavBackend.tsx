@@ -20,8 +20,8 @@ function NavBackend({ menus }: INavBackendProps): JSX.Element {
   const navigate = useNavigate();
 
   return (
-    <div className="relative flex min-h-screen justify-end pt-42 pb-20">
-      <ul className="absolute left-20 w-full max-w-[200px] basis-3/12 ">
+    <div className="relative flex min-h-screen justify-end px-10 pt-42 pb-20">
+      <ul className="w-full max-w-[200px] ">
         {menus.map((menu) => (
           <li key={menu.content}>
             <button

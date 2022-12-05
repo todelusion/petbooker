@@ -14,9 +14,14 @@ interface ITyppingValue {
 export default function UserLogin(): JSX.Element {
   console.log("render Login");
   const { dispatchPending } = useModal();
-  const { authToken, setAuthToken } = useContext(UserAuth);
+  const {
+    authToken,
+    setAuthToken,
+    setIdentity: setIdentityContext,
+  } = useContext(UserAuth);
   const [inputValue, setInputValue] = useState<ITyppingValue>({});
   const [identity, setIdentity] = useState<string>("");
+  console.log(identity);
   const navigate = useNavigate();
   const inputValueHandler = (event: React.FormEvent): void => {
     const { name, value } = event.target as HTMLInputElement;
@@ -56,20 +61,41 @@ export default function UserLogin(): JSX.Element {
       return;
     }
     dispatchPending({ type: "IS_LOADING" });
+    console.log(
+      identity === "customer"
+        ? {
+            UserAccount: email,
+            UserPassWord: password,
+            Identity: identity,
+          }
+        : {
+            HotelAccount: email,
+            HotelPassWord: password,
+            Identity: identity,
+          }
+    );
     axios
       .post(
         `https://petcity.rocket-coding.com/${
           identity === "customer" ? "user" : "hotel"
         }/login`,
-        {
-          UserAccount: email,
-          UserPassWord: password,
-          Identity: identity,
-        }
+        identity === "customer"
+          ? {
+              UserAccount: email,
+              UserPassWord: password,
+              Identity: identity,
+            }
+          : {
+              HotelAccount: email,
+              HotelPassWord: password,
+              Identity: identity,
+            }
       )
       .then((res) => {
         console.log(res);
         setAuthToken(res.data.JwtToken);
+        setIdentityContext(identity);
+
         dispatchPending({ type: "DONE" });
         navigate("/home");
       })
@@ -126,8 +152,8 @@ export default function UserLogin(): JSX.Element {
               <input
                 type="radio"
                 name="identify"
-                id="hotel"
-                value="hotel"
+                id="Hotel"
+                value="Hotel"
                 onChange={setidentity}
                 className="mr-2 h-5 w-5 cursor-pointer appearance-none rounded-full border-2 border-black duration-150 checked:border-4 checked:border-primary checked:ring-2 checked:ring-primary_Dark hover:border-primary"
               />

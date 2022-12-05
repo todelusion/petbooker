@@ -2,29 +2,24 @@ import { AnimatePresence, motion } from "framer-motion";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import UserAuth from "../../context/UserAuthContext";
-import { memberMenu, hotelMemberMenu, accountMenuPath } from "./data";
-
-type Member = "member" | "hotel";
+import { customerMenu, hotelMemberMenu, accountMenuPath } from "./data";
 
 function AccountMenu(): JSX.Element {
   const navigate = useNavigate();
-  const { setAuthToken } = useContext(UserAuth);
+  const { setAuthToken, identity } = useContext(UserAuth);
 
   // 用is .... 如果是 boolean
   const [toggleAccountMenu, toggleAccountMenuSet] = useState(false);
-  let member: Member;
-  // eslint-disable-next-line prefer-const
-  member = "hotel";
 
   const renderMenu = (): typeof hotelMemberMenu => {
     // 根據會員身分來顯示可用的功能列表
-    switch (member) {
-      case "member":
-        return memberMenu;
-      case "hotel":
+    switch (identity) {
+      case "customer":
+        return customerMenu;
+      case "Hotel":
         return hotelMemberMenu;
       default:
-        return memberMenu;
+        return customerMenu;
     }
   };
 

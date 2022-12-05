@@ -12,13 +12,12 @@ import UserModifyPassword from "./pages/User/UserModifyPassword";
 import UserRegist from "./pages/User/UserRegist";
 import Hotel from "./pages/Hotel";
 import NavBackend from "./Layout/NavBackend";
-import CmsAccount from "./pages/Cms/CmsAccount";
 import CmsInfo from "./pages/Cms/CmsInfo";
 
-import { cmsMenu, memberMenu } from "./Layout/data";
-import MemberInfo from "./pages/Member/MemberInfo";
+import { cmsMenu, customerMenu } from "./Layout/data";
 import { FilterProvider } from "./context/FilterContext";
 import CmsOrder from "./pages/Cms/CmsOrder";
+import CustomerInfo from "./pages/Customer/CustomerInfo";
 
 export default function Router(): JSX.Element {
   const client = new QueryClient();
@@ -51,10 +50,9 @@ export default function Router(): JSX.Element {
               </ComponentProvicer>
             }
           />
-          <Route path="/member" element={<NavBackend menus={memberMenu} />}>
-            <Route index element={<MemberInfo />} />
+          <Route path="/customer" element={<NavBackend menus={customerMenu} />}>
+            <Route path="/customer/info" element={<CustomerInfo />} />
           </Route>
-          <Route path="/accountinfo" element={<MemberInfo />} />
           <Route path="/login" element={<UserLogin />} />;
           <Route path="/regist" element={<UserRegist />} />;
           <Route path="/forgetPassword" element={<UserForgetPassword />} />;
