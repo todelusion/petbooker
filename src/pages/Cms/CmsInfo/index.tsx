@@ -5,30 +5,18 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 // import Button from "../../../components/Button";
 import { AutoComplete, Button, Form, Input, Select, TimePicker } from "antd";
-import dayjs from "dayjs";
 import UploadImage from "../../../components/UploadImage";
-import CountryList from "../../../containers/SearchBar/CountryList";
-import { countySchema } from "../../../types/schema";
-import { xml2json, parseXml } from "../../../utils/xml2json";
+import { CountyList, countySchema } from "../../../types/schema";
 import Filter from "../../../containers/Filter";
 import AntdUploadImage from "./AntdUploadImage";
+import getCountry from "../../../utils/getCountry";
 
-const schema = z.object({
-  name: z.string(),
-  telphone: z.string().min(8),
-  address: z.string(),
-  businessHours: z.date(),
-  introduction: z.string(),
-});
-type Schema = z.infer<typeof schema>;
 type LayoutType = Parameters<typeof Form>[0]["layout"];
 function CmsInfo(): JSX.Element {
-  // 時間格式
-  const format = "HH:mm";
   // 引入antd Form
   const [form] = Form.useForm();
   const [formLayout, setFormLayout] = useState<LayoutType>("horizontal");
-
+  const countrydata: CountyList | undefined = getCountry();
   const onFinish = (fieldsValue: any): void => {
     const rangeTimeValue = fieldsValue["range-time-picker"];
     const value = {
@@ -49,6 +37,9 @@ function CmsInfo(): JSX.Element {
   const prefixSelector = (
     <Form.Item name="areaid" noStyle>
       <Select style={{ width: 100 }}>
+        {countrydata?.map((item) => (
+          <Select.Option value={item.Id}>{item.Areas}</Select.Option>
+        ))}
         <Select.Option value="0">台北</Select.Option>
         <Select.Option value="1">台中</Select.Option>
       </Select>
@@ -67,19 +58,8 @@ function CmsInfo(): JSX.Element {
     return event?.fileList;
   };
 
-  // const { data: countryData } = useQuery(["country"], async () =>
-  //   axios
-  //     .get("https://api.nlsc.gov.tw/other/ListCounty")
-  //     .then((res) => xml2json(parseXml(res.data), " "))
-  //     .catch((err) => err)
-  // );
-  // let countryList;
-  // if (countryData !== undefined) {
-  //   countryList = countySchema.parse(JSON.parse(countryData));
-  // }
-
   return (
-    <div className="">
+    <div className="relative">
       <Form
         labelCol={{ span: 4 }}
         wrapperCol={{ span: 14 }}
@@ -149,24 +129,28 @@ function CmsInfo(): JSX.Element {
           <AntdUploadImage />
         </Form.Item>
 
-        <Filter
-          horizontal
-          closePet
-          closeRoomPrices
-          className="my-5"
-          onChange={(filter) => console.log(filter.PetType)}
-        />
-
-        <Form.Item>
+        <Form.Item
+          wrapperCol={{ span: 200 }}
+          className="absolute bottom-0 w-full"
+        >
           <Button
             type="primary"
             htmlType="submit"
-            className="flex-center h-max w-full rounded-full border-2 border-second bg-second text-white"
+            size="large"
+            block
+            className="flex-center inline-block h-max w-full rounded-full border-2 border-second bg-second text-white"
           >
             送出
           </Button>
         </Form.Item>
       </Form>
+      <Filter
+        horizontal
+        closePet
+        closeRoomPrices
+        className="my-5"
+        onChange={(filter) => console.log(filter.PetType)}
+      />
     </div>
   );
 }

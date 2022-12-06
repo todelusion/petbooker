@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { PlusOutlined } from "@ant-design/icons";
 import { Modal, Upload } from "antd";
 import type { RcFile, UploadProps } from "antd/es/upload";
 import type { UploadFile } from "antd/es/upload/interface";
+import axios from "axios";
+import UserAuth from "../../../context/UserAuthContext";
 
 const getBase64 = async (file: RcFile): Promise<string> =>
   new Promise((resolve, reject) => {
@@ -17,7 +19,7 @@ function AntdUploadImage(): JSX.Element {
   const [previewImage, setPreviewImage] = useState("");
   const [previewTitle, setPreviewTitle] = useState("");
   const [fileList, setFileList] = useState<UploadFile[]>([]);
-
+  const { authToken } = useContext(UserAuth);
   const handleCancel = (): void => setPreviewOpen(false);
 
   const handlePreview = async (file: UploadFile): Promise<void> => {
@@ -29,12 +31,38 @@ function AntdUploadImage(): JSX.Element {
     setPreviewOpen(true);
     const result =
       file.name.length > 0 ||
+      // eslint-disable-next-line no-unsafe-optional-chaining
       file.url?.substring(file.url?.lastIndexOf("/") + 1);
     setPreviewTitle(result);
   };
 
-  const handleChange: UploadProps["onChange"] = ({ fileList: newFileList }) =>
-    setFileList(newFileList);
+  const handleChange: UploadProps["onChange"] = ({ fileList: newFileList }) => {
+    const PhotoFormData = new FormData();
+    fileList.forEach((file) =>
+      PhotoFormData.append("file", file.originFileObj)
+    );
+    console.log(PhotoFormData);
+
+    void axios
+      .post(
+        "https://petcity.rocket-coding.com/hotel/uploadhotelphotos",
+        PhotoFormData,
+        {
+          headers: {
+            Authorization:
+              "Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJJZCI6MTAsIkFjY291bnQiOiJrd2VpZm9uMTk5OEBnbWFpbC5jb20iLCJOYW1lIjoid3d3IiwiSW1hZ2UiOm51bGwsIklkZW50aXR5IjoiaG90ZWwiLCJFeHAiOiIxMi82LzIwMjIgMTA6MDI6MDIgQU0ifQ.gJ-0BqvybxELhjyIB4g9exbbtXPCA-oVF_aNc_yb1DTzI0ALI4R9Z7aWHTsbc3GsDfJ7zx7NxTsMt2VG_4EaUQ",
+          },
+        }
+      )
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    console.log(fileList);
+    return setFileList(newFileList);
+  };
 
   const uploadButton = (
     <div>
@@ -42,10 +70,10 @@ function AntdUploadImage(): JSX.Element {
       <div style={{ marginTop: 8 }}>Upload</div>
     </div>
   );
+  console.log(fileList);
   return (
     <>
       <Upload
-        // action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
         listType="picture-card"
         fileList={fileList}
         onPreview={handlePreview}
