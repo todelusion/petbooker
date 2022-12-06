@@ -2,7 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import buttonStyle from "./style";
 
-type ButtonPropsType = "Primary" | "Secondary";
+type ButtonPropsType = "Primary" | "Secondary" | "Transparent";
 
 interface ButtonProps {
   type: ButtonPropsType;
@@ -29,6 +29,8 @@ function Button({
         return buttonStyle.Primary;
       case "Secondary":
         return buttonStyle.Secondary;
+      case "Transparent":
+        return buttonStyle.Transparent;
       default:
         return buttonStyle.Primary;
     }

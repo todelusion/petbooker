@@ -10,11 +10,11 @@ import {
 
 export { accountMenuPath };
 
-export const memberMenu = [
+export const customerMenu = [
   {
     logo: userPath,
     content: "帳戶資訊",
-    navigatePath: "./member",
+    navigatePath: "/customer/info",
   },
   {
     logo: creditCardPath,
@@ -39,7 +39,7 @@ export const memberMenu = [
   {
     logo: logOutPath,
     content: "登出",
-    navigatePath: null,
+    navigatePath: "/home",
   },
 ];
 
