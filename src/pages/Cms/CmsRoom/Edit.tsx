@@ -7,6 +7,7 @@ import MotionFade from "../../../containers/MotionFade";
 import MotionPopup from "../../../containers/MotionPopup";
 import useModal from "../../../hooks/useModal";
 import UploadImage from "../../../components/UploadImage";
+import { xPath } from "../../../img/icons";
 
 interface IEditProps {
   onClick: () => void;
@@ -25,7 +26,7 @@ function Edit({ onClick }: IEditProps): JSX.Element {
             onClick={onClick}
             className="absolute right-11 top-11 text-xl"
           >
-            X
+            <img src={xPath} alt="" />
           </button>
           <p className="mb-4 text-center text-3xl font-bold">編輯寵物房型</p>
           <UploadImage type="Room" className="mb-6" />

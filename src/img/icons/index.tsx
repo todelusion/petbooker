@@ -22,6 +22,7 @@ import ErrorPath from "./Error.svg";
 import LoadingPath from "./Loading.svg";
 import PlusPath from "./Plus.svg";
 import UploadRoomPath from "./UploadRoom.svg";
+import xPath from "./X.svg";
 
 interface ILoadingProps {
   className?: string;
@@ -68,4 +69,5 @@ export {
   LoadingPath,
   PlusPath,
   UploadRoomPath,
+  xPath,
 };
