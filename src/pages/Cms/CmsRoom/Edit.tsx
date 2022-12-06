@@ -28,7 +28,7 @@ function Edit({ onClick }: IEditProps): JSX.Element {
             X
           </button>
           <p className="mb-4 text-center text-3xl font-bold">編輯寵物房型</p>
-          <UploadImage />
+          <UploadImage type="Room" className="mb-6" />
           <FilterInput
             onChange={(e) => console.log(e)}
             noContext
@@ -79,7 +79,10 @@ function Edit({ onClick }: IEditProps): JSX.Element {
                   { type: "string" },
                 ]}
               >
-                <Input placeholder="請填寫您的寵物房型介紹資訊" />
+                <Input.TextArea
+                  rows={4}
+                  placeholder="請填寫您的寵物房型介紹資訊"
+                />
               </Form.Item>
 
               <Form.Item>

@@ -200,7 +200,7 @@ function FilterInput({
               onChange(e);
             }}
             type={type}
-            className="h-5 w-5 cursor-pointer appearance-none rounded-full border-2 border-black checked:border-4 checked:border-primary checked:ring-2 checked:ring-primary_Dark hover:border-primary"
+            className="h-5 w-5 cursor-pointer appearance-none rounded-full border-2 border-black duration-150 checked:border-4 checked:border-primary checked:ring-2 checked:ring-primary_Dark hover:border-primary"
           />
         );
 
@@ -218,7 +218,7 @@ function FilterInput({
               onChange(e);
             }}
             type={type}
-            className="relative h-5 w-5 cursor-pointer appearance-none rounded-sm border-2 border-black before:absolute before:top-1/2 before:-translate-y-1/2 before:text-white checked:border-4 checked:border-primary checked:bg-primary checked:ring-2 checked:ring-primary_Dark before:checked:content-['✔'] hover:border-primary"
+            className="relative h-5 w-5 cursor-pointer appearance-none rounded-sm border-2 border-black duration-150 before:absolute before:top-1/2 before:-translate-y-1/2 before:text-white checked:border-4 checked:border-primary checked:bg-primary checked:ring-2 checked:ring-primary_Dark before:checked:content-['✔'] hover:border-primary"
           />
         );
 
@@ -235,7 +235,7 @@ function FilterInput({
               onChange(e);
             }}
             type={type}
-            className="relative h-5 w-5 cursor-pointer appearance-none rounded-sm border-2 border-black before:absolute before:top-1/2 before:-translate-y-1/2 before:text-white checked:border-4 checked:border-primary checked:bg-primary checked:ring-2 checked:ring-primary_Dark before:checked:content-['✔'] hover:border-primary"
+            className="relative h-5 w-5 cursor-pointer appearance-none rounded-sm border-2 border-black duration-150 before:absolute before:top-1/2 before:-translate-y-1/2 before:text-white checked:border-4 checked:border-primary checked:bg-primary checked:ring-2 checked:ring-primary_Dark before:checked:content-['✔'] hover:border-primary"
           />
         );
     }

@@ -1,40 +1,63 @@
 import axios from "axios";
 import React, { ChangeEvent, useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
+import { UploadRoomPath } from "../../img/icons";
+
+type Type = "Avatar" | "Room";
 
 interface IUploadImageProps {
-  type: "stickers" | "room";
+  type: Type;
+  className?: string;
 }
 
-function UploadImage(): JSX.Element {
-  const { pathname } = useLocation();
-  const [imageFile, setImageFile] = useState<File[]>();
+const renderUploadImage = (
+  type: Type,
+  previewImage: string | undefined
+): JSX.Element => {
+  switch (type) {
+    case "Room":
+      return previewImage !== undefined ? (
+        <img
+          src={previewImage}
+          alt="previewImage"
+          className="h-80 w-full object-cover"
+        />
+      ) : (
+        <div className="flex-center h-80 w-full bg-slate-200">
+          <p className=" font-bold text-slate-700">上傳寵物房型照片</p>
+        </div>
+      );
+    case "Avatar":
+      return previewImage !== undefined ? (
+        <img
+          src={previewImage}
+          alt="previewImage"
+          className="h-32 w-32 rounded-full border-4 border-black object-cover"
+        />
+      ) : (
+        <div className="h-32 w-32 rounded-full border-4 border-black bg-slate-200" />
+      );
+    default:
+      return <h2>系統錯誤</h2>;
+  }
+};
 
-  const [previewImage, setPreviewImage] = useState<string[]>();
+function UploadImage({ type, className }: IUploadImageProps): JSX.Element {
+  const [imageFile, setImageFile] = useState<File>();
+
+  const [previewImage, setPreviewImage] = useState<string>();
 
   // 接收上傳圖片
   const handleSetImage = (event: ChangeEvent<HTMLInputElement>): void => {
     const { files } = event.target;
     if (files === null) return;
-    if (
-      files.length > 5 ||
-      (imageFile != null ? imageFile.length + files.length : 0) > 5
-    ) {
-      alert("照片數量不可大於4張");
-      return;
-    }
-    console.log(files);
 
-    // 建立postRequest的FormData
+    setImageFile(files[0]);
 
-    const imageFormData =
-      imageFile != null
-        ? [...imageFile, ...files]
-        : Object.values(files).map((item) => item);
-    setImageFile(imageFormData);
-    // 建立previewImage
-    const previewData = imageFormData?.map((item) => URL.createObjectURL(item));
-    setPreviewImage(previewData);
+    const localurl = URL.createObjectURL(files[0]);
+
+    setPreviewImage(localurl);
+
     // eslint-disable-next-line no-param-reassign
     event.target.value = "";
   };
@@ -79,12 +102,18 @@ function UploadImage(): JSX.Element {
   }, [imageFile, previewImage]);
 
   return (
-    <div>
+    <div
+      className={`relative ${className ?? ""} ${
+        type === "Room" ? "" : "w-max"
+      }`}
+    >
       <label
         htmlFor="upload"
-        className=" mt-4 w-8 cursor-pointer rounded-md bg-indigo-200 p-2 text-white"
+        className={`absolute ${
+          type === "Room" ? "right-6 top-6" : "bottom-0 -right-3"
+        } inline-block w-fit cursor-pointer overflow-hidden rounded-full`}
       >
-        File
+        <img src={UploadRoomPath} alt="" />
         <input
           id="upload"
           type="file"
@@ -95,19 +124,8 @@ function UploadImage(): JSX.Element {
           hidden
         />
       </label>
-      <span className="flex ">
-        {previewImage !== null && previewImage !== undefined
-          ? previewImage.map((item, index) => (
-              <button
-                key={item}
-                onClick={() => deleteImg(item, index)}
-                type="button"
-              >
-                <img src={item} alt="previewImage" className="h-20 w-20 " />
-              </button>
-            ))
-          : ""}
-      </span>
+      {renderUploadImage(type, previewImage)}
+
       {/* <button type="button" onClick={sendPhoto} className="mt-4">
         打都打！
       </button> */}
