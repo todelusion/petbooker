@@ -20,6 +20,7 @@ import Pets2Path from "./Pets2.svg";
 import SuccessPath from "./Success.svg";
 import ErrorPath from "./Error.svg";
 import LoadingPath from "./Loading.svg";
+import PlusPath from "./Plus.svg";
 
 interface ILoadingProps {
   className?: string;
@@ -64,4 +65,5 @@ export {
   SuccessPath,
   ErrorPath,
   LoadingPath,
+  PlusPath,
 };

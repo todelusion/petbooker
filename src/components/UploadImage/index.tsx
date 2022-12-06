@@ -1,7 +1,13 @@
 import axios from "axios";
 import React, { ChangeEvent, useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
+
+interface IUploadImageProps {
+  type: "stickers" | "room";
+}
 
 function UploadImage(): JSX.Element {
+  const { pathname } = useLocation();
   const [imageFile, setImageFile] = useState<File[]>();
 
   const [previewImage, setPreviewImage] = useState<string[]>();
@@ -80,7 +86,6 @@ function UploadImage(): JSX.Element {
       >
         File
         <input
-          multiple
           id="upload"
           type="file"
           name="image"
@@ -93,7 +98,11 @@ function UploadImage(): JSX.Element {
       <span className="flex ">
         {previewImage !== null && previewImage !== undefined
           ? previewImage.map((item, index) => (
-              <button onClick={() => deleteImg(item, index)} type="button">
+              <button
+                key={item}
+                onClick={() => deleteImg(item, index)}
+                type="button"
+              >
                 <img src={item} alt="previewImage" className="h-20 w-20 " />
               </button>
             ))

@@ -27,7 +27,7 @@ export default function PendingModal({
       >
         <AnimatePresence>
           {status === "isLoading" && (
-            <MotionFade>
+            <MotionFade className="flex-center absolute min-h-full w-full bg-slate-900/50">
               <div key={status} className="relative -mt-4">
                 <img src={LoadingPath} alt="" className="w-28 " />
                 <Loading className=" absolute left-1/2 bottom-0 -translate-x-1/2 -translate-y-1/2" />

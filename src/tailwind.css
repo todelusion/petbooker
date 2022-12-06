@@ -42,3 +42,23 @@
   -ms-user-select: none;
   user-select: none;
 }
+
+[class^="ant-col"],
+[class*=" ant-col"] {
+  font-family: Noto Sans TC;
+}
+
+.ant-form-item .ant-form-item-label > label {
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.ant-input:hover {
+  border-color: #6e7d00;
+}
+.ant-input:focus {
+  border-color: #6e7d00;
+}
+.ant-btn-primary:not(:disabled):hover {
+  background-color: #ffb423;
+}

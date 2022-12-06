@@ -37,9 +37,6 @@ function Filter({
     onChange(filter);
   }, [FoodTypes, PetType, RoomPrices, ServiceTypes, onChange]);
 
-  // useEffect(() => {
-  //   handleChange();
-  // }, [handleChange]);
   handleChange();
 
   return (
