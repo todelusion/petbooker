@@ -1,6 +1,7 @@
 import { Button, Form, Input } from "antd";
 import { motion } from "framer-motion";
-import React, { useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
+import axios from "axios";
 import FilterInput from "../../../containers/Filter/FilterInput";
 import { petLists } from "../../../containers/Filter/data";
 import MotionFade from "../../../containers/MotionFade";
@@ -8,6 +9,10 @@ import MotionPopup from "../../../containers/MotionPopup";
 import useModal from "../../../hooks/useModal";
 import UploadImage from "../../../components/UploadImage";
 import { xPath } from "../../../img/icons";
+import { toFormData } from "../../../utils";
+import { uploadRoomPhoto, postRoom } from "../../../utils/api/hotel";
+import UserAuth from "../../../context/UserAuthContext";
+import { POSTRoomSchema } from "../../../types/schema";
 
 interface IEditProps {
   onClick: () => void;
@@ -15,6 +20,10 @@ interface IEditProps {
 
 function Edit({ onClick }: IEditProps): JSX.Element {
   const [form] = Form.useForm();
+  const [petType, setPetType] = useState("");
+  const { dispatchPending } = useModal();
+  console.log(petType);
+  const { authToken } = useContext(UserAuth);
   console.log("render Edit");
 
   return (
@@ -29,9 +38,20 @@ function Edit({ onClick }: IEditProps): JSX.Element {
             <img src={xPath} alt="" />
           </button>
           <p className="mb-4 text-center text-3xl font-bold">編輯寵物房型</p>
-          <UploadImage type="Room" className="mb-6" />
+          <UploadImage
+            onChange={(file) => {
+              return;
+              const formdata = toFormData(file);
+              uploadRoomPhoto(formdata, authToken)
+                .then((res) => console.log(res))
+                .catch((err) => console.log(err));
+            }}
+            type="Room"
+            className="mb-6"
+          />
+
           <FilterInput
-            onChange={(e) => console.log(e)}
+            onChange={(e) => setPetType((e.target as HTMLInputElement).value)}
             noContext
             required
             action="PICK-PetType"
@@ -47,7 +67,34 @@ function Edit({ onClick }: IEditProps): JSX.Element {
               form={form}
               initialValues={{ layout: "horizontal" }}
               autoComplete="on"
-              onFinish={(values) => console.log(values)}
+              onFinish={(values) => {
+                const result = POSTRoomSchema.safeParse({
+                  ...values,
+                  PetType: petType,
+                });
+                dispatchPending({ type: "IS_LOADING" });
+                if (result.success) {
+                  postRoom(result.data, authToken)
+                    .then((res) => {
+                      dispatchPending({
+                        type: "IS_SUCCESS",
+                        payload: "新增房型成功",
+                      });
+                      setTimeout(() => dispatchPending({ type: "DONE" }), 1000);
+                      onClick();
+                      console.log(res);
+                    })
+                    .catch((err) => {
+                      dispatchPending({
+                        type: "IS_ERROR",
+                        payload: err.response.data.Message,
+                      });
+                      setTimeout(() => dispatchPending({ type: "DONE" }), 1000);
+                    });
+                } else {
+                  console.log(result.error);
+                }
+              }}
               onFinishFailed={(errorInfo) => console.log("Failed", errorInfo)}
               labelAlign="left"
             >

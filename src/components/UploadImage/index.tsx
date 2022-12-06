@@ -8,6 +8,7 @@ type Type = "Avatar" | "Room";
 interface IUploadImageProps {
   type: Type;
   className?: string;
+  onChange: (file: File) => void;
 }
 
 const renderUploadImage = (
@@ -42,7 +43,11 @@ const renderUploadImage = (
   }
 };
 
-function UploadImage({ type, className }: IUploadImageProps): JSX.Element {
+function UploadImage({
+  type,
+  className,
+  onChange,
+}: IUploadImageProps): JSX.Element {
   const [imageFile, setImageFile] = useState<File>();
 
   const [previewImage, setPreviewImage] = useState<string>();
@@ -54,8 +59,10 @@ function UploadImage({ type, className }: IUploadImageProps): JSX.Element {
 
     setImageFile(files[0]);
 
-    const localurl = URL.createObjectURL(files[0]);
+    // 使用 onChange props的原因：UploadImage compoent會在各個地方出現，但是其對應的 POST路徑不同
+    onChange(files[0]);
 
+    const localurl = URL.createObjectURL(files[0]);
     setPreviewImage(localurl);
 
     // eslint-disable-next-line no-param-reassign
@@ -97,8 +104,8 @@ function UploadImage({ type, className }: IUploadImageProps): JSX.Element {
   };
 
   useEffect(() => {
-    console.log(imageFile);
-    console.log(previewImage);
+    console.log("in UploadImage component", imageFile);
+    console.log("in UploadImage component", previewImage);
   }, [imageFile, previewImage]);
 
   return (
