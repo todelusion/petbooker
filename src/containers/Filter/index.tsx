@@ -12,91 +12,90 @@ interface IFilterProps {
   closeService?: true;
   closeRoomPrices?: true;
   closePet?: true;
-  onChange: (filter: IinitFilter) => void;
 }
+const Filter = React.memo(
+  ({
+    className,
 
-function Filter({
-  className,
-  onChange,
-  horizontal,
-  closePet,
-  closeFood,
-  closeService,
-  closeRoomPrices,
-}: IFilterProps): JSX.Element {
-  // console.log("render Filter");
-  const { FoodTypes, ServiceTypes, RoomPrices, PetType } = useFilter();
+    horizontal,
+    closePet,
+    closeFood,
+    closeService,
+    closeRoomPrices,
+  }: IFilterProps): JSX.Element => {
+    // console.log("render Filter");
+    const { FoodTypes, ServiceTypes, RoomPrices, PetType } = useFilter();
 
-  const handleChange = useCallback((): void => {
-    const filter = {
-      FoodTypes,
-      ServiceTypes,
-      RoomPrices,
-      PetType,
-    };
-    onChange(filter);
-  }, [FoodTypes, PetType, RoomPrices, ServiceTypes, onChange]);
+    // const handleChange = useCallback((): void => {
+    //   const filter = {
+    //     FoodTypes,
+    //     ServiceTypes,
+    //     RoomPrices,
+    //     PetType,
+    //   };
+    // }, [FoodTypes, PetType, RoomPrices, ServiceTypes]);
 
-  handleChange();
+    // handleChange();
 
-  return (
-    <>
-      {!closePet && (
-        <FilterInput
-          horizontal={horizontal}
-          action="PICK-PetType"
-          checked={PetType}
-          filterList={petLists}
-          className={className ?? ""}
-        />
-      )}
-      {!closeFood && (
-        <FilterInput
-          horizontal={horizontal}
-          action="PICK-FoodTypes"
-          filterList={foodLists}
-          checked={FoodTypes}
-          className={className ?? ""}
-        />
-      )}
-      {!closeRoomPrices && (
-        <FilterInput
-          horizontal={horizontal}
-          action="PICK-RoomPrices"
-          filterList={pricesLists}
-          checked={RoomPrices}
-          className={className ?? ""}
-        />
-      )}
-      {!closeService &&
-        serviceLists.map((list) => {
-          let checkArray = [""];
-          switch (list.keyname) {
-            case "services":
-              checkArray = ServiceTypes.services;
-              break;
-            case "facilities":
-              checkArray = ServiceTypes.facilities;
-              break;
-            case "specials":
-              checkArray = ServiceTypes.specials;
-              break;
-            default:
-              break;
-          }
-          return (
-            <FilterInput
-              horizontal={horizontal}
-              action="PICK-ServiceTypes"
-              filterList={list}
-              checked={checkArray}
-              key={list.keyname}
-              className={className ?? ""}
-            />
-          );
-        })}
-    </>
-  );
-}
+    return (
+      <>
+        {!closePet && (
+          <FilterInput
+            horizontal={horizontal}
+            action="PICK-PetType"
+            checked={PetType}
+            filterList={petLists}
+            className={className ?? ""}
+          />
+        )}
+        {!closeFood && (
+          <FilterInput
+            horizontal={horizontal}
+            action="PICK-FoodTypes"
+            filterList={foodLists}
+            checked={FoodTypes}
+            className={className ?? ""}
+          />
+        )}
+        {!closeRoomPrices && (
+          <FilterInput
+            horizontal={horizontal}
+            action="PICK-RoomPrices"
+            filterList={pricesLists}
+            checked={RoomPrices}
+            className={className ?? ""}
+          />
+        )}
+        {!closeService &&
+          serviceLists.map((list) => {
+            let checkArray = [""];
+            switch (list.keyname) {
+              case "services":
+                checkArray = ServiceTypes.services;
+                break;
+              case "facilities":
+                checkArray = ServiceTypes.facilities;
+                break;
+              case "specials":
+                checkArray = ServiceTypes.specials;
+                break;
+              default:
+                break;
+            }
+            return (
+              <FilterInput
+                horizontal={horizontal}
+                action="PICK-ServiceTypes"
+                filterList={list}
+                checked={checkArray}
+                key={list.keyname}
+                className={className ?? ""}
+              />
+            );
+          })}
+      </>
+    );
+  }
+);
 
 export default Filter;

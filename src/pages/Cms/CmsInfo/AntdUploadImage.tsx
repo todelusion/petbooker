@@ -1,9 +1,15 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { PlusOutlined } from "@ant-design/icons";
 import { Modal, Upload } from "antd";
 import type { RcFile, UploadProps } from "antd/es/upload";
 import type { UploadFile } from "antd/es/upload/interface";
+import axios from "axios";
+import UserAuth from "../../../context/UserAuthContext";
 
+interface IAntdUploadImageProps {
+  ImagefileList: UploadFile[];
+  setImageFileList: React.Dispatch<React.SetStateAction<UploadFile[]>>;
+}
 const getBase64 = async (file: RcFile): Promise<string> =>
   new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -12,11 +18,12 @@ const getBase64 = async (file: RcFile): Promise<string> =>
     reader.onerror = (error) => reject(error);
   });
 
-function AntdUploadImage(): JSX.Element {
+function AntdUploadImage(props: IAntdUploadImageProps): JSX.Element {
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
   const [previewTitle, setPreviewTitle] = useState("");
-  const [fileList, setFileList] = useState<UploadFile[]>([]);
+  const { ImagefileList, setImageFileList } = props;
+  // const { authToken } = useContext(UserAuth);
 
   const handleCancel = (): void => setPreviewOpen(false);
 
@@ -24,34 +31,41 @@ function AntdUploadImage(): JSX.Element {
     if (file.url == null && file.preview == null) {
       file.preview = await getBase64(file.originFileObj as RcFile);
     }
-
     setPreviewImage(file.url ?? (file.preview as string));
     setPreviewOpen(true);
     const result =
       file.name.length > 0 ||
+      // eslint-disable-next-line no-unsafe-optional-chaining
       file.url?.substring(file.url?.lastIndexOf("/") + 1);
     setPreviewTitle(result);
   };
 
   const handleChange: UploadProps["onChange"] = ({ fileList: newFileList }) =>
-    setFileList(newFileList);
+    // const PhotoFormData = new FormData();
+    // ImagefileList.forEach((file) =>
+    //   PhotoFormData.append("file", file.originFileObj)
+    // );
+    // console.log(PhotoFormData);
 
+    setImageFileList(newFileList);
   const uploadButton = (
     <div>
       <PlusOutlined />
-      <div style={{ marginTop: 8 }}>Upload</div>
+      <div style={{ marginTop: 8 }}>上傳圖片</div>
     </div>
   );
+
   return (
     <>
       <Upload
-        // action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
         listType="picture-card"
-        fileList={fileList}
+        fileList={ImagefileList}
         onPreview={handlePreview}
         onChange={handleChange}
+        maxCount={5}
+        beforeUpload={() => false}
       >
-        {fileList.length >= 5 ? null : uploadButton}
+        {ImagefileList.length >= 5 ? null : uploadButton}
       </Upload>
       <Modal
         open={previewOpen}
