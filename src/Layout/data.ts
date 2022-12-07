@@ -18,7 +18,7 @@ export const cmsMenu = [
   {
     logo: fileTextPath,
     content: "房間列表",
-    navigatePath: null,
+    navigatePath: "/cms/room",
   },
   {
     logo: calendarPath,

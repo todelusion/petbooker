@@ -6,7 +6,7 @@ const initialPending = {
 };
 
 export interface InitialPending {
-  status: "isLoading" | "isSuccess" | "isError" | "";
+  status: "IS_LOADING" | "IS_SUCCESS" | "IS_ERROR" | "DONE";
   message: string;
 }
 
@@ -39,22 +39,22 @@ const pendingReducer = (
   switch (action.type) {
     case "IS_LOADING":
       return {
-        status: "isLoading",
+        status: "IS_LOADING",
         message: action.payload ?? "",
       };
     case "IS_SUCCESS":
       return {
-        status: "isSuccess",
+        status: "IS_SUCCESS",
         message: action.payload ?? "",
       };
     case "IS_ERROR":
       return {
-        status: "isError",
+        status: "IS_ERROR",
         message: action.payload ?? "",
       };
     case "DONE":
       return {
-        status: "",
+        status: "DONE",
         message: action.payload ?? "",
       };
     default:

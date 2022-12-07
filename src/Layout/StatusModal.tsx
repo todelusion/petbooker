@@ -22,20 +22,20 @@ export default function PendingModal({
         onKeyUp={() => dispatchPending({ type: "DONE" })}
         tabIndex={0}
         className={`fixed z-20 min-h-screen w-full ${
-          status === "" ? "pointer-events-none" : "pointer-events-auto"
+          status === "DONE" ? "pointer-events-none" : "pointer-events-auto"
         }`}
       >
         <AnimatePresence>
-          {status === "isLoading" && (
-            <MotionFade>
+          {status === "IS_LOADING" && (
+            <MotionFade className="flex-center absolute min-h-full w-full bg-slate-900/50">
               <div key={status} className="relative -mt-4">
                 <img src={LoadingPath} alt="" className="w-28 " />
                 <Loading className=" absolute left-1/2 bottom-0 -translate-x-1/2 -translate-y-1/2" />
               </div>
             </MotionFade>
           )}
-          {status === "isSuccess" && (
-            <MotionFade>
+          {status === "IS_SUCCESS" && (
+            <MotionFade className="flex-center absolute min-h-full w-full bg-slate-900/50">
               <div
                 key={status}
                 className="relative flex min-h-[150px] min-w-[200px] grow-0 flex-col items-center justify-between"
@@ -45,8 +45,8 @@ export default function PendingModal({
               </div>
             </MotionFade>
           )}
-          {status === "isError" && (
-            <MotionFade>
+          {status === "IS_ERROR" && (
+            <MotionFade className="flex-center absolute min-h-full w-full bg-slate-900/50">
               <div
                 key={status}
                 className="relative flex min-h-[150px] min-w-[200px] grow-0 flex-col items-center justify-between"
