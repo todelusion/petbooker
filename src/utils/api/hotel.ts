@@ -41,6 +41,7 @@ export const useRoomList = (token: string) => {
     ["RoomList"],
     async () => {
       const res = await axios.get(`${baseURL}/hotel/room/list`, header);
+      console.log(res.data);
       return RoomListSchema.parse(res.data.roomList);
     },
     {
