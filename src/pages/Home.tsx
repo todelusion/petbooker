@@ -5,9 +5,12 @@ import HotelCard from "../components/HotelCard";
 import SearchBar from "../containers/SearchBar";
 import StatusModal from "../Layout/StatusModal";
 import useModal from "../hooks/useModal";
+import useFilter from "../hooks/useFilter";
 
 function Home(): JSX.Element {
   console.log("render Home");
+  const { ServiceTypes } = useFilter();
+  const { Services, Facilities, Specials } = useFilter();
 
   return (
     <div className="relative flex w-full items-start justify-evenly px-20 pt-40">
@@ -15,7 +18,7 @@ function Home(): JSX.Element {
         <p className="bg-black py-2 text-center text-xl text-white">
           透過以下分類搜尋
         </p>
-        <Filter onChange={(filter) => console.log(filter)} />
+        <Filter />
       </section>
       <div className="flex max-w-2xl flex-col items-center xl:max-w-4xl">
         <SearchBar className="mb-16" />

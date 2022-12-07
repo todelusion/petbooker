@@ -43,12 +43,19 @@ export const handleFilterValue = (
 
   const dispatchContex = (): void => {
     if (filterContextProps === undefined) return;
-    const { filterDispatch, FoodTypes, PetType, RoomPrices, ServiceTypes } =
-      filterContextProps;
+    const {
+      filterDispatch,
+      FoodTypes,
+      PetType,
+      RoomPrices,
+      Services,
+      Facilities,
+      Specials,
+    } = filterContextProps;
 
     const action = element.getAttribute("data-action") as FilterAction["type"];
     // console.log({ value, checked, action, name });
-    console.log(action);
+    // console.log(action);
 
     // 為了避免變數重複宣告，因此在 case 後加上{}花括號，來限制作用域
     if (action === "PICK-PetType") {
@@ -69,34 +76,24 @@ export const handleFilterValue = (
             payload: [...RoomPrices, value],
           });
           break;
-        case "PICK-ServiceTypes": {
-          const keyname = name as "services" | "facilities" | "specials";
-          const { services, facilities, specials } = ServiceTypes;
-
-          switch (keyname) {
-            case "services":
-              filterDispatch({
-                type: "PICK-ServiceTypes",
-                payload: { keyname, contents: [...services, value] },
-              });
-              break;
-            case "facilities":
-              filterDispatch({
-                type: "PICK-ServiceTypes",
-                payload: { keyname, contents: [...facilities, value] },
-              });
-              break;
-            case "specials":
-              filterDispatch({
-                type: "PICK-ServiceTypes",
-                payload: { keyname, contents: [...specials, value] },
-              });
-              break;
-            default:
-              break;
-          }
+        case "PICK-Services":
+          filterDispatch({
+            type: action,
+            payload: [...Services, value],
+          });
           break;
-        }
+        case "PICK-Facilities":
+          filterDispatch({
+            type: action,
+            payload: [...Facilities, value],
+          });
+          break;
+        case "PICK-Specials":
+          filterDispatch({
+            type: action,
+            payload: [...Specials, value],
+          });
+          break;
 
         default:
           break;
@@ -116,43 +113,24 @@ export const handleFilterValue = (
             payload: RoomPrices.filter((RoomPrice) => RoomPrice !== value),
           });
           break;
-        case "PICK-ServiceTypes": {
-          const keyname = name as "services" | "facilities" | "specials";
-          const { services, facilities, specials } = ServiceTypes;
-
-          switch (keyname) {
-            case "services":
-              filterDispatch({
-                type: "PICK-ServiceTypes",
-                payload: {
-                  keyname,
-                  contents: services.filter((item) => item !== value),
-                },
-              });
-              break;
-            case "facilities":
-              filterDispatch({
-                type: "PICK-ServiceTypes",
-                payload: {
-                  keyname,
-                  contents: facilities.filter((facility) => facility !== value),
-                },
-              });
-              break;
-            case "specials":
-              filterDispatch({
-                type: "PICK-ServiceTypes",
-                payload: {
-                  keyname,
-                  contents: specials.filter((special) => special !== value),
-                },
-              });
-              break;
-            default:
-              break;
-          }
+        case "PICK-Services":
+          filterDispatch({
+            type: action,
+            payload: Services.filter((Service) => Service !== value),
+          });
           break;
-        }
+        case "PICK-Facilities":
+          filterDispatch({
+            type: action,
+            payload: Facilities.filter((Facility) => Facility !== value),
+          });
+          break;
+        case "PICK-Specials":
+          filterDispatch({
+            type: action,
+            payload: Specials.filter((Special) => Special !== value),
+          });
+          break;
         default:
           break;
       }

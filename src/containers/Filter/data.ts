@@ -90,76 +90,76 @@ export const pricesLists = {
   ],
 };
 
-export const serviceLists = [
-  {
-    keyname: "services",
-    title: "服務內容",
-    type: "checkbox",
-    contents: [
-      {
-        value: "contract",
-        descript: "簽署合約",
-        logo: fileTextPath,
-      },
-      {
-        value: "shower",
-        descript: "洗澡服務",
-        logo: ShowerPath,
-      },
-      {
-        value: "walkdog",
-        descript: "遛狗服務",
-        logo: PetsPath,
-      },
-      {
-        value: "pickup",
-        descript: "接送服務",
-        logo: HomePath,
-      },
-    ],
-  },
-  {
-    keyname: "facilities",
-    title: "設施條件",
-    type: "checkbox",
-    contents: [
-      {
-        value: "24hrMonitor",
-        descript: "24小時寵物監視器",
-        logo: EyePath,
-      },
-      {
-        value: "24hrClerk",
-        descript: "24小時人員駐店",
-        logo: userPath,
-      },
-      {
-        value: "hospital",
-        descript: "與醫療院所配合",
-        logo: ClinicPath,
-      },
-    ],
-  },
-  {
-    keyname: "specials",
-    title: "特殊需求",
-    type: "checkbox",
-    contents: [
-      {
-        value: "lifeRecord",
-        descript: "提供寵物生活紀錄",
-        logo: CameraPath,
-      },
-      {
-        value: "independentZone",
-        descript: "生活空間與其他寵物分開",
-        logo: boxPath,
-      },
-      {
-        value: "yard",
-        descript: "廣大庭院",
-        logo: GrassPath,
-      },
-    ],
-  },
-];
+export const serviceLists = {
+  keyname: "services",
+  title: "服務內容",
+  type: "checkbox",
+  contents: [
+    {
+      value: "contract",
+      descript: "簽署合約",
+      logo: fileTextPath,
+    },
+    {
+      value: "shower",
+      descript: "洗澡服務",
+      logo: ShowerPath,
+    },
+    {
+      value: "walkdog",
+      descript: "遛狗服務",
+      logo: PetsPath,
+    },
+    {
+      value: "pickup",
+      descript: "接送服務",
+      logo: HomePath,
+    },
+  ],
+};
+
+export const facilitiesLists = {
+  keyname: "facilities",
+  title: "設施條件",
+  type: "checkbox",
+  contents: [
+    {
+      value: "24hrMonitor",
+      descript: "24小時寵物監視器",
+      logo: EyePath,
+    },
+    {
+      value: "24hrClerk",
+      descript: "24小時人員駐店",
+      logo: userPath,
+    },
+    {
+      value: "hospital",
+      descript: "與醫療院所配合",
+      logo: ClinicPath,
+    },
+  ],
+};
+
+export const specialsLists = {
+  keyname: "specials",
+  title: "特殊需求",
+  type: "checkbox",
+  contents: [
+    {
+      value: "lifeRecord",
+      descript: "提供寵物生活紀錄",
+      logo: CameraPath,
+    },
+    {
+      value: "independentZone",
+      descript: "生活空間與其他寵物分開",
+      logo: boxPath,
+    },
+    {
+      value: "yard",
+      descript: "廣大庭院",
+      logo: GrassPath,
+    },
+  ],
+};
