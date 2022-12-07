@@ -1,13 +1,10 @@
-import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import React, { ChangeEvent, useMemo, useState } from "react";
-import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
+import React, { ChangeEvent, useState } from "react";
 // import Button from "../../../components/Button";
-import { AutoComplete, Button, Form, Input, Select, TimePicker } from "antd";
+import { Button, Form, Input, Select, TimePicker } from "antd";
 import type { UploadFile } from "antd/es/upload/interface";
 import UploadImage from "../../../components/UploadImage";
-import { CountyList, countySchema } from "../../../types/schema";
+import { CountyList } from "../../../types/schema";
 import Filter from "../../../containers/Filter";
 import AntdUploadImage from "./AntdUploadImage";
 import getCountry from "../../../utils/getCountry";
@@ -19,20 +16,23 @@ function CmsInfo(): JSX.Element {
   const [form] = Form.useForm();
   const [formLayout, setFormLayout] = useState<LayoutType>("horizontal");
   const countrydata: CountyList | undefined = getCountry();
-  const { FoodTypes, PetType, RoomPrices, ServiceTypes } = useFilter();
+  const { FoodTypes, ServiceTypes } = useFilter();
   const [ImagefileList, setImageFileList] = useState<UploadFile[]>([]);
-
+  const url = "https://petcity.rocket-coding.com/hotel";
   const onFinish = (fieldsValue: any): void => {
     const rangeTimeValue = fieldsValue["range-time-picker"];
     const HotelBusinessTime = [
       rangeTimeValue[0].format("HH:mm"),
       rangeTimeValue[1].format("HH:mm"),
     ];
-
     const result = {
       ...fieldsValue,
       HotelBusinessTime: [...HotelBusinessTime],
+      FoodTypes: [...FoodTypes],
+      ServiceTypes,
     };
+
+    console.log(result);
   };
 
   const onFinishFailed = (errorInfo: any): void => {
@@ -45,8 +45,6 @@ function CmsInfo(): JSX.Element {
         {countrydata?.map((item) => (
           <Select.Option value={item.Id}>{item.Areas}</Select.Option>
         ))}
-        <Select.Option value="0">台北</Select.Option>
-        <Select.Option value="1">台中</Select.Option>
       </Select>
     </Form.Item>
   );
@@ -140,7 +138,7 @@ function CmsInfo(): JSX.Element {
             htmlType="submit"
             size="large"
             block
-            className="flex-center inline-block h-max w-full rounded-full border-2 border-second bg-second text-white"
+            className="flex-center absolute -bottom-20 inline-block h-max w-full rounded-full border-2 border-second bg-second text-white"
           >
             送出
           </Button>
