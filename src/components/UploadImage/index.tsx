@@ -25,7 +25,7 @@ const renderUploadImage = (
         />
       ) : (
         <div className="flex-center h-80 w-full bg-slate-200">
-          <p className=" font-bold text-slate-700">上傳寵物房型照片</p>
+          <p className="font-bold text-slate-700">上傳寵物房型照片</p>
         </div>
       );
     case "Avatar":

@@ -9,7 +9,7 @@ import MotionPopup from "../../../containers/MotionPopup";
 import useModal from "../../../hooks/useModal";
 import UploadImage from "../../../components/UploadImage";
 import { xPath } from "../../../img/icons";
-import { toFormData } from "../../../utils";
+import { assertIsError, toFormData } from "../../../utils";
 import { uploadRoomPhoto, postRoom } from "../../../utils/api/hotel";
 import UserAuth from "../../../context/UserAuthContext";
 import { POSTRoomSchema } from "../../../types/schema";
@@ -21,14 +21,15 @@ interface IEditProps {
 function Edit({ onClick }: IEditProps): JSX.Element {
   const [form] = Form.useForm();
   const [petType, setPetType] = useState("");
+  const [formdata, setFormData] = useState<FormData>();
   const { dispatchPending } = useModal();
   console.log(petType);
   const { authToken } = useContext(UserAuth);
   console.log("render Edit");
 
   return (
-    <MotionFade className="flex-center fixed left-0 top-0 z-10 min-h-screen w-full bg-black/50">
-      <MotionPopup className="relative rounded-3xl bg-white p-10">
+    <MotionFade className="flex-center fixed left-0 top-0 z-10 h-screen w-full bg-black/50">
+      <MotionPopup className="scrollbar-thumb-h-1/2 relative h-[calc(100%-24px)] overflow-scroll rounded-xl bg-white p-10 scrollbar-thin scrollbar-thumb-slate-700/50 scrollbar-thumb-rounded-3xl ">
         <>
           <button
             type="button"
@@ -40,11 +41,7 @@ function Edit({ onClick }: IEditProps): JSX.Element {
           <p className="mb-4 text-center text-3xl font-bold">編輯寵物房型</p>
           <UploadImage
             onChange={(file) => {
-              return;
-              const formdata = toFormData(file);
-              uploadRoomPhoto(formdata, authToken)
-                .then((res) => console.log(res))
-                .catch((err) => console.log(err));
+              setFormData(toFormData(file));
             }}
             type="Room"
             className="mb-6"
@@ -67,30 +64,42 @@ function Edit({ onClick }: IEditProps): JSX.Element {
               form={form}
               initialValues={{ layout: "horizontal" }}
               autoComplete="on"
-              onFinish={(values) => {
+              onFinish={async (values) => {
                 const result = POSTRoomSchema.safeParse({
                   ...values,
                   PetType: petType,
                 });
                 dispatchPending({ type: "IS_LOADING" });
                 if (result.success) {
-                  postRoom(result.data, authToken)
-                    .then((res) => {
-                      dispatchPending({
-                        type: "IS_SUCCESS",
-                        payload: "新增房型成功",
-                      });
-                      setTimeout(() => dispatchPending({ type: "DONE" }), 1000);
-                      onClick();
-                      console.log(res);
-                    })
-                    .catch((err) => {
-                      dispatchPending({
-                        type: "IS_ERROR",
-                        payload: err.response.data.Message,
-                      });
-                      setTimeout(() => dispatchPending({ type: "DONE" }), 1000);
+                  try {
+                    const res = await postRoom(result.data, authToken);
+                    dispatchPending({
+                      type: "IS_SUCCESS",
+                      payload: "新增房型成功",
                     });
+                    setTimeout(() => dispatchPending({ type: "DONE" }), 1000);
+                    const { roomid } = res.data.result;
+
+                    if (formdata === undefined) return;
+                    console.log("upload photo");
+
+                    const uploadResult = await uploadRoomPhoto(
+                      roomid,
+                      formdata,
+                      authToken
+                    );
+                    console.log(uploadResult);
+
+                    onClick();
+                  } catch (error) {
+                    const err = assertIsError(error);
+                    console.log(err);
+                    dispatchPending({
+                      type: "IS_ERROR",
+                      payload: "系統錯誤，請重新操作",
+                    });
+                    setTimeout(() => dispatchPending({ type: "DONE" }), 1000);
+                  }
                 } else {
                   console.log(result.error);
                 }

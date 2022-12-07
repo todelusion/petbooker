@@ -1,10 +1,16 @@
-const baseURL = "https://petcity.rocket-coding.com";
+export const baseURL = "https://petcity.rocket-coding.com";
 
-const toFormData = (file: File): FormData => {
+export const toFormData = (file: File): FormData => {
   const formdata = new FormData();
   formdata.append("Image", file);
 
   return formdata;
 };
 
-export { toFormData, baseURL };
+export const assertIsError = (err: unknown): Error => {
+  if (!(err instanceof Error)) {
+    throw err;
+  }
+
+  return err;
+};
