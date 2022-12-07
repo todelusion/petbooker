@@ -28,5 +28,17 @@ export const GETRoomListSchema = z.object({
     })
   ),
 });
-
 export type TGETRoomListSchema = z.infer<typeof GETRoomListSchema>;
+
+export const RoomListSchema = z.array(
+  z.object({
+    Id: z.number(),
+    RoomPhoto: z.string(),
+    RoomName: z.string(),
+    PetType: z.string(),
+    RoomPrice: z.string(),
+    RoomInfo: z.string(),
+    HotelId: z.null(),
+  })
+);
+export type RoomList = z.infer<typeof RoomListSchema>;
