@@ -6,6 +6,7 @@ module.exports = {
         xs: "384px",
       },
       fontSize: {
+        "4.5xl": "2.5rem",
         "5.5xl": "3.5rem",
       },
       colors: {

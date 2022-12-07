@@ -26,139 +26,161 @@ interface IFilterList {
 interface IFilterInputProps {
   action: FilterAction["type"];
   filterList: IFilterList;
+  onChange?: (e: React.MouseEvent<HTMLInputElement, MouseEvent>) => void;
+  required?: boolean;
+  noContext?: boolean;
   horizontal?: true;
-  checked: string | string[];
+  checked?: string | string[];
   className?: string;
 }
 
 export const handleFilterValue = (
   e: React.FormEvent,
-  filterContextProps: IFilterContextProps
+  filterContextProps?: IFilterContextProps
 ): void => {
-  const { filterDispatch, FoodTypes, PetType, RoomPrices, ServiceTypes } =
-    filterContextProps;
   const element = e.target as HTMLInputElement;
   const { value, checked, name } = element;
-  const action = element.getAttribute("data-action") as FilterAction["type"];
-  // console.log({ value, checked, action, name });
 
-  // 為了避免變數重複宣告，因此在 case 後加上{}花括號，來限制作用域
-  if (action === "PICK-PetType") {
-    filterDispatch({ type: action, payload: value });
-  }
+  const dispatchContex = (): void => {
+    if (filterContextProps === undefined) return;
+    const { filterDispatch, FoodTypes, PetType, RoomPrices, ServiceTypes } =
+      filterContextProps;
 
-  if (checked) {
-    switch (action) {
-      case "PICK-FoodTypes":
-        filterDispatch({
-          type: action,
-          payload: [...FoodTypes, value],
-        });
-        break;
-      case "PICK-RoomPrices":
-        filterDispatch({
-          type: action,
-          payload: [...RoomPrices, value],
-        });
-        break;
-      case "PICK-ServiceTypes": {
-        const keyname = name as "services" | "facilities" | "specials";
-        const { services, facilities, specials } = ServiceTypes;
+    const action = element.getAttribute("data-action") as FilterAction["type"];
+    // console.log({ value, checked, action, name });
+    console.log(action);
 
-        switch (keyname) {
-          case "services":
-            filterDispatch({
-              type: "PICK-ServiceTypes",
-              payload: { keyname, contents: [...services, value] },
-            });
-            break;
-          case "facilities":
-            filterDispatch({
-              type: "PICK-ServiceTypes",
-              payload: { keyname, contents: [...facilities, value] },
-            });
-            break;
-          case "specials":
-            filterDispatch({
-              type: "PICK-ServiceTypes",
-              payload: { keyname, contents: [...specials, value] },
-            });
-            break;
-          default:
-            break;
-        }
-        break;
-      }
-
-      default:
-        break;
+    // 為了避免變數重複宣告，因此在 case 後加上{}花括號，來限制作用域
+    if (action === "PICK-PetType") {
+      filterDispatch({ type: action, payload: value });
     }
-  }
-  if (!checked) {
-    switch (action) {
-      case "PICK-FoodTypes":
-        filterDispatch({
-          type: action,
-          payload: FoodTypes.filter((FoodType) => FoodType !== value),
-        });
-        break;
-      case "PICK-RoomPrices":
-        filterDispatch({
-          type: action,
-          payload: RoomPrices.filter((RoomPrice) => RoomPrice !== value),
-        });
-        break;
-      case "PICK-ServiceTypes": {
-        const keyname = name as "services" | "facilities" | "specials";
-        const { services, facilities, specials } = ServiceTypes;
 
-        switch (keyname) {
-          case "services":
-            filterDispatch({
-              type: "PICK-ServiceTypes",
-              payload: {
-                keyname,
-                contents: services.filter((item) => item !== value),
-              },
-            });
-            break;
-          case "facilities":
-            filterDispatch({
-              type: "PICK-ServiceTypes",
-              payload: {
-                keyname,
-                contents: facilities.filter((facility) => facility !== value),
-              },
-            });
-            break;
-          case "specials":
-            filterDispatch({
-              type: "PICK-ServiceTypes",
-              payload: {
-                keyname,
-                contents: specials.filter((special) => special !== value),
-              },
-            });
-            break;
-          default:
-            break;
+    if (checked) {
+      switch (action) {
+        case "PICK-FoodTypes":
+          filterDispatch({
+            type: action,
+            payload: [...FoodTypes, value],
+          });
+          break;
+        case "PICK-RoomPrices":
+          filterDispatch({
+            type: action,
+            payload: [...RoomPrices, value],
+          });
+          break;
+        case "PICK-ServiceTypes": {
+          const keyname = name as "services" | "facilities" | "specials";
+          const { services, facilities, specials } = ServiceTypes;
+
+          switch (keyname) {
+            case "services":
+              filterDispatch({
+                type: "PICK-ServiceTypes",
+                payload: { keyname, contents: [...services, value] },
+              });
+              break;
+            case "facilities":
+              filterDispatch({
+                type: "PICK-ServiceTypes",
+                payload: { keyname, contents: [...facilities, value] },
+              });
+              break;
+            case "specials":
+              filterDispatch({
+                type: "PICK-ServiceTypes",
+                payload: { keyname, contents: [...specials, value] },
+              });
+              break;
+            default:
+              break;
+          }
+          break;
         }
-        break;
+
+        default:
+          break;
       }
-      default:
-        break;
     }
-  }
+    if (!checked) {
+      switch (action) {
+        case "PICK-FoodTypes":
+          filterDispatch({
+            type: action,
+            payload: FoodTypes.filter((FoodType) => FoodType !== value),
+          });
+          break;
+        case "PICK-RoomPrices":
+          filterDispatch({
+            type: action,
+            payload: RoomPrices.filter((RoomPrice) => RoomPrice !== value),
+          });
+          break;
+        case "PICK-ServiceTypes": {
+          const keyname = name as "services" | "facilities" | "specials";
+          const { services, facilities, specials } = ServiceTypes;
+
+          switch (keyname) {
+            case "services":
+              filterDispatch({
+                type: "PICK-ServiceTypes",
+                payload: {
+                  keyname,
+                  contents: services.filter((item) => item !== value),
+                },
+              });
+              break;
+            case "facilities":
+              filterDispatch({
+                type: "PICK-ServiceTypes",
+                payload: {
+                  keyname,
+                  contents: facilities.filter((facility) => facility !== value),
+                },
+              });
+              break;
+            case "specials":
+              filterDispatch({
+                type: "PICK-ServiceTypes",
+                payload: {
+                  keyname,
+                  contents: specials.filter((special) => special !== value),
+                },
+              });
+              break;
+            default:
+              break;
+          }
+          break;
+        }
+        default:
+          break;
+      }
+    }
+  };
+
+  dispatchContex();
 };
 
 function FilterInput({
+  onChange,
+  required,
+  noContext,
   action,
   filterList,
   checked,
   horizontal,
   className,
 }: IFilterInputProps): JSX.Element {
-  const FilterContextProps = useFilter();
+  const isUseContext = (): IFilterContextProps | undefined => {
+    // 如果 props-action 未傳進來代表不想使用 Context
+
+    if (noContext) return undefined;
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    return useFilter();
+  };
+
+  const FilterContextProps = isUseContext();
   const { keyname, title, type, contents } = filterList;
 
   // renderUI
@@ -168,11 +190,15 @@ function FilterInput({
         return (
           <input
             data-action={action}
-            defaultChecked={checked === content.value}
+            defaultChecked={content.value === checked}
             name={action}
             id={content.descript}
             value={content.value}
-            onClick={(e) => handleFilterValue(e, FilterContextProps)}
+            onClick={(e) => {
+              handleFilterValue(e, FilterContextProps);
+              if (onChange === undefined) return;
+              onChange(e);
+            }}
             type={type}
             className="h-5 w-5 cursor-pointer appearance-none rounded-full border-2 border-black duration-150 checked:border-4 checked:border-primary checked:ring-2 checked:ring-primary_Dark hover:border-primary"
           />
@@ -186,7 +212,11 @@ function FilterInput({
             name={keyname}
             id={content.descript}
             value={content.value}
-            onClick={(e) => handleFilterValue(e, FilterContextProps)}
+            onClick={(e) => {
+              handleFilterValue(e, FilterContextProps);
+              if (onChange === undefined) return;
+              onChange(e);
+            }}
             type={type}
             className="relative h-5 w-5 cursor-pointer appearance-none rounded-sm border-2 border-black duration-150 before:absolute before:top-1/2 before:-translate-y-1/2 before:text-white checked:border-4 checked:border-primary checked:bg-primary checked:ring-2 checked:ring-primary_Dark before:checked:content-['✔'] hover:border-primary"
           />
@@ -199,7 +229,11 @@ function FilterInput({
             id={content.descript}
             value={content.value}
             defaultChecked={checked === content.value}
-            onClick={(e) => handleFilterValue(e, FilterContextProps)}
+            onClick={(e) => {
+              handleFilterValue(e, FilterContextProps);
+              if (onChange === undefined) return;
+              onChange(e);
+            }}
             type={type}
             className="relative h-5 w-5 cursor-pointer appearance-none rounded-sm border-2 border-black duration-150 before:absolute before:top-1/2 before:-translate-y-1/2 before:text-white checked:border-4 checked:border-primary checked:bg-primary checked:ring-2 checked:ring-primary_Dark before:checked:content-['✔'] hover:border-primary"
           />
@@ -215,10 +249,12 @@ function FilterInput({
         className={horizontal === true ? "flex items-center" : ""}
       >
         {horizontal && (
-          <p className="relative mr-5">
+          <p className="relative mr-5 font-bold">
             {title}
-            {action === "PICK-FoodTypes" && (
-              <span className=" absolute -top-1 -right-2 text-lg">*</span>
+            {required && (
+              <span className=" absolute -top-1 -left-3 text-lg text-[#ff4d4f]">
+                *
+              </span>
             )}
           </p>
         )}
