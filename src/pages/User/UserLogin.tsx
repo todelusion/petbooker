@@ -62,8 +62,8 @@ export default function UserLogin(): JSX.Element {
           identity === "customer" ? "user" : "hotel"
         }/login`,
         {
-          UserAccount: email,
-          UserPassWord: password,
+          HotelAccount: email,
+          HotelPassWord: password,
           Identity: identity,
         }
       )

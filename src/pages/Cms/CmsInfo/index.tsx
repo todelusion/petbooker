@@ -1,15 +1,17 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import React, { ChangeEvent, useState } from "react";
+import React, { ChangeEvent, useMemo, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 // import Button from "../../../components/Button";
 import { AutoComplete, Button, Form, Input, Select, TimePicker } from "antd";
+import type { UploadFile } from "antd/es/upload/interface";
 import UploadImage from "../../../components/UploadImage";
 import { CountyList, countySchema } from "../../../types/schema";
 import Filter from "../../../containers/Filter";
 import AntdUploadImage from "./AntdUploadImage";
 import getCountry from "../../../utils/getCountry";
+import useFilter from "../../../hooks/useFilter";
 
 type LayoutType = Parameters<typeof Form>[0]["layout"];
 function CmsInfo(): JSX.Element {
@@ -17,17 +19,20 @@ function CmsInfo(): JSX.Element {
   const [form] = Form.useForm();
   const [formLayout, setFormLayout] = useState<LayoutType>("horizontal");
   const countrydata: CountyList | undefined = getCountry();
+  const { FoodTypes, PetType, RoomPrices, ServiceTypes } = useFilter();
+  const [ImagefileList, setImageFileList] = useState<UploadFile[]>([]);
+
   const onFinish = (fieldsValue: any): void => {
     const rangeTimeValue = fieldsValue["range-time-picker"];
-    const value = {
-      "range-time-picker": [
-        rangeTimeValue[0].format("HH:mm"),
-        rangeTimeValue[1].format("HH:mm"),
-      ],
-    };
+    const HotelBusinessTime = [
+      rangeTimeValue[0].format("HH:mm"),
+      rangeTimeValue[1].format("HH:mm"),
+    ];
 
-    const result = { ...fieldsValue, ...value };
-    console.log("Success:", result);
+    const result = {
+      ...fieldsValue,
+      HotelBusinessTime: [...HotelBusinessTime],
+    };
   };
 
   const onFinishFailed = (errorInfo: any): void => {
@@ -45,11 +50,6 @@ function CmsInfo(): JSX.Element {
       </Select>
     </Form.Item>
   );
-
-  const handleInfo = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    console.log("Change:", e.target.value);
-  };
-
   const normFile = (event: ChangeEvent<HTMLInputElement>): FileList => {
     console.log("Upload event:", event);
     if (Array.isArray(event)) {
@@ -57,7 +57,7 @@ function CmsInfo(): JSX.Element {
     }
     return event?.fileList;
   };
-
+  console.log(FoodTypes, ServiceTypes);
   return (
     <div className="relative">
       <Form
@@ -114,19 +114,21 @@ function CmsInfo(): JSX.Element {
           label="介紹"
           rules={[{ required: true, message: "必填項目" }]}
         >
-          <Input showCount maxLength={500} onChange={handleInfo} />
+          <Input showCount maxLength={500} />
         </Form.Item>
 
         {/* <div className="mt-10 flex justify-center ">
           <UploadImage />
         </div> */}
         <Form.Item
-          name="HotelPhoto"
           label="上傳圖片"
           valuePropName="fileList"
           getValueFromEvent={normFile}
         >
-          <AntdUploadImage />
+          <AntdUploadImage
+            ImagefileList={ImagefileList}
+            setImageFileList={setImageFileList}
+          />
         </Form.Item>
 
         <Form.Item
@@ -144,13 +146,14 @@ function CmsInfo(): JSX.Element {
           </Button>
         </Form.Item>
       </Form>
-      <Filter
-        horizontal
-        closePet
-        closeRoomPrices
-        className="my-5"
-        onChange={(filter) => console.log(filter.PetType)}
-      />
+      <Filter horizontal closePet closeRoomPrices className="my-5" />
+      {/* <button
+        type="button"
+        onClick={() => {
+        }}
+      >
+        123
+      </button> */}
     </div>
   );
 }
