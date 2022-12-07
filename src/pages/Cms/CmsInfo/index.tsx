@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { ChangeEvent, useState } from "react";
+import React, { ChangeEvent, useContext, useState } from "react";
 // import Button from "../../../components/Button";
 import { Button, Form, Input, Select, TimePicker } from "antd";
 import type { UploadFile } from "antd/es/upload/interface";
@@ -9,22 +9,30 @@ import Filter from "../../../containers/Filter";
 import AntdUploadImage from "./AntdUploadImage";
 import getCountry from "../../../utils/getCountry";
 import useFilter from "../../../hooks/useFilter";
+import UserAuth from "../../../context/UserAuthContext";
 
 type LayoutType = Parameters<typeof Form>[0]["layout"];
 function CmsInfo(): JSX.Element {
   // 引入antd Form
   const [form] = Form.useForm();
   const [formLayout, setFormLayout] = useState<LayoutType>("horizontal");
+  // select城市資料
   const countrydata: CountyList | undefined = getCountry();
+  // filter資料
   const { FoodTypes, ServiceTypes } = useFilter();
+  // uploadImage
   const [ImagefileList, setImageFileList] = useState<UploadFile[]>([]);
+
   const url = "https://petcity.rocket-coding.com/hotel";
+
+  const { authToken } = useContext(UserAuth);
   const onFinish = (fieldsValue: any): void => {
     const rangeTimeValue = fieldsValue["range-time-picker"];
     const HotelBusinessTime = [
       rangeTimeValue[0].format("HH:mm"),
       rangeTimeValue[1].format("HH:mm"),
     ];
+
     const result = {
       ...fieldsValue,
       HotelBusinessTime: [...HotelBusinessTime],
@@ -33,6 +41,14 @@ function CmsInfo(): JSX.Element {
     };
 
     console.log(result);
+    // void axios
+    //   .put(url, result, {
+    //     headers: {
+    //       Authorization: `Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJJZCI6MTMsIkFjY291bnQiOiJrd2VpZm9uMTIzNEBnbWFpbC5jb20iLCJOYW1lIjoicXFxIiwiSW1hZ2UiOm51bGwsIklkZW50aXR5IjoiaG90ZWwiLCJFeHAiOiIxLzYvMjAyMyA4OjQwOjM3IEFNIn0.KEdrkEa0A43Lw9L_NKH94eI31-JdTsaC50wn_GRk2HWKWjQjQ_E8Vkh719Fz4waNelP-5oU8VBnywTxz0ZmJ-w`,
+    //     },
+    //   })
+    //   .then((res) => console.log(res))
+    //   .catch((err) => console.log(err));
   };
 
   const onFinishFailed = (errorInfo: any): void => {
@@ -55,7 +71,6 @@ function CmsInfo(): JSX.Element {
     }
     return event?.fileList;
   };
-  console.log(FoodTypes, ServiceTypes);
   return (
     <div className="relative">
       <Form
