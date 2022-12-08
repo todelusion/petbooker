@@ -12,6 +12,20 @@ import StatusModal from "../Layout/StatusModal";
 import useModal from "../hooks/useModal";
 import Filter from "../containers/Filter";
 
+const dataTest = {
+  FoodTypes: ["wetFood", "freshFood"],
+  ServiceTypes: [
+    "contract",
+    "shower",
+    "24hrMonitor",
+    "24hrClerk",
+    "independentZone",
+    "lifeRecord",
+    "wetFood",
+    "freshFood",
+  ],
+};
+
 function ContextTest(): JSX.Element {
   const { PetType, FoodTypes, ServiceTypes } = useFilter();
   const { pending, dispatchPending } = useModal();
@@ -26,7 +40,12 @@ function ContextTest(): JSX.Element {
           countryList={countryList}
         />
       )}
-      <Filter onChange={(e) => console.log(e)} />
+      <Filter
+        data={{
+          FoodTypes: dataTest.FoodTypes,
+          ServiceTypes: dataTest.ServiceTypes,
+        }}
+      />
       <SearchBar className="mb-16" />
 
       <Button

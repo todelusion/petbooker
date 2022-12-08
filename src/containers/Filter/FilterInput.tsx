@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
-import React from "react";
+import React, { LegacyRef, MutableRefObject, useEffect, useRef } from "react";
 import { useLocation } from "react-router-dom";
 import type {
   FilterAction,
@@ -26,7 +26,7 @@ interface IFilterList {
 interface IFilterInputProps {
   action: FilterAction["type"];
   filterList: IFilterList;
-  onChange?: (e: React.MouseEvent<HTMLInputElement, MouseEvent>) => void;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   required?: boolean;
   noContext?: boolean;
   horizontal?: true;
@@ -40,6 +40,7 @@ export const handleFilterValue = (
 ): void => {
   const element = e.target as HTMLInputElement;
   const { value, checked, name } = element;
+  console.log({ value, checked, name });
 
   const dispatchContex = (): void => {
     if (filterContextProps === undefined) return;
@@ -140,6 +141,18 @@ export const handleFilterValue = (
   dispatchContex();
 };
 
+const useInputRef = (ref: React.MutableRefObject<null>): void => {
+  useEffect(() => {
+    if (ref.current == null) return;
+    const input = ref.current as HTMLInputElement;
+    // console.log(input);
+    input.addEventListener("input", (e) => {
+      console.log(e);
+    });
+    // console.log({ value, checked, name });
+  });
+};
+
 function FilterInput({
   onChange,
   required,
@@ -157,22 +170,26 @@ function FilterInput({
     // eslint-disable-next-line react-hooks/rules-of-hooks
     return useFilter();
   };
-
+  const inputRef = useRef(null);
+  useInputRef(inputRef);
   const FilterContextProps = isUseContext();
   const { keyname, title, type, contents } = filterList;
 
   // renderUI
   const renderInput = (content: Content): JSX.Element => {
+    // 使用 state改變 Dom元素背後的value
+
     switch (type) {
       case "radio":
         return (
           <input
+            ref={inputRef}
             data-action={action}
             defaultChecked={content.value === checked}
             name={action}
             id={content.descript}
             value={content.value}
-            onClick={(e) => {
+            onChange={(e) => {
               handleFilterValue(e, FilterContextProps);
               if (onChange === undefined) return;
               onChange(e);
@@ -185,12 +202,13 @@ function FilterInput({
       case "checkbox":
         return (
           <input
+            ref={inputRef}
             data-action={action}
             defaultChecked={(checked as string[]).includes(content.value)}
             name={keyname}
             id={content.descript}
             value={content.value}
-            onClick={(e) => {
+            onChange={(e) => {
               handleFilterValue(e, FilterContextProps);
               if (onChange === undefined) return;
               onChange(e);
@@ -203,11 +221,12 @@ function FilterInput({
       default:
         return (
           <input
+            ref={inputRef}
             data-action={action}
             id={content.descript}
             value={content.value}
             defaultChecked={checked === content.value}
-            onClick={(e) => {
+            onChange={(e) => {
               handleFilterValue(e, FilterContextProps);
               if (onChange === undefined) return;
               onChange(e);

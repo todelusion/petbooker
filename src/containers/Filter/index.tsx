@@ -13,6 +13,12 @@ import {
 import FilterInput from "./FilterInput";
 
 interface IFilterProps {
+  data?: {
+    PetType?: string;
+    FoodTypes?: string[];
+    RoomPrices?: string[];
+    ServiceTypes?: string[];
+  };
   className?: string;
   horizontal?: true;
   closeFood?: true;
@@ -25,7 +31,7 @@ interface IFilterProps {
 const Filter = React.memo(
   ({
     className,
-
+    data,
     horizontal,
     closePet,
     closeFood,
@@ -38,13 +44,22 @@ const Filter = React.memo(
     const { FoodTypes, RoomPrices, PetType, Services, Specials, Facilities } =
       useFilter();
 
+    console.log({
+      FoodTypes,
+      RoomPrices,
+      PetType,
+      Services,
+      Specials,
+      Facilities,
+    });
+
     return (
       <>
         {!closePet && (
           <FilterInput
             horizontal={horizontal}
             action="PICK-PetType"
-            checked={PetType}
+            checked={data?.PetType ?? PetType}
             filterList={petLists}
             className={className ?? ""}
           />
@@ -54,7 +69,7 @@ const Filter = React.memo(
             horizontal={horizontal}
             action="PICK-FoodTypes"
             filterList={foodLists}
-            checked={FoodTypes}
+            checked={data?.FoodTypes ?? FoodTypes}
             className={className ?? ""}
           />
         )}
@@ -63,7 +78,7 @@ const Filter = React.memo(
             horizontal={horizontal}
             action="PICK-RoomPrices"
             filterList={pricesLists}
-            checked={RoomPrices}
+            checked={data?.RoomPrices ?? RoomPrices}
             className={className ?? ""}
           />
         )}
@@ -72,7 +87,7 @@ const Filter = React.memo(
             horizontal={horizontal}
             action="PICK-Services"
             filterList={serviceLists}
-            checked={Services}
+            checked={data?.ServiceTypes ?? Services}
             className={className ?? ""}
           />
         )}
@@ -81,7 +96,7 @@ const Filter = React.memo(
             horizontal={horizontal}
             action="PICK-Facilities"
             filterList={facilitiesLists}
-            checked={Facilities}
+            checked={data?.ServiceTypes ?? Facilities}
             className={className ?? ""}
           />
         )}
@@ -90,7 +105,7 @@ const Filter = React.memo(
             horizontal={horizontal}
             action="PICK-Specials"
             filterList={specialsLists}
-            checked={Specials}
+            checked={data?.ServiceTypes ?? Specials}
             className={className ?? ""}
           />
         )}
