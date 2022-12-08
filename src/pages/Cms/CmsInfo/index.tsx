@@ -1,8 +1,13 @@
 import axios from "axios";
-import React, { ChangeEvent, useContext, useState } from "react";
-// import Button from "../../../components/Button";
+import React, {
+  ChangeEvent,
+  useContext,
+  useLayoutEffect,
+  useState,
+} from "react";
 import { Button, Form, Input, Select, TimePicker } from "antd";
 import type { UploadFile } from "antd/es/upload/interface";
+import { useNavigate } from "react-router-dom";
 import UploadImage from "../../../components/UploadImage";
 import { CountyList } from "../../../types/schema";
 import Filter from "../../../containers/Filter";
@@ -10,42 +15,67 @@ import AntdUploadImage from "./AntdUploadImage";
 import getCountry from "../../../utils/getCountry";
 import useFilter from "../../../hooks/useFilter";
 import UserAuth from "../../../context/UserAuthContext";
+import { toFormData } from "../../../utils";
 
 type LayoutType = Parameters<typeof Form>[0]["layout"];
 function CmsInfo(): JSX.Element {
+  const { authToken } = useContext(UserAuth);
+  const navigate = useNavigate();
   // 引入antd Form
   const [form] = Form.useForm();
   const [formLayout, setFormLayout] = useState<LayoutType>("horizontal");
   // select城市資料
   const countrydata: CountyList | undefined = getCountry();
   // filter資料
-  const { FoodTypes, ServiceTypes } = useFilter();
+  const { Services, Facilities, Specials, FoodTypes } = useFilter();
   // uploadImage
   const [ImagefileList, setImageFileList] = useState<UploadFile[]>([]);
-
-  const url = "https://petcity.rocket-coding.com/hotel";
-
-  const { authToken } = useContext(UserAuth);
-  const onFinish = (fieldsValue: any): void => {
+  const [Thumbnail, setThumbnail] = useState<FormData>();
+  const defaultThumbnail: null | string = null;
+  // 請求網址
+  const putInfo = "https://petcity.rocket-coding.com/hotel";
+  const postImage = "https://petcity.rocket-coding.com/hotel/uploadhotelphotos";
+  // antd表單驗證成功時
+  const onFinish = async (fieldsValue: any): Promise<void> => {
+    // 將Timepicker 轉換格式
     const rangeTimeValue = fieldsValue["range-time-picker"];
     const HotelBusinessTime = [
       rangeTimeValue[0].format("HH:mm"),
       rangeTimeValue[1].format("HH:mm"),
     ];
+    // 將Thumbnail 轉換 成 FormData
+    if (Thumbnail !== undefined) {
+      const formdata = new FormData();
+      console.log("123");
+
+      formdata.append("Image", Thumbnail);
+
+      setThumbnailFormData(formdata);
+    }
 
     const result = {
       ...fieldsValue,
       HotelBusinessTime: [...HotelBusinessTime],
-      FoodTypes: [...FoodTypes],
-      ServiceTypes,
+      FoodTypes,
+      ServiceTypes: [...Services, ...Facilities, ...Specials, ...FoodTypes],
     };
+    delete result["range-time-picker"];
 
-    console.log(result);
-    // void axios
-    //   .put(url, result, {
-    //     headers: {
-    //       Authorization: `Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJJZCI6MTMsIkFjY291bnQiOiJrd2VpZm9uMTIzNEBnbWFpbC5jb20iLCJOYW1lIjoicXFxIiwiSW1hZ2UiOm51bGwsIklkZW50aXR5IjoiaG90ZWwiLCJFeHAiOiIxLzYvMjAyMyA4OjQwOjM3IEFNIn0.KEdrkEa0A43Lw9L_NKH94eI31-JdTsaC50wn_GRk2HWKWjQjQ_E8Vkh719Fz4waNelP-5oU8VBnywTxz0ZmJ-w`,
-    //     },
+    const PhotoFormData = new FormData();
+    if (ImagefileList.length > 0) {
+      ImagefileList.forEach((file) =>
+        PhotoFormData.append("file", file.originFileObj)
+      );
+    }
+    // await axios
+    //   .put(putInfo, result, {
+    //     headers: { Authorization: `Bearer ${authToken}` },
+    //   })
+    //   .then((res) => console.log(res))
+    //   .catch((err) => console.log(err));
+    // await axios
+    //   .post(postImage, PhotoFormData, {
+    //     headers: { Authorization: `Bearer ${authToken}` },
     //   })
     //   .then((res) => console.log(res))
     //   .catch((err) => console.log(err));
@@ -71,8 +101,24 @@ function CmsInfo(): JSX.Element {
     }
     return event?.fileList;
   };
+  useLayoutEffect(() => {
+    if (authToken === "") {
+      navigate("/home");
+    }
+  });
+  console.log(Thumbnail);
   return (
-    <div className="relative">
+    <div className="relative flex flex-col ">
+      <div className="mb-10 flex justify-center ">
+        <UploadImage
+          type="Avatar"
+          onChange={(event) => {
+            console.log(event);
+          }}
+          defaultImage={defaultThumbnail}
+          setThumbnail={setThumbnail}
+        />
+      </div>
       <Form
         labelCol={{ span: 4 }}
         wrapperCol={{ span: 14 }}
