@@ -9,11 +9,9 @@ const initFilter = {
   PetType: "",
   FoodTypes: [] as string[],
   RoomPrices: [] as string[],
-  ServiceTypes: {
-    services: [] as string[],
-    facilities: [] as string[],
-    specials: [] as string[],
-  },
+  Services: [] as string[],
+  Facilities: [] as string[],
+  Specials: [] as string[],
 };
 
 export type IinitFilter = typeof initFilter;
@@ -35,11 +33,16 @@ export type FilterAction =
       payload: string[];
     }
   | {
-      type: "PICK-ServiceTypes";
-      payload: {
-        keyname: "services" | "facilities" | "specials";
-        contents: string[];
-      };
+      type: "PICK-Services";
+      payload: string[];
+    }
+  | {
+      type: "PICK-Facilities";
+      payload: string[];
+    }
+  | {
+      type: "PICK-Specials";
+      payload: string[];
     };
 
 export interface IFilterContextProps extends IinitFilter {
@@ -61,19 +64,12 @@ const filterReducer = (
       return { ...state, FoodTypes: action.payload };
     case "PICK-RoomPrices":
       return { ...state, RoomPrices: action.payload };
-    case "PICK-ServiceTypes": {
-      const { keyname, contents } = action.payload;
-      const newServiceTypes = {
-        services: [""],
-        facilities: [""],
-        specials: [""],
-      };
-      newServiceTypes[keyname] = contents;
-      return {
-        ...state,
-        ServiceTypes: newServiceTypes,
-      };
-    }
+    case "PICK-Services":
+      return { ...state, Services: action.payload };
+    case "PICK-Facilities":
+      return { ...state, Facilities: action.payload };
+    case "PICK-Specials":
+      return { ...state, Specials: action.payload };
     default:
       return state;
   }
@@ -86,14 +82,6 @@ export function FilterProvider({
   const [filter, filterDispatch] = useReducer(filterReducer, initFilter);
 
   const value = useMemo(() => ({ ...filter, filterDispatch }), [filter]);
-  // const { FoodTypes, PetType, RoomPrices, ServiceTypes } = value;
-  // console.log({ FoodTypes, PetType, RoomPrices, ServiceTypes });
-
-  // useEffect(() => {
-  //   if (!pathname.includes("/cms")) return;
-  //   console.log("in FilterContext");
-  //   filterDispatch({ type: "CLEAR" });
-  // }, [pathname, value]);
 
   console.log(value);
 

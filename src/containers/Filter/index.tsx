@@ -2,7 +2,14 @@
 import React, { useCallback, useEffect } from "react";
 import { IinitFilter } from "../../context/FilterContext";
 import useFilter from "../../hooks/useFilter";
-import { foodLists, petLists, pricesLists, serviceLists } from "./data";
+import {
+  foodLists,
+  petLists,
+  pricesLists,
+  serviceLists,
+  facilitiesLists,
+  specialsLists,
+} from "./data";
 import FilterInput from "./FilterInput";
 
 interface IFilterProps {
@@ -10,6 +17,8 @@ interface IFilterProps {
   horizontal?: true;
   closeFood?: true;
   closeService?: true;
+  closeFacility?: true;
+  closeSpecial?: true;
   closeRoomPrices?: true;
   closePet?: true;
 }
@@ -21,21 +30,13 @@ const Filter = React.memo(
     closePet,
     closeFood,
     closeService,
+    closeFacility,
+    closeSpecial,
     closeRoomPrices,
   }: IFilterProps): JSX.Element => {
     // console.log("render Filter");
-    const { FoodTypes, ServiceTypes, RoomPrices, PetType } = useFilter();
-
-    // const handleChange = useCallback((): void => {
-    //   const filter = {
-    //     FoodTypes,
-    //     ServiceTypes,
-    //     RoomPrices,
-    //     PetType,
-    //   };
-    // }, [FoodTypes, PetType, RoomPrices, ServiceTypes]);
-
-    // handleChange();
+    const { FoodTypes, RoomPrices, PetType, Services, Specials, Facilities } =
+      useFilter();
 
     return (
       <>
@@ -66,33 +67,33 @@ const Filter = React.memo(
             className={className ?? ""}
           />
         )}
-        {!closeService &&
-          serviceLists.map((list) => {
-            let checkArray = [""];
-            switch (list.keyname) {
-              case "services":
-                checkArray = ServiceTypes.services;
-                break;
-              case "facilities":
-                checkArray = ServiceTypes.facilities;
-                break;
-              case "specials":
-                checkArray = ServiceTypes.specials;
-                break;
-              default:
-                break;
-            }
-            return (
-              <FilterInput
-                horizontal={horizontal}
-                action="PICK-ServiceTypes"
-                filterList={list}
-                checked={checkArray}
-                key={list.keyname}
-                className={className ?? ""}
-              />
-            );
-          })}
+        {!closeService && (
+          <FilterInput
+            horizontal={horizontal}
+            action="PICK-Services"
+            filterList={serviceLists}
+            checked={Services}
+            className={className ?? ""}
+          />
+        )}
+        {!closeFacility && (
+          <FilterInput
+            horizontal={horizontal}
+            action="PICK-Facilities"
+            filterList={facilitiesLists}
+            checked={Facilities}
+            className={className ?? ""}
+          />
+        )}
+        {!closeSpecial && (
+          <FilterInput
+            horizontal={horizontal}
+            action="PICK-Specials"
+            filterList={specialsLists}
+            checked={Specials}
+            className={className ?? ""}
+          />
+        )}
       </>
     );
   }
