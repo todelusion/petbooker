@@ -1,4 +1,5 @@
 import axios from "axios";
+import { log } from "console";
 import React, { ChangeEvent, useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { UploadRoomPath } from "../../img/icons";
@@ -66,6 +67,8 @@ function UploadImage({
   const handleSetImage = (event: ChangeEvent<HTMLInputElement>): void => {
     const { files } = event.target;
     if (files === null) return;
+    console.log(files);
+
     const formdata = new FormData();
     formdata.append("Image", files[0]);
     setThumbnail(formdata);
@@ -82,7 +85,6 @@ function UploadImage({
   useEffect(() => {
     console.log("in UploadImage component", previewImage);
   }, [previewImage]);
-
   return (
     <div
       className={`relative ${className ?? ""} ${

@@ -35,6 +35,7 @@ function CmsInfo(): JSX.Element {
   // 請求網址
   const putInfo = "https://petcity.rocket-coding.com/hotel";
   const postImage = "https://petcity.rocket-coding.com/hotel/uploadhotelphotos";
+  const postThumbnail = "";
   // antd表單驗證成功時
   const onFinish = async (fieldsValue: any): Promise<void> => {
     // 將Timepicker 轉換格式
@@ -43,15 +44,6 @@ function CmsInfo(): JSX.Element {
       rangeTimeValue[0].format("HH:mm"),
       rangeTimeValue[1].format("HH:mm"),
     ];
-    // 將Thumbnail 轉換 成 FormData
-    if (Thumbnail !== undefined) {
-      const formdata = new FormData();
-      console.log("123");
-
-      formdata.append("Image", Thumbnail);
-
-      setThumbnailFormData(formdata);
-    }
 
     const result = {
       ...fieldsValue,
@@ -67,18 +59,25 @@ function CmsInfo(): JSX.Element {
         PhotoFormData.append("file", file.originFileObj)
       );
     }
-    // await axios
-    //   .put(putInfo, result, {
-    //     headers: { Authorization: `Bearer ${authToken}` },
-    //   })
-    //   .then((res) => console.log(res))
-    //   .catch((err) => console.log(err));
-    // await axios
-    //   .post(postImage, PhotoFormData, {
-    //     headers: { Authorization: `Bearer ${authToken}` },
-    //   })
-    //   .then((res) => console.log(res))
-    //   .catch((err) => console.log(err));
+
+    await axios
+      .put(putInfo, result, {
+        headers: { Authorization: `Bearer ${authToken}` },
+      })
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err));
+    await axios
+      .post(postImage, PhotoFormData, {
+        headers: { Authorization: `Bearer ${authToken}` },
+      })
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err));
+    await axios
+      .post(Thumbnail, PhotoFormData, {
+        headers: { Authorization: `Bearer ${authToken}` },
+      })
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err));
   };
 
   const onFinishFailed = (errorInfo: any): void => {
@@ -106,7 +105,7 @@ function CmsInfo(): JSX.Element {
       navigate("/home");
     }
   });
-  console.log(Thumbnail);
+  console.log(Thumbnail?.get("Image"));
   return (
     <div className="relative flex flex-col ">
       <div className="mb-10 flex justify-center ">
@@ -206,13 +205,6 @@ function CmsInfo(): JSX.Element {
         </Form.Item>
       </Form>
       <Filter horizontal closePet closeRoomPrices className="my-5" />
-      {/* <button
-        type="button"
-        onClick={() => {
-        }}
-      >
-        123
-      </button> */}
     </div>
   );
 }
