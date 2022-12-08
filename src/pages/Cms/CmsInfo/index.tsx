@@ -35,7 +35,7 @@ function CmsInfo(): JSX.Element {
   // 請求網址
   const putInfo = "https://petcity.rocket-coding.com/hotel";
   const postImage = "https://petcity.rocket-coding.com/hotel/uploadhotelphotos";
-  const postThumbnail = "";
+  const postThumbnail = "https://petcity.rocket-coding.com/hotel/uploadprofile";
   // antd表單驗證成功時
   const onFinish = async (fieldsValue: any): Promise<void> => {
     // 將Timepicker 轉換格式
@@ -73,7 +73,7 @@ function CmsInfo(): JSX.Element {
       .then((res) => console.log(res))
       .catch((err) => console.log(err));
     await axios
-      .post(Thumbnail, PhotoFormData, {
+      .post(postThumbnail, Thumbnail, {
         headers: { Authorization: `Bearer ${authToken}` },
       })
       .then((res) => console.log(res))
