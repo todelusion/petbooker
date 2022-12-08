@@ -1,7 +1,7 @@
 import { useReducer, useMemo } from "react";
 
 const initialPending = {
-  status: "",
+  status: "DONE",
   message: "",
 };
 
