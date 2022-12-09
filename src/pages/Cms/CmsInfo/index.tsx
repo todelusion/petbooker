@@ -15,7 +15,6 @@ import AntdUploadImage from "./AntdUploadImage";
 import getCountry from "../../../utils/getCountry";
 import useFilter from "../../../hooks/useFilter";
 import UserAuth from "../../../context/UserAuthContext";
-import { toFormData } from "../../../utils";
 
 type LayoutType = Parameters<typeof Form>[0]["layout"];
 function CmsInfo(): JSX.Element {
@@ -64,20 +63,22 @@ function CmsInfo(): JSX.Element {
       .put(putInfo, result, {
         headers: { Authorization: `Bearer ${authToken}` },
       })
-      .then((res) => console.log(res))
-      .catch((err) => console.log(err));
+      .then((res) => console.log("傳送資訊成功", res))
+      .catch((err) => console.log("傳送資訊失敗", err));
     await axios
       .post(postImage, PhotoFormData, {
         headers: { Authorization: `Bearer ${authToken}` },
       })
-      .then((res) => console.log(res))
-      .catch((err) => console.log(err));
-    await axios
-      .post(postThumbnail, Thumbnail, {
-        headers: { Authorization: `Bearer ${authToken}` },
-      })
-      .then((res) => console.log(res))
-      .catch((err) => console.log(err));
+      .then((res) => console.log("傳送照片成功", res))
+      .catch((err) => console.log("傳送照片失敗", err));
+    if (Thumbnail?.has("Image") ?? false) {
+      await axios
+        .post(postThumbnail, Thumbnail, {
+          headers: { Authorization: `Bearer ${authToken}` },
+        })
+        .then((res) => console.log("傳送大頭成功", res))
+        .catch((err) => console.log("傳送大頭失敗", err));
+    }
   };
 
   const onFinishFailed = (errorInfo: any): void => {
