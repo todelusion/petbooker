@@ -7,7 +7,11 @@ import { Comments as comments, Rooms as rooms } from "./data";
 import SearchBar from "../../containers/SearchBar";
 import Photo from "./Photo";
 import Info from "./Info";
-import type { serviceLists } from "../../containers/Filter/data";
+import type {
+  serviceLists,
+  facilitiesLists,
+  specialsLists,
+} from "../../containers/Filter/data";
 import Room from "./Room";
 
 export interface IHotel {
@@ -23,6 +27,8 @@ export interface IHotel {
   price: number;
   HotelScore: number;
   serviceLists: typeof serviceLists;
+  facilitiesLists: typeof facilitiesLists;
+  specialsLists: typeof specialsLists;
 }
 
 function Hotel(): JSX.Element {

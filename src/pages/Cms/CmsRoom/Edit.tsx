@@ -2,6 +2,7 @@ import { Button, Form, Input } from "antd";
 import { motion } from "framer-motion";
 import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
+import { useQueryClient } from "@tanstack/react-query";
 import FilterInput from "../../../containers/Filter/FilterInput";
 import { petLists } from "../../../containers/Filter/data";
 import MotionFade from "../../../containers/MotionFade";
@@ -12,18 +13,21 @@ import { xPath } from "../../../img/icons";
 import { assertIsError, toFormData } from "../../../utils";
 import { uploadRoomPhoto, postRoom } from "../../../utils/api/hotel";
 import UserAuth from "../../../context/UserAuthContext";
-import { POSTRoomSchema } from "../../../types/schema";
+import { POSTRoomSchema, Room } from "../../../types/schema";
 
 interface IEditProps {
+  title: string;
   onClick: () => void;
+  data: Room;
 }
 
-function Edit({ onClick }: IEditProps): JSX.Element {
+function Edit({ title, onClick, data }: IEditProps): JSX.Element {
+  console.log(data);
   const [form] = Form.useForm();
   const [petType, setPetType] = useState("");
   const [formdata, setFormData] = useState<FormData>();
   const { dispatchPending } = useModal();
-  console.log(petType);
+  const queryClient = useQueryClient();
   const { authToken } = useContext(UserAuth);
   console.log("render Edit");
 
@@ -38,7 +42,7 @@ function Edit({ onClick }: IEditProps): JSX.Element {
           >
             <img src={xPath} alt="" />
           </button>
-          <p className="mb-4 text-center text-3xl font-bold">編輯寵物房型</p>
+          <p className="mb-4 text-center text-3xl font-bold">{title}</p>
           <UploadImage
             onChange={(file) => {
               setFormData(toFormData(file));
@@ -54,6 +58,7 @@ function Edit({ onClick }: IEditProps): JSX.Element {
             action="PICK-PetType"
             horizontal
             filterList={petLists}
+            checked={data.PetType}
             className="mb-5 ml-3"
           />
           <div>
@@ -62,9 +67,21 @@ function Edit({ onClick }: IEditProps): JSX.Element {
               // wrapperCol={{ span: 14 }}
               layout="horizontal"
               form={form}
-              initialValues={{ layout: "horizontal" }}
+              initialValues={{
+                RoomName: data.RoomName,
+                RoomPrice: data.RoomPrice,
+                RoomInfo: data.RoomInfo,
+              }}
               autoComplete="on"
               onFinish={async (values) => {
+                if (formdata === undefined) {
+                  dispatchPending({
+                    type: "IS_ERROR",
+                    payload: "必須上傳圖片",
+                  });
+                  setTimeout(() => dispatchPending({ type: "DONE" }), 1000);
+                  return;
+                }
                 const result = POSTRoomSchema.safeParse({
                   ...values,
                   PetType: petType,
@@ -73,15 +90,8 @@ function Edit({ onClick }: IEditProps): JSX.Element {
                 if (result.success) {
                   try {
                     const res = await postRoom(result.data, authToken);
-                    dispatchPending({
-                      type: "IS_SUCCESS",
-                      payload: "新增房型成功",
-                    });
-                    setTimeout(() => dispatchPending({ type: "DONE" }), 1000);
-                    const { roomid } = res.data.result;
 
-                    if (formdata === undefined) return;
-                    console.log("upload photo");
+                    const { roomid } = res.data.result;
 
                     const uploadResult = await uploadRoomPhoto(
                       roomid,
@@ -89,6 +99,12 @@ function Edit({ onClick }: IEditProps): JSX.Element {
                       authToken
                     );
                     console.log(uploadResult);
+                    dispatchPending({
+                      type: "IS_SUCCESS",
+                      payload: "新增房型成功",
+                    });
+                    setTimeout(() => dispatchPending({ type: "DONE" }), 1000);
+                    await queryClient.invalidateQueries(["RoomList"]);
 
                     onClick();
                   } catch (error) {
@@ -137,26 +153,4 @@ function Edit({ onClick }: IEditProps): JSX.Element {
                 ]}
               >
                 <Input.TextArea
-                  rows={4}
-                  placeholder="請填寫您的寵物房型介紹資訊"
-                />
-              </Form.Item>
-
-              <Form.Item>
-                <Button
-                  type="primary"
-                  htmlType="submit"
-                  className="flex-center h-max w-full rounded-full border-2 border-second bg-second text-white"
-                >
-                  送出
-                </Button>
-              </Form.Item>
-            </Form>
-          </div>
-        </>
-      </MotionPopup>
-    </MotionFade>
-  );
-}
-
-export default Edit;
+                  rows={4

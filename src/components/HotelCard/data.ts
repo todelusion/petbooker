@@ -1,4 +1,8 @@
-import { serviceLists } from "../../containers/Filter/data";
+import {
+  serviceLists,
+  facilitiesLists,
+  specialsLists,
+} from "../../containers/Filter/data";
 // 透過 uuid 套件產生 id 值，並暫時寫死在本機data上
 
 export const Hotels = [
@@ -23,6 +27,8 @@ export const Hotels = [
     // FoodTypes 在 Filter資料夾
     // ServicesTypes 在 Filter資料夾
     serviceLists,
+    facilitiesLists,
+    specialsLists,
     // HotelAccount 前端不能知道
     // HotelPassword 前端不能知道
   },
@@ -40,6 +46,8 @@ export const Hotels = [
     price: 500,
     HotelScore: 9.1,
     serviceLists,
+    facilitiesLists,
+    specialsLists,
   },
 ];
 

@@ -23,10 +23,18 @@ import LoadingPath from "./Loading.svg";
 import PlusPath from "./Plus.svg";
 import UploadRoomPath from "./UploadRoom.svg";
 import xPath from "./X.svg";
+import MotionFade from "../../containers/MotionFade";
+import EditPath from "./Edit.svg";
+import TrashPath from "./Trash.svg";
 
 interface ILoadingProps {
   className?: string;
 }
+interface ILoadingCustomProps {
+  className?: string;
+  color?: string;
+}
+
 export function Loading({ className }: ILoadingProps): JSX.Element {
   return (
     <div className={className}>
@@ -40,34 +48,12 @@ export function Loading({ className }: ILoadingProps): JSX.Element {
     </div>
   );
 }
-Loading.defaultProps = {
-  className: "",
-};
 
-export {
-  Pets2Path,
-  heartPath,
-  logOutPath,
-  messageSquarePath,
-  userPath,
-  fileTextPath,
-  creditCardPath,
-  accountMenuPath,
-  PetsPath,
-  searchPath,
-  mapPinPath,
-  calendarPath,
-  boxPath,
-  ClinicPath,
-  EyePath,
-  GrassPath,
-  HomePath,
-  ShowerPath,
-  CameraPath,
-  SuccessPath,
-  ErrorPath,
-  LoadingPath,
-  PlusPath,
-  UploadRoomPath,
-  xPath,
-};
+export function LoadingCustom({
+  className,
+  color,
+}: ILoadingCustomProps): JSX.Element {
+  return (
+    <MotionFade className={className}>
+      <div className="grid gap-2">
+        <div className="flex an

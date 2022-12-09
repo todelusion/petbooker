@@ -32,17 +32,33 @@ function Info({ hotel, className }: IInfoProps): JSX.Element {
       </ul>
       <p className="mb-4 pl-1 text-sm text-stone-600">{hotel.HotelInfo}</p>
       <ul className="flex flex-wrap">
-        {hotel.serviceLists.map((item) =>
-          item.contents.map((content) => (
-            <li
-              key={content.value}
-              className="mx-2 mb-1 flex items-center rounded-3xl border-2 border-black py-1 px-3"
-            >
-              <img src={content.logo} alt="" width="16" />
-              <span className="ml-1 text-xs">{content.descript}</span>
-            </li>
-          ))
-        )}
+        {hotel.serviceLists.contents.map((content) => (
+          <li
+            key={content.value}
+            className="mx-2 mb-1 flex items-center rounded-3xl border-2 border-black py-1 px-3"
+          >
+            <img src={content.logo} alt="" width="16" />
+            <span className="ml-1 text-xs">{content.descript}</span>
+          </li>
+        ))}
+        {hotel.facilitiesLists.contents.map((content) => (
+          <li
+            key={content.value}
+            className="mx-2 mb-1 flex items-center rounded-3xl border-2 border-black py-1 px-3"
+          >
+            <img src={content.logo} alt="" width="16" />
+            <span className="ml-1 text-xs">{content.descript}</span>
+          </li>
+        ))}
+        {hotel.specialsLists.contents.map((content) => (
+          <li
+            key={content.value}
+            className="mx-2 mb-1 flex items-center rounded-3xl border-2 border-black py-1 px-3"
+          >
+            <img src={content.logo} alt="" width="16" />
+            <span className="ml-1 text-xs">{content.descript}</span>
+          </li>
+        ))}
       </ul>
     </section>
   );
