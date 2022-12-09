@@ -104,4 +104,21 @@ function ContextTest(): JSX.Element {
             break;
           case "specials":
             checkArray = ServiceTypes.specials;
-            b
+            break;
+          default:
+            break;
+        }
+        return (
+          <FilterInput
+            action="PICK-ServiceTypes"
+            filterList={list}
+            checked={checkArray}
+            key={list.keyname}
+          />
+        );
+      })} */}
+    </div>
+  );
+}
+
+export default ContextTest;

@@ -1,4 +1,3 @@
-import { useQuery } from "@tanstack/react-query";
 import React from "react";
 import Button from "../Button";
 import { fakeText, Hotels as hotelList } from "./data";

@@ -56,4 +56,42 @@ export function LoadingCustom({
   return (
     <MotionFade className={className}>
       <div className="grid gap-2">
-        <div className="flex an
+        <div className="flex animate-pulse items-center justify-center space-x-2">
+          <div className={`h-3 w-3 rounded-full ${color ?? ""}`} />
+          <div className={`h-3 w-3 rounded-full ${color ?? ""}`} />
+          <div className={`h-3 w-3 rounded-full ${color ?? ""}`} />
+        </div>
+      </div>
+    </MotionFade>
+  );
+}
+
+export {
+  Pets2Path,
+  heartPath,
+  logOutPath,
+  messageSquarePath,
+  userPath,
+  fileTextPath,
+  creditCardPath,
+  accountMenuPath,
+  PetsPath,
+  searchPath,
+  mapPinPath,
+  calendarPath,
+  boxPath,
+  ClinicPath,
+  EyePath,
+  GrassPath,
+  HomePath,
+  ShowerPath,
+  CameraPath,
+  SuccessPath,
+  ErrorPath,
+  LoadingPath,
+  PlusPath,
+  UploadRoomPath,
+  xPath,
+  EditPath,
+  TrashPath,
+};
