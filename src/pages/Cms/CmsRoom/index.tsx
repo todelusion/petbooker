@@ -5,11 +5,11 @@ import Button from "../../../components/Button";
 import MotionFade from "../../../containers/MotionFade";
 import UserAuth from "../../../context/UserAuthContext";
 import useModal from "../../../hooks/useModal";
-import { PlusPath } from "../../../img/icons";
+import { LoadingCustom, LoadingPath, PlusPath } from "../../../img/icons";
 import { getRoomList, useRoomList } from "../../../utils/api/hotel";
-import Room from "./Room";
+import RoomCard from "./Room";
 import Edit from "./Edit";
-import { RoomList } from "../../../types/schema";
+import { Room } from "../../../types/schema";
 
 const useDisableScroll = (isEdit: boolean): void => {
   const body = document.querySelector("body");
@@ -24,23 +24,14 @@ const useDisableScroll = (isEdit: boolean): void => {
   }, [body, isEdit]);
 };
 
-// const useSetRoomList = (data: RoomList | undefined): RoomList | undefined => {
-//   const [roomList, setRoomList] = useState<RoomList>();
-
-//   useEffect(() => {
-//     setRoomList(data?.filter((item, index) => index < 3));
-//   }, [data]);
-
-//   return roomList;
-// };
-
 function CmsRoom(): JSX.Element {
-  const [isEdit, setIsEdit] = useState(false);
+  const [isShow, setIsShow] = useState("" as "edit" | "add" | "");
+  const [room, setRoom] = useState<Room>();
+  // console.log(room);
   const { authToken } = useContext(UserAuth);
 
-  useDisableScroll(isEdit);
-  const { data } = useRoomList(authToken);
-  console.log(data);
+  useDisableScroll(isShow === "");
+  const { data: datas } = useRoomList(authToken);
   // const roomList = useSetRoomList(data);
 
   return (
@@ -49,18 +40,36 @@ function CmsRoom(): JSX.Element {
         icon={PlusPath}
         type="Secondary"
         text="新增寵物房型"
-        className="w-max px-4 py-2"
+        className="mb-4 w-max px-4 py-2"
         onClick={() => {
-          setIsEdit(!isEdit);
+          setIsShow("add");
         }}
       />
-      {data === undefined ? (
-        <p>loading</p>
-      ) : (
-        <Room data={data} className="w-full" />
-      )}
       <AnimatePresence>
-        {isEdit && <Edit onClick={() => setIsEdit(false)} />}
+        {datas === undefined ? (
+          <div key="Loading" className="relative w-full">
+            <LoadingCustom className="absolute left-1/2" color="bg-second" />
+          </div>
+        ) : (
+          <RoomCard
+            onClick={(data) => {
+              setIsShow("edit");
+              setRoom(data);
+            }}
+            key="Room"
+            datas={datas}
+            className="w-full"
+          />
+        )}
+
+        {isShow !== "" && room !== undefined && (
+          <Edit
+            title={`${isShow === "add" ? "新增寵物房型" : "編輯寵物房型"} `}
+            key="Edit"
+            onClick={() => setIsShow("")}
+            data={room}
+          />
+        )}
       </AnimatePresence>
     </div>
   );

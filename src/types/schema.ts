@@ -42,3 +42,4 @@ export const RoomListSchema = z.array(
   })
 );
 export type RoomList = z.infer<typeof RoomListSchema>;
+export type Room = RoomList[0];

@@ -3,11 +3,7 @@ import axios, { AxiosResponse, AxiosStatic } from "axios";
 import { useQuery } from "@tanstack/react-query";
 import Header from "./Header";
 import { baseURL } from "../index";
-import {
-  GETRoomListSchema,
-  PostRoomSchema,
-  RoomListSchema,
-} from "../../types/schema";
+import { TPostRoomSchema, RoomListSchema } from "../../types/schema";
 
 export const uploadRoomPhoto = async (
   id: number,
@@ -23,13 +19,23 @@ export const uploadRoomPhoto = async (
 };
 
 export const postRoom = async (
-  body: PostRoomSchema,
+  body: TPostRoomSchema,
   token: string
 ): Promise<AxiosResponse<any, any>> => {
   const header = new Header(token);
 
   return axios
     .post(`${baseURL}/hotel/room`, body, header)
+    .then((res) => res)
+    .catch((err) => err);
+};
+export const deleteRoom = async (
+  id: number,
+  token: string
+): Promise<AxiosResponse<any, any>> => {
+  const header = new Header(token);
+  return axios
+    .delete(`${baseURL}/hotel/room?roomId=${id}`, header)
     .then((res) => res)
     .catch((err) => err);
 };
@@ -41,6 +47,7 @@ export const useRoomList = (token: string) => {
     ["RoomList"],
     async () => {
       const res = await axios.get(`${baseURL}/hotel/room/list`, header);
+      console.log(res.data);
       return RoomListSchema.parse(res.data.roomList);
     },
     {
