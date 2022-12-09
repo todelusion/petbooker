@@ -1,28 +1,43 @@
-import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import React, { ChangeEvent, useMemo, useState } from "react";
-import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
-// import Button from "../../../components/Button";
-import { AutoComplete, Button, Form, Input, Select, TimePicker } from "antd";
+import React, {
+  ChangeEvent,
+  useContext,
+  useLayoutEffect,
+  useState,
+} from "react";
+import { Button, Form, Input, Select, TimePicker } from "antd";
 import type { UploadFile } from "antd/es/upload/interface";
+import { useNavigate } from "react-router-dom";
 import UploadImage from "../../../components/UploadImage";
-import { CountyList, countySchema } from "../../../types/schema";
+import { CountyList } from "../../../types/schema";
 import Filter from "../../../containers/Filter";
 import AntdUploadImage from "./AntdUploadImage";
 import getCountry from "../../../utils/getCountry";
 import useFilter from "../../../hooks/useFilter";
+import UserAuth from "../../../context/UserAuthContext";
 
 type LayoutType = Parameters<typeof Form>[0]["layout"];
 function CmsInfo(): JSX.Element {
+  const { authToken } = useContext(UserAuth);
+  const navigate = useNavigate();
   // 引入antd Form
   const [form] = Form.useForm();
   const [formLayout, setFormLayout] = useState<LayoutType>("horizontal");
+  // select城市資料
   const countrydata: CountyList | undefined = getCountry();
-  const { FoodTypes, PetType, RoomPrices, ServiceTypes } = useFilter();
+  // filter資料
+  const { Services, Facilities, Specials, FoodTypes } = useFilter();
+  // uploadImage
   const [ImagefileList, setImageFileList] = useState<UploadFile[]>([]);
-
-  const onFinish = (fieldsValue: any): void => {
+  const [Thumbnail, setThumbnail] = useState<FormData>();
+  const defaultThumbnail: null | string = null;
+  // 請求網址
+  const putInfo = "https://petcity.rocket-coding.com/hotel";
+  const postImage = "https://petcity.rocket-coding.com/hotel/uploadhotelphotos";
+  const postThumbnail = "https://petcity.rocket-coding.com/hotel/uploadprofile";
+  // antd表單驗證成功時
+  const onFinish = async (fieldsValue: any): Promise<void> => {
+    // 將Timepicker 轉換格式
     const rangeTimeValue = fieldsValue["range-time-picker"];
     const HotelBusinessTime = [
       rangeTimeValue[0].format("HH:mm"),
@@ -32,7 +47,38 @@ function CmsInfo(): JSX.Element {
     const result = {
       ...fieldsValue,
       HotelBusinessTime: [...HotelBusinessTime],
+      FoodTypes,
+      ServiceTypes: [...Services, ...Facilities, ...Specials, ...FoodTypes],
     };
+    delete result["range-time-picker"];
+
+    const PhotoFormData = new FormData();
+    if (ImagefileList.length > 0) {
+      ImagefileList.forEach((file) =>
+        PhotoFormData.append("file", file.originFileObj)
+      );
+    }
+
+    await axios
+      .put(putInfo, result, {
+        headers: { Authorization: `Bearer ${authToken}` },
+      })
+      .then((res) => console.log("傳送資訊成功", res))
+      .catch((err) => console.log("傳送資訊失敗", err));
+    await axios
+      .post(postImage, PhotoFormData, {
+        headers: { Authorization: `Bearer ${authToken}` },
+      })
+      .then((res) => console.log("傳送照片成功", res))
+      .catch((err) => console.log("傳送照片失敗", err));
+    if (Thumbnail?.has("Image") ?? false) {
+      await axios
+        .post(postThumbnail, Thumbnail, {
+          headers: { Authorization: `Bearer ${authToken}` },
+        })
+        .then((res) => console.log("傳送大頭成功", res))
+        .catch((err) => console.log("傳送大頭失敗", err));
+    }
   };
 
   const onFinishFailed = (errorInfo: any): void => {
@@ -45,8 +91,6 @@ function CmsInfo(): JSX.Element {
         {countrydata?.map((item) => (
           <Select.Option value={item.Id}>{item.Areas}</Select.Option>
         ))}
-        <Select.Option value="0">台北</Select.Option>
-        <Select.Option value="1">台中</Select.Option>
       </Select>
     </Form.Item>
   );
@@ -57,9 +101,24 @@ function CmsInfo(): JSX.Element {
     }
     return event?.fileList;
   };
-  console.log(FoodTypes, ServiceTypes);
+  useLayoutEffect(() => {
+    if (authToken === "") {
+      navigate("/home");
+    }
+  });
+  console.log(Thumbnail?.get("Image"));
   return (
-    <div className="relative">
+    <div className="relative flex flex-col ">
+      <div className="mb-10 flex justify-center ">
+        <UploadImage
+          type="Avatar"
+          onChange={(event) => {
+            console.log(event);
+          }}
+          defaultImage={defaultThumbnail}
+          setThumbnail={setThumbnail}
+        />
+      </div>
       <Form
         labelCol={{ span: 4 }}
         wrapperCol={{ span: 14 }}
@@ -140,20 +199,13 @@ function CmsInfo(): JSX.Element {
             htmlType="submit"
             size="large"
             block
-            className="flex-center inline-block h-max w-full rounded-full border-2 border-second bg-second text-white"
+            className="flex-center absolute -bottom-20 inline-block h-max w-full rounded-full border-2 border-second bg-second text-white"
           >
             送出
           </Button>
         </Form.Item>
       </Form>
       <Filter horizontal closePet closeRoomPrices className="my-5" />
-      {/* <button
-        type="button"
-        onClick={() => {
-        }}
-      >
-        123
-      </button> */}
     </div>
   );
 }

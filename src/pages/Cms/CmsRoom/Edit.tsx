@@ -153,26 +153,4 @@ function Edit({ title, onClick, data }: IEditProps): JSX.Element {
                 ]}
               >
                 <Input.TextArea
-                  rows={4}
-                  placeholder="請填寫您的寵物房型介紹資訊"
-                />
-              </Form.Item>
-
-              <Form.Item>
-                <Button
-                  type="primary"
-                  htmlType="submit"
-                  className="flex-center h-max w-full rounded-full border-2 border-second bg-second text-white"
-                >
-                  送出
-                </Button>
-              </Form.Item>
-            </Form>
-          </div>
-        </>
-      </MotionPopup>
-    </MotionFade>
-  );
-}
-
-export default Edit;
+                  rows={4

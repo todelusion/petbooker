@@ -59,20 +59,4 @@ function CmsRoom(): JSX.Element {
             key="Room"
             datas={datas}
             className="w-full"
-          />
-        )}
-
-        {isShow !== "" && room !== undefined && (
-          <Edit
-            title={`${isShow === "add" ? "新增寵物房型" : "編輯寵物房型"} `}
-            key="Edit"
-            onClick={() => setIsShow("")}
-            data={room}
-          />
-        )}
-      </AnimatePresence>
-    </div>
-  );
-}
-
-export default CmsRoom;
+    

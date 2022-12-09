@@ -16,7 +16,7 @@ function AccountMenu(): JSX.Element {
     switch (identity) {
       case "customer":
         return customerMenu;
-      case "Hotel":
+      case "hotel":
         return hotelMemberMenu;
       default:
         return customerMenu;

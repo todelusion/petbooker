@@ -43,3 +43,20 @@ export const RoomListSchema = z.array(
 );
 export type RoomList = z.infer<typeof RoomListSchema>;
 export type Room = RoomList[0];
+
+export const HotelInfoSchema =z.object({
+  result: z.object({
+    HotelName: z.string(),
+    HotelPhone: z.string(),
+    HotelArea: z.string(),
+    HotelAddress: z.string(),
+    HotelStartTime: z.string(),
+    HotelEndTime: z.string(),
+    HotelInfo: z.string(),
+    FoodTypes: z.array(z.string()),
+    ServiceTypes: z.array(z.string()),
+    HotelPhotos: z.array(z.string()),
+    HotelThumbnail: z.string()
+  })
+})
+export type HotelInfo  = z.infer<typeof HotelInfoSchema>;
