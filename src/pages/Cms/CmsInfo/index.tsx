@@ -6,7 +6,7 @@ import React, {
   useState,
 } from "react";
 import { Button, Form, Input, Select, TimePicker } from "antd";
-import type { UploadFile } from "antd/es/upload/interface";
+import type { RcFile, UploadFile } from "antd/es/upload/interface";
 import { useNavigate } from "react-router-dom";
 import UploadImage from "../../../components/UploadImage";
 import { CountyList } from "../../../types/schema";
@@ -15,6 +15,14 @@ import AntdUploadImage from "./AntdUploadImage";
 import getCountry from "../../../utils/getCountry";
 import useFilter from "../../../hooks/useFilter";
 import UserAuth from "../../../context/UserAuthContext";
+
+const getBase64 = async (file: RcFile): Promise<string> =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result as string);
+    reader.onerror = (error) => reject(error);
+  });
 
 type LayoutType = Parameters<typeof Form>[0]["layout"];
 function CmsInfo(): JSX.Element {
@@ -43,7 +51,7 @@ function CmsInfo(): JSX.Element {
       rangeTimeValue[0].format("HH:mm"),
       rangeTimeValue[1].format("HH:mm"),
     ];
-
+    //所有input欄位的資料
     const result = {
       ...fieldsValue,
       HotelBusinessTime: [...HotelBusinessTime],
@@ -52,12 +60,8 @@ function CmsInfo(): JSX.Element {
     };
     delete result["range-time-picker"];
 
-    const PhotoFormData = new FormData();
-    if (ImagefileList.length > 0) {
-      ImagefileList.forEach((file) =>
-        PhotoFormData.append("file", file.originFileObj)
-      );
-    }
+    //將旅館照片打包成base64格式
+    const base64Image = ImagefileList?.map((file) => file.thumbUrl);
 
     await axios
       .put(putInfo, result, {
@@ -65,13 +69,14 @@ function CmsInfo(): JSX.Element {
       })
       .then((res) => console.log("傳送資訊成功", res))
       .catch((err) => console.log("傳送資訊失敗", err));
-    await axios
-      .post(postImage, PhotoFormData, {
-        headers: { Authorization: `Bearer ${authToken}` },
-      })
-      .then((res) => console.log("傳送照片成功", res))
-      .catch((err) => console.log("傳送照片失敗", err));
-    if (Thumbnail?.has("Image") ?? false) {
+
+    // await axios
+    //   .post(postImage, base64Image, {
+    //     headers: { Authorization: `Bearer ${authToken}` },
+    //   })
+    //   .then((res) => console.log("傳送照片成功", res))
+    //   .catch((err) => console.log("傳送照片失敗", err));
+    if (Thumbnail?.get("image")) {
       await axios
         .post(postThumbnail, Thumbnail, {
           headers: { Authorization: `Bearer ${authToken}` },
@@ -101,11 +106,13 @@ function CmsInfo(): JSX.Element {
     }
     return event?.fileList;
   };
+
   useLayoutEffect(() => {
     if (authToken === "") {
       navigate("/home");
     }
   });
+
   console.log(Thumbnail?.get("Image"));
   return (
     <div className="relative flex flex-col ">

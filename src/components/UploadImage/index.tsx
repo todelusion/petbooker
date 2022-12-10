@@ -2,6 +2,7 @@ import axios from "axios";
 import { log } from "console";
 import React, { ChangeEvent, useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
+import { string } from "zod";
 import { UploadRoomPath } from "../../img/icons";
 
 type Type = "Avatar" | "Room";
@@ -66,9 +67,17 @@ function UploadImage({
   // 接收上傳圖片
   const handleSetImage = (event: ChangeEvent<HTMLInputElement>): void => {
     const { files } = event.target;
-    if (files === null) return;
+    if (files === null || files === undefined) return;
     console.log(files);
 
+    //將file轉換成base64 字符串...
+    // const reader = new FileReader();
+    // reader.readAsDataURL(files[0]);
+    // reader.onloadend = () => {
+    //   const base64 = reader.result;
+    //   if (typeof base64 === "string") setThumbnail(base64);
+    // };
+    //將file轉換成base64 字符串...
     const formdata = new FormData();
     formdata.append("Image", files[0]);
     setThumbnail(formdata);
