@@ -9,25 +9,22 @@ import { Button, Form, Input, Select, TimePicker } from "antd";
 import type { RcFile, UploadFile } from "antd/es/upload/interface";
 import { useNavigate } from "react-router-dom";
 import UploadImage from "../../../components/UploadImage";
-import { CountyList } from "../../../types/schema";
+import { CountyList, HotelInfo, HotelInfoSchema } from "../../../types/schema";
 import Filter from "../../../containers/Filter";
 import AntdUploadImage from "./AntdUploadImage";
 import getCountry from "../../../utils/getCountry";
 import useFilter from "../../../hooks/useFilter";
 import UserAuth from "../../../context/UserAuthContext";
-
-const getBase64 = async (file: RcFile): Promise<string> =>
-  new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => resolve(reader.result as string);
-    reader.onerror = (error) => reject(error);
-  });
+import fetchHotelInfo from "../../../utils/api/hotelInfo";
+import { useQuery } from "@tanstack/react-query";
 
 type LayoutType = Parameters<typeof Form>[0]["layout"];
+
 function CmsInfo(): JSX.Element {
+  //若無Token則返回/home
   const { authToken } = useContext(UserAuth);
   const navigate = useNavigate();
+
   // 引入antd Form
   const [form] = Form.useForm();
   const [formLayout, setFormLayout] = useState<LayoutType>("horizontal");
@@ -37,12 +34,26 @@ function CmsInfo(): JSX.Element {
   const { Services, Facilities, Specials, FoodTypes } = useFilter();
   // uploadImage
   const [ImagefileList, setImageFileList] = useState<UploadFile[]>([]);
+  const [defaultImagefileList, setdefaultImagefileList] = useState("");
   const [Thumbnail, setThumbnail] = useState<FormData>();
   const defaultThumbnail: null | string = null;
+
   // 請求網址
+  const getInfo = "https://petcity.rocket-coding.com/hotel";
   const putInfo = "https://petcity.rocket-coding.com/hotel";
   const postImage = "https://petcity.rocket-coding.com/hotel/uploadhotelphotos";
   const postThumbnail = "https://petcity.rocket-coding.com/hotel/uploadprofile";
+
+  //獲取資料
+  const { data } = useQuery(["Info"], async () => {
+    const response = await axios.get(getInfo, {
+      headers: { Authorization: `Bearer ${authToken}` },
+    });
+    return HotelInfoSchema.parse(response.data.result);
+  });
+  // const {FoodTypes,HotelEndTime}=data
+  console.log(data?.HotelEndTime);
+
   // antd表單驗證成功時
   const onFinish = async (fieldsValue: any): Promise<void> => {
     // 將Timepicker 轉換格式
@@ -51,6 +62,7 @@ function CmsInfo(): JSX.Element {
       rangeTimeValue[0].format("HH:mm"),
       rangeTimeValue[1].format("HH:mm"),
     ];
+
     //所有input欄位的資料
     const result = {
       ...fieldsValue,
@@ -76,7 +88,7 @@ function CmsInfo(): JSX.Element {
     //   })
     //   .then((res) => console.log("傳送照片成功", res))
     //   .catch((err) => console.log("傳送照片失敗", err));
-    if (Thumbnail?.get("image")) {
+    if (Thumbnail?.has("Image") ?? false) {
       await axios
         .post(postThumbnail, Thumbnail, {
           headers: { Authorization: `Bearer ${authToken}` },
@@ -113,7 +125,6 @@ function CmsInfo(): JSX.Element {
     }
   });
 
-  console.log(Thumbnail?.get("Image"));
   return (
     <div className="relative flex flex-col ">
       <div className="mb-10 flex justify-center ">

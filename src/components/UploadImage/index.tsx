@@ -68,7 +68,6 @@ function UploadImage({
   const handleSetImage = (event: ChangeEvent<HTMLInputElement>): void => {
     const { files } = event.target;
     if (files === null || files === undefined) return;
-    console.log(files);
 
     //將file轉換成base64 字符串...
     // const reader = new FileReader();
@@ -77,7 +76,8 @@ function UploadImage({
     //   const base64 = reader.result;
     //   if (typeof base64 === "string") setThumbnail(base64);
     // };
-    //將file轉換成base64 字符串...
+
+    //將file轉換成formData
     const formdata = new FormData();
     formdata.append("Image", files[0]);
     setThumbnail(formdata);
