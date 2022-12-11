@@ -47,7 +47,6 @@ function Button({
       onClick={() => {
         onNavigate();
         if (onClick === undefined) return;
-        console.log("test");
         onClick();
       }}
       className={`${renderButtonPropsType()} ${className} flex-center h-max rounded-full`}

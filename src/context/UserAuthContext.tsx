@@ -11,7 +11,7 @@ interface UserAuthProps {
 }
 const UserAuth = createContext({
   authToken: "",
-  identity: "" as "customer" | "Hotel",
+  identity: "",
   setAuthToken: (() => {}) as React.Dispatch<SetStateAction<string>>,
   setIdentity: (() => {}) as React.Dispatch<SetStateAction<string>>,
 });
