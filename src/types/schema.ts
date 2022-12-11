@@ -45,17 +45,24 @@ export type RoomList = z.infer<typeof RoomListSchema>;
 export type Room = RoomList[0];
 
 export const HotelInfoSchema = z.object({
-      HotelName: z.string(),
-    HotelPhone: z.string(),
-    HotelArea: z.string(),
-    HotelAddress: z.string(),
-    HotelStartTime: z.string(),
-    HotelEndTime: z.string(),
-    HotelInfo: z.string(),
-    FoodTypes: z.array(z.string()),
-    ServiceTypes: z.array(z.string()),
-    HotelPhotos: z.array(z.string()),
-    HotelThumbnail: z.string()
+  HotelName:z.string(),
+  HotelPhone:z.union([z.string(),z.null()]) ,
+  HotelArea: z.union([z.number(),z.null()]),
+  HotelAddress: z.union([z.string(),z.null()]),
+  HotelStartTime: z.union([z.string(),z.null()]),
+  HotelEndTime: z.union([z.string(),z.null()]),
+  HotelInfo: z.union([z.string(),z.null()]),
+  FoodTypes:  z.union([z.array(z.string()),z.null()]),
+  ServiceTypes:z.union([z.array(z.string()),z.null()]),
+  HotelPhotos: z.array(
+    z.union( [z.object({
+      ImageId: z.number(),
+      Base64: z.string(),
+      Extension: z.string()
+    }),z.unknown()])
+   
+  ),
+  HotelThumbnail:z.union([z.string(),z.null()])
  })
 
 export type HotelInfo = z.infer<typeof HotelInfoSchema>;
