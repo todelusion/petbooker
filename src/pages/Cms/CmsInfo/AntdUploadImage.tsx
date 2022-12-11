@@ -9,6 +9,7 @@ import UserAuth from "../../../context/UserAuthContext";
 interface IAntdUploadImageProps {
   ImagefileList: UploadFile[];
   setImageFileList: React.Dispatch<React.SetStateAction<UploadFile[]>>;
+  // defaultFileList:{}
 }
 const getBase64 = async (file: RcFile): Promise<string> =>
   new Promise((resolve, reject) => {
@@ -23,6 +24,7 @@ function AntdUploadImage(props: IAntdUploadImageProps): JSX.Element {
   const [previewImage, setPreviewImage] = useState("");
   const [previewTitle, setPreviewTitle] = useState("");
   const { ImagefileList, setImageFileList } = props;
+  // const { defaultFileList } = props;
   // const { authToken } = useContext(UserAuth);
 
   const handleCancel = (): void => setPreviewOpen(false);
@@ -40,7 +42,7 @@ function AntdUploadImage(props: IAntdUploadImageProps): JSX.Element {
     setPreviewTitle(result);
   };
 
-  const handleChange: UploadProps["onChange"] = ({ fileList: newFileList }) =>
+  const handleChange: UploadProps["onChange"] = ({ fileList: newFileList }) => {
     // const PhotoFormData = new FormData();
     // ImagefileList.forEach((file) =>
     //   PhotoFormData.append("file", file.originFileObj)
@@ -48,6 +50,11 @@ function AntdUploadImage(props: IAntdUploadImageProps): JSX.Element {
     // console.log(PhotoFormData);
 
     setImageFileList(newFileList);
+  };
+
+  const handleRemove = (file: UploadFile) => {
+    console.log(file.uid);
+  };
   const uploadButton = (
     <div>
       <PlusOutlined />
@@ -62,8 +69,10 @@ function AntdUploadImage(props: IAntdUploadImageProps): JSX.Element {
         fileList={ImagefileList}
         onPreview={handlePreview}
         onChange={handleChange}
+        onRemove={handleRemove}
         maxCount={5}
         beforeUpload={() => false}
+        // defaultFileList={defaultFileList}
       >
         {ImagefileList.length >= 5 ? null : uploadButton}
       </Upload>
