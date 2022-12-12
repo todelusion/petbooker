@@ -62,7 +62,7 @@ function CmsInfo(): JSX.Element {
   const { Services, Facilities, Specials, FoodTypes } = useFilter();
   // uploadImage
   const [ImagefileList, setImageFileList] = useState<UploadFile[]>();
-  const [DelImage, setDelImage] = useState<number[]>();
+  const [DelImage, setDelImage] = useState<number[]>([]);
   const [Thumbnail, setThumbnail] = useState<FormData>();
   const defaultThumbnail: string | undefined | null = data?.HotelThumbnail;
   console.log(DelImage);
