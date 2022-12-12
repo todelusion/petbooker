@@ -12,7 +12,7 @@ interface IUploadImageProps {
   className?: string;
   onChange: (file: File) => void;
   defaultImage: string | null | undefined;
-  setThumbnail: React.Dispatch<React.SetStateAction<FormData | undefined>>;
+  setThumbnail?: React.Dispatch<React.SetStateAction<FormData | undefined>>;
 }
 
 const renderUploadImage = (
@@ -21,18 +21,31 @@ const renderUploadImage = (
   defaultImage?: string | null
 ): JSX.Element => {
   switch (type) {
-    case "Room":
-      return previewImage !== undefined ? (
-        <img
-          src={previewImage}
-          alt="previewImage"
-          className="h-80 w-full object-cover"
-        />
-      ) : (
+    case "Room": {
+      console.log();
+      if (previewImage !== undefined)
+        return (
+          <img
+            src={previewImage}
+            alt="previewImage"
+            className="h-80 w-full object-cover"
+          />
+        );
+      if (defaultImage !== null && defaultImage !== undefined)
+        return (
+          <img
+            src={defaultImage}
+            alt="defaultImage"
+            className="h-80 w-full object-cover"
+          />
+        );
+
+      return (
         <div className="flex-center h-80 w-full bg-slate-200">
           <p className="font-bold text-slate-700">上傳寵物房型照片</p>
         </div>
       );
+    }
     case "Avatar":
       // eslint-disable-next-line no-nested-ternary
       return previewImage !== undefined ? (
@@ -80,7 +93,8 @@ function UploadImage({
     //將file轉換成formData
     const formdata = new FormData();
     formdata.append("Image", files[0]);
-    setThumbnail(formdata);
+
+    if (setThumbnail !== undefined) setThumbnail(formdata);
 
     // 使用 onChange props的原因：UploadImage compoent會在各個地方出現，但是其對應的 POST路徑不同
     onChange(files[0]);

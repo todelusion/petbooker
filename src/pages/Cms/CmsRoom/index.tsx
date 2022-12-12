@@ -25,12 +25,12 @@ const useDisableScroll = (isEdit: boolean): void => {
 };
 
 function CmsRoom(): JSX.Element {
-  const [isShow, setIsShow] = useState("" as "edit" | "add" | "");
+  const [isShow, setIsShow] = useState<"POST" | "PUT">();
   const [room, setRoom] = useState<Room>();
   // console.log(room);
   const { authToken } = useContext(UserAuth);
 
-  useDisableScroll(isShow === "");
+  useDisableScroll(isShow !== undefined);
   const { data: datas } = useRoomList(authToken);
   // const roomList = useSetRoomList(data);
 
@@ -42,7 +42,7 @@ function CmsRoom(): JSX.Element {
         text="新增寵物房型"
         className="mb-4 w-max px-4 py-2"
         onClick={() => {
-          setIsShow("add");
+          setIsShow("POST");
         }}
       />
       <AnimatePresence>
@@ -53,7 +53,7 @@ function CmsRoom(): JSX.Element {
         ) : (
           <RoomCard
             onClick={(data) => {
-              setIsShow("edit");
+              setIsShow("PUT");
               setRoom(data);
             }}
             key="Room"
@@ -62,11 +62,20 @@ function CmsRoom(): JSX.Element {
           />
         )}
 
-        {isShow !== "" && room !== undefined && (
+        {isShow === "POST" && (
           <Edit
-            title={`${isShow === "add" ? "新增寵物房型" : "編輯寵物房型"} `}
-            key="Edit"
-            onClick={() => setIsShow("")}
+            type={isShow}
+            title="新增寵物房型"
+            key="EDIT"
+            onClick={() => setIsShow(undefined)}
+          />
+        )}
+        {isShow === "PUT" && (
+          <Edit
+            type={isShow}
+            title="編輯寵物房型"
+            key="EDIT"
+            onClick={() => setIsShow(undefined)}
             data={room}
           />
         )}

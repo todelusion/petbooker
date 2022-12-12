@@ -6,13 +6,13 @@ export const countySchema = z.array(
 
 export type CountyList = z.infer<typeof countySchema>;
 
-export const POSTRoomSchema = z.object({
+export const PostRoomSchema = z.object({
   RoomName: z.string(),
   PetType: z.string(),
   RoomPrice: z.string(),
   RoomInfo: z.string(),
 });
-export type TPostRoomSchema = z.infer<typeof POSTRoomSchema>;
+export type POSTRoom = z.infer<typeof PostRoomSchema>;
 
 export const GETRoomListSchema = z.object({
   Status: z.boolean(),

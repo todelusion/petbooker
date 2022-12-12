@@ -26,9 +26,28 @@ export const postRoom = async (
 
   return axios
     .post(`${baseURL}/hotel/room`, body, header)
+    .then((res) => {
+      console.log(res);
+      return res;
+    })
+    .catch((err) => {
+      console.log(err);
+      return err;
+    });
+};
+
+export const putRoom = async (
+  id: number,
+  body: TPostRoomSchema,
+  token: string
+): Promise<AxiosResponse<any, any>> => {
+  const header = new Header(token);
+  return axios
+    .put(`${baseURL}/hotel/room?roomId=${id}`, body, header)
     .then((res) => res)
     .catch((err) => err);
 };
+
 export const deleteRoom = async (
   id: number,
   token: string
@@ -47,7 +66,6 @@ export const useRoomList = (token: string) => {
     ["RoomList"],
     async () => {
       const res = await axios.get(`${baseURL}/hotel/room/list`, header);
-      console.log(res.data);
       return RoomListSchema.parse(res.data.roomList);
     },
     {
