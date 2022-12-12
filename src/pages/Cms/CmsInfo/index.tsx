@@ -2,40 +2,57 @@ import axios from "axios";
 import React, {
   ChangeEvent,
   useContext,
+  useEffect,
   useLayoutEffect,
   useState,
 } from "react";
 import { Button, Form, Input, Select, TimePicker } from "antd";
-import type { RcFile, UploadFile } from "antd/es/upload/interface";
+import type { UploadFile } from "antd/es/upload/interface";
 import { useNavigate } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+import dayjs from "dayjs";
+import Base from "antd/es/typography/Base";
 import UploadImage from "../../../components/UploadImage";
-import { CountyList, HotelInfo, HotelInfoSchema } from "../../../types/schema";
+import { CountyList, HotelInfoSchema } from "../../../types/schema";
 import Filter from "../../../containers/Filter";
 import AntdUploadImage from "./AntdUploadImage";
 import getCountry from "../../../utils/getCountry";
 import useFilter from "../../../hooks/useFilter";
 import UserAuth from "../../../context/UserAuthContext";
-
-import { useQuery } from "@tanstack/react-query";
 import useModal from "../../../hooks/useModal";
-import dayjs from "dayjs";
 
 type LayoutType = Parameters<typeof Form>[0]["layout"];
 
 function CmsInfo(): JSX.Element {
   const { dispatchPending } = useModal();
-  //若無Token則返回/home
+  // 若無Token則返回/home
   const { authToken } = useContext(UserAuth);
   const navigate = useNavigate();
-  //獲取資料
+  // 請求網址
+  const getInfo = "https://petcity.rocket-coding.com/hotel";
+  const putInfo = "https://petcity.rocket-coding.com/hotel";
+  const postImage = "https://petcity.rocket-coding.com/hotel/uploadhotelphotos";
+  const postThumbnail = "https://petcity.rocket-coding.com/hotel/uploadprofile";
+
+  const [defaultImagefileList, setdefaultImagefileList] = useState();
+
+  // 獲取資料
   const { data, isLoading, isSuccess } = useQuery(["Info"], async () => {
     const response = await axios.get(getInfo, {
       headers: { Authorization: `Bearer ${authToken}` },
     });
+    setdefaultImagefileList(
+      response.data.result.HotelPhotos.map((item) => ({
+        uid: item.ImageId,
+        thumbUrl: `data:image/png;base64,${item.Base64}`,
+        name: "image.png",
+        status: "done",
+        url: `${item.ImageUrl}`,
+      }))
+    );
     return HotelInfoSchema.parse(response.data.result);
   });
-  // const {FoodTypes,HotelEndTime}=data
-
+  console.log(defaultImagefileList);
   // 引入antd Form
   const [form] = Form.useForm();
   const [formLayout, setFormLayout] = useState<LayoutType>("horizontal");
@@ -44,22 +61,11 @@ function CmsInfo(): JSX.Element {
   // filter資料
   const { Services, Facilities, Specials, FoodTypes } = useFilter();
   // uploadImage
-  const [ImagefileList, setImageFileList] = useState<UploadFile[]>(
-    data?.HotelPhotos ?? []
-  );
-  console.log(ImagefileList);
-
-  const [defaultImagefileList, setdefaultImagefileList] = useState({
-    ...data?.HotelPhotos,
-  });
+  const [ImagefileList, setImageFileList] = useState<UploadFile[]>();
+  const [DelImage, setDelImage] = useState<number[]>();
   const [Thumbnail, setThumbnail] = useState<FormData>();
   const defaultThumbnail: string | undefined | null = data?.HotelThumbnail;
-
-  // 請求網址
-  const getInfo = "https://petcity.rocket-coding.com/hotel";
-  const putInfo = "https://petcity.rocket-coding.com/hotel";
-  const postImage = "https://petcity.rocket-coding.com/hotel/uploadhotelphotos";
-  const postThumbnail = "https://petcity.rocket-coding.com/hotel/uploadprofile";
+  console.log(DelImage);
 
   // antd表單驗證成功時
   const onFinish = async (fieldsValue: any): Promise<void> => {
@@ -70,7 +76,7 @@ function CmsInfo(): JSX.Element {
       rangeTimeValue[1].format("HH:mm"),
     ];
 
-    //所有input欄位的資料
+    // 所有input欄位的資料
     const result = {
       ...fieldsValue,
       HotelBusinessTime: [...HotelBusinessTime],
@@ -79,7 +85,7 @@ function CmsInfo(): JSX.Element {
     };
     delete result["range-time-picker"];
 
-    //將旅館照片打包成base64格式
+    // 將旅館照片打包成base64格式
     const AddImage = ImagefileList?.map((file) => ({
       Base64: file.thumbUrl?.split(",")[1],
       Extension: "png",
@@ -88,7 +94,7 @@ function CmsInfo(): JSX.Element {
 
     const postImagebae64 = {
       AddImage,
-      DelImage: [0],
+      DelImage,
     };
 
     await axios
@@ -140,6 +146,34 @@ function CmsInfo(): JSX.Element {
       navigate("/home");
     }
   }, []);
+  // useEffect(() => {
+  //   function setInitImage(): void {
+  //     if (isSuccess) {
+  //       // if (data?.HotelPhotos.length === 0) return;
+  //       data.HotelPhotos.forEach((item) => {
+  //         console.log(item.ImageId);
+  //       });
+  //       const resultAry = data.HotelPhotos.map((item) => ({
+  //         uid: item.ImageId,
+  //         thumbUrl: `data:image/png;base64,${item.Base64}`,
+  //         name: "image.png",
+  //         status: "done",
+  //         url: `${item.ImageUrl}`,
+  //       }));
+  //       setImageFileList(resultAry);
+  //       setImageFileList([
+  //         {
+  //           uid: "-1",
+  //           name: "image.png",
+  //           status: "done",
+  //           url: "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png",
+  //         },
+  //       ]);
+  //       console.log(resultAry);
+  //     }
+  //   }
+  //   setInitImage();
+  // }, []);
 
   return (
     <div className="relative flex flex-col ">
@@ -204,7 +238,7 @@ function CmsInfo(): JSX.Element {
               label="營業時間"
               rules={[{ required: true, message: "必填項目" }]}
               initialValue={
-                data.HotelEndTime
+                data.HotelEndTime != null
                   ? [
                       dayjs(data.HotelStartTime, "HH:mm"),
                       dayjs(data.HotelEndTime, "HH:mm"),
@@ -233,7 +267,9 @@ function CmsInfo(): JSX.Element {
               <AntdUploadImage
                 ImagefileList={ImagefileList}
                 setImageFileList={setImageFileList}
-                // defaultFileList={[data.HotelPhotos]}
+                defaultFileList={defaultImagefileList}
+                setDelImage={setDelImage}
+                DelImage={DelImage}
               />
             </Form.Item>
 

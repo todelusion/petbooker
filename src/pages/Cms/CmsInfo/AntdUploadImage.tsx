@@ -6,10 +6,20 @@ import type { UploadFile } from "antd/es/upload/interface";
 import axios from "axios";
 import UserAuth from "../../../context/UserAuthContext";
 
+// const defaultImagefileList = [
+//   {
+//     uid: "98",
+//     name: "image.png",
+//     status: "done",
+//     url: "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png",
+//   },
+// ];
 interface IAntdUploadImageProps {
   ImagefileList: UploadFile[];
   setImageFileList: React.Dispatch<React.SetStateAction<UploadFile[]>>;
-  // defaultFileList:{}
+  defaultFileList: Array<UploadFile<any>>;
+  setDelImage: React.Dispatch<React.SetStateAction<number[] | undefined>>;
+  DelImage: number[] | undefined;
 }
 const getBase64 = async (file: RcFile): Promise<string> =>
   new Promise((resolve, reject) => {
@@ -24,9 +34,8 @@ function AntdUploadImage(props: IAntdUploadImageProps): JSX.Element {
   const [previewImage, setPreviewImage] = useState("");
   const [previewTitle, setPreviewTitle] = useState("");
   const { ImagefileList, setImageFileList } = props;
-  // const { defaultFileList } = props;
+  const { defaultFileList, setDelImage, DelImage } = props;
   // const { authToken } = useContext(UserAuth);
-
   const handleCancel = (): void => setPreviewOpen(false);
 
   const handlePreview = async (file: UploadFile): Promise<void> => {
@@ -47,13 +56,26 @@ function AntdUploadImage(props: IAntdUploadImageProps): JSX.Element {
     // ImagefileList.forEach((file) =>
     //   PhotoFormData.append("file", file.originFileObj)
     // );
-    // console.log(PhotoFormData);
+    // console.log(newFileList);
+    // newFileList.forEach((item) => {
+    //   console.log(item?.thumbUrl);
+    // });
+
+    // const ary = newFileList.map((item) => item);
+    // console.log(ary);
+    // const resultary = ary.map((item) => item.thumbUrl?.split(",")[1]);
+    // console.log(resultary);
 
     setImageFileList(newFileList);
   };
 
   const handleRemove = (file: UploadFile) => {
-    console.log(file.uid);
+    if (DelImage?.length > 0) {
+      setDelImage((preventValue) => [
+        [...preventValue],
+        parseInt(file.uid, 10),
+      ]);
+    }
   };
   const uploadButton = (
     <div>
@@ -72,9 +94,9 @@ function AntdUploadImage(props: IAntdUploadImageProps): JSX.Element {
         onRemove={handleRemove}
         maxCount={5}
         beforeUpload={() => false}
-        // defaultFileList={defaultFileList}
+        defaultFileList={defaultFileList}
       >
-        {ImagefileList.length >= 5 ? null : uploadButton}
+        {ImagefileList?.length >= 5 ? null : uploadButton}
       </Upload>
       <Modal
         open={previewOpen}
