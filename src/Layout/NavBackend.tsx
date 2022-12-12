@@ -1,5 +1,5 @@
 import React, { useContext, useEffect } from "react";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import UserAuth from "../context/UserAuthContext";
 import useModal from "../hooks/useModal";
 
@@ -20,6 +20,8 @@ interface INavBackendProps {
 
 const useCheckIdentity = (): boolean => {
   const navigate = useNavigate();
+  const { pathname } = useLocation();
+  console.log(pathname);
   const { authToken, identity } = useContext(UserAuth);
   const { dispatchPending } = useModal();
   if (authToken === "") {
@@ -28,7 +30,7 @@ const useCheckIdentity = (): boolean => {
     navigate("/login");
     return false;
   }
-  if (identity === "customer") {
+  if (identity === "customer" && pathname.includes("/cms")) {
     dispatchPending({
       type: "IS_ERROR",
       payload: "您不是業主身分，請切換為業主帳號並繼續",

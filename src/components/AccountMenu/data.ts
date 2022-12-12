@@ -19,7 +19,7 @@ export const customerMenu = [
   {
     logo: creditCardPath,
     content: "我的寵物名片",
-    navigatePath: null,
+    navigatePath: "/customer/pet",
   },
   {
     logo: fileTextPath,

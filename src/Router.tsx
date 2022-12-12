@@ -19,6 +19,7 @@ import { FilterProvider } from "./context/FilterContext";
 import CmsOrder from "./pages/Cms/CmsOrder";
 import CustomerInfo from "./pages/Customer/CustomerInfo";
 import CmsRoom from "./pages/Cms/CmsRoom";
+import CustomerPet from "./pages/Customer/CustomerPet";
 
 export default function Router(): JSX.Element {
   const client = new QueryClient();
@@ -53,6 +54,7 @@ export default function Router(): JSX.Element {
           />
           <Route path="/customer" element={<NavBackend menus={customerMenu} />}>
             <Route path="/customer/info" element={<CustomerInfo />} />
+            <Route path="/customer/pet" element={<CustomerPet />} />
           </Route>
           <Route path="/login" element={<UserLogin />} />;
           <Route path="/regist" element={<UserRegist />} />;

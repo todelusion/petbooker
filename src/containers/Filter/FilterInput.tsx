@@ -33,6 +33,7 @@ interface IFilterList {
 interface IFilterInputProps {
   action: FilterAction["type"];
   filterList: IFilterList;
+  labelWidth?: string;
   onChange?: (e: React.MouseEvent<HTMLInputElement>) => void;
   required?: boolean;
   noContext?: boolean;
@@ -144,6 +145,7 @@ const dispatchContext = (
 
 function FilterInput({
   onChange,
+  labelWidth,
   required,
   noContext,
   action,
@@ -161,20 +163,6 @@ function FilterInput({
   };
   const formRef = useRef<HTMLFormElement>(null);
   const FilterContextProps = isUseContext();
-
-  // useInputRef(formRef);
-
-  // initInputArr.forEach((input) => {
-  //   const { checked: checkedValue, name, value } = input;
-  //   console.log({ checked: checkedValue, name, value });
-  // });
-
-  // useEffect(() => {
-  //   if (FilterContextProps === undefined) return;
-  //   initInputArr.forEach((initInput) => {
-  //     dispatchContext(initInput, FilterContextProps);
-  //   });
-  // }, []);
 
   const { keyname, title, type, contents } = filterList;
 
@@ -261,7 +249,11 @@ function FilterInput({
         className={horizontal === true ? "flex items-center" : ""}
       >
         {horizontal && (
-          <p className="relative mr-5 font-bold">
+          <p
+            className={`relative ${
+              labelWidth === undefined ? "mr-5" : labelWidth
+            }`}
+          >
             {title}
             {required && (
               <span className=" absolute -top-1 -left-3 text-lg text-[#ff4d4f]">
