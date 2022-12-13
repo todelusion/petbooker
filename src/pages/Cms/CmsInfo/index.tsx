@@ -38,9 +38,14 @@ function CmsInfo(): JSX.Element {
     useState<UploadFile[]>();
 
   const { data, isSuccess, isFetching } = useHotelInfo(authToken);
+  console.log(data);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
+    console.log("123");
+
     if (data !== undefined) {
+      console.log("觸發Effect");
+
       const result = data.HotelPhotos.map((item) => {
         if (item === null) return [{ uid: "", name: "" }];
         return {
@@ -123,32 +128,29 @@ function CmsInfo(): JSX.Element {
       DelImage,
     };
 
-    await axios
-      .put(putInfo, result, {
-        headers: { Authorization: `Bearer ${authToken}` },
-      })
-      .then((res) => console.log("傳送資訊成功", res))
-      .catch((err) => console.log("傳送資訊失敗", err));
+    await axios.put(putInfo, result, {
+      headers: { Authorization: `Bearer ${authToken}` },
+    });
+    // .then((res) => console.log("傳送資訊成功", res))
+    // .catch((err) => console.log("傳送資訊失敗", err));
 
-    await axios
-      .post(postImage, postImagebae64, {
-        headers: { Authorization: `Bearer ${authToken}` },
-      })
-      .then((res) => console.log("傳送照片成功", res))
-      .catch((err) => console.log("傳送照片失敗", err));
+    await axios.post(postImage, postImagebae64, {
+      headers: { Authorization: `Bearer ${authToken}` },
+    });
+    // .then((res) => console.log("傳送照片成功", res))
+    // .catch((err) => console.log("傳送照片失敗", err));
     if (Thumbnail?.has("Image") ?? false) {
-      await axios
-        .post(postThumbnail, Thumbnail, {
-          headers: { Authorization: `Bearer ${authToken}` },
-        })
-        .then((res) => console.log("傳送大頭成功", res))
-        .catch((err) => console.log("傳送大頭失敗", err));
+      await axios.post(postThumbnail, Thumbnail, {
+        headers: { Authorization: `Bearer ${authToken}` },
+      });
+      // .then((res) => console.log("傳送大頭成功", res))
+      // .catch((err) => console.log("傳送大頭失敗", err));
     }
-    await queryClient
-      .invalidateQueries(["Info"])
-      .catch((err) => console.log(err));
-    queryClient.removeQueries(["Info"]);
-    await queryClient.setQueryData(["Info"]);
+    await queryClient.invalidateQueries(["Info"]);
+    await queryClient.removeQueries(["Info"]);
+
+    // await queryClient.setQueryData(["Info"]);
+    // location.reload();
   };
 
   const onFinishFailed = (errorInfo: any): void => {
