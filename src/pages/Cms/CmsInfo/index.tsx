@@ -34,7 +34,9 @@ function CmsInfo(): JSX.Element {
   const postImage = "https://petcity.rocket-coding.com/hotel/uploadhotelphotos";
   const postThumbnail = "https://petcity.rocket-coding.com/hotel/uploadprofile";
 
-  const [defaultImagefileList, setdefaultImagefileList] = useState();
+  const [defaultImagefileList, setdefaultImagefileList] = useState<
+    object[] | undefined
+  >();
 
   // 獲取資料
   const { data, isLoading, isSuccess } = useQuery(["Info"], async () => {
@@ -61,7 +63,7 @@ function CmsInfo(): JSX.Element {
   // filter資料
   const { Services, Facilities, Specials, FoodTypes } = useFilter();
   // uploadImage
-  const [ImagefileList, setImageFileList] = useState<UploadFile[]>();
+  const [ImagefileList, setImageFileList] = useState<UploadFile[] | []>([]);
   const [DelImage, setDelImage] = useState<number[]>([]);
   const [Thumbnail, setThumbnail] = useState<FormData>();
   const defaultThumbnail: string | undefined | null = data?.HotelThumbnail;
@@ -128,7 +130,9 @@ function CmsInfo(): JSX.Element {
     <Form.Item name="areaid" noStyle initialValue={data?.HotelArea}>
       <Select style={{ width: 100 }}>
         {countrydata?.map((item) => (
-          <Select.Option value={item.Id}>{item.Areas}</Select.Option>
+          <Select.Option key={item.Id} value={item.Id}>
+            {item.Areas}
+          </Select.Option>
         ))}
       </Select>
     </Form.Item>
@@ -261,7 +265,7 @@ function CmsInfo(): JSX.Element {
             <Form.Item
               label="上傳圖片"
               valuePropName="fileList"
-              getValueFromEvent={normFile}
+              // getValueFromEvent={normFile}
               initialValue={data.HotelPhotos}
             >
               <AntdUploadImage

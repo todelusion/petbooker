@@ -14,13 +14,15 @@ import UserAuth from "../../../context/UserAuthContext";
 //     url: "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png",
 //   },
 // ];
+
 interface IAntdUploadImageProps {
   ImagefileList: UploadFile[];
   setImageFileList: React.Dispatch<React.SetStateAction<UploadFile[]>>;
-  defaultFileList: Array<UploadFile<any>>;
-  setDelImage: React.Dispatch<React.SetStateAction<number[] | undefined>>;
-  DelImage: number[] | undefined;
+  defaultFileList: object[] | undefined;
+  setDelImage: React.Dispatch<React.SetStateAction<number[]>>;
+  DelImage: number[];
 }
+
 const getBase64 = async (file: RcFile): Promise<string> =>
   new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -66,13 +68,17 @@ function AntdUploadImage(props: IAntdUploadImageProps): JSX.Element {
     // const resultary = ary.map((item) => item.thumbUrl?.split(",")[1]);
     // console.log(resultary);
 
+    console.log(newFileList);
     setImageFileList(newFileList);
   };
 
-  const handleRemove = (file: UploadFile) => {
-    console.log(file.uid);
+  const handleRemove = (file: UploadFile): void => {
+    console.log(typeof file.uid);
 
-    setDelImage((prventValue) => ([...prventValue, file.uid));
+    setDelImage((prventValue) => [
+      ...prventValue,
+      file.uid as unknown as number,
+    ]);
   };
   const uploadButton = (
     <div>
