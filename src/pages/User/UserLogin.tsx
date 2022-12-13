@@ -139,7 +139,7 @@ export default function UserLogin(): JSX.Element {
               <input
                 type="radio"
                 name="identify"
-                id="Hotel"
+                id="hotel"
                 value="hotel"
                 onChange={setidentity}
                 className="mr-2 h-5 w-5 cursor-pointer appearance-none rounded-full border-2 border-black duration-150 checked:border-4 checked:border-primary checked:ring-2 checked:ring-primary_Dark hover:border-primary"

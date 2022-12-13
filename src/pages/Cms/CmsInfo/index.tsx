@@ -9,18 +9,18 @@ import React, {
 import { Button, Form, Input, Select, TimePicker } from "antd";
 import type { UploadFile } from "antd/es/upload/interface";
 import { useNavigate } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import dayjs from "dayjs";
 import UploadImage from "../../../components/UploadImage";
-import { CountyList, HotelInfoSchema } from "../../../types/schema";
+import { CountyList } from "../../../types/schema";
 import Filter from "../../../containers/Filter";
 import AntdUploadImage from "./AntdUploadImage";
 import getCountry from "../../../utils/getCountry";
 import useFilter from "../../../hooks/useFilter";
 import UserAuth from "../../../context/UserAuthContext";
 import useModal from "../../../hooks/useModal";
-import { useRoomList } from "../../../utils/api/hotel";
 import { useHotelInfo } from "../../../utils/api/hotelInfo";
+import { LoadingCustom } from "../../../img/icons";
 
 type LayoutType = Parameters<typeof Form>[0]["layout"];
 
@@ -30,32 +30,28 @@ function CmsInfo(): JSX.Element {
   const { authToken } = useContext(UserAuth);
   const navigate = useNavigate();
   // 請求網址
-  const getInfo = "https://petcity.rocket-coding.com/hotel";
   const putInfo = "https://petcity.rocket-coding.com/hotel";
   const postImage = "https://petcity.rocket-coding.com/hotel/uploadhotelphotos";
   const postThumbnail = "https://petcity.rocket-coding.com/hotel/uploadprofile";
 
-  const [defaultImagefileList, setdefaultImagefileList] = useState<
-    object[] | undefined
-  >();
-  console.log(defaultImagefileList);
+  const [defaultImagefileList, setdefaultImagefileList] =
+    useState<UploadFile[]>();
 
   const { data, isSuccess, isFetching } = useHotelInfo(authToken);
-  console.log(data?.HotelPhotos);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (data !== undefined) {
       const result = data.HotelPhotos.map((item) => {
-        if (item === null) return [];
+        if (item === null) return [{ uid: "", name: "" }];
         return {
           uid: item.ImageId,
-          thumbUrl: `data:image/png;base64,${item.Base64}`,
           name: "image.png",
+          thumbUrl: `data:image/png;base64,${item.Base64}`,
           status: "done",
           url: item.ImageUrl,
         };
       });
-      setdefaultImagefileList(result);
+      setdefaultImagefileList(result as unknown as Array<UploadFile<any>>);
     }
   }, [data]);
 
@@ -78,7 +74,7 @@ function CmsInfo(): JSX.Element {
   // if (isFetching) {
   //   dispatchPending({ type: "IS_LOADING" });
   // }
-  console.log(defaultImagefileList);
+  console.log("defaultImagefileList", defaultImagefileList);
   // 引入antd Form
   const [form] = Form.useForm();
   const [formLayout, setFormLayout] = useState<LayoutType>("horizontal");
@@ -91,6 +87,7 @@ function CmsInfo(): JSX.Element {
   const [DelImage, setDelImage] = useState<number[]>([]);
   const [Thumbnail, setThumbnail] = useState<FormData>();
   const defaultThumbnail: string | undefined | null = data?.HotelThumbnail;
+  const queryClient = useQueryClient();
   // console.log(DelImage);
 
   // antd表單驗證成功時
@@ -107,16 +104,19 @@ function CmsInfo(): JSX.Element {
       ...fieldsValue,
       HotelBusinessTime: [...HotelBusinessTime],
       FoodTypes,
-      ServiceTypes: [...Services, ...Facilities, ...Specials, ...FoodTypes],
+      ServiceTypes: [...Services, ...Facilities, ...Specials],
     };
     delete result["range-time-picker"];
 
     // 將旅館照片打包成base64格式
-    const AddImage = ImagefileList?.map((file) => ({
+    const AddImage = ImagefileList?.filter(
+      (file) => typeof file.uid !== "number"
+    ).map((file) => ({
       Base64: file.thumbUrl?.split(",")[1],
       Extension: "png",
     }));
-    console.log(AddImage);
+
+    console.log(DelImage);
 
     const postImagebae64 = {
       AddImage,
@@ -144,7 +144,11 @@ function CmsInfo(): JSX.Element {
         .then((res) => console.log("傳送大頭成功", res))
         .catch((err) => console.log("傳送大頭失敗", err));
     }
-    navigate("/cms/info");
+    await queryClient
+      .invalidateQueries(["Info"])
+      .catch((err) => console.log(err));
+    queryClient.removeQueries(["Info"]);
+    await queryClient.setQueryData(["Info"]);
   };
 
   const onFinishFailed = (errorInfo: any): void => {
@@ -206,8 +210,10 @@ function CmsInfo(): JSX.Element {
 
   return (
     <div className="relative flex flex-col ">
-      {isFetching && <p>loading</p>}
-      {isSuccess && (
+      {isFetching && (
+        <LoadingCustom className="absolute left-1/2" color="bg-second" />
+      )}
+      {isSuccess && defaultImagefileList != null && (
         <>
           <div className="mb-10 flex justify-center ">
             <UploadImage
@@ -319,7 +325,17 @@ function CmsInfo(): JSX.Element {
               </Button>
             </Form.Item>
           </Form>
-          <Filter horizontal closePet closeRoomPrices className="my-5" />
+
+          <Filter
+            data={{
+              FoodTypes: data.FoodTypes ?? undefined,
+              ServiceTypes: data.ServiceTypes ?? undefined,
+            }}
+            horizontal
+            closePet
+            closeRoomPrices
+            className="my-5"
+          />
         </>
       )}
     </div>

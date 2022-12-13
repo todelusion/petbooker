@@ -72,7 +72,7 @@ export const HotelInfoSchema = z.object({
 // const b = z.union([z.number(), z.boolean()]);
 // const c = z.intersection(a, b);
 
-// type C = z.infer<typeof c>
+// type C = z.infer<typeof c>｀
 
 // const Person = z.object({
 //   name: z.string(),

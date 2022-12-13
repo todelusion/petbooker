@@ -6,14 +6,23 @@ import type { UploadFile } from "antd/es/upload/interface";
 import axios from "axios";
 import UserAuth from "../../../context/UserAuthContext";
 
-// const defaultImagefileList = [
-//   {
-//     uid: "98",
-//     name: "image.png",
-//     status: "done",
-//     url: "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png",
-//   },
-// ];
+const defaultImage = [
+  {
+    uid: "98",
+    name: "image.png",
+    status: "done",
+    url: "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png",
+  },
+];
+
+const defalutImageOwn = [
+  {
+    name: "image.png",
+    status: "done",
+    uid: 151,
+    url: "https://petcity.rocket-coding.com/upload/profile/HotelPhoto2bfd64eb-00b8-4219-9148-cf2b968c60f220221213022759.png",
+  },
+];
 
 interface IAntdUploadImageProps {
   ImagefileList: UploadFile[];
@@ -68,12 +77,11 @@ function AntdUploadImage(props: IAntdUploadImageProps): JSX.Element {
     // const resultary = ary.map((item) => item.thumbUrl?.split(",")[1]);
     // console.log(resultary);
 
-    console.log(newFileList);
     setImageFileList(newFileList);
   };
 
   const handleRemove = (file: UploadFile): void => {
-    console.log(typeof file.uid);
+    console.log(file.uid);
 
     setDelImage((prventValue) => [
       ...prventValue,
@@ -97,7 +105,9 @@ function AntdUploadImage(props: IAntdUploadImageProps): JSX.Element {
         onRemove={handleRemove}
         maxCount={5}
         beforeUpload={() => false}
-        defaultFileList={defaultFileList}
+        defaultFileList={defaultFileList as unknown as Array<UploadFile<any>>}
+        // defaultFileList={defaultImage as unknown as Array<UploadFile<any>>}
+        // defaultFileList={defalutImageOwn as unknown as Array<UploadFile<any>>}
       >
         {ImagefileList?.length >= 5 ? null : uploadButton}
       </Upload>
