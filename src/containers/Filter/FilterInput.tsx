@@ -181,15 +181,18 @@ function FilterInput({
             name={action}
             id={content.descript}
             value={content.value}
-            onClick={(e) => {
+            onClick={async (e) => {
               if (FilterContextProps !== undefined)
                 dispatchContext(
                   e.target as HTMLInputElement,
                   FilterContextProps
                 );
-              queryClient
-                .invalidateQueries(["HotelList"])
-                .catch((err) => console.log(err));
+              await tryCatch(async () =>
+                queryClient.removeQueries(["HotelList"])
+              );
+              // await tryCatch(async () =>
+              //   queryClient.invalidateQueries(["HotelList"])
+              // );
               if (onChange !== undefined) onChange(e);
             }}
             type={type}
@@ -217,9 +220,9 @@ function FilterInput({
               await tryCatch(async () =>
                 queryClient.removeQueries(["HotelList"])
               );
-              await tryCatch(async () =>
-                queryClient.invalidateQueries(["HotelList"])
-              );
+              // await tryCatch(async () =>
+              //   queryClient.invalidateQueries(["HotelList"])
+              // );
 
               if (onChange !== undefined) onChange(e);
             }}
@@ -237,15 +240,18 @@ function FilterInput({
             id={content.descript}
             value={content.value}
             defaultChecked={checked?.includes(content.value)}
-            onClick={(e) => {
+            onClick={async (e) => {
               if (FilterContextProps !== undefined)
                 dispatchContext(
                   e.target as HTMLInputElement,
                   FilterContextProps
                 );
-              queryClient
-                .invalidateQueries(["HotelList"])
-                .catch((err) => console.log(err));
+              await tryCatch(async () =>
+                queryClient.removeQueries(["HotelList"])
+              );
+              // await tryCatch(async () =>
+              //   queryClient.invalidateQueries(["HotelList"])
+              // );
               if (onChange !== undefined) onChange(e);
             }}
             type={type}

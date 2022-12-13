@@ -16,6 +16,7 @@ interface HotelCardProps {
 
 const HotelCard = React.memo(({ data }: HotelCardProps): JSX.Element => {
   console.log(typeof data[0]?.HotelPhoto);
+  console.log(data);
   if (data.length < 1) return <p>未找到適合您寵物的旅店</p>;
   return (
     <>
@@ -37,10 +38,10 @@ const HotelCard = React.memo(({ data }: HotelCardProps): JSX.Element => {
           </div>
           <ul className="flex basis-1/2 flex-col justify-between p-6 ">
             <li className="text-2xl font-bold">{hotel?.HotelName}</li>
-            <li className="mb-4 line-clamp-[7]">{fakeText}</li>
+            <li className="mb-4 line-clamp-[7]">{hotel?.HotelInfo}</li>
             <li className="inline-flex items-center justify-between">
               <p className="text-xl font-bold tracking-wide text-gray-600">
-                NTD&nbsp;&nbsp;{hotel?.HotelScore}
+                NTD&nbsp;&nbsp;{hotel?.RoomLowPrice}
                 &nbsp;起&nbsp;/日
               </p>
               <Button

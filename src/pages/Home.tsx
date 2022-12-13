@@ -20,8 +20,18 @@ function Home(): JSX.Element {
   const { selection, area } = useSearchBar();
   const { Facilities, FoodTypes, PetType, RoomPrices, Services, Specials } =
     useFilter();
-
-  console.log("renderHotelCard");
+  // console.log("renderHotelCard", {
+  //   AreaId: Number(area.value),
+  //   PetType,
+  //   FoodTypes,
+  //   ServiceTypes: [...Facilities, ...Services, ...Specials],
+  //   CheckInDate: format(selection.startDate, "yyyy/M/d"),
+  //   CheckOutDate: format(selection.endDate, "yyyy/M/d"),
+  //   PriceRange: RoomPrices,
+  //   Page: 1,
+  //   PageSize: 5,
+  // });
+  // console.log({ selection, area });
   const { data } = useHotelList({
     AreaId: Number(area.value),
     PetType,
@@ -33,7 +43,7 @@ function Home(): JSX.Element {
     Page: 1,
     PageSize: 5,
   });
-  console.log(data);
+  // console.log(data);
 
   return (
     <div className="relative flex w-full items-start justify-evenly px-20 pt-40">

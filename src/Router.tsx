@@ -1,5 +1,6 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Routes, Route } from "react-router-dom";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import ComponentProvicer from "./context";
 
 import Nav from "./Layout/Nav";
@@ -74,6 +75,7 @@ export default function Router(): JSX.Element {
           </Route>
         </Route>
       </Routes>
+      <ReactQueryDevtools />
     </QueryClientProvider>
   );
 }

@@ -7,10 +7,11 @@ import { baseURL } from "../index";
 
 export const useHotelList = (body: Filter) =>
   useQuery(["HotelList"], async () => {
+    console.log("in useHotelList Hooks", body);
     const res = await axios.post(`${baseURL}/hotel/hotelFilter`, body);
-    // console.log(res.data);
+    console.log(res);
     const result = HotelListSchema.safeParse(res.data);
-    if (result.success) {
+    if (result.success === true) {
       return result.data;
     }
     console.log(result.error.format());
