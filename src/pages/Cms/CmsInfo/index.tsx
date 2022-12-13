@@ -41,10 +41,10 @@ function CmsInfo(): JSX.Element {
   console.log(data);
 
   useEffect(() => {
-    console.log("123");
+    console.log("近來Efeect");
 
     if (data !== undefined) {
-      console.log("觸發Effect");
+      console.log("觸發setstae");
 
       const result = data.HotelPhotos.map((item) => {
         if (item === null) return [{ uid: "", name: "" }];
@@ -57,6 +57,7 @@ function CmsInfo(): JSX.Element {
         };
       });
       setdefaultImagefileList(result as unknown as Array<UploadFile<any>>);
+      setImageFileList(result as unknown as Array<UploadFile<any>>);
     }
   }, [data]);
 
@@ -133,19 +134,28 @@ function CmsInfo(): JSX.Element {
     });
     // .then((res) => console.log("傳送資訊成功", res))
     // .catch((err) => console.log("傳送資訊失敗", err));
-
-    await axios.post(postImage, postImagebae64, {
-      headers: { Authorization: `Bearer ${authToken}` },
-    });
-    // .then((res) => console.log("傳送照片成功", res))
-    // .catch((err) => console.log("傳送照片失敗", err));
-    if (Thumbnail?.has("Image") ?? false) {
-      await axios.post(postThumbnail, Thumbnail, {
+    try {
+      await axios.post(postImage, postImagebae64, {
         headers: { Authorization: `Bearer ${authToken}` },
       });
-      // .then((res) => console.log("傳送大頭成功", res))
-      // .catch((err) => console.log("傳送大頭失敗", err));
+      console.log("成功");
+    } catch (error) {
+      console.log("失敗", error);
     }
+
+    // .then((res) => console.log("傳送照片成功", res))
+    // .catch((err) => console.log("傳送照片失敗", err));
+    try {
+      if (Thumbnail?.has("Image") ?? false) {
+        await axios.post(postThumbnail, Thumbnail, {
+          headers: { Authorization: `Bearer ${authToken}` },
+        });
+        console.log("成功大頭貼上傳");
+      }
+    } catch (error) {
+      console.log("失敗", error);
+    }
+
     await queryClient.invalidateQueries(["Info"]);
     await queryClient.removeQueries(["Info"]);
 

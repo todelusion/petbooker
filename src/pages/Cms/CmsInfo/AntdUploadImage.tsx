@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { PlusOutlined } from "@ant-design/icons";
 import { Modal, Upload } from "antd";
 import type { RcFile, UploadProps } from "antd/es/upload";
@@ -46,7 +46,6 @@ function AntdUploadImage(props: IAntdUploadImageProps): JSX.Element {
   const [previewTitle, setPreviewTitle] = useState("");
   const { ImagefileList, setImageFileList } = props;
   const { defaultFileList, setDelImage, DelImage } = props;
-  // const { authToken } = useContext(UserAuth);
   const handleCancel = (): void => setPreviewOpen(false);
 
   const handlePreview = async (file: UploadFile): Promise<void> => {
@@ -71,22 +70,23 @@ function AntdUploadImage(props: IAntdUploadImageProps): JSX.Element {
     // newFileList.forEach((item) => {
     //   console.log(item?.thumbUrl);
     // });
-
     // const ary = newFileList.map((item) => item);
     // console.log(ary);
     // const resultary = ary.map((item) => item.thumbUrl?.split(",")[1]);
     // console.log(resultary);
-
     setImageFileList(newFileList);
   };
 
   const handleRemove = (file: UploadFile): void => {
+    // const result = file.thumbUrl?.split(",")[1];
+    // defaultFileList;
     console.log(file.uid);
 
     setDelImage((prventValue) => [
       ...prventValue,
       file.uid as unknown as number,
     ]);
+    console.log(DelImage);
   };
   const uploadButton = (
     <div>
@@ -94,22 +94,28 @@ function AntdUploadImage(props: IAntdUploadImageProps): JSX.Element {
       <div style={{ marginTop: 8 }}>上傳圖片</div>
     </div>
   );
-
   return (
     <>
       <Upload
         listType="picture-card"
+        // fileList={defaultFileList as unknown as Array<UploadFile<any>>}
         fileList={ImagefileList}
         onPreview={handlePreview}
         onChange={handleChange}
         onRemove={handleRemove}
         maxCount={5}
         beforeUpload={() => false}
-        defaultFileList={defaultFileList as unknown as Array<UploadFile<any>>}
+        // defaultFileList={defaultFileList as unknown as Array<UploadFile<any>>}
         // defaultFileList={defaultImage as unknown as Array<UploadFile<any>>}
         // defaultFileList={defalutImageOwn as unknown as Array<UploadFile<any>>}
       >
-        {ImagefileList?.length >= 5 ? null : uploadButton}
+        {(
+          defaultFileList?.length
+            ? defaultFileList.length === 5 && ImagefileList?.length >= 5
+            : 0
+        )
+          ? null
+          : uploadButton}
       </Upload>
       <Modal
         open={previewOpen}
