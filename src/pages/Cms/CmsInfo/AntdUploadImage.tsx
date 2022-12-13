@@ -72,7 +72,7 @@ function AntdUploadImage(props: IAntdUploadImageProps): JSX.Element {
   const handleRemove = (file: UploadFile) => {
     console.log(file.uid);
 
-    setDelImage((prventValue) => ([...prventValue, file.uid));
+    setDelImage((prventValue) => [...prventValue, file.uid]);
   };
   const uploadButton = (
     <div>

@@ -11,7 +11,6 @@ import type { UploadFile } from "antd/es/upload/interface";
 import { useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import dayjs from "dayjs";
-import Base from "antd/es/typography/Base";
 import UploadImage from "../../../components/UploadImage";
 import { CountyList, HotelInfoSchema } from "../../../types/schema";
 import Filter from "../../../containers/Filter";
@@ -37,7 +36,7 @@ function CmsInfo(): JSX.Element {
   const [defaultImagefileList, setdefaultImagefileList] = useState();
 
   // 獲取資料
-  const { data, isLoading, isSuccess } = useQuery(["Info"], async () => {
+  const { data, isFetching, isSuccess } = useQuery(["Info"], async () => {
     const response = await axios.get(getInfo, {
       headers: { Authorization: `Bearer ${authToken}` },
     });
@@ -52,6 +51,9 @@ function CmsInfo(): JSX.Element {
     );
     return HotelInfoSchema.parse(response.data.result);
   });
+  // if (isFetching) {
+  //   dispatchPending({ type: "IS_LOADING" });
+  // }
   console.log(defaultImagefileList);
   // 引入antd Form
   const [form] = Form.useForm();
@@ -118,6 +120,7 @@ function CmsInfo(): JSX.Element {
         .then((res) => console.log("傳送大頭成功", res))
         .catch((err) => console.log("傳送大頭失敗", err));
     }
+    navigate("/cms/info");
   };
 
   const onFinishFailed = (errorInfo: any): void => {
