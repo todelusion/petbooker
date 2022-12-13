@@ -64,6 +64,7 @@ function AccountMenu(): JSX.Element {
                     toggleAccountMenuSet(false);
                     if (item.navigatePath === "/home") {
                       setAuthToken("");
+                      localStorage.setItem("token", "");
                       navigate(item.navigatePath);
                       return;
                     }

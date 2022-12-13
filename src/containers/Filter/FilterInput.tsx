@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
+import { useQueryClient } from "@tanstack/react-query";
 import React, {
   LegacyRef,
   MutableRefObject,
@@ -14,6 +15,7 @@ import type {
   IFilterContextProps,
 } from "../../context/FilterContext";
 import useFilter from "../../hooks/useFilter";
+import { tryCatch } from "../../utils";
 
 interface Content {
   value: string;
@@ -47,7 +49,7 @@ const dispatchContext = (
   filterContextProps: IFilterContextProps
 ): void => {
   const { value, checked, name } = element;
-  console.log({ value, checked, name });
+  // console.log({ value, checked, name });
   if (filterContextProps === undefined) return;
   const {
     filterDispatch,
@@ -161,6 +163,7 @@ function FilterInput({
     // eslint-disable-next-line react-hooks/rules-of-hooks
     return useFilter();
   };
+  const queryClient = useQueryClient();
   const formRef = useRef<HTMLFormElement>(null);
   const FilterContextProps = isUseContext();
 
@@ -184,6 +187,9 @@ function FilterInput({
                   e.target as HTMLInputElement,
                   FilterContextProps
                 );
+              queryClient
+                .invalidateQueries(["HotelList"])
+                .catch((err) => console.log(err));
               if (onChange !== undefined) onChange(e);
             }}
             type={type}
@@ -202,12 +208,19 @@ function FilterInput({
             name={keyname}
             id={content.descript}
             value={content.value}
-            onClick={(e: React.MouseEvent<HTMLInputElement>) => {
+            onClick={async (e: React.MouseEvent<HTMLInputElement>) => {
               if (FilterContextProps !== undefined)
                 dispatchContext(
                   e.target as HTMLInputElement,
                   FilterContextProps
                 );
+              await tryCatch(async () =>
+                queryClient.removeQueries(["HotelList"])
+              );
+              await tryCatch(async () =>
+                queryClient.invalidateQueries(["HotelList"])
+              );
+
               if (onChange !== undefined) onChange(e);
             }}
             type={type}
@@ -230,6 +243,9 @@ function FilterInput({
                   e.target as HTMLInputElement,
                   FilterContextProps
                 );
+              queryClient
+                .invalidateQueries(["HotelList"])
+                .catch((err) => console.log(err));
               if (onChange !== undefined) onChange(e);
             }}
             type={type}

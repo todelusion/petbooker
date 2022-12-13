@@ -30,7 +30,7 @@ export const AxiosTryCatch = async <T>(
 
 export const tryCatch = async <T>(
   callback: () => Promise<T>,
-  defaultValue: T
+  defaultValue?: T
 ): Promise<T | undefined> => {
   try {
     return await callback();
