@@ -1,7 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
 import React from "react";
 import Button from "../Button";
 import { fakeText, Hotels as hotelList } from "./data";
+
+// function fetchHomeCard (){
+//   axios.get('')
+// }
 
 const HotelCard = React.memo((): JSX.Element => {
   console.log("renderHotelCard");

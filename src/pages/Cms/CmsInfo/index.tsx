@@ -11,7 +11,6 @@ import type { UploadFile } from "antd/es/upload/interface";
 import { useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import dayjs from "dayjs";
-import Base from "antd/es/typography/Base";
 import UploadImage from "../../../components/UploadImage";
 import { CountyList, HotelInfoSchema } from "../../../types/schema";
 import Filter from "../../../containers/Filter";
@@ -20,6 +19,8 @@ import getCountry from "../../../utils/getCountry";
 import useFilter from "../../../hooks/useFilter";
 import UserAuth from "../../../context/UserAuthContext";
 import useModal from "../../../hooks/useModal";
+import { useRoomList } from "../../../utils/api/hotel";
+import { useHotelInfo } from "../../../utils/api/hotelInfo";
 
 type LayoutType = Parameters<typeof Form>[0]["layout"];
 
@@ -37,23 +38,46 @@ function CmsInfo(): JSX.Element {
   const [defaultImagefileList, setdefaultImagefileList] = useState<
     object[] | undefined
   >();
+  console.log(defaultImagefileList);
+
+  const { data, isSuccess, isFetching } = useHotelInfo(authToken);
+  console.log(data?.HotelPhotos);
+
+  useEffect(() => {
+    if (data !== undefined) {
+      const result = data.HotelPhotos.map((item) => {
+        if (item === null) return [];
+        return {
+          uid: item.ImageId,
+          thumbUrl: `data:image/png;base64,${item.Base64}`,
+          name: "image.png",
+          status: "done",
+          url: item.ImageUrl,
+        };
+      });
+      setdefaultImagefileList(result);
+    }
+  }, [data]);
 
   // 獲取資料
-  const { data, isLoading, isSuccess } = useQuery(["Info"], async () => {
-    const response = await axios.get(getInfo, {
-      headers: { Authorization: `Bearer ${authToken}` },
-    });
-    setdefaultImagefileList(
-      response.data.result.HotelPhotos.map((item) => ({
-        uid: item.ImageId,
-        thumbUrl: `data:image/png;base64,${item.Base64}`,
-        name: "image.png",
-        status: "done",
-        url: `${item.ImageUrl}`,
-      }))
-    );
-    return HotelInfoSchema.parse(response.data.result);
-  });
+  // const { data, isFetching, isSuccess } = useQuery(["Info"], async () => {
+  //   const response = await axios.get(getInfo, {
+  //     headers: { Authorization: `Bearer ${authToken}` },
+  //   });
+  //   setdefaultImagefileList(
+  //     response.data.result.HotelPhotos.map((item) => ({
+  //       uid: item.ImageId,
+  //       thumbUrl: `data:image/png;base64,${item.Base64}`,
+  //       name: "image.png",
+  //       status: "done",
+  //       url: `${item.ImageUrl}`,
+  //     }))
+  //   );
+  //   return HotelInfoSchema.parse(response.data.result);
+  // });
+  // if (isFetching) {
+  //   dispatchPending({ type: "IS_LOADING" });
+  // }
   console.log(defaultImagefileList);
   // 引入antd Form
   const [form] = Form.useForm();
@@ -63,11 +87,11 @@ function CmsInfo(): JSX.Element {
   // filter資料
   const { Services, Facilities, Specials, FoodTypes } = useFilter();
   // uploadImage
-  const [ImagefileList, setImageFileList] = useState<UploadFile[] | []>([]);
+  const [ImagefileList, setImageFileList] = useState<UploadFile[]>();
   const [DelImage, setDelImage] = useState<number[]>([]);
   const [Thumbnail, setThumbnail] = useState<FormData>();
   const defaultThumbnail: string | undefined | null = data?.HotelThumbnail;
-  console.log(DelImage);
+  // console.log(DelImage);
 
   // antd表單驗證成功時
   const onFinish = async (fieldsValue: any): Promise<void> => {
@@ -120,6 +144,7 @@ function CmsInfo(): JSX.Element {
         .then((res) => console.log("傳送大頭成功", res))
         .catch((err) => console.log("傳送大頭失敗", err));
     }
+    navigate("/cms/info");
   };
 
   const onFinishFailed = (errorInfo: any): void => {
@@ -181,18 +206,20 @@ function CmsInfo(): JSX.Element {
 
   return (
     <div className="relative flex flex-col ">
-      <div className="mb-10 flex justify-center ">
-        <UploadImage
-          type="Avatar"
-          onChange={(event) => {
-            console.log(event);
-          }}
-          defaultImage={defaultThumbnail}
-          setThumbnail={setThumbnail}
-        />
-      </div>
+      {isFetching && <p>loading</p>}
       {isSuccess && (
         <>
+          <div className="mb-10 flex justify-center ">
+            <UploadImage
+              type="Avatar"
+              onChange={(event) => {
+                console.log(event);
+              }}
+              defaultImage={defaultThumbnail}
+              setThumbnail={setThumbnail}
+            />
+          </div>
+
           <Form
             labelCol={{ span: 4 }}
             wrapperCol={{ span: 14 }}
@@ -265,7 +292,7 @@ function CmsInfo(): JSX.Element {
             <Form.Item
               label="上傳圖片"
               valuePropName="fileList"
-              // getValueFromEvent={normFile}
+              getValueFromEvent={normFile}
               initialValue={data.HotelPhotos}
             >
               <AntdUploadImage
