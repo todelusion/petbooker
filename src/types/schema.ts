@@ -54,6 +54,37 @@ export const HotelListSchema = z.object({
   Nowpage: z.number(),
 });
 
+export const HotelSchema = z.object({
+  Hotel: z.array(
+    z.object({
+      HotelId: z.number(),
+      HotelPhoto: z.array(z.string()),
+      HotelScore: z.number(),
+      HotelName: z.string(),
+      HotelInfo: z.string(),
+      HotelService: z.array(z.string()),
+      HotelComment: z.array(
+        z.object({
+          UserName: z.union([z.null(), z.string()]),
+          UserPhoto: z.union([z.null(), z.string()]),
+          Score: z.number(),
+          Comment: z.union([z.null(), z.string()]),
+        })
+      ),
+      Room: z.array(
+        z.object({
+          Id: z.number(),
+          RoomPhoto: z.string(),
+          RoomName: z.string(),
+          PetType: z.string(),
+          RoomPrice: z.number(),
+          RoomInfo: z.string(),
+        })
+      ),
+    })
+  ),
+});
+
 export const FilterSchema = z.object({
   AreaId: z.number(),
   PetType: z.string(),
@@ -65,6 +96,8 @@ export const FilterSchema = z.object({
   Page: z.number(),
   PageSize: z.number(),
 });
+
+export type Hotel = z.infer<typeof HotelSchema>;
 
 export type CountyList = z.infer<typeof countySchema>;
 

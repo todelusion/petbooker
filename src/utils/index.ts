@@ -1,6 +1,45 @@
 import { AxiosResponse } from "axios";
+import {
+  serviceLists,
+  facilitiesLists,
+  specialsLists,
+} from "../containers/Filter/data";
 
 export const baseURL = "https://petcity.rocket-coding.com";
+
+export const parseServiceTypes = (
+  ServiceTypes: string[]
+): {
+  Services: string[];
+  Facilities: string[];
+  Specials: string[];
+} => {
+  const servicesInputValue = [...serviceLists.contents].map((obj) => obj.value);
+  const facilitiesInputValue = [...facilitiesLists.contents].map(
+    (obj) => obj.value
+  );
+  const specialsInputValue = [...specialsLists.contents].map(
+    (obj) => obj.value
+  );
+
+  const Services = ServiceTypes.filter((item) =>
+    servicesInputValue.includes(item)
+  );
+
+  const Facilities = ServiceTypes.filter((item) =>
+    facilitiesInputValue.includes(item)
+  );
+
+  const Specials = ServiceTypes.filter((item) =>
+    specialsInputValue.includes(item)
+  );
+
+  return {
+    Services,
+    Facilities,
+    Specials,
+  };
+};
 
 export const toFormData = (file: File): FormData => {
   const formdata = new FormData();
@@ -23,7 +62,7 @@ export const AxiosTryCatch = async <T>(
     const res = await callback();
     return res.data;
   } catch (error) {
-    console.error(error);
+    console.log(error);
     return undefined;
   }
 };
@@ -35,7 +74,7 @@ export const tryCatch = async <T>(
   try {
     return await callback();
   } catch (error) {
-    console.error(error);
+    console.log(error);
     return defaultValue;
   }
 };

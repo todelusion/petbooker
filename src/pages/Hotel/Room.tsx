@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import Button from "../../components/Button";
 import type { IRoom } from "./data";
 
@@ -7,12 +8,14 @@ interface IRoomProps {
 }
 
 function Room({ data }: IRoomProps): JSX.Element {
+  console.log(data);
+  const navigate = useNavigate();
   return (
     <ul className="mb-6 flex h-70 justify-between border-2">
       <li className="h-full basis-4/12">
         {data.RoomPhoto !== "" ? (
           <img
-            src={data.RoomName}
+            src={data.RoomPhoto}
             alt=""
             className="h-full w-full object-cover"
           />
@@ -39,6 +42,7 @@ function Room({ data }: IRoomProps): JSX.Element {
             className="px-5 py-2"
             type="Secondary"
             textSize="text-sm lg:text-base"
+            onClick={() => navigate(`/hotel/book/${data.Id}`)}
           />
         </div>
       </li>

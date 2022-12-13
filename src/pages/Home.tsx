@@ -20,18 +20,7 @@ function Home(): JSX.Element {
   const { selection, area } = useSearchBar();
   const { Facilities, FoodTypes, PetType, RoomPrices, Services, Specials } =
     useFilter();
-  // console.log("renderHotelCard", {
-  //   AreaId: Number(area.value),
-  //   PetType,
-  //   FoodTypes,
-  //   ServiceTypes: [...Facilities, ...Services, ...Specials],
-  //   CheckInDate: format(selection.startDate, "yyyy/M/d"),
-  //   CheckOutDate: format(selection.endDate, "yyyy/M/d"),
-  //   PriceRange: RoomPrices,
-  //   Page: 1,
-  //   PageSize: 5,
-  // });
-  // console.log({ selection, area });
+
   const { data } = useHotelList({
     AreaId: Number(area.value),
     PetType,

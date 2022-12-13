@@ -13,6 +13,7 @@ import type {
   specialsLists,
 } from "../../containers/Filter/data";
 import Room from "./Room";
+import { useHotel } from "../../utils/api/home";
 
 export interface IHotel {
   Id: string;
@@ -33,9 +34,13 @@ export interface IHotel {
 
 function Hotel(): JSX.Element {
   const { id } = useParams();
-  const hotel = Hotels.find((_hotel) => _hotel.Id === id);
+  const { data } = useHotel(id ?? "");
+  console.log(data);
 
-  if (hotel === undefined) return <p>系統錯誤</p>;
+  const hotel = data?.Hotel[0];
+
+  if (hotel === undefined) return <p>loading</p>;
+
   return (
     <div className="px-20 pt-40">
       <div className="flex-col-center ">
@@ -62,8 +67,8 @@ function Hotel(): JSX.Element {
       <h2 className="mb-4 w-full text-left text-2xl font-bold">空房狀況</h2>
 
       <section className="flex flex-col">
-        {rooms.map((room) => (
-          <Room key={room.RoomName} data={room} />
+        {hotel.Room.map((room) => (
+          <Room key={room.Id} data={room} />
         ))}
       </section>
     </div>
