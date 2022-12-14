@@ -22,6 +22,7 @@ import CustomerInfo from "./pages/Customer/CustomerInfo";
 import CmsRoom from "./pages/Cms/CmsRoom";
 import CustomerPet from "./pages/Customer/CustomerPet";
 import CustomerBook from "./pages/Customer/CustomerBook/intex";
+import Success from "./pages/Customer/CustomerBook/Success/Success";
 
 export default function Router(): JSX.Element {
   const client = new QueryClient();
@@ -65,6 +66,7 @@ export default function Router(): JSX.Element {
           <Route path="/customer" element={<NavBackend menus={customerMenu} />}>
             <Route path="/customer/info" element={<CustomerInfo />} />
             <Route path="/customer/pet" element={<CustomerPet />} />
+            <Route path="/customer/OrderSuccess" element={<Success />} />
           </Route>
           <Route path="/login" element={<UserLogin />} />;
           <Route path="/regist" element={<UserRegist />} />;
