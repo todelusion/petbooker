@@ -32,7 +32,7 @@ export const RoomListSchema = z.array(
     RoomPhoto: z.string(),
     RoomName: z.string(),
     PetType: z.string(),
-    RoomPrice: z.string(),
+    RoomPrice: z.number(),
     RoomInfo: z.string(),
     HotelId: z.null(),
   })
