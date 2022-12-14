@@ -42,7 +42,13 @@ function Room({ data }: IRoomProps): JSX.Element {
             className="px-5 py-2"
             type="Secondary"
             textSize="text-sm lg:text-base"
-            onClick={() => navigate(`/hotel/book/${data.Id}`)}
+            onClick={() =>
+              navigate(
+                `/hotel/book/${data.Id as unknown as string}/${data.RoomName}/${
+                  data.RoomPrice
+                }`
+              )
+            }
           />
         </div>
       </li>

@@ -54,7 +54,14 @@ export default function Router(): JSX.Element {
               </ComponentProvicer>
             }
           />
-          <Route path="/hotel/book/:id" element={<CustomerBook />} />
+          <Route
+            path="/hotel/book/:id/:room/:price"
+            element={
+              <ComponentProvicer>
+                <CustomerBook />
+              </ComponentProvicer>
+            }
+          />
           <Route path="/customer" element={<NavBackend menus={customerMenu} />}>
             <Route path="/customer/info" element={<CustomerInfo />} />
             <Route path="/customer/pet" element={<CustomerPet />} />

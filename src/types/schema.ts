@@ -97,6 +97,29 @@ export const FilterSchema = z.object({
   PageSize: z.number(),
 });
 
+export const UserInfoSchema = z.object({
+  UserAccount: z.string(),
+  UserName: z.string(),
+  UserPhone: z.union([z.null(), z.string()]),
+});
+
+export const PostBookSchema = z.object({
+  PetCardId: z.number(),
+  RoomId: z.number(),
+  OrderedDate: z.string(),
+  CheckInDate: z.string(),
+  CheckOutDate: z.string(),
+  TotalNight: z.number(),
+  TotalPrice: z.number(),
+  UserName: z.string(),
+  UserPhone: z.string(),
+  Status: z.string(),
+});
+
+export type PostBook = z.infer<typeof PostBookSchema>;
+
+export type UserInfo = z.infer<typeof UserInfoSchema>;
+
 export type Hotel = z.infer<typeof HotelSchema>;
 
 export type CountyList = z.infer<typeof countySchema>;

@@ -28,7 +28,7 @@ export const useHotel = (id: string) =>
     const data = await AxiosTryCatch<Hotel>(async () =>
       axios.get(`${baseURL}/hotel/hotelInfo?hotelId=${id}`)
     );
-    console.log(data);
+    // console.log(data);
     const result = HotelSchema.safeParse(data);
     if (result.success) {
       return result.data;
