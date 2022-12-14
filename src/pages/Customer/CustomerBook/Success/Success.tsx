@@ -18,7 +18,7 @@ function Success(): JSX.Element {
             查看我的訂單
           </button>
           <img src={orderSuccess} alt="Success.png" />
-          <img src={Divider1} alt="Success.png" className="mt-8 " />
+          {/* <img src={Divider1} alt="Success.png" className="mt-8 " /> */}
         </div>
       </div>
     </div>

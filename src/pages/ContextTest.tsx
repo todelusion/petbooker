@@ -27,8 +27,6 @@ const dataTest = {
 };
 
 function ContextTest(): JSX.Element {
-  const { PetType, FoodTypes, ServiceTypes } = useFilter();
-  const { pending, dispatchPending } = useModal();
   const countryList = getCountry();
 
   return (

@@ -73,7 +73,7 @@ export const useRoomList = (token: string) => {
         return result.data;
       }
       console.log(result.error.format());
-      return result.error;
+      return undefined;
     },
     {
       onError: (err) => console.log("GETRoomList錯誤", err),

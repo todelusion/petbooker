@@ -6,7 +6,7 @@ import MotionFade from "../../../containers/MotionFade";
 import UserAuth from "../../../context/UserAuthContext";
 import useModal from "../../../hooks/useModal";
 import { LoadingCustom, LoadingPath, PlusPath } from "../../../img/icons";
-import { getRoomList, useRoomList } from "../../../utils/api/cmsRoom";
+import { useRoomList } from "../../../utils/api/cmsRoom";
 import RoomCard from "./Room";
 import Edit from "./Edit";
 import { Room } from "../../../types/schema";

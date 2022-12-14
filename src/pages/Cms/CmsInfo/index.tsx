@@ -89,7 +89,7 @@ function CmsInfo(): JSX.Element {
   // filter資料
   const { Services, Facilities, Specials, FoodTypes } = useFilter();
   // uploadImage
-  const [ImagefileList, setImageFileList] = useState<UploadFile[]>();
+  const [ImagefileList, setImageFileList] = useState<UploadFile[]>([]);
   const [DelImage, setDelImage] = useState<number[]>([]);
   const [Thumbnail, setThumbnail] = useState<FormData>();
   const defaultThumbnail: string | undefined | null = data?.HotelThumbnail;
@@ -181,9 +181,9 @@ function CmsInfo(): JSX.Element {
   const normFile = (event: ChangeEvent<HTMLInputElement>): FileList => {
     console.log("Upload event:", event);
     if (Array.isArray(event)) {
-      return event;
+      return event as any;
     }
-    return event?.fileList;
+    return (event as any).fileList;
   };
 
   useLayoutEffect(() => {
@@ -313,13 +313,16 @@ function CmsInfo(): JSX.Element {
               getValueFromEvent={normFile}
               initialValue={data.HotelPhotos}
             >
-              <AntdUploadImage
-                ImagefileList={ImagefileList}
-                setImageFileList={setImageFileList}
-                defaultFileList={defaultImagefileList}
-                setDelImage={setDelImage}
-                DelImage={DelImage}
-              />
+              {ImagefileList !== undefined &&
+                setImageFileList !== undefined && (
+                  <AntdUploadImage
+                    ImagefileList={ImagefileList}
+                    setImageFileList={setImageFileList}
+                    defaultFileList={defaultImagefileList}
+                    setDelImage={setDelImage}
+                    DelImage={DelImage}
+                  />
+                )}
             </Form.Item>
 
             <Form.Item
