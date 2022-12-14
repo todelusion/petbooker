@@ -148,13 +148,15 @@ export const HotelInfoSchema = z.object({
     z.union([
       z.object({
         ImageId: z.number(),
+        ImageUrl: z.string(),
         Base64: z.string(),
         Extension: z.string(),
       }),
-      z.unknown(),
+      z.null(),
     ])
   ),
   HotelThumbnail: z.union([z.string(), z.null()]),
 });
 
 export type HotelInfo = z.infer<typeof HotelInfoSchema>;
+// export type HotelPhotos = z.infer<typeof HotelInfoSchema["HotelPhotos"]>

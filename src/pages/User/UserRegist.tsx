@@ -66,7 +66,7 @@ export default function UserRegist(): JSX.Element {
       HotelName: userName,
       HotelPassWord: password,
       ConfirmedPassword: confirmPassword,
-      Identity: "Hotel",
+      Identity: "hotel",
     };
     dispatchPending({ type: "IS_LOADING" });
     axios
@@ -170,7 +170,7 @@ export default function UserRegist(): JSX.Element {
                 type="radio"
                 name="identify"
                 id="hotelier"
-                value="Hotel"
+                value="hotel"
                 onChange={setgroup}
                 className="mr-2 h-5 w-5 cursor-pointer appearance-none rounded-full border-2 border-black duration-150 checked:border-4 checked:border-primary checked:ring-2 checked:ring-primary_Dark hover:border-primary"
               />
