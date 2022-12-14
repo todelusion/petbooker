@@ -1,6 +1,6 @@
 import React from "react";
 import orderSuccess from "../../../../img/OrderSuccess.svg";
-import Divider1 from "../img/Divider1.svg";
+// import Divider1 from "../img/Divider1.svg";
 
 function Success(): JSX.Element {
   return (
