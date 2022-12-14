@@ -50,15 +50,17 @@ function AntdUploadImage(props: IAntdUploadImageProps): JSX.Element {
 
   const handlePreview = async (file: UploadFile): Promise<void> => {
     if (file.url == null && file.preview == null) {
+      // eslint-disable-next-line no-param-reassign
       file.preview = await getBase64(file.originFileObj as RcFile);
     }
     setPreviewImage(file.url ?? (file.preview as string));
     setPreviewOpen(true);
-    const result =
-      file.name.length > 0 ||
-      // eslint-disable-next-line no-unsafe-optional-chaining
-      file.url?.substring(file.url?.lastIndexOf("/") + 1);
-    setPreviewTitle(result);
+    // const result =
+    //   file.name.length > 0 ||
+    //   eslint-disable-next-line no-unsafe-optional-chaining
+    //   file.url?.substring(file.url?.lastIndexOf("/") + 1);
+
+    setPreviewTitle("");
   };
 
   const handleChange: UploadProps["onChange"] = ({ fileList: newFileList }) => {
@@ -119,7 +121,7 @@ function AntdUploadImage(props: IAntdUploadImageProps): JSX.Element {
       </Upload>
       <Modal
         open={previewOpen}
-        title={previewTitle}
+        // title={previewTitle}
         footer={null}
         onCancel={handleCancel}
       >

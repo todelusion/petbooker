@@ -6,7 +6,6 @@ import Button from "../components/Button";
 import AccountMenu from "../components/AccountMenu";
 import Footer from "./Footer";
 import UserAuth from "../context/UserAuthContext";
-import usePending, { IPendingProps, PendingAction } from "../hooks/usePending";
 import StatusModal from "./StatusModal";
 import MotionFade from "../containers/MotionFade";
 import useModal from "../hooks/useModal";
