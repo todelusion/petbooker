@@ -4,6 +4,7 @@ import { faChevronUp, faChevronDown } from "@fortawesome/free-solid-svg-icons";
 import { AnimatePresence, motion } from "framer-motion";
 
 import { useLocation } from "react-router-dom";
+import { useQueryClient } from "@tanstack/react-query";
 import {
   searchPath,
   mapPinPath,
@@ -16,6 +17,7 @@ import CountryList from "./CountryList";
 import PetCardSmall from "./PetCardSmall";
 import useSearchBar from "../../hooks/useSearchBar";
 import getCountry from "../../utils/getCountry";
+import { tryCatch } from "../../utils";
 
 export type SearchBarAction =
   | {
@@ -75,11 +77,11 @@ const searchBarReducer = (
 };
 
 const SearchBar = React.memo(
-  // eslint-disable-next-line react/require-default-props
   ({ className }: { className?: string }): JSX.Element => {
     // console.log("renderSearchBar");
     const { pathname } = useLocation();
     const countryList = getCountry();
+    const queryClient = useQueryClient();
 
     const { area, selection, pet, dispatch } = useSearchBar();
     const [
@@ -208,12 +210,12 @@ const SearchBar = React.memo(
               icon={showPetCardSmall ? faChevronUp : faChevronDown}
             />
           </button>
-          <Button
+          {/* <Button
             text="搜尋"
             type="Secondary"
             icon={searchPath}
             className="ml-4 px-2 py-2"
-          />
+          /> */}
         </div>
 
         <section className="absolute left-2 z-10">
@@ -229,7 +231,7 @@ const SearchBar = React.memo(
               >
                 {countryList !== undefined && (
                   <CountryList
-                    onClick={(e) => {
+                    onClick={async (e) => {
                       const { textContent, value } =
                         e.target as HTMLSelectElement;
                       dispatchSearchBar({
@@ -243,6 +245,9 @@ const SearchBar = React.memo(
                           value,
                         },
                       });
+                      await tryCatch(async () =>
+                        queryClient.removeQueries(["HotelList"])
+                      );
                     }}
                     countryList={countryList}
                     key="CountryList"
@@ -263,7 +268,13 @@ const SearchBar = React.memo(
                 transition={{ duration: 0.3, ease: [0.65, 0.05, 0.36, 1] }}
                 className="origin-top"
               >
-                <DatePicker />
+                <DatePicker
+                  onChange={async () => {
+                    await tryCatch(async () =>
+                      queryClient.removeQueries(["HotelList"])
+                    );
+                  }}
+                />
               </motion.div>
             )}
           </AnimatePresence>

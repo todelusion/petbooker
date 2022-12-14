@@ -16,7 +16,7 @@ function AccountMenu(): JSX.Element {
     switch (identity) {
       case "customer":
         return customerMenu;
-      case "Hotel":
+      case "hotel":
         return hotelMemberMenu;
       default:
         return customerMenu;
@@ -64,6 +64,7 @@ function AccountMenu(): JSX.Element {
                     toggleAccountMenuSet(false);
                     if (item.navigatePath === "/home") {
                       setAuthToken("");
+                      localStorage.setItem("token", "");
                       navigate(item.navigatePath);
                       return;
                     }

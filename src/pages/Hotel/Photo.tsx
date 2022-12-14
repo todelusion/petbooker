@@ -9,13 +9,17 @@ interface IPhotoProps {
 function Photo({ data, className }: IPhotoProps): JSX.Element {
   return (
     <ul
-      className={`grid h-96 w-full grid-cols-4 grid-rows-2 gap-4 ${
+      className={`grid h-120 w-full grid-cols-4 grid-rows-2 gap-4 ${
         className as string
       }`}
     >
-      <li className="col-span-2 row-span-2 border-2 border-black">
+      <li className="col-span-2 row-span-2 ">
         {data[0] !== "" ? (
-          <img src={data[0]} alt="thumbnail" />
+          <img
+            src={data[0]}
+            alt="thumbnail"
+            className=" h-full w-full rounded-lg object-cover"
+          />
         ) : (
           <div className="h-full w-full bg-gray-100" />
         )}
@@ -26,7 +30,11 @@ function Photo({ data, className }: IPhotoProps): JSX.Element {
         if (photo !== "")
           return (
             <li key={photo} className="col-span-1">
-              <img src={photo} alt="" />
+              <img
+                src={photo}
+                alt=""
+                className=" h-full w-full rounded-lg object-cover"
+              />
             </li>
           );
         return (

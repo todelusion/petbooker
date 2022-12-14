@@ -1,5 +1,7 @@
-import React from "react";
-import { Outlet, useNavigate } from "react-router-dom";
+import React, { useContext, useEffect } from "react";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
+import UserAuth from "../context/UserAuthContext";
+import useModal from "../hooks/useModal";
 
 interface INavBackendProps {
   menus: Array<
@@ -16,8 +18,35 @@ interface INavBackendProps {
   >;
 }
 
+const useCheckIdentity = (): boolean => {
+  const navigate = useNavigate();
+  const { pathname } = useLocation();
+  console.log(pathname);
+  const { authToken, identity } = useContext(UserAuth);
+  const { dispatchPending } = useModal();
+  if (authToken === "") {
+    dispatchPending({ type: "IS_ERROR", payload: "請登入會員" });
+    setTimeout(() => dispatchPending({ type: "DONE" }), 1000);
+    navigate("/login");
+    return false;
+  }
+  if (identity === "customer" && pathname.includes("/cms")) {
+    dispatchPending({
+      type: "IS_ERROR",
+      payload: "您不是業主身分，請切換為業主帳號並繼續",
+    });
+    setTimeout(() => dispatchPending({ type: "DONE" }), 1000);
+    navigate("/home");
+    return false;
+  }
+  return true;
+};
+
 function NavBackend({ menus }: INavBackendProps): JSX.Element {
   const navigate = useNavigate();
+  if (!useCheckIdentity()) {
+    return <p>重新導向</p>;
+  }
 
   return (
     <div className="relative flex min-h-screen justify-end px-10 pt-42 pb-20">

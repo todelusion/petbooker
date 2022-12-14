@@ -61,19 +61,6 @@ export default function UserLogin(): JSX.Element {
       return;
     }
     dispatchPending({ type: "IS_LOADING" });
-    console.log(
-      identity === "customer"
-        ? {
-            UserAccount: email,
-            UserPassWord: password,
-            Identity: identity,
-          }
-        : {
-            HotelAccount: email,
-            HotelPassWord: password,
-            Identity: identity,
-          }
-    );
     axios
       .post(
         `https://petcity.rocket-coding.com/${
@@ -152,8 +139,8 @@ export default function UserLogin(): JSX.Element {
               <input
                 type="radio"
                 name="identify"
-                id="Hotel"
-                value="Hotel"
+                id="hotel"
+                value="hotel"
                 onChange={setidentity}
                 className="mr-2 h-5 w-5 cursor-pointer appearance-none rounded-full border-2 border-black duration-150 checked:border-4 checked:border-primary checked:ring-2 checked:ring-primary_Dark hover:border-primary"
               />

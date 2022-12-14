@@ -1,12 +1,21 @@
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
-import React from "react";
+import { useQueryClient } from "@tanstack/react-query";
+import React, {
+  LegacyRef,
+  MutableRefObject,
+  RefObject,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { useLocation } from "react-router-dom";
 import type {
   FilterAction,
   IFilterContextProps,
 } from "../../context/FilterContext";
 import useFilter from "../../hooks/useFilter";
+import { tryCatch } from "../../utils";
 
 interface Content {
   value: string;
@@ -26,7 +35,8 @@ interface IFilterList {
 interface IFilterInputProps {
   action: FilterAction["type"];
   filterList: IFilterList;
-  onChange?: (e: React.MouseEvent<HTMLInputElement, MouseEvent>) => void;
+  labelWidth?: string;
+  onChange?: (e: React.MouseEvent<HTMLInputElement>) => void;
   required?: boolean;
   noContext?: boolean;
   horizontal?: true;
@@ -34,136 +44,110 @@ interface IFilterInputProps {
   className?: string;
 }
 
-export const handleFilterValue = (
-  e: React.FormEvent,
-  filterContextProps?: IFilterContextProps
+const dispatchContext = (
+  element: HTMLInputElement,
+  filterContextProps: IFilterContextProps
 ): void => {
-  const element = e.target as HTMLInputElement;
   const { value, checked, name } = element;
+  // console.log({ value, checked, name });
+  if (filterContextProps === undefined) return;
+  const {
+    filterDispatch,
+    FoodTypes,
+    PetType,
+    RoomPrices,
+    Services,
+    Facilities,
+    Specials,
+  } = filterContextProps;
 
-  const dispatchContex = (): void => {
-    if (filterContextProps === undefined) return;
-    const { filterDispatch, FoodTypes, PetType, RoomPrices, ServiceTypes } =
-      filterContextProps;
+  const action = element.getAttribute("data-action") as FilterAction["type"];
+  // console.log({ value, checked, action, name });
+  // console.log(action);
 
-    const action = element.getAttribute("data-action") as FilterAction["type"];
-    // console.log({ value, checked, action, name });
-    console.log(action);
+  // 為了避免變數重複宣告，因此在 case 後加上{}花括號，來限制作用域
+  if (action === "PICK-PetType") {
+    filterDispatch({ type: action, payload: value });
+  }
 
-    // 為了避免變數重複宣告，因此在 case 後加上{}花括號，來限制作用域
-    if (action === "PICK-PetType") {
-      filterDispatch({ type: action, payload: value });
+  if (checked) {
+    switch (action) {
+      case "PICK-FoodTypes":
+        filterDispatch({
+          type: action,
+          payload: [...FoodTypes, value],
+        });
+        break;
+      case "PICK-RoomPrices":
+        filterDispatch({
+          type: action,
+          payload: [...RoomPrices, value],
+        });
+        break;
+      case "PICK-Services":
+        filterDispatch({
+          type: action,
+          payload: [...Services, value],
+        });
+        break;
+      case "PICK-Facilities":
+        filterDispatch({
+          type: action,
+          payload: [...Facilities, value],
+        });
+        break;
+      case "PICK-Specials":
+        filterDispatch({
+          type: action,
+          payload: [...Specials, value],
+        });
+        break;
+
+      default:
+        break;
     }
-
-    if (checked) {
-      switch (action) {
-        case "PICK-FoodTypes":
-          filterDispatch({
-            type: action,
-            payload: [...FoodTypes, value],
-          });
-          break;
-        case "PICK-RoomPrices":
-          filterDispatch({
-            type: action,
-            payload: [...RoomPrices, value],
-          });
-          break;
-        case "PICK-ServiceTypes": {
-          const keyname = name as "services" | "facilities" | "specials";
-          const { services, facilities, specials } = ServiceTypes;
-
-          switch (keyname) {
-            case "services":
-              filterDispatch({
-                type: "PICK-ServiceTypes",
-                payload: { keyname, contents: [...services, value] },
-              });
-              break;
-            case "facilities":
-              filterDispatch({
-                type: "PICK-ServiceTypes",
-                payload: { keyname, contents: [...facilities, value] },
-              });
-              break;
-            case "specials":
-              filterDispatch({
-                type: "PICK-ServiceTypes",
-                payload: { keyname, contents: [...specials, value] },
-              });
-              break;
-            default:
-              break;
-          }
-          break;
-        }
-
-        default:
-          break;
-      }
+  }
+  if (!checked) {
+    switch (action) {
+      case "PICK-FoodTypes":
+        filterDispatch({
+          type: action,
+          payload: FoodTypes.filter((FoodType) => FoodType !== value),
+        });
+        break;
+      case "PICK-RoomPrices":
+        filterDispatch({
+          type: action,
+          payload: RoomPrices.filter((RoomPrice) => RoomPrice !== value),
+        });
+        break;
+      case "PICK-Services":
+        filterDispatch({
+          type: action,
+          payload: Services.filter((Service) => Service !== value),
+        });
+        break;
+      case "PICK-Facilities":
+        filterDispatch({
+          type: action,
+          payload: Facilities.filter((Facility) => Facility !== value),
+        });
+        break;
+      case "PICK-Specials":
+        filterDispatch({
+          type: action,
+          payload: Specials.filter((Special) => Special !== value),
+        });
+        break;
+      default:
+        break;
     }
-    if (!checked) {
-      switch (action) {
-        case "PICK-FoodTypes":
-          filterDispatch({
-            type: action,
-            payload: FoodTypes.filter((FoodType) => FoodType !== value),
-          });
-          break;
-        case "PICK-RoomPrices":
-          filterDispatch({
-            type: action,
-            payload: RoomPrices.filter((RoomPrice) => RoomPrice !== value),
-          });
-          break;
-        case "PICK-ServiceTypes": {
-          const keyname = name as "services" | "facilities" | "specials";
-          const { services, facilities, specials } = ServiceTypes;
-
-          switch (keyname) {
-            case "services":
-              filterDispatch({
-                type: "PICK-ServiceTypes",
-                payload: {
-                  keyname,
-                  contents: services.filter((item) => item !== value),
-                },
-              });
-              break;
-            case "facilities":
-              filterDispatch({
-                type: "PICK-ServiceTypes",
-                payload: {
-                  keyname,
-                  contents: facilities.filter((facility) => facility !== value),
-                },
-              });
-              break;
-            case "specials":
-              filterDispatch({
-                type: "PICK-ServiceTypes",
-                payload: {
-                  keyname,
-                  contents: specials.filter((special) => special !== value),
-                },
-              });
-              break;
-            default:
-              break;
-          }
-          break;
-        }
-        default:
-          break;
-      }
-    }
-  };
-
-  dispatchContex();
+  }
 };
 
 function FilterInput({
   onChange,
+  labelWidth,
   required,
   noContext,
   action,
@@ -179,65 +163,102 @@ function FilterInput({
     // eslint-disable-next-line react-hooks/rules-of-hooks
     return useFilter();
   };
-
+  const queryClient = useQueryClient();
+  const formRef = useRef<HTMLFormElement>(null);
   const FilterContextProps = isUseContext();
+
   const { keyname, title, type, contents } = filterList;
 
   // renderUI
   const renderInput = (content: Content): JSX.Element => {
     switch (type) {
-      case "radio":
+      case "radio": {
         return (
           <input
+            key={content.value}
             data-action={action}
             defaultChecked={content.value === checked}
             name={action}
             id={content.descript}
             value={content.value}
-            onClick={(e) => {
-              handleFilterValue(e, FilterContextProps);
-              if (onChange === undefined) return;
-              onChange(e);
+            onClick={async (e) => {
+              if (FilterContextProps !== undefined)
+                dispatchContext(
+                  e.target as HTMLInputElement,
+                  FilterContextProps
+                );
+              await tryCatch(async () =>
+                queryClient.removeQueries(["HotelList"])
+              );
+              // await tryCatch(async () =>
+              //   queryClient.invalidateQueries(["HotelList"])
+              // );
+              if (onChange !== undefined) onChange(e);
             }}
             type={type}
             className="h-5 w-5 cursor-pointer appearance-none rounded-full border-2 border-black duration-150 checked:border-4 checked:border-primary checked:ring-2 checked:ring-primary_Dark hover:border-primary"
           />
         );
+      }
 
-      case "checkbox":
+      case "checkbox": {
         return (
           <input
+            key={content.value}
+            // ref={inputRef}
             data-action={action}
-            defaultChecked={(checked as string[]).includes(content.value)}
+            defaultChecked={checked?.includes(content.value)}
             name={keyname}
             id={content.descript}
             value={content.value}
-            onClick={(e) => {
-              handleFilterValue(e, FilterContextProps);
-              if (onChange === undefined) return;
-              onChange(e);
+            onClick={async (e: React.MouseEvent<HTMLInputElement>) => {
+              if (FilterContextProps !== undefined)
+                dispatchContext(
+                  e.target as HTMLInputElement,
+                  FilterContextProps
+                );
+              await tryCatch(async () =>
+                queryClient.removeQueries(["HotelList"])
+              );
+              // await tryCatch(async () =>
+              //   queryClient.invalidateQueries(["HotelList"])
+              // );
+
+              if (onChange !== undefined) onChange(e);
             }}
             type={type}
             className="relative h-5 w-5 cursor-pointer appearance-none rounded-sm border-2 border-black duration-150 before:absolute before:top-1/2 before:-translate-y-1/2 before:text-white checked:border-4 checked:border-primary checked:bg-primary checked:ring-2 checked:ring-primary_Dark before:checked:content-['✔'] hover:border-primary"
           />
         );
+      }
 
-      default:
+      default: {
         return (
           <input
+            key={content.value}
             data-action={action}
             id={content.descript}
             value={content.value}
-            defaultChecked={checked === content.value}
-            onClick={(e) => {
-              handleFilterValue(e, FilterContextProps);
-              if (onChange === undefined) return;
-              onChange(e);
+            defaultChecked={checked?.includes(content.value)}
+            onClick={async (e) => {
+              if (FilterContextProps !== undefined)
+                dispatchContext(
+                  e.target as HTMLInputElement,
+                  FilterContextProps
+                );
+              await tryCatch(async () =>
+                queryClient.removeQueries(["HotelList"])
+              );
+              // await tryCatch(async () =>
+              //   queryClient.invalidateQueries(["HotelList"])
+              // );
+              if (onChange !== undefined) onChange(e);
             }}
             type={type}
             className="relative h-5 w-5 cursor-pointer appearance-none rounded-sm border-2 border-black duration-150 before:absolute before:top-1/2 before:-translate-y-1/2 before:text-white checked:border-4 checked:border-primary checked:bg-primary checked:ring-2 checked:ring-primary_Dark before:checked:content-['✔'] hover:border-primary"
           />
         );
+      }
     }
   };
 
@@ -245,11 +266,16 @@ function FilterInput({
     <div className={`${horizontal ? "" : "p-4"}${className}`}>
       {!horizontal && <p className="relative font-bold">{title}</p>}
       <form
+        ref={formRef}
         name={action}
         className={horizontal === true ? "flex items-center" : ""}
       >
         {horizontal && (
-          <p className="relative mr-5 font-bold">
+          <p
+            className={`relative ${
+              labelWidth === undefined ? "mr-5" : labelWidth
+            }`}
+          >
             {title}
             {required && (
               <span className=" absolute -top-1 -left-3 text-lg text-[#ff4d4f]">

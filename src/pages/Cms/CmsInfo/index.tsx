@@ -1,38 +1,166 @@
-import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import React, { ChangeEvent, useMemo, useState } from "react";
-import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
-// import Button from "../../../components/Button";
-import { AutoComplete, Button, Form, Input, Select, TimePicker } from "antd";
+import React, {
+  ChangeEvent,
+  useContext,
+  useEffect,
+  useLayoutEffect,
+  useState,
+} from "react";
+import { Button, Form, Input, Select, TimePicker } from "antd";
 import type { UploadFile } from "antd/es/upload/interface";
+import { useNavigate } from "react-router-dom";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import dayjs from "dayjs";
 import UploadImage from "../../../components/UploadImage";
-import { CountyList, countySchema } from "../../../types/schema";
+import { CountyList } from "../../../types/schema";
 import Filter from "../../../containers/Filter";
 import AntdUploadImage from "./AntdUploadImage";
 import getCountry from "../../../utils/getCountry";
 import useFilter from "../../../hooks/useFilter";
+import UserAuth from "../../../context/UserAuthContext";
+import useModal from "../../../hooks/useModal";
+import { useHotelInfo } from "../../../utils/api/hotelInfo";
+import { LoadingCustom } from "../../../img/icons";
 
 type LayoutType = Parameters<typeof Form>[0]["layout"];
+
 function CmsInfo(): JSX.Element {
+  const { dispatchPending } = useModal();
+  // 若無Token則返回/home
+  const { authToken } = useContext(UserAuth);
+  const navigate = useNavigate();
+  // 請求網址
+  const putInfo = "https://petcity.rocket-coding.com/hotel";
+  const postImage = "https://petcity.rocket-coding.com/hotel/uploadhotelphotos";
+  const postThumbnail = "https://petcity.rocket-coding.com/hotel/uploadprofile";
+
+  const [defaultImagefileList, setdefaultImagefileList] =
+    useState<UploadFile[]>();
+
+  const { data, isSuccess, isFetching } = useHotelInfo(authToken);
+  console.log(data);
+
+  useEffect(() => {
+    console.log("近來Efeect");
+
+    if (data !== undefined) {
+      console.log("觸發setstae");
+
+      const result = data.HotelPhotos.map((item) => {
+        if (item === null) return [{ uid: "", name: "" }];
+        return {
+          uid: item.ImageId,
+          name: "image.png",
+          thumbUrl: `data:image/png;base64,${item.Base64}`,
+          status: "done",
+          url: item.ImageUrl,
+        };
+      });
+      setdefaultImagefileList(result as unknown as Array<UploadFile<any>>);
+      setImageFileList(result as unknown as Array<UploadFile<any>>);
+    }
+  }, [data]);
+
+  // 獲取資料
+  // const { data, isFetching, isSuccess } = useQuery(["Info"], async () => {
+  //   const response = await axios.get(getInfo, {
+  //     headers: { Authorization: `Bearer ${authToken}` },
+  //   });
+  //   setdefaultImagefileList(
+  //     response.data.result.HotelPhotos.map((item) => ({
+  //       uid: item.ImageId,
+  //       thumbUrl: `data:image/png;base64,${item.Base64}`,
+  //       name: "image.png",
+  //       status: "done",
+  //       url: `${item.ImageUrl}`,
+  //     }))
+  //   );
+  //   return HotelInfoSchema.parse(response.data.result);
+  // });
+  // if (isFetching) {
+  //   dispatchPending({ type: "IS_LOADING" });
+  // }
+  console.log("defaultImagefileList", defaultImagefileList);
   // 引入antd Form
   const [form] = Form.useForm();
   const [formLayout, setFormLayout] = useState<LayoutType>("horizontal");
+  // select城市資料
   const countrydata: CountyList | undefined = getCountry();
-  const { FoodTypes, PetType, RoomPrices, ServiceTypes } = useFilter();
-  const [ImagefileList, setImageFileList] = useState<UploadFile[]>([]);
+  // filter資料
+  const { Services, Facilities, Specials, FoodTypes } = useFilter();
+  // uploadImage
+  const [ImagefileList, setImageFileList] = useState<UploadFile[]>();
+  const [DelImage, setDelImage] = useState<number[]>([]);
+  const [Thumbnail, setThumbnail] = useState<FormData>();
+  const defaultThumbnail: string | undefined | null = data?.HotelThumbnail;
+  const queryClient = useQueryClient();
+  // console.log(DelImage);
 
-  const onFinish = (fieldsValue: any): void => {
+  // antd表單驗證成功時
+  const onFinish = async (fieldsValue: any): Promise<void> => {
+    // 將Timepicker 轉換格式
     const rangeTimeValue = fieldsValue["range-time-picker"];
     const HotelBusinessTime = [
       rangeTimeValue[0].format("HH:mm"),
       rangeTimeValue[1].format("HH:mm"),
     ];
 
+    // 所有input欄位的資料
     const result = {
       ...fieldsValue,
       HotelBusinessTime: [...HotelBusinessTime],
+      FoodTypes,
+      ServiceTypes: [...Services, ...Facilities, ...Specials],
     };
+    delete result["range-time-picker"];
+
+    // 將旅館照片打包成base64格式
+    const AddImage = ImagefileList?.filter(
+      (file) => typeof file.uid !== "number"
+    ).map((file) => ({
+      Base64: file.thumbUrl?.split(",")[1],
+      Extension: "png",
+    }));
+
+    console.log(DelImage);
+
+    const postImagebae64 = {
+      AddImage,
+      DelImage,
+    };
+
+    await axios.put(putInfo, result, {
+      headers: { Authorization: `Bearer ${authToken}` },
+    });
+    // .then((res) => console.log("傳送資訊成功", res))
+    // .catch((err) => console.log("傳送資訊失敗", err));
+    try {
+      await axios.post(postImage, postImagebae64, {
+        headers: { Authorization: `Bearer ${authToken}` },
+      });
+      console.log("成功");
+    } catch (error) {
+      console.log("失敗", error);
+    }
+
+    // .then((res) => console.log("傳送照片成功", res))
+    // .catch((err) => console.log("傳送照片失敗", err));
+    try {
+      if (Thumbnail?.has("Image") ?? false) {
+        await axios.post(postThumbnail, Thumbnail, {
+          headers: { Authorization: `Bearer ${authToken}` },
+        });
+        console.log("成功大頭貼上傳");
+      }
+    } catch (error) {
+      console.log("失敗", error);
+    }
+
+    await queryClient.invalidateQueries(["Info"]);
+    await queryClient.removeQueries(["Info"]);
+
+    // await queryClient.setQueryData(["Info"]);
+    // location.reload();
   };
 
   const onFinishFailed = (errorInfo: any): void => {
@@ -40,13 +168,13 @@ function CmsInfo(): JSX.Element {
   };
 
   const prefixSelector = (
-    <Form.Item name="areaid" noStyle>
+    <Form.Item name="areaid" noStyle initialValue={data?.HotelArea}>
       <Select style={{ width: 100 }}>
         {countrydata?.map((item) => (
-          <Select.Option value={item.Id}>{item.Areas}</Select.Option>
+          <Select.Option key={item.Id} value={item.Id}>
+            {item.Areas}
+          </Select.Option>
         ))}
-        <Select.Option value="0">台北</Select.Option>
-        <Select.Option value="1">台中</Select.Option>
       </Select>
     </Form.Item>
   );
@@ -57,103 +185,171 @@ function CmsInfo(): JSX.Element {
     }
     return event?.fileList;
   };
-  console.log(FoodTypes, ServiceTypes);
+
+  useLayoutEffect(() => {
+    if (authToken === "") {
+      navigate("/home");
+    }
+  }, []);
+  // useEffect(() => {
+  //   function setInitImage(): void {
+  //     if (isSuccess) {
+  //       // if (data?.HotelPhotos.length === 0) return;
+  //       data.HotelPhotos.forEach((item) => {
+  //         console.log(item.ImageId);
+  //       });
+  //       const resultAry = data.HotelPhotos.map((item) => ({
+  //         uid: item.ImageId,
+  //         thumbUrl: `data:image/png;base64,${item.Base64}`,
+  //         name: "image.png",
+  //         status: "done",
+  //         url: `${item.ImageUrl}`,
+  //       }));
+  //       setImageFileList(resultAry);
+  //       setImageFileList([
+  //         {
+  //           uid: "-1",
+  //           name: "image.png",
+  //           status: "done",
+  //           url: "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png",
+  //         },
+  //       ]);
+  //       console.log(resultAry);
+  //     }
+  //   }
+  //   setInitImage();
+  // }, []);
+
   return (
-    <div className="relative">
-      <Form
-        labelCol={{ span: 4 }}
-        wrapperCol={{ span: 14 }}
-        layout={formLayout}
-        form={form}
-        initialValues={{ layout: formLayout }}
-        autoComplete="on"
-        onFinish={onFinish}
-        onFinishFailed={onFinishFailed}
-        labelAlign="left"
-      >
-        <Form.Item
-          label="名稱"
-          name="HotelName"
-          rules={[
-            { required: true, message: "必填項目" },
-            { type: "string", max: 16 },
-          ]}
-        >
-          <Input placeholder="名稱" />
-        </Form.Item>
+    <div className="relative flex flex-col ">
+      {isFetching && (
+        <LoadingCustom className="absolute left-1/2" color="bg-second" />
+      )}
+      {isSuccess && defaultImagefileList != null && (
+        <>
+          <div className="mb-10 flex justify-center ">
+            <UploadImage
+              type="Avatar"
+              onChange={(event) => {
+                console.log(event);
+              }}
+              defaultImage={defaultThumbnail}
+              setThumbnail={setThumbnail}
+            />
+          </div>
 
-        <Form.Item
-          label="電話"
-          name="HotelPhone"
-          rules={[
-            { required: true, message: "必填項目" },
-            { type: "string", max: 11, message: "電話格式請小於11碼" },
-          ]}
-        >
-          <Input placeholder="電話" />
-        </Form.Item>
-
-        <Form.Item
-          name="HotelAddress"
-          label="飯店地址"
-          rules={[{ required: true, message: "必填項目" }]}
-        >
-          <Input addonBefore={prefixSelector} style={{ width: "50" }} />
-        </Form.Item>
-
-        <Form.Item
-          name="range-time-picker"
-          label="營業時間"
-          rules={[{ required: true, message: "必填項目" }]}
-        >
-          <TimePicker.RangePicker format="HH:mm" />
-        </Form.Item>
-
-        <Form.Item
-          name="HotelInfo"
-          label="介紹"
-          rules={[{ required: true, message: "必填項目" }]}
-        >
-          <Input showCount maxLength={500} />
-        </Form.Item>
-
-        {/* <div className="mt-10 flex justify-center ">
-          <UploadImage />
-        </div> */}
-        <Form.Item
-          label="上傳圖片"
-          valuePropName="fileList"
-          getValueFromEvent={normFile}
-        >
-          <AntdUploadImage
-            ImagefileList={ImagefileList}
-            setImageFileList={setImageFileList}
-          />
-        </Form.Item>
-
-        <Form.Item
-          wrapperCol={{ span: 200 }}
-          className="absolute bottom-0 w-full"
-        >
-          <Button
-            type="primary"
-            htmlType="submit"
-            size="large"
-            block
-            className="flex-center inline-block h-max w-full rounded-full border-2 border-second bg-second text-white"
+          <Form
+            labelCol={{ span: 4 }}
+            wrapperCol={{ span: 14 }}
+            layout={formLayout}
+            form={form}
+            initialValues={{ layout: formLayout }}
+            autoComplete="on"
+            onFinish={onFinish}
+            onFinishFailed={onFinishFailed}
+            labelAlign="left"
           >
-            送出
-          </Button>
-        </Form.Item>
-      </Form>
-      <Filter horizontal closePet closeRoomPrices className="my-5" />
-      {/* <button
-        type="button"
-        onClick={() => {
-        }}
-      >
-        123
-      </button> */}
+            <Form.Item
+              label="名稱"
+              name="HotelName"
+              rules={[
+                { required: true, message: "必填項目" },
+                { type: "string", max: 16 },
+              ]}
+              initialValue={data.HotelName}
+            >
+              <Input placeholder="名稱" />
+            </Form.Item>
+
+            <Form.Item
+              label="電話"
+              name="HotelPhone"
+              rules={[
+                { required: true, message: "必填項目" },
+                { type: "string", max: 11, message: "電話格式請小於11碼" },
+              ]}
+              initialValue={data.HotelPhone}
+            >
+              <Input placeholder="電話" />
+            </Form.Item>
+
+            <Form.Item
+              name="HotelAddress"
+              label="飯店地址"
+              rules={[{ required: true, message: "必填項目" }]}
+              initialValue={data.HotelAddress}
+            >
+              <Input addonBefore={prefixSelector} style={{ width: "50" }} />
+            </Form.Item>
+
+            <Form.Item
+              name="range-time-picker"
+              label="營業時間"
+              rules={[{ required: true, message: "必填項目" }]}
+              initialValue={
+                data.HotelEndTime != null
+                  ? [
+                      dayjs(data.HotelStartTime, "HH:mm"),
+                      dayjs(data.HotelEndTime, "HH:mm"),
+                    ]
+                  : ""
+              }
+            >
+              <TimePicker.RangePicker format="HH:mm" />
+            </Form.Item>
+
+            <Form.Item
+              name="HotelInfo"
+              label="介紹"
+              rules={[{ required: true, message: "必填項目" }]}
+              initialValue={data.HotelInfo}
+            >
+              <Input showCount maxLength={500} />
+            </Form.Item>
+
+            <Form.Item
+              label="上傳圖片"
+              valuePropName="fileList"
+              getValueFromEvent={normFile}
+              initialValue={data.HotelPhotos}
+            >
+              <AntdUploadImage
+                ImagefileList={ImagefileList}
+                setImageFileList={setImageFileList}
+                defaultFileList={defaultImagefileList}
+                setDelImage={setDelImage}
+                DelImage={DelImage}
+              />
+            </Form.Item>
+
+            <Form.Item
+              wrapperCol={{ span: 200 }}
+              className="absolute bottom-0 w-full"
+            >
+              <Button
+                type="primary"
+                htmlType="submit"
+                size="large"
+                block
+                className="flex-center absolute -bottom-20 inline-block h-max w-full rounded-full border-2 border-second bg-second text-white"
+              >
+                送出
+              </Button>
+            </Form.Item>
+          </Form>
+
+          <Filter
+            data={{
+              FoodTypes: data.FoodTypes ?? undefined,
+              ServiceTypes: data.ServiceTypes ?? undefined,
+            }}
+            horizontal
+            closePet
+            closeRoomPrices
+            className="my-5"
+          />
+        </>
+      )}
     </div>
   );
 }

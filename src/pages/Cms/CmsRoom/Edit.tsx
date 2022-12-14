@@ -1,7 +1,8 @@
 import { Button, Form, Input } from "antd";
 import { motion } from "framer-motion";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useLayoutEffect, useState } from "react";
 import axios from "axios";
+import { useQueryClient } from "@tanstack/react-query";
 import FilterInput from "../../../containers/Filter/FilterInput";
 import { petLists } from "../../../containers/Filter/data";
 import MotionFade from "../../../containers/MotionFade";
@@ -9,23 +10,96 @@ import MotionPopup from "../../../containers/MotionPopup";
 import useModal from "../../../hooks/useModal";
 import UploadImage from "../../../components/UploadImage";
 import { xPath } from "../../../img/icons";
-import { assertIsError, toFormData } from "../../../utils";
-import { uploadRoomPhoto, postRoom } from "../../../utils/api/hotel";
+import {
+  assertIsError,
+  toFormData,
+  AxiosTryCatch,
+  tryCatch,
+} from "../../../utils";
+import { uploadRoomPhoto, putRoom, postRoom } from "../../../utils/api/cmsRoom";
 import UserAuth from "../../../context/UserAuthContext";
-import { POSTRoomSchema } from "../../../types/schema";
+import { POSTRoom, PostRoomSchema, Room } from "../../../types/schema";
+import { PendingAction } from "../../../hooks/usePending";
 
 interface IEditProps {
+  title: string;
   onClick: () => void;
+  data?: Room;
+  type: "POST" | "PUT";
 }
 
-function Edit({ onClick }: IEditProps): JSX.Element {
+const handleRequest = async (
+  type: "POST" | "PUT",
+  data: POSTRoom,
+  token: string,
+  id?: number,
+  formdata?: FormData
+): Promise<boolean | string> => {
+  console.log(type);
+
+  if (type === "POST") {
+    if (formdata === undefined) return "新增房型必須要有圖片";
+
+    const res = await AxiosTryCatch(async () => postRoom(data, token));
+    const { roomid } = res.result;
+    const result = await AxiosTryCatch(async () =>
+      uploadRoomPhoto(roomid, formdata, token)
+    );
+
+    if (result === undefined) return false;
+    return true;
+  }
+
+  if (type === "PUT" && id !== undefined) {
+    const result = await AxiosTryCatch(async () => putRoom(id, data, token));
+    if (result === undefined) return false;
+
+    if (formdata !== undefined) {
+      await uploadRoomPhoto(id, formdata, token);
+      return true;
+    }
+    return true;
+  }
+  return false;
+};
+
+const handleValidate = (
+  type: "POST" | "PUT",
+  dispatchPending: React.Dispatch<PendingAction>,
+  formdata?: FormData
+): void => {
+  if (type === "PUT") return;
+  if (formdata === undefined) {
+    dispatchPending({
+      type: "IS_ERROR",
+      payload: "必須上傳圖片",
+    });
+    setTimeout(() => dispatchPending({ type: "DONE" }), 1000);
+  }
+};
+
+const useInitState = (
+  setState: React.Dispatch<React.SetStateAction<string | undefined>>,
+  state?: string
+): void => {
+  useEffect(() => {
+    console.log("useInit");
+    if (state === undefined) return;
+    setState(state);
+  }, [setState, state]);
+};
+
+function Edit({ title, onClick, data, type }: IEditProps): JSX.Element {
   const [form] = Form.useForm();
-  const [petType, setPetType] = useState("");
+  const [petType, setPetType] = useState<string>();
   const [formdata, setFormData] = useState<FormData>();
   const { dispatchPending } = useModal();
-  console.log(petType);
+  const queryClient = useQueryClient();
   const { authToken } = useContext(UserAuth);
-  console.log("render Edit");
+
+  // console.log("render Edit");
+  // console.log(data.RoomPhoto);
+  useInitState(setPetType, data?.PetType);
 
   return (
     <MotionFade className="flex-center fixed left-0 top-0 z-10 h-screen w-full bg-black/50">
@@ -38,11 +112,12 @@ function Edit({ onClick }: IEditProps): JSX.Element {
           >
             <img src={xPath} alt="" />
           </button>
-          <p className="mb-4 text-center text-3xl font-bold">編輯寵物房型</p>
+          <p className="mb-4 text-center text-3xl font-bold">{title}</p>
           <UploadImage
             onChange={(file) => {
               setFormData(toFormData(file));
             }}
+            defaultImage={data?.RoomPhoto}
             type="Room"
             className="mb-6"
           />
@@ -54,6 +129,7 @@ function Edit({ onClick }: IEditProps): JSX.Element {
             action="PICK-PetType"
             horizontal
             filterList={petLists}
+            checked={data?.PetType}
             className="mb-5 ml-3"
           />
           <div>
@@ -62,46 +138,62 @@ function Edit({ onClick }: IEditProps): JSX.Element {
               // wrapperCol={{ span: 14 }}
               layout="horizontal"
               form={form}
-              initialValues={{ layout: "horizontal" }}
+              initialValues={{
+                RoomName: data?.RoomName,
+                RoomPrice: data?.RoomPrice,
+                RoomInfo: data?.RoomInfo,
+              }}
               autoComplete="on"
               onFinish={async (values) => {
-                const result = POSTRoomSchema.safeParse({
+                // console.log(values);
+                handleValidate(type, dispatchPending);
+
+                const parse = PostRoomSchema.safeParse({
                   ...values,
                   PetType: petType,
                 });
-                dispatchPending({ type: "IS_LOADING" });
-                if (result.success) {
-                  try {
-                    const res = await postRoom(result.data, authToken);
-                    dispatchPending({
-                      type: "IS_SUCCESS",
-                      payload: "新增房型成功",
-                    });
-                    setTimeout(() => dispatchPending({ type: "DONE" }), 1000);
-                    const { roomid } = res.data.result;
 
-                    if (formdata === undefined) return;
-                    console.log("upload photo");
-
-                    const uploadResult = await uploadRoomPhoto(
-                      roomid,
-                      formdata,
-                      authToken
-                    );
-                    console.log(uploadResult);
-
-                    onClick();
-                  } catch (error) {
-                    const err = assertIsError(error);
-                    console.log(err);
+                if (parse.success) {
+                  console.log(parse.data);
+                  dispatchPending({
+                    type: "IS_LOADING",
+                  });
+                  const result = await tryCatch(
+                    async () =>
+                      handleRequest(
+                        type,
+                        parse.data,
+                        authToken,
+                        data?.Id,
+                        formdata
+                      ),
+                    false
+                  );
+                  if (result === false) {
                     dispatchPending({
                       type: "IS_ERROR",
-                      payload: "系統錯誤，請重新操作",
+                      payload: "系統錯誤，請稍後再試",
                     });
-                    setTimeout(() => dispatchPending({ type: "DONE" }), 1000);
+                    return;
                   }
-                } else {
-                  console.log(result.error);
+                  if (typeof result === "string") {
+                    dispatchPending({
+                      type: "IS_ERROR",
+                      payload: result,
+                    });
+                    return;
+                  }
+
+                  await queryClient.invalidateQueries(["RoomList"]);
+                  onClick();
+                  dispatchPending({ type: "DONE" });
+                }
+
+                if (!parse.success) {
+                  dispatchPending({
+                    type: "IS_ERROR",
+                    payload: "填寫欄位不完整",
+                  });
                 }
               }}
               onFinishFailed={(errorInfo) => console.log("Failed", errorInfo)}

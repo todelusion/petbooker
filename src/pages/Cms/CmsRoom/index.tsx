@@ -5,9 +5,11 @@ import Button from "../../../components/Button";
 import MotionFade from "../../../containers/MotionFade";
 import UserAuth from "../../../context/UserAuthContext";
 import useModal from "../../../hooks/useModal";
-import { PlusPath } from "../../../img/icons";
-import { getRoomList, useRoomList } from "../../../utils/api/hotel";
+import { LoadingCustom, LoadingPath, PlusPath } from "../../../img/icons";
+import { getRoomList, useRoomList } from "../../../utils/api/cmsRoom";
+import RoomCard from "./Room";
 import Edit from "./Edit";
+import { Room } from "../../../types/schema";
 
 const useDisableScroll = (isEdit: boolean): void => {
   const body = document.querySelector("body");
@@ -23,27 +25,60 @@ const useDisableScroll = (isEdit: boolean): void => {
 };
 
 function CmsRoom(): JSX.Element {
-  const [isEdit, setIsEdit] = useState(false);
+  const [isShow, setIsShow] = useState<"POST" | "PUT">();
+  const [room, setRoom] = useState<Room>();
+  // console.log(room);
   const { authToken } = useContext(UserAuth);
-  useDisableScroll(isEdit);
 
-  const { data } = useRoomList(authToken);
-
-  console.log(data);
+  useDisableScroll(isShow !== undefined);
+  const { data: datas } = useRoomList(authToken);
+  // const roomList = useSetRoomList(data);
 
   return (
-    <div>
+    <div className="flex w-full max-w-5xl flex-col items-end ">
       <Button
         icon={PlusPath}
         type="Secondary"
         text="新增寵物房型"
-        className="px-4 py-2"
+        className="mb-4 w-max px-4 py-2"
         onClick={() => {
-          setIsEdit(!isEdit);
+          setIsShow("POST");
         }}
       />
       <AnimatePresence>
-        {isEdit && <Edit onClick={() => setIsEdit(false)} />}
+        {datas === undefined ? (
+          <div key="Loading" className="relative w-full">
+            <LoadingCustom className="absolute left-1/2" color="bg-second" />
+          </div>
+        ) : (
+          <RoomCard
+            onClick={(data) => {
+              setIsShow("PUT");
+              setRoom(data);
+            }}
+            key="Room"
+            datas={datas}
+            className="w-full"
+          />
+        )}
+
+        {isShow === "POST" && (
+          <Edit
+            type={isShow}
+            title="新增寵物房型"
+            key="EDIT"
+            onClick={() => setIsShow(undefined)}
+          />
+        )}
+        {isShow === "PUT" && (
+          <Edit
+            type={isShow}
+            title="編輯寵物房型"
+            key="EDIT"
+            onClick={() => setIsShow(undefined)}
+            data={room}
+          />
+        )}
       </AnimatePresence>
     </div>
   );

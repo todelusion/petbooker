@@ -1,7 +1,9 @@
 export interface IRoom {
+  PetType: string;
+  Id: number;
   RoomPhoto: string;
   RoomName: string;
-  RoomPrice: string;
+  RoomPrice: number;
   RoomInfo: string;
 }
 
