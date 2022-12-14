@@ -8,6 +8,8 @@ interface IOrderProps {
 }
 
 function Order({ data }: IOrderProps): JSX.Element {
+  // console.log(ReservedList);
+
   return (
     <div className="overflow-hidden rounded-lg border-2 border-black">
       <ul className="grid grid-cols-7 justify-items-center gap-x-14 border-b-2 border-stone-200 bg-stone-100 py-7 text-lg font-bold">
