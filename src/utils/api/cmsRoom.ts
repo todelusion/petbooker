@@ -3,7 +3,7 @@ import axios, { AxiosResponse, AxiosStatic } from "axios";
 import { useQuery } from "@tanstack/react-query";
 import Header from "./Header";
 import { baseURL } from "../index";
-import { TPostRoomSchema, RoomListSchema } from "../../types/schema";
+import { POSTRoom, RoomListSchema } from "../../types/schema";
 
 export const uploadRoomPhoto = async (
   id: number,
@@ -19,7 +19,7 @@ export const uploadRoomPhoto = async (
 };
 
 export const postRoom = async (
-  body: TPostRoomSchema,
+  body: POSTRoom,
   token: string
 ): Promise<AxiosResponse<any, any>> => {
   const header = new Header(token);
@@ -38,7 +38,7 @@ export const postRoom = async (
 
 export const putRoom = async (
   id: number,
-  body: TPostRoomSchema,
+  body: POSTRoom,
   token: string
 ): Promise<AxiosResponse<any, any>> => {
   const header = new Header(token);
@@ -58,7 +58,7 @@ export const deleteRoom = async (
     .then((res) => res)
     .catch((err) => err);
 };
-  
+
 export const useRoomList = (token: string) => {
   const header = new Header(token);
 

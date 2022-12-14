@@ -67,24 +67,24 @@ export const pricesLists = {
   type: "checkbox",
   contents: [
     {
-      value: "0, 500",
-      descript: "NTD 0 - NTD 500",
+      value: "0",
+      descript: "NTD 0 - NTD 499",
     },
 
     {
-      value: "500, 1000",
-      descript: "NTD 500 - NTD 1,000",
+      value: "1",
+      descript: "NTD 500 - NTD 999",
     },
     {
-      value: "1000, 1500",
-      descript: "NTD 1,000 - NTD 1,500",
+      value: "2",
+      descript: "NTD 1,000 - NTD 1,499",
     },
     {
-      value: "1500, 2000",
-      descript: "NTD 1,500 - NTD 2,000",
+      value: "3",
+      descript: "NTD 1,500 - NTD 1,999",
     },
     {
-      value: "2000",
+      value: "4",
       descript: "NTD 2,000 以上",
     },
   ],

@@ -141,14 +141,14 @@ const Filter = React.memo(
     const [initServices, setInitServices] = useState<string[]>();
     const [initFacilities, setInitFacilities] = useState<string[]>();
     const [initSpecials, setInitSpecials] = useState<string[]>();
-    console.log({
-      FoodTypes,
-      PetType,
-      RoomPrices,
-      Services,
-      Specials,
-      Facilities,
-    });
+    // console.log({
+    //   FoodTypes,
+    //   PetType,
+    //   RoomPrices,
+    //   Services,
+    //   Specials,
+    //   Facilities,
+    // });
 
     if (data !== undefined) {
       useFilterDefault(

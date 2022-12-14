@@ -7,11 +7,11 @@ interface IFilterProviderProps {
 
 const initFilter = {
   PetType: "",
-  FoodTypes: [] as string[],
-  RoomPrices: [] as string[],
-  Services: [] as string[],
-  Facilities: [] as string[],
-  Specials: [] as string[],
+  FoodTypes: [] as string[] | [],
+  RoomPrices: [] as string[] | [],
+  Services: [] as string[] | [],
+  Facilities: [] as string[] | [],
+  Specials: [] as string[] | [],
 };
 
 export type IinitFilter = typeof initFilter;

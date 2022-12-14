@@ -16,7 +16,7 @@ import {
   AxiosTryCatch,
   tryCatch,
 } from "../../../utils";
-import { uploadRoomPhoto, putRoom, postRoom } from "../../../utils/api/hotel";
+import { uploadRoomPhoto, putRoom, postRoom } from "../../../utils/api/cmsRoom";
 import UserAuth from "../../../context/UserAuthContext";
 import { POSTRoom, PostRoomSchema, Room } from "../../../types/schema";
 import { PendingAction } from "../../../hooks/usePending";

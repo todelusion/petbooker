@@ -1,6 +1,8 @@
 import { useParams } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper";
+import { AnimatePresence } from "framer-motion";
+import React from "react";
 import { Hotels } from "../../components/HotelCard/data";
 import Comment from "./Comment";
 import { Comments as comments, Rooms as rooms } from "./data";
@@ -13,6 +15,9 @@ import type {
   specialsLists,
 } from "../../containers/Filter/data";
 import Room from "./Room";
+import { useHotel } from "../../utils/api/home";
+import { LoadingCustom } from "../../img/icons";
+import MotionFade from "../../containers/MotionFade";
 
 export interface IHotel {
   Id: string;
@@ -33,39 +38,55 @@ export interface IHotel {
 
 function Hotel(): JSX.Element {
   const { id } = useParams();
-  const hotel = Hotels.find((_hotel) => _hotel.Id === id);
+  const { data } = useHotel(id ?? "");
+  console.log(data);
 
-  if (hotel === undefined) return <p>系統錯誤</p>;
   return (
     <div className="px-20 pt-40">
-      <div className="flex-col-center ">
-        <SearchBar className="mb-12" />
-        <Photo data={hotel.HotelPhoto} className="mb-12" />
-        <Info hotel={hotel} className="mb-12" />
-        <Swiper
-          slidesPerView={3}
-          navigation
-          modules={[Navigation]}
-          className="flex w-full"
-        >
-          {comments.map((comment) => (
-            <SwiperSlide key={comment.UserName}>
-              <Comment data={comment} className="mx-auto" />
-            </SwiperSlide>
-          ))}
-        </Swiper>
-      </div>
-      <hr
-        style={{ borderStyle: "solid" }}
-        className="my-12 block border-b-[1px] border-stone-300"
-      />
-      <h2 className="mb-4 w-full text-left text-2xl font-bold">空房狀況</h2>
+      <AnimatePresence>
+        {data === undefined ? (
+          <LoadingCustom
+            key="Loading"
+            className="absolute left-1/2 top-1/2"
+            color="bg-second"
+          />
+        ) : (
+          <MotionFade key="Hotel">
+            <>
+              <div className="flex-col-center ">
+                <SearchBar className="mb-12" />
+                <Photo data={data.Hotel[0].HotelPhoto} className="mb-12" />
+                <Info hotel={data.Hotel[0]} className="mb-12" />
+                <Swiper
+                  slidesPerView={3}
+                  navigation
+                  modules={[Navigation]}
+                  className="flex w-full"
+                >
+                  {comments.map((comment) => (
+                    <SwiperSlide key={comment.UserName}>
+                      <Comment data={comment} className="mx-auto" />
+                    </SwiperSlide>
+                  ))}
+                </Swiper>
+              </div>
+              <hr
+                style={{ borderStyle: "solid" }}
+                className="my-12 block border-b-[1px] border-stone-300"
+              />
+              <h2 className="mb-4 w-full text-left text-2xl font-bold">
+                空房狀況
+              </h2>
 
-      <section className="flex flex-col">
-        {rooms.map((room) => (
-          <Room key={room.RoomName} data={room} />
-        ))}
-      </section>
+              <section className="flex flex-col">
+                {data.Hotel[0].Room.map((room) => (
+                  <Room key={room.Id} data={room} />
+                ))}
+              </section>
+            </>
+          </MotionFade>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

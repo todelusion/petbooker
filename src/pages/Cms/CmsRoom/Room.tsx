@@ -4,7 +4,7 @@ import Button from "../../../components/Button";
 import MotionFade from "../../../containers/MotionFade";
 import { RoomList, Room } from "../../../types/schema";
 import { EditPath, TrashPath } from "../../../img/icons";
-import { deleteRoom } from "../../../utils/api/hotel";
+import { deleteRoom } from "../../../utils/api/cmsRoom";
 
 import UserAuth from "../../../context/UserAuthContext";
 import { assertIsError } from "../../../utils";

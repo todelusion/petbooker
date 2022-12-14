@@ -1,8 +1,9 @@
 import React from "react";
+import { Hotel } from "../../types/schema";
 import type { IHotel } from "./index";
 
 interface IInfoProps {
-  hotel: IHotel;
+  hotel: Hotel["Hotel"][0];
   className?: string;
 }
 
@@ -31,7 +32,7 @@ function Info({ hotel, className }: IInfoProps): JSX.Element {
         </li>
       </ul>
       <p className="mb-4 pl-1 text-sm text-stone-600">{hotel.HotelInfo}</p>
-      <ul className="flex flex-wrap">
+      {/* <ul className="flex flex-wrap">
         {hotel.serviceLists.contents.map((content) => (
           <li
             key={content.value}
@@ -59,7 +60,7 @@ function Info({ hotel, className }: IInfoProps): JSX.Element {
             <span className="ml-1 text-xs">{content.descript}</span>
           </li>
         ))}
-      </ul>
+      </ul> */}
     </section>
   );
 }

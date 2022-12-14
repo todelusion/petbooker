@@ -1,5 +1,6 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Routes, Route } from "react-router-dom";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import ComponentProvicer from "./context";
 
 import Nav from "./Layout/Nav";
@@ -19,6 +20,9 @@ import { FilterProvider } from "./context/FilterContext";
 import CmsOrder from "./pages/Cms/CmsOrder";
 import CustomerInfo from "./pages/Customer/CustomerInfo";
 import CmsRoom from "./pages/Cms/CmsRoom";
+import CustomerPet from "./pages/Customer/CustomerPet";
+import CustomerBook from "./pages/Customer/CustomerBook/intex";
+import Success from "./pages/Customer/CustomerBook/Success/Success";
 
 export default function Router(): JSX.Element {
   const client = new QueryClient();
@@ -51,8 +55,18 @@ export default function Router(): JSX.Element {
               </ComponentProvicer>
             }
           />
+          <Route
+            path="/hotel/book/:id/:room/:price"
+            element={
+              <ComponentProvicer>
+                <CustomerBook />
+              </ComponentProvicer>
+            }
+          />
           <Route path="/customer" element={<NavBackend menus={customerMenu} />}>
             <Route path="/customer/info" element={<CustomerInfo />} />
+            <Route path="/customer/pet" element={<CustomerPet />} />
+            <Route path="/customer/OrderSuccess" element={<Success />} />
           </Route>
           <Route path="/login" element={<UserLogin />} />;
           <Route path="/regist" element={<UserRegist />} />;
@@ -72,6 +86,7 @@ export default function Router(): JSX.Element {
           </Route>
         </Route>
       </Routes>
+      <ReactQueryDevtools />
     </QueryClientProvider>
   );
 }

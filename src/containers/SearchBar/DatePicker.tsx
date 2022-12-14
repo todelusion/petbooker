@@ -30,12 +30,16 @@ type NavigatorRenderer = (
   props: CalendarProps
 ) => JSX.Element;
 
-function DatePicker(): JSX.Element {
+interface IDatePickerProps {
+  onChange?: () => void;
+}
+
+function DatePicker({ onChange }: IDatePickerProps): JSX.Element {
   const { dispatch, selection } = useSearchBar();
   const onDateChange = (item: IDateRangePickerOutput): void => {
     dispatch({ type: "PICK_DATERANGE", payload: item });
   };
-  console.log(selection);
+  // console.log(selection);
 
   const onNavigatorRenderer: NavigatorRenderer = (
     currFocusedDate,
@@ -83,9 +87,11 @@ function DatePicker(): JSX.Element {
 
   return (
     <DateRangePicker
-      onChange={(item) =>
-        onDateChange(item as unknown as IDateRangePickerOutput)
-      }
+      onChange={(item) => {
+        onDateChange(item as unknown as IDateRangePickerOutput);
+        if (onChange === undefined) return;
+        onChange();
+      }}
       navigatorRenderer={onNavigatorRenderer}
       moveRangeOnFirstSelection={false}
       minDate={new Date()}
