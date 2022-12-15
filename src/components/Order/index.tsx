@@ -4,6 +4,7 @@ import Button from "../Button";
 import { buttonText, cmsList, translateState } from "./data";
 import { ReservedList } from "../../types/schema";
 import UserAuth from "../../context/UserAuthContext";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface IOrderProps {
   data: ReservedList;
@@ -11,9 +12,12 @@ interface IOrderProps {
 
 function Order({ data }: IOrderProps): JSX.Element {
   const { authToken } = useContext(UserAuth);
+  const queryClient = useQueryClient();
+
   const handlePetCard = (id: number): void => {
     console.log(id);
   };
+
   const handleCheckIn = (id: number, Status: string): void => {
     console.log(Status);
     // eslint-disable-next-line default-case
@@ -24,9 +28,12 @@ function Order({ data }: IOrderProps): JSX.Element {
           { CheckIn: "checkIn" },
           {
             headers: { Authorization: `Bearer ${authToken}` },
-            // params: { orderId: id },
           }
         );
+        queryClient.invalidateQueries(["reserved"]);
+        queryClient.invalidateQueries(["checkIn"]);
+        queryClient.removeQueries(["reserved"]);
+        queryClient.removeQueries(["checkIn"]);
         break;
       case "checkIn":
         void axios.put(
@@ -36,9 +43,14 @@ function Order({ data }: IOrderProps): JSX.Element {
             headers: { Authorization: `Bearer ${authToken}` },
           }
         );
+        queryClient.invalidateQueries(["checkIn"]);
+        queryClient.invalidateQueries(["checkOut"]);
+        queryClient.removeQueries(["checkIn"]);
+        queryClient.removeQueries(["checkOut"]);
         break;
     }
   };
+
   const handleCancel = (id: number): void => {
     void axios.put(
       `https://petcity.rocket-coding.com/hotel/checkOut?orderId=${id}`,
@@ -47,6 +59,10 @@ function Order({ data }: IOrderProps): JSX.Element {
         headers: { Authorization: `Bearer ${authToken}` },
       }
     );
+    queryClient.invalidateQueries(["reserved"]);
+    queryClient.invalidateQueries(["cancel"]);
+    queryClient.removeQueries(["reserved"]);
+    queryClient.removeQueries(["cancel"]);
   };
   return (
     <div className="overflow-hidden rounded-lg border-2 border-black">

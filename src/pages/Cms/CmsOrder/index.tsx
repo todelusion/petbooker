@@ -3,6 +3,7 @@ import Button from "../../../components/Button";
 import Order from "../../../components/Order";
 
 import UserAuth from "../../../context/UserAuthContext";
+import { LoadingCustom } from "../../../img/icons";
 import useOrderList from "../../../utils/api/orderList";
 
 type Status = "待入住" | "已入住" | "完成訂單" | "取消訂單";
@@ -47,10 +48,18 @@ function CmsOrder(): JSX.Element {
 
         break;
     }
+
+    if (reserve.isSuccess) return;
   };
 
   return (
     <div>
+      {(reserve.isFetching ||
+        checkin.isFetching ||
+        checkout.isFetching ||
+        cancel.isFetching) && (
+        <LoadingCustom className="absolute left-1/2" color="bg-second" />
+      )}
       {reserve.data != null && (
         <>
           <nav className="mb-4 flex">
