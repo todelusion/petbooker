@@ -68,7 +68,7 @@ const HotelCard = React.memo(({ data }: HotelCardProps): JSX.Element => {
                   ) {
                     dispatchPending({
                       type: "IS_ERROR",
-                      payload: "必須入住日與退房日不得為空且不能相同",
+                      payload: "入住日與退房日不得為空且不能相同",
                     });
                     setTimeout(() => dispatchPending({ type: "DONE" }), 1000);
                     return;
