@@ -5,11 +5,10 @@ import type { IRoom } from "./data";
 
 interface IRoomProps {
   data: IRoom;
+  onClick: () => void;
 }
 
-function Room({ data }: IRoomProps): JSX.Element {
-  console.log(data);
-  const navigate = useNavigate();
+function Room({ data, onClick }: IRoomProps): JSX.Element {
   return (
     <ul className="mb-6 flex h-70 justify-between border-2">
       <li className="h-full basis-4/12">
@@ -42,13 +41,7 @@ function Room({ data }: IRoomProps): JSX.Element {
             className="px-5 py-2"
             type="Secondary"
             textSize="text-sm lg:text-base"
-            onClick={() =>
-              navigate(
-                `/hotel/book/${data.Id as unknown as string}/${data.RoomName}/${
-                  data.RoomPrice
-                }`
-              )
-            }
+            onClick={onClick}
           />
         </div>
       </li>

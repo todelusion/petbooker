@@ -27,6 +27,7 @@ export const useHotelList = (body: Filter) =>
 export const useHotel = (id: string, startDate: Date, endDate: Date) => {
   const start = format(startDate, "yyyy/MM/dd");
   const end = format(endDate, "yyyy/MM/dd");
+  console.log(startDate.getDate(), endDate.getDate());
 
   return useQuery(["Hotel"], async () => {
     const data = await AxiosTryCatch<Hotel>(async () =>

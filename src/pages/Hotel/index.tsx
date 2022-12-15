@@ -1,12 +1,12 @@
-import { useNavigate, useParams } from "react-router-dom";
+import { NavigateFunction, useNavigate, useParams } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper";
 import { AnimatePresence } from "framer-motion";
-import React, { useEffect, useLayoutEffect } from "react";
+import React, { useContext, useEffect, useLayoutEffect } from "react";
 import { format } from "date-fns";
 import { Hotels } from "../../components/HotelCard/data";
 import Comment from "./Comment";
-import { Comments as comments, Rooms as rooms } from "./data";
+import { Comments as comments, IRoom, Rooms as rooms } from "./data";
 import SearchBar from "../../containers/SearchBar";
 import Photo from "./Photo";
 import Info from "./Info";
@@ -21,6 +21,9 @@ import { LoadingCustom } from "../../img/icons";
 import MotionFade from "../../containers/MotionFade";
 import useSearchBar from "../../hooks/useSearchBar";
 import useModal from "../../hooks/useModal";
+import { ISearchBarContextProps } from "../../context/SearchBarContext";
+import { PendingAction } from "../../hooks/usePending";
+import UserAuth from "../../context/UserAuthContext";
 
 export interface IHotel {
   Id: string;
@@ -38,31 +41,51 @@ export interface IHotel {
   facilitiesLists: typeof facilitiesLists;
   specialsLists: typeof specialsLists;
 }
-const useRedirect = (startDate: Date, endDate: Date): void => {
-  const navigate = useNavigate();
-  const { dispatchPending } = useModal();
-  useEffect(() => {
-    if (startDate.getTime() !== endDate.getTime()) return undefined;
 
-    navigate("/home");
+const handleClick = (
+  authToken: string,
+  navigate: NavigateFunction,
+  room: IRoom,
+  selection: ISearchBarContextProps["selection"],
+  dispatchPending: React.Dispatch<PendingAction>
+): void => {
+  if (authToken === "") {
+    dispatchPending({
+      type: "IS_ERROR",
+      payload: "請先登入會員",
+    });
+    setTimeout(() => dispatchPending({ type: "DONE" }), 1000);
+    return;
+  }
+  if (selection.startDate.getTime() === selection.endDate.getTime()) {
     dispatchPending({
       type: "IS_ERROR",
       payload: "必須入住日與退房日不得為空且不能相同",
     });
     setTimeout(() => dispatchPending({ type: "DONE" }), 1000);
+    return;
+  }
 
-    return clearInterval(
-      setTimeout(() => dispatchPending({ type: "DONE" }), 1000)
-    );
-  }, [dispatchPending, endDate, navigate, startDate]);
+  navigate(
+    `/hotel/book/${room.Id as unknown as string}/${room.RoomName}/${
+      room.RoomPrice
+    }`
+  );
 };
 
 function Hotel(): JSX.Element {
   const { id } = useParams();
   const { selection } = useSearchBar();
-  useRedirect(selection.startDate, selection.endDate);
+  const { dispatchPending } = useModal();
+  const { authToken } = useContext(UserAuth);
+  const navigate = useNavigate();
+  // useRedirect(selection.startDate, selection.endDate);
   const { data } = useHotel(id ?? "", selection.startDate, selection.endDate);
   console.log(data);
+
+  useEffect(() =>
+    clearInterval(setTimeout(() => dispatchPending({ type: "DONE" }), 1000))
+  );
 
   return (
     <div className="px-20 pt-40">
@@ -103,7 +126,19 @@ function Hotel(): JSX.Element {
 
               <section className="flex flex-col">
                 {data.Hotel[0].Room.map((room) => (
-                  <Room key={room.Id} data={room} />
+                  <Room
+                    onClick={() =>
+                      handleClick(
+                        authToken,
+                        navigate,
+                        room,
+                        selection,
+                        dispatchPending
+                      )
+                    }
+                    key={room.Id}
+                    data={room}
+                  />
                 ))}
               </section>
             </>

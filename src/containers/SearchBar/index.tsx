@@ -270,9 +270,10 @@ const SearchBar = React.memo(
               >
                 <DatePicker
                   onChange={async () => {
-                    await tryCatch(async () =>
-                      queryClient.removeQueries(["HotelList"])
-                    );
+                    queryClient.removeQueries(["HotelList"]);
+                    if (selection.startDate !== selection.endDate) return;
+                    queryClient.removeQueries(["Hotel"]);
+                    // await queryClient.invalidateQueries(["Hotel"]);
                   }}
                 />
               </motion.div>

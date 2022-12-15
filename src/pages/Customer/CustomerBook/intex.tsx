@@ -1,14 +1,34 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { format } from "date-fns";
-import React, { useContext } from "react";
-import { useParams } from "react-router-dom";
+import React, { useContext, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import Button from "../../../components/Button";
 import UserAuth from "../../../context/UserAuthContext";
 import useFilter from "../../../hooks/useFilter";
+import useModal from "../../../hooks/useModal";
 import useSearchBar from "../../../hooks/useSearchBar";
 import { Hotel } from "../../../types/schema";
 import { useUserInfo } from "../../../utils/api/user";
 import petCard from "../CustomerPet/data";
+
+// const useRedirect = (startDate: Date, endDate: Date): void => {
+//   const navigate = useNavigate();
+//   const { dispatchPending } = useModal();
+//   useEffect(() => {
+//     if (startDate.getTime() !== endDate.getTime()) return undefined;
+
+//     navigate("/home");
+//     dispatchPending({
+//       type: "IS_ERROR",
+//       payload: "必須入住日與退房日不得為空且不能相同",
+//     });
+//     setTimeout(() => dispatchPending({ type: "DONE" }), 1000);
+
+//     return clearInterval(
+//       setTimeout(() => dispatchPending({ type: "DONE" }), 1000)
+//     );
+//   }, [dispatchPending, endDate, navigate, startDate]);
+// };
 
 function CustomerBook(): JSX.Element {
   const { id, room, price } = useParams();
@@ -16,6 +36,7 @@ function CustomerBook(): JSX.Element {
   const { data: user } = useUserInfo(authToken);
   const queryClient = useQueryClient();
   const { selection } = useSearchBar();
+  // useRedirect(selection.startDate, selection.endDate);
   const hotel = queryClient.getQueryData<Hotel>(["Hotel"])?.Hotel[0];
   console.log(user);
   console.log(hotel);
@@ -141,7 +162,7 @@ function CustomerBook(): JSX.Element {
               <li className="text-xl font-bold">{hotel.HotelName}</li>
             </ul>
 
-            <ul className="mr-6 grid basis-4/12 grid-cols-1 content-start gap-y-1 border-r-2">
+            <ul className="mr-6 grid basis-4/12 grid-cols-1 content-start gap-y-1">
               <li className="mb-2 font-bold">訂房資訊</li>
               <li>
                 <span>房型：</span>
@@ -155,19 +176,19 @@ function CustomerBook(): JSX.Element {
                 <span>退房日期：</span>
                 <span>{format(selection.endDate, "yyyy/MM/dd")}</span>
               </li>
-              <li>
+              <li className=" mb-14">
                 <span>總計入住：</span>
                 <span>
                   {(selection.endDate.getTime() -
                     selection.startDate.getTime()) /
                     86400000}
-                  天
+                  晚
                 </span>
               </li>
-              <li>
-                <span>訂單價格：</span>
-                <span>
-                  NTD
+              <li className="flex items-center">
+                <span>訂單總價格：</span>
+                <span className="text-lg font-bold text-primary">
+                  NTD &nbsp;
                   {((selection.endDate.getTime() -
                     selection.startDate.getTime()) /
                     86400000) *
@@ -175,12 +196,22 @@ function CustomerBook(): JSX.Element {
                 </span>
               </li>
             </ul>
+            <div className="flex-center h-full">
+              <hr
+                style={{ borderStyle: "solid" }}
+                className="mx-8 block h-[calc(100%-2rem)] border-r-2 border-stone-300"
+              />
+            </div>
             <ul className="basis-6/12">
               <li className="mb-1 font-bold">飼主資訊</li>
             </ul>
           </section>
         )}
-        <Button type="Secondary" text="確認訂房" className="py-2 px-4" />
+        <Button
+          type="Secondary"
+          text="確認訂房"
+          className="mx-auto py-2 px-10"
+        />
       </div>
     </div>
   );
