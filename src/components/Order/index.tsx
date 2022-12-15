@@ -53,7 +53,7 @@ function Order({ data }: IOrderProps): JSX.Element {
 
   const handleCancel = (id: number): void => {
     void axios.put(
-      `https://petcity.rocket-coding.com/hotel/checkOut?orderId=${id}`,
+      `https://petcity.rocket-coding.com/hotel/cancel?orderId=${id}`,
       { Cancel: "cancel" },
       {
         headers: { Authorization: `Bearer ${authToken}` },
