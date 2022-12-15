@@ -111,7 +111,8 @@ function AntdUploadImage(props: IAntdUploadImageProps): JSX.Element {
         // defaultFileList={defaultImage as unknown as Array<UploadFile<any>>}
         // defaultFileList={defalutImageOwn as unknown as Array<UploadFile<any>>}
       >
-        {(
+        {// eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
+        (
           defaultFileList?.length
             ? defaultFileList.length === 5 && ImagefileList?.length >= 5
             : 0

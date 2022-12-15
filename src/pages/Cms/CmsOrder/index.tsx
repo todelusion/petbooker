@@ -1,41 +1,57 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Button from "../../../components/Button";
 import Order from "../../../components/Order";
-import { cmsOrder, CMSOrder } from "../../../components/Order/data";
+
 import UserAuth from "../../../context/UserAuthContext";
-import { useOrderList } from "../../../utils/api/orderList";
+import useOrderList from "../../../utils/api/orderList";
 
 type Status = "待入住" | "已入住" | "完成訂單" | "取消訂單";
 
 function CmsOrder(): JSX.Element {
   const { authToken } = useContext(UserAuth);
-  const { data } = useOrderList(authToken);
+  // const { data } = useOrderList(authToken);
+  const [reserve, checkin, checkout, cancel] = useOrderList(authToken);
 
-  const [dataStatus, setDataStatus] = useState(data);
+  const [dataStatus, setDataStatus] = useState(reserve.data);
+  console.log(dataStatus);
 
+  useEffect(() => {
+    if (reserve.data !== undefined) {
+      setDataStatus(reserve.data);
+    }
+  }, [reserve.data]);
   const handleClick = (status: Status): void => {
     switch (status) {
       case "待入住":
-        setDataStatus(data.filter((order) => order.Status === "待入住"));
+        setDataStatus(reserve.data);
+
         break;
       case "已入住":
-        setDataStatus(data.filter((order) => order.Status === "已入住"));
+        setDataStatus(checkin.data);
+
         break;
       case "完成訂單":
-        setDataStatus(data.filter((order) => order.Status === "完成訂單"));
+        setDataStatus(checkout.data);
+
         break;
       case "取消訂單":
-        setDataStatus(data.filter((order) => order.Status === "取消訂單"));
+        setDataStatus(cancel.data);
+
         break;
       default:
-        setDataStatus(data.filter((order) => order.Status === "待入住"));
+        if (reserve.data !== undefined) {
+          setDataStatus(
+            reserve.data.filter((order) => order.Status === "待入住")
+          );
+        }
+
         break;
     }
   };
 
   return (
     <div>
-      {data && (
+      {reserve.data != null && (
         <>
           <nav className="mb-4 flex">
             <Button
@@ -63,7 +79,7 @@ function CmsOrder(): JSX.Element {
               className="ml-4 py-3 px-6"
             />
           </nav>
-          <Order data={data} />
+          {dataStatus != null && <Order data={dataStatus} />}
         </>
       )}
     </div>

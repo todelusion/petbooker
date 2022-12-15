@@ -2,10 +2,8 @@
 /* eslint-disable import/prefer-default-export */
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { useContext } from "react";
 import { baseURL } from "..";
-import UserAuth from "../../context/UserAuthContext";
-import { HotelInfoSchema, HotelInfo } from "../../types/schema";
+import { HotelInfoSchema } from "../../types/schema";
 import Header from "./Header";
 
 // const fetchHotelInfo =async(url:string,token:string)=>{

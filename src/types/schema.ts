@@ -166,9 +166,11 @@ export const OrderListSchema = z.array(
       Id: z.number(),
       UserName: z.string(),
       PetCardId: z.number(),
+      PetPhoto: z.string(),
+      PetName: z.string(),
       RoomName: z.string(),
-      CheckInDate: z.string(),
-      CheckOutDate: z.string(),
+      checkInDateOnly: z.string(),
+      checkOutDateOnly: z.string(),
       Status: z.string()
     })
   )
