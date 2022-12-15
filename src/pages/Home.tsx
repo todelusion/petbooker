@@ -15,8 +15,11 @@ import { IFilterContextProps } from "../context/FilterContext";
 import { useHotelList } from "../utils/api/home";
 import { LoadingCustom } from "../img/icons";
 import MotionFade from "../containers/MotionFade";
+import PageNums from "../components/PageNums";
 
 function Home(): JSX.Element {
+  const [current, setCurrent] = useState(1);
+  const queryClient = useQueryClient();
   const { selection, area } = useSearchBar();
   const { Facilities, FoodTypes, PetType, RoomPrices, Services, Specials } =
     useFilter();
@@ -29,13 +32,13 @@ function Home(): JSX.Element {
     CheckInDate: format(selection.startDate, "yyyy/M/d"),
     CheckOutDate: format(selection.endDate, "yyyy/M/d"),
     PriceRange: RoomPrices,
-    Page: 1,
+    Page: current,
     PageSize: 5,
   });
-  // console.log(data);
+  console.log(data);
 
   return (
-    <div className="relative flex w-full items-start justify-evenly px-20 pt-40">
+    <div className="relative flex w-full items-start justify-evenly px-20 pt-40 pb-20">
       <section className=" basis-2/12 rounded-md border-2 border-black">
         <p className="bg-black py-2 text-center text-xl text-white">
           透過以下分類搜尋
@@ -44,8 +47,8 @@ function Home(): JSX.Element {
       </section>
       <div className="flex max-w-2xl basis-10/12 flex-col items-center xl:max-w-4xl">
         <SearchBar className="mb-20" />
-        <div className="relative w-full">
-          <DropDownList className="absolute right-0 -top-12 mb-3" />
+        <div className="relative w-full pt-10">
+          <DropDownList className="absolute right-0 -top-12" />
           <AnimatePresence>
             {data === undefined ? (
               <LoadingCustom
@@ -55,7 +58,18 @@ function Home(): JSX.Element {
               />
             ) : (
               <MotionFade key="HotelCard">
-                <HotelCard data={data.Data} />
+                <>
+                  <PageNums
+                    onClick={async () => {
+                      queryClient.removeQueries(["HotelList"]);
+                    }}
+                    setCurrent={setCurrent}
+                    current={current}
+                    total={data.Totalpage}
+                    className="flex-center absolute -top-12 mb-10 w-full"
+                  />
+                  <HotelCard data={data.Data} />
+                </>
               </MotionFade>
             )}
           </AnimatePresence>

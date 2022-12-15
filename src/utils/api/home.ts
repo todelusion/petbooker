@@ -2,6 +2,7 @@
 /* eslint-disable import/prefer-default-export */
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
+import { format } from "date-fns";
 import {
   Filter,
   Hotel,
@@ -14,7 +15,7 @@ export const useHotelList = (body: Filter) =>
   useQuery(["HotelList"], async () => {
     console.log("in useHotelList Hooks", body);
     const res = await axios.post(`${baseURL}/hotel/hotelFilter`, body);
-    console.log(res);
+    // console.log(res);
     const result = HotelListSchema.safeParse(res.data);
     if (result.success) {
       return result.data;
@@ -23,10 +24,15 @@ export const useHotelList = (body: Filter) =>
     return undefined;
   });
 
-export const useHotel = (id: string) =>
-  useQuery(["Hotel"], async () => {
+export const useHotel = (id: string, startDate: Date, endDate: Date) => {
+  const start = format(startDate, "yyyy/MM/dd");
+  const end = format(endDate, "yyyy/MM/dd");
+
+  return useQuery(["Hotel"], async () => {
     const data = await AxiosTryCatch<Hotel>(async () =>
-      axios.get(`${baseURL}/hotel/hotelInfo?hotelId=${id}`)
+      axios.get(
+        `${baseURL}/hotel/hotelInfo?hotelId=${id}&startDate=${start}&endDate=${end}`
+      )
     );
     // console.log(data);
     const result = HotelSchema.safeParse(data);
@@ -36,3 +42,4 @@ export const useHotel = (id: string) =>
     console.log(result.error.format());
     return undefined;
   });
+};
