@@ -33,8 +33,8 @@ interface IFilterList {
 }
 
 interface IFilterInputProps {
-  action: FilterAction["type"];
   filterList: IFilterList;
+  action?: FilterAction["type"];
   labelWidth?: string;
   onChange?: (e: React.MouseEvent<HTMLInputElement>) => void;
   required?: boolean;
@@ -178,7 +178,7 @@ function FilterInput({
             key={content.value}
             data-action={action}
             defaultChecked={content.value === checked}
-            name={action}
+            name={keyname}
             id={content.descript}
             value={content.value}
             onClick={async (e) => {
@@ -267,7 +267,7 @@ function FilterInput({
       {!horizontal && <p className="relative font-bold">{title}</p>}
       <form
         ref={formRef}
-        name={action}
+        name={keyname}
         className={horizontal === true ? "flex items-center" : ""}
       >
         {horizontal && (
