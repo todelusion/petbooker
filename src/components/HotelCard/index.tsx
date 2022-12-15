@@ -16,8 +16,8 @@ interface HotelCardProps {
 
 const HotelCard = React.memo(({ data }: HotelCardProps): JSX.Element => {
   console.log(typeof data[0]?.HotelPhoto);
-  console.log(data);
-  // const queryClient = useQueryClient();
+  // console.log(data);
+  const queryClient = useQueryClient();
   if (data.length < 1) return <p>未找到適合您寵物的旅店</p>;
   // const renderPath = (HotelId: number):string => {
   //   if(HotelId)
@@ -56,9 +56,9 @@ const HotelCard = React.memo(({ data }: HotelCardProps): JSX.Element => {
                 text="選擇房間"
                 className="py-2 px-5 text-sm"
                 navigatePath={`/hotel/${hotel?.HotelId ?? ""}`}
-                // onClick={() => {
-                //   queryClient.removeQueries(["Hotel"]);
-                // }}
+                onClick={() => {
+                  queryClient.removeQueries(["Hotel"]);
+                }}
               />
             </li>
           </ul>

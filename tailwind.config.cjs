@@ -14,6 +14,7 @@ module.exports = {
         primary_A11y: "#332200",
         primary_Dark: "#B27600",
         second: "#6E7D00",
+        second_dark: "#313800",
         accent: "#B9C850",
         neutral: "#F5F5F5",
       },

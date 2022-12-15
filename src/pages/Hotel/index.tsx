@@ -1,8 +1,9 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper";
 import { AnimatePresence } from "framer-motion";
-import React from "react";
+import React, { useEffect, useLayoutEffect } from "react";
+import { format } from "date-fns";
 import { Hotels } from "../../components/HotelCard/data";
 import Comment from "./Comment";
 import { Comments as comments, Rooms as rooms } from "./data";
@@ -18,6 +19,8 @@ import Room from "./Room";
 import { useHotel } from "../../utils/api/home";
 import { LoadingCustom } from "../../img/icons";
 import MotionFade from "../../containers/MotionFade";
+import useSearchBar from "../../hooks/useSearchBar";
+import useModal from "../../hooks/useModal";
 
 export interface IHotel {
   Id: string;
@@ -35,10 +38,30 @@ export interface IHotel {
   facilitiesLists: typeof facilitiesLists;
   specialsLists: typeof specialsLists;
 }
+const useRedirect = (startDate: Date, endDate: Date): void => {
+  const navigate = useNavigate();
+  const { dispatchPending } = useModal();
+  useEffect(() => {
+    if (startDate.getTime() !== endDate.getTime()) return undefined;
+
+    navigate("/home");
+    dispatchPending({
+      type: "IS_ERROR",
+      payload: "必須入住日與退房日不得為空且不能相同",
+    });
+    setTimeout(() => dispatchPending({ type: "DONE" }), 1000);
+
+    return clearInterval(
+      setTimeout(() => dispatchPending({ type: "DONE" }), 1000)
+    );
+  }, [dispatchPending, endDate, navigate, startDate]);
+};
 
 function Hotel(): JSX.Element {
   const { id } = useParams();
-  const { data } = useHotel(id ?? "");
+  const { selection } = useSearchBar();
+  useRedirect(selection.startDate, selection.endDate);
+  const { data } = useHotel(id ?? "", selection.startDate, selection.endDate);
   console.log(data);
 
   return (
