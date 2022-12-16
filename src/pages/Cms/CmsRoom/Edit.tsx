@@ -126,7 +126,6 @@ function Edit({ title, onClick, data, type }: IEditProps): JSX.Element {
             onChange={(e) => setPetType((e.target as HTMLInputElement).value)}
             noContext
             required
-            action="PICK-PetType"
             horizontal
             filterList={petLists}
             checked={data?.PetType}
