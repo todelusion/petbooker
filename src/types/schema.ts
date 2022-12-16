@@ -190,3 +190,16 @@ export const OrderListSchema = z.array(
     })
   )
   export type ReservedList = z.infer<typeof OrderListSchema>;
+
+  export const customerOrderListSchema= z.array(
+      z.object({
+        Id: z.number(),
+        RoomPhoto: z.string(),
+        HotelName: z.string(),
+        RoomName: z.string(),
+        CheckInDate: z.string(),
+        CheckOutDate: z.string(),
+        Status: z.string()
+      })
+    )
+    export type customerOrder = z.infer<typeof customerOrderListSchema>;

@@ -8,7 +8,6 @@ import useOrderList from "../../../utils/api/orderList";
 
 function CmsOrder(): JSX.Element {
   const { authToken } = useContext(UserAuth);
-  // const { data } = useOrderList(authToken);
   const [reserve, checkin, checkout, cancel] = useOrderList(authToken);
 
   const [dataStatus, setDataStatus] = useState(reserve.data);

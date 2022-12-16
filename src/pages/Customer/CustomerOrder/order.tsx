@@ -1,6 +1,6 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import axios from "axios";
-
+import { useQueryClient } from "@tanstack/react-query";
 import {
   buttonText,
   translateState,
@@ -8,36 +8,39 @@ import {
 } from "../../../components/Order/data";
 //該Order的Schema
 
-import { useQueryClient } from "@tanstack/react-query";
 import UserAuth from "../../../context/UserAuthContext";
 import Button from "../../../components/Button";
-import { ReservedList } from "../../../types/schema";
+import { customerOrder } from "../../../types/schema";
+import { AnimatePresence } from "framer-motion";
+import Popup from "../../Cms/CmsOrder/Popup";
 
 interface IOrderProps {
-  data: {
-    photo: "";
-    HotelName: "123";
-    Petname: "小王";
-    RoomType: "高級";
-    StartDayOnly: "123456";
-    EndDayOnly: "123456";
-    RoomPrice: "1200";
-    PetCardId: "1";
-    Status: "reverved";
-  };
+  data: customerOrder;
 }
 
 function Order({ data }: IOrderProps): JSX.Element {
   const { authToken } = useContext(UserAuth);
 
   const queryClient = useQueryClient();
-
-  const handlePetCard = (id: number): void => {
-    console.log(id);
-  };
+  const [open, setOpen] = useState(false);
+  const [petId, setPetId] = useState(0);
+  console.log(petId);
 
   return (
     <div className=" overflow-hidden rounded-lg border-2 border-black">
+      <AnimatePresence>
+        {open && (
+          <Popup
+            id={petId}
+            key="Popup"
+            open={open}
+            onClose={() => {
+              setOpen(false);
+              console.log(open);
+            }}
+          />
+        )}
+      </AnimatePresence>
       <ul className="grid grid-cols-8 items-center justify-items-center gap-x-14 whitespace-nowrap border-b-2 border-stone-200 bg-stone-100 py-7 px-7 text-lg font-bold">
         {customerList.map((list) => (
           <li key={list}>{list}</li>
@@ -48,17 +51,21 @@ function Order({ data }: IOrderProps): JSX.Element {
           key={item.Id}
           className="grid grid-cols-8 items-center  justify-items-center gap-y-6 gap-x-14 border-b-2 py-6 px-7 text-center"
         >
-          <li>{item.photo}</li>
+          <li>
+            <img src={item.RoomPhoto} alt="RoomPhoto.jpg" />
+          </li>
           <li>{item.HotelName}</li>
-          <li>{item.RoomType}</li>
-          <li>{item.checkInDateOnly}</li>
-          <li>{item.checkOutDateOnly}</li>
+          <li>{item.RoomName}</li>
+          <li>{item.CheckInDate}</li>
+          <li>{item.CheckOutDate}</li>
           <li>{item.RoomPrice}</li>
           <li>
             <button
               type="button"
               onClick={() => {
-                handlePetCard(item.PetCardId);
+                console.log("碰到拉！");
+                setPetId(item.PetCardId);
+                setOpen(true);
               }}
               className="flex min-w-[160px] items-center rounded-md border-2 border-black py-2 pl-4"
             >
