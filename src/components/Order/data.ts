@@ -8,66 +8,25 @@ export const cmsList = [
   "更動訂單狀態",
 ];
 
-export const cmsOrder = [
-  {
-    UserName: "杰倫",
-    PedCardId: "A",
-    PetName: "Ruby",
-    PetPhoto: "",
-    RoomId: "經典小貓房 A",
-    CheckInDate: "2022/11/07",
-    CheckOutDate: "2022/11/09",
-    Status: "待入住",
-    ReservedListId: "1",
-  },
-  {
-    UserName: "大傑比利",
-    PedCardId: "B",
-    PetName: "咖哩",
-    PetPhoto: "",
-    RoomId: "經典小貓房 B",
-    CheckInDate: "2022/11/12",
-    CheckOutDate: "2022/11/13",
-    Status: "待入住",
-    ReservedListId: "2",
-  },
-  {
-    UserName: "大傑比利",
-    PedCardId: "B",
-    PetName: "咖哩",
-    PetPhoto: "",
-    RoomId: "經典小貓房 B",
-    CheckInDate: "2022/11/12",
-    CheckOutDate: "2022/11/13",
-    Status: "已入住",
-    ReservedListId: "3",
-  },
-  {
-    UserName: "大傑比利",
-    PedCardId: "B",
-    PetName: "咖哩",
-    PetPhoto: "",
-    RoomId: "經典小貓房 B",
-    CheckInDate: "2022/11/12",
-    CheckOutDate: "2022/11/13",
-    Status: "完成訂單",
-    ReservedListId: "4",
-  },
-  {
-    UserName: "大傑比利",
-    PedCardId: "B",
-    PetName: "咖哩",
-    PetPhoto: "",
-    RoomId: "經典小貓房 B",
-    CheckInDate: "2022/11/12",
-    CheckOutDate: "2022/11/13",
-    Status: "取消訂單",
-    ReservedListId: "5",
-  },
-];
+interface ItranslateState{
+  [key: string]:string
+};
+interface IbuttonText{
+  [key: string]:string
+};
 
-export type CMSOrder = typeof cmsOrder;
-
+export  const translateState:ItranslateState={
+  cancel:"已取消",
+  checkOut:"已完成",
+  checkIn:"已入住",
+  reserved:"已預約"
+}
+export  const buttonText:IbuttonText={
+  cancel:"已取消",
+  checkOut:"已完成",
+  checkIn:"確認退房",
+  reserved:"確認入住"
+}
 export const user = {
   Petphoto: "",
 };

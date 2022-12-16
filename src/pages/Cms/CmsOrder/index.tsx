@@ -1,71 +1,118 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Button from "../../../components/Button";
 import Order from "../../../components/Order";
-import { cmsOrder, CMSOrder } from "../../../components/Order/data";
 
-type Status = "全部" | "待入住" | "已入住" | "完成訂單" | "取消訂單";
+import UserAuth from "../../../context/UserAuthContext";
+import { LoadingCustom } from "../../../img/icons";
+import useOrderList from "../../../utils/api/orderList";
 
 function CmsOrder(): JSX.Element {
-  const [data, setData] = useState(cmsOrder);
+  const { authToken } = useContext(UserAuth);
+  // const { data } = useOrderList(authToken);
+  const [reserve, checkin, checkout, cancel] = useOrderList(authToken);
 
-  const handleClick = (status: Status): void => {
+  const [dataStatus, setDataStatus] = useState(reserve.data);
+  const [select, setSelect] = useState("待入住");
+
+  console.log(dataStatus);
+
+  useEffect(() => {
+    if (select !== "已入住") return;
+    if (checkin.data !== undefined) {
+      setDataStatus(checkin.data);
+    }
+  }, [checkin.data, select]);
+
+  useEffect(() => {
+    if (select !== "待入住") return;
+    if (reserve.data !== undefined) {
+      setDataStatus(reserve.data);
+    }
+  }, [reserve.data, select]);
+  // useEffect(() => {
+  //   if (checkin.data !== undefined) {
+  //     setDataStatus(checkin.data);
+  //   }
+  // }, [checkin.data]);
+
+  const handleClick = (status: string): void => {
+    console.log(status);
+
     switch (status) {
-      case "全部":
-        setData(cmsOrder);
-        break;
       case "待入住":
-        setData(cmsOrder.filter((order) => order.Status === "待入住"));
+        setSelect("待入住");
+        setDataStatus(reserve.data);
+
         break;
       case "已入住":
-        setData(cmsOrder.filter((order) => order.Status === "已入住"));
+        setSelect("已入住");
+        setDataStatus(checkin.data);
+
         break;
       case "完成訂單":
-        setData(cmsOrder.filter((order) => order.Status === "完成訂單"));
+        setSelect("完成訂單");
+        setDataStatus(checkout.data);
+
         break;
       case "取消訂單":
-        setData(cmsOrder.filter((order) => order.Status === "取消訂單"));
+        setSelect("取消訂單");
+        setDataStatus(cancel.data);
+
         break;
       default:
-        setData(cmsOrder.filter((order) => order.Status === "待入住"));
+        if (reserve.data !== undefined) {
+          setDataStatus(
+            reserve.data.filter((order) => order.Status === "待入住")
+          );
+        }
+
         break;
     }
   };
 
   return (
     <div>
-      <nav className="mb-4 flex">
-        <Button
-          onClick={() => handleClick("全部")}
-          type="Transparent"
-          text="全部"
-          className="py-3 px-6"
-        />
-        <Button
-          onClick={() => handleClick("待入住")}
-          type="Transparent"
-          text="待入住"
-          className="ml-4 py-3 px-6"
-        />
-        <Button
-          onClick={() => handleClick("已入住")}
-          type="Transparent"
-          text="已入住"
-          className="ml-4 py-3 px-6"
-        />
-        <Button
-          onClick={() => handleClick("完成訂單")}
-          type="Transparent"
-          text="完成訂單"
-          className="ml-4 py-3 px-6"
-        />
-        <Button
-          onClick={() => handleClick("取消訂單")}
-          type="Transparent"
-          text="取消訂單"
-          className="ml-4 py-3 px-6"
-        />
-      </nav>
-      <Order data={data} />
+      {reserve.isFetching ||
+      checkin.isFetching ||
+      checkout.isFetching ||
+      cancel.isFetching ? (
+        <LoadingCustom className="absolute left-1/2" color="bg-second" />
+      ) : (
+        (reserve.isSuccess ||
+          checkin.isSuccess ||
+          checkout.isSuccess ||
+          cancel.isSuccess) && (
+          <>
+            <nav className="mb-4 flex">
+              <Button
+                onClick={() => handleClick("待入住")}
+                type="Transparent"
+                text="待入住"
+                className="ml-4 py-3 px-6"
+              />
+              <Button
+                onClick={() => handleClick("已入住")}
+                type="Transparent"
+                text="已入住"
+                className="ml-4 py-3 px-6"
+              />
+              <Button
+                onClick={() => handleClick("完成訂單")}
+                type="Transparent"
+                text="完成訂單"
+                className="ml-4 py-3 px-6"
+              />
+              <Button
+                onClick={() => handleClick("取消訂單")}
+                type="Transparent"
+                text="取消訂單"
+                className="ml-4 py-3 px-6"
+              />
+            </nav>
+            {dataStatus != null && <Order data={dataStatus} />}
+          </>
+        )
+      )}
     </div>
   );
 }

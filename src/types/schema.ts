@@ -160,3 +160,18 @@ export const HotelInfoSchema = z.object({
 
 export type HotelInfo = z.infer<typeof HotelInfoSchema>;
 // export type HotelPhotos = z.infer<typeof HotelInfoSchema["HotelPhotos"]>
+
+export const OrderListSchema = z.array(
+    z.object({
+      Id: z.number(),
+      UserName: z.string(),
+      PetCardId: z.number(),
+      PetPhoto: z.string(),
+      PetName: z.string(),
+      RoomName: z.string(),
+      checkInDateOnly: z.string(),
+      checkOutDateOnly: z.string(),
+      Status: z.string()
+    })
+  )
+  export type ReservedList = z.infer<typeof OrderListSchema>;
