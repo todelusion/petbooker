@@ -1,23 +1,58 @@
+import Item from "antd/es/list/Item";
 import React from "react";
+import { string } from "zod";
 import MotionFade from "../../../containers/MotionFade";
 import MotionPopup from "../../../containers/MotionPopup";
 import { usePetCard } from "../../../utils/api/petCard";
+import { sortService, translateService } from "./petData";
 
 interface ModalProps {
   open: boolean;
   onClose?: () => void;
   id: number;
 }
+
 function Popup({ open, onClose, id }: ModalProps): JSX.Element {
   const { data, isSuccess } = usePetCard(id);
 
-  // console.log(open);
-  // console.log(id);
-  console.log(data);
+  const sortedServiceTypes = (
+    ServiceTypes: string[] | null,
+    categoryName: string
+  ) => {
+    if (ServiceTypes === null || data?.ServiceTypes === undefined) return;
+    if (ServiceTypes.length === 0) return;
+
+    const result = data.ServiceTypes.filter((item) => {
+      if (item === null) return;
+      console.log(sortService[item], "filter");
+      return sortService[item] === categoryName;
+    }).map((item) => {
+      if (item === null) return;
+      console.log(item, "map");
+
+      return translateService[item];
+    });
+    return result;
+  };
+
+  const Services =
+    sortedServiceTypes((data?.ServiceTypes as string[]) || null, "Services") ||
+    [];
+  const Facilities =
+    sortedServiceTypes(
+      (data?.ServiceTypes as string[]) || null,
+      "Facilities"
+    ) || [];
+  const Specials =
+    sortedServiceTypes((data?.ServiceTypes as string[]) || null, "Specials") ||
+    [];
+  console.log(data?.ServiceTypes);
+
+  console.log(Services, Facilities, Specials);
 
   return (
     <MotionFade className="flex-center fixed left-0 top-0 z-10 h-screen w-full bg-black/50">
-      <MotionPopup className="scrollbar-thumb-h-1/2 relative h-[calc(50%-24px)] w-[90%] max-w-[90%] overflow-scroll rounded-xl bg-white p-10 scrollbar-thin scrollbar-thumb-slate-700/50 scrollbar-thumb-rounded-3xl ">
+      <MotionPopup className="scrollbar-thumb-h-1/2 relative h-[calc(80%-24px)] w-[90%] max-w-[90%] overflow-scroll rounded-xl bg-white p-10 scrollbar-thin scrollbar-thumb-slate-700/50 scrollbar-thumb-rounded-3xl ">
         <div className="  h-full   w-full ">
           {open && data !== undefined && (
             <>

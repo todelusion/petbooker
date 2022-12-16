@@ -125,7 +125,7 @@ export const PetSchema = z.object({
   PetPersonality: z.string().optional(),
   PetMedicine: z.union([z.null(), z.string().optional()]),
   PetNote: z.union([z.null(), z.string().optional()]),
-  ServiceTypes: z.array(z.union([z.null(), z.string().optional()])),
+  ServiceTypes: z.array(z.union([z.null(), z.string()])),
   PetPhoto:z.union([z.null(), z.string().optional()])
 });
 
