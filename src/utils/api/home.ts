@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-/* eslint-disable import/prefer-default-export */
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { format } from "date-fns";
@@ -8,8 +7,10 @@ import {
   Hotel,
   HotelListSchema,
   HotelSchema,
+  Pet,
 } from "../../types/schema";
 import { AxiosTryCatch, baseURL } from "../index";
+import Header from "./Header";
 
 export const useHotelList = (body: Filter) =>
   useQuery(["HotelList"], async () => {
@@ -27,6 +28,7 @@ export const useHotelList = (body: Filter) =>
 export const useHotel = (id: string, startDate: Date, endDate: Date) => {
   const start = format(startDate, "yyyy/MM/dd");
   const end = format(endDate, "yyyy/MM/dd");
+  console.log(startDate.getDate(), endDate.getDate());
 
   return useQuery(["Hotel"], async () => {
     const data = await AxiosTryCatch<Hotel>(async () =>
@@ -42,4 +44,12 @@ export const useHotel = (id: string, startDate: Date, endDate: Date) => {
     console.log(result.error.format());
     return undefined;
   });
+};
+
+export const usePostPet = async (body: Pet, token: string) => {
+  const header = new Header(token);
+  const data = await AxiosTryCatch(async () =>
+    axios.post(`${baseURL}/petcard`, body, header)
+  );
+  console.log(data);
 };

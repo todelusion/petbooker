@@ -1,10 +1,12 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import axios from "axios";
+import { useQueryClient } from "@tanstack/react-query";
+import { AnimatePresence } from "framer-motion";
 import Button from "../Button";
 import { buttonText, cmsList, translateState } from "./data";
 import { ReservedList } from "../../types/schema";
 import UserAuth from "../../context/UserAuthContext";
-import { useQueryClient } from "@tanstack/react-query";
+import Popup from "../../pages/Cms/CmsOrder/Popup";
 
 interface IOrderProps {
   data: ReservedList;
@@ -12,29 +14,39 @@ interface IOrderProps {
 
 function Order({ data }: IOrderProps): JSX.Element {
   const { authToken } = useContext(UserAuth);
+  // const [reserve, checkin, checkout, cancel] = useOrderList(authToken);
+
   const queryClient = useQueryClient();
+  const [open, setOpen] = useState(false);
+  console.log(open);
 
   const handlePetCard = (id: number): void => {
     console.log(id);
+  };
+  const putCheckIn = async (id: number): Promise<void> => {
+    await axios.put(
+      `https://petcity.rocket-coding.com/hotel/checkIn?orderId=${id}`,
+      { CheckIn: "checkIn" },
+      {
+        headers: { Authorization: `Bearer ${authToken}` },
+      }
+    );
+    await queryClient.invalidateQueries(["reserved"]);
+    await queryClient.invalidateQueries(["checkIn"]);
+    queryClient.removeQueries(["reserved"]);
+    queryClient.removeQueries(["checkIn"]);
+    // setData(checkin.data);
   };
 
   const handleCheckIn = (id: number, Status: string): void => {
     console.log(Status);
     // eslint-disable-next-line default-case
     switch (Status) {
-      case "reserved":
-        void axios.put(
-          `https://petcity.rocket-coding.com/hotel/checkIn?orderId=${id}`,
-          { CheckIn: "checkIn" },
-          {
-            headers: { Authorization: `Bearer ${authToken}` },
-          }
-        );
-        queryClient.invalidateQueries(["reserved"]);
-        queryClient.invalidateQueries(["checkIn"]);
-        queryClient.removeQueries(["reserved"]);
-        queryClient.removeQueries(["checkIn"]);
+      case "reserved": {
+        void putCheckIn(id);
         break;
+      }
+
       case "checkIn":
         void axios.put(
           `https://petcity.rocket-coding.com/hotel/checkOut?orderId=${id}`,
@@ -43,8 +55,9 @@ function Order({ data }: IOrderProps): JSX.Element {
             headers: { Authorization: `Bearer ${authToken}` },
           }
         );
-        queryClient.invalidateQueries(["checkIn"]);
-        queryClient.invalidateQueries(["checkOut"]);
+
+        void queryClient.invalidateQueries(["checkIn"]);
+        void queryClient.invalidateQueries(["checkOut"]);
         queryClient.removeQueries(["checkIn"]);
         queryClient.removeQueries(["checkOut"]);
         break;
@@ -53,19 +66,31 @@ function Order({ data }: IOrderProps): JSX.Element {
 
   const handleCancel = (id: number): void => {
     void axios.put(
-      `https://petcity.rocket-coding.com/hotel/checkOut?orderId=${id}`,
+      `https://petcity.rocket-coding.com/hotel/cancel?orderId=${id}`,
       { Cancel: "cancel" },
       {
         headers: { Authorization: `Bearer ${authToken}` },
       }
     );
-    queryClient.invalidateQueries(["reserved"]);
-    queryClient.invalidateQueries(["cancel"]);
+    void queryClient.invalidateQueries(["reserved"]);
+    void queryClient.invalidateQueries(["cancel"]);
     queryClient.removeQueries(["reserved"]);
     queryClient.removeQueries(["cancel"]);
   };
   return (
     <div className="overflow-hidden rounded-lg border-2 border-black">
+      <AnimatePresence>
+        {open && (
+          <Popup
+            key="Popup"
+            open={open}
+            onClose={() => {
+              setOpen(false);
+              console.log(open);
+            }}
+          />
+        )}
+      </AnimatePresence>
       <ul className="grid grid-cols-7 justify-items-center gap-x-14 border-b-2 border-stone-200 bg-stone-100 py-7 px-7 text-lg font-bold">
         {cmsList.map((list) => (
           <li key={list}>{list}</li>
@@ -74,13 +99,16 @@ function Order({ data }: IOrderProps): JSX.Element {
       {data.map((item) => (
         <ul
           key={item.Id}
-          className="grid grid-cols-7 items-center justify-items-center gap-y-6 gap-x-14 border-b-2 py-6 px-7 text-center"
+          className="grid grid-cols-7 items-center justify-items-center gap-y-6 gap-x-14 whitespace-nowrap border-b-2 py-6 px-7 text-center"
         >
           <li>{item.UserName}</li>
           <li>
             <button
               type="button"
               onClick={() => {
+                console.log("碰到拉！");
+
+                setOpen(true);
                 handlePetCard(item.PetCardId);
               }}
               className="flex min-w-[160px] items-center rounded-md border-2 border-black py-2 pl-4"

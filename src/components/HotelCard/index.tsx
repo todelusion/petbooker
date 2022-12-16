@@ -3,6 +3,7 @@ import { format } from "date-fns";
 import { AnimatePresence } from "framer-motion";
 import React, { useEffect, useState } from "react";
 import useFilter from "../../hooks/useFilter";
+import useModal from "../../hooks/useModal";
 import useSearchBar from "../../hooks/useSearchBar";
 import { LoadingCustom } from "../../img/icons";
 import { HorelList } from "../../types/schema";
@@ -18,12 +19,12 @@ const HotelCard = React.memo(({ data }: HotelCardProps): JSX.Element => {
   console.log(typeof data[0]?.HotelPhoto);
   // console.log(data);
   const queryClient = useQueryClient();
+  const { selection } = useSearchBar();
+  const { dispatchPending } = useModal();
+  useEffect(() =>
+    clearInterval(setTimeout(() => dispatchPending({ type: "DONE" }), 1000))
+  );
   if (data.length < 1) return <p>未找到適合您寵物的旅店</p>;
-  // const renderPath = (HotelId: number):string => {
-  //   if(HotelId)
-
-  //   return `/hotel/${hotel?.HotelId}`
-  // }
 
   return (
     <>
@@ -55,8 +56,23 @@ const HotelCard = React.memo(({ data }: HotelCardProps): JSX.Element => {
                 type="Secondary"
                 text="選擇房間"
                 className="py-2 px-5 text-sm"
-                navigatePath={`/hotel/${hotel?.HotelId ?? ""}`}
+                navigatePath={
+                  selection.startDate.getTime() === selection.endDate.getTime()
+                    ? "/home"
+                    : `/hotel/${hotel?.HotelId ?? ""}`
+                }
                 onClick={() => {
+                  if (
+                    selection.startDate.getTime() ===
+                    selection.endDate.getTime()
+                  ) {
+                    dispatchPending({
+                      type: "IS_ERROR",
+                      payload: "入住日與退房日不得為空且不能相同",
+                    });
+                    setTimeout(() => dispatchPending({ type: "DONE" }), 1000);
+                    return;
+                  }
                   queryClient.removeQueries(["Hotel"]);
                 }}
               />

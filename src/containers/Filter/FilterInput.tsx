@@ -34,14 +34,17 @@ interface IFilterList {
 
 interface IFilterInputProps {
   filterList: IFilterList;
+  noContext: true;
   action?: FilterAction["type"];
   labelWidth?: string;
   onChange?: (e: React.MouseEvent<HTMLInputElement>) => void;
   required?: boolean;
-  noContext?: boolean;
   horizontal?: true;
   checked?: string | string[];
   className?: string;
+  classNames?: {
+    p: string;
+  };
 }
 
 const dispatchContext = (
@@ -155,6 +158,7 @@ function FilterInput({
   checked,
   horizontal,
   className,
+  classNames,
 }: IFilterInputProps): JSX.Element {
   const isUseContext = (): IFilterContextProps | undefined => {
     // 如果 props-action 未傳進來代表不想使用 Context
@@ -272,7 +276,7 @@ function FilterInput({
       >
         {horizontal && (
           <p
-            className={`relative ${
+            className={`relative ${classNames?.p ?? "font-bold"} ${
               labelWidth === undefined ? "mr-5" : labelWidth
             }`}
           >

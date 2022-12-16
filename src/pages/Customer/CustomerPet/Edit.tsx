@@ -17,14 +17,15 @@ import {
 } from "../../../utils";
 import { uploadRoomPhoto, putRoom, postRoom } from "../../../utils/api/cmsRoom";
 import UserAuth from "../../../context/UserAuthContext";
-import { POSTRoom, PostRoomSchema, Room } from "../../../types/schema";
+import { Pet, POSTRoom, PostRoomSchema, Room } from "../../../types/schema";
 import { PendingAction } from "../../../hooks/usePending";
 import Input from "./Input";
+import input from "./data";
 
 interface IEditProps {
   title: string;
   onClick: () => void;
-  data?: Room;
+  data?: Pet;
   type: "POST" | "PUT";
 }
 
@@ -118,33 +119,47 @@ function Edit({ title, onClick, data, type }: IEditProps): JSX.Element {
             type="Room"
             className="mb-6"
           />
-
+          <Input
+            onChange={(e) => console.log(e.target.value)}
+            {...input.PetName}
+          />
+          <hr className=" my-6 block border-stone-300" />
+          <h2 className="mb-3 font-bold">寵物資訊</h2>
           <FilterInput
             onChange={(e) => setPetType((e.target as HTMLInputElement).value)}
             noContext
             required
             labelWidth="min-w-[5rem]"
-            action="PICK-PetType"
             horizontal
             filterList={petLists}
             checked={data?.PetType}
             className="mb-5"
+            classNames={{ p: "font-normal text-sm" }}
           />
-          <form>
-            <Input
-              required
-              title="寵物名子"
-              name="PetName"
-              labelWidth="min-w-[5rem]"
-              placeholder="請填寫您的寵物名字"
-            />
-            <Input
-              title="年齡"
-              name="PetName"
-              labelWidth="min-w-[5rem]"
-              placeholder="請填寫您的寵物名字"
-            />
-          </form>
+
+          <Input
+            onChange={(e) => console.log(e.target.value)}
+            title="個性"
+            name="PetPersonality"
+            labelWidth="min-w-[5rem]"
+            className=" mb-4"
+            classNames={{ p: "text-sm" }}
+          />
+          <Input
+            onChange={(e) => console.log(e.target.value)}
+            title="服用藥物"
+            name="PetMedicine"
+            className=" mb-4"
+            labelWidth="min-w-[5rem]"
+            classNames={{ p: "text-sm" }}
+          />
+          <Input
+            onChange={(e) => console.log(e.target.value)}
+            title="備註"
+            name="PetNote"
+            labelWidth="min-w-[5rem]"
+            classNames={{ p: "text-sm" }}
+          />
         </>
       </MotionPopup>
     </MotionFade>

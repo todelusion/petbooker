@@ -30,39 +30,21 @@ export default function Router(): JSX.Element {
   return (
     <QueryClientProvider client={client}>
       <Routes>
-        <Route path="/" element={<Nav />}>
+        <Route
+          path="/"
+          element={
+            <ComponentProvicer>
+              <Nav />
+            </ComponentProvicer>
+          }
+        >
           <Route path="/" element={<LandingPage />} />
-          <Route
-            path="/home"
-            element={
-              <ComponentProvicer>
-                <Home />
-              </ComponentProvicer>
-            }
-          />
-          <Route
-            path="/contextTest"
-            element={
-              <ComponentProvicer>
-                <ContextTest />
-              </ComponentProvicer>
-            }
-          />
-          <Route
-            path="/hotel/:id"
-            element={
-              <ComponentProvicer>
-                <Hotel />
-              </ComponentProvicer>
-            }
-          />
+          <Route path="/home" element={<Home />} />
+          <Route path="/contextTest" element={<ContextTest />} />
+          <Route path="/hotel/:id" element={<Hotel />} />
           <Route
             path="/hotel/book/:id/:room/:price"
-            element={
-              <ComponentProvicer>
-                <CustomerBook />
-              </ComponentProvicer>
-            }
+            element={<CustomerBook />}
           />
           <Route path="/customer" element={<NavBackend menus={customerMenu} />}>
             <Route path="/customer/info" element={<CustomerInfo />} />

@@ -11,8 +11,8 @@ function Info({ hotel, className }: IInfoProps): JSX.Element {
   return (
     <section className={className}>
       <ul className="mb-4 flex h-20">
-        <li className="rounded-3xl bg-primary p-4 text-4xl font-bold text-white">
-          {hotel.HotelScore}
+        <li className="flex-center h-20 w-24 rounded-xl bg-primary p-4 text-4xl font-bold text-white">
+          <span>{hotel.HotelScore}</span>
         </li>
         <li className="ml-6">
           <h2 className="mb-2 py-1 text-4xl font-bold">{hotel.HotelName}</h2>
