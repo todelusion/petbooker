@@ -12,7 +12,7 @@ import useSearchBar from "../../../hooks/useSearchBar";
 import { EditPath } from "../../../img/icons";
 import { Booking, Hotel, Pet, PetSchema } from "../../../types/schema";
 import { useUserInfo } from "../../../utils/api/user";
-import petCard from "../CustomerPet/data";
+// import petCard from "../CustomerPet/data";
 import Edit from "../CustomerPet/Edit";
 import PetInfo from "./PetInfo";
 
@@ -99,7 +99,7 @@ function CustomerBook(): JSX.Element {
           >
             <img src={EditPath} alt="" />
           </button>
-          <ul className="mr-7 basis-2/12">
+          {/* <ul className="mr-7 basis-2/12">
             <li className=" mb-6 h-40">
               {petCard.PetPhoto === null ? (
                 <div className="h-full w-full bg-gray-200" />
@@ -112,7 +112,7 @@ function CustomerBook(): JSX.Element {
               )}
             </li>
             <li className="text-xl font-bold">{petCard.PetName}</li>
-          </ul>
+          </ul> */}
 
           <ul className="mr-6 grid basis-4/12 grid-cols-1 content-start gap-y-2 border-r-2">
             <li className="mb-2 font-bold">寵物資訊</li>

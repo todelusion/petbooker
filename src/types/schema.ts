@@ -117,11 +117,11 @@ export const BookingSchema = z.object({
 });
 
 export const PetSchema = z.object({
-  PetName: z.string({ required_error: "寵物姓名必填" }),
-  PetType: z.string({ required_error: "寵物類型必填" }),
-  PetAge: z.string({ required_error: "寵物年齡必填" }),
-  PetSex: z.string({ required_error: "寵物性別必填" }),
-  FoodTypes: z.array(z.string({ required_error: "寵物飲食偏好必填" })),
+  PetName: z.string({ required_error: "寵物姓名不得為空" }),
+  PetType: z.string({ required_error: "寵物類型不得為空" }),
+  PetAge: z.string({ required_error: "寵物年齡不得為空" }),
+  PetSex: z.string({ required_error: "寵物性別不得為空" }),
+  FoodTypes: z.array(z.string({ required_error: "寵物飲食偏好不得為空" })),
   PetPersonality: z.string().optional(),
   PetMedicine: z.string().optional(),
   PetNote: z.string().optional(),
