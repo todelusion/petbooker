@@ -24,7 +24,7 @@ function Order({ data }: IOrderProps): JSX.Element {
   const queryClient = useQueryClient();
   const [open, setOpen] = useState(false);
   const [petId, setPetId] = useState(0);
-  console.log(petId);
+  console.log(petId, "!");
 
   return (
     <div className=" overflow-hidden rounded-lg border-2 border-black">
