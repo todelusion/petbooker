@@ -18,11 +18,9 @@ function Order({ data }: IOrderProps): JSX.Element {
 
   const queryClient = useQueryClient();
   const [open, setOpen] = useState(false);
-  console.log(open);
+  const [petId, setPetId] = useState(0);
+  console.log(petId);
 
-  const handlePetCard = (id: number): void => {
-    console.log(id);
-  };
   const putCheckIn = async (id: number): Promise<void> => {
     await axios.put(
       `https://petcity.rocket-coding.com/hotel/checkIn?orderId=${id}`,
@@ -82,6 +80,7 @@ function Order({ data }: IOrderProps): JSX.Element {
       <AnimatePresence>
         {open && (
           <Popup
+            id={petId}
             key="Popup"
             open={open}
             onClose={() => {
@@ -107,9 +106,8 @@ function Order({ data }: IOrderProps): JSX.Element {
               type="button"
               onClick={() => {
                 console.log("碰到拉！");
-
+                setPetId(item.PetCardId);
                 setOpen(true);
-                handlePetCard(item.PetCardId);
               }}
               className="flex min-w-[160px] items-center rounded-md border-2 border-black py-2 pl-4"
             >
