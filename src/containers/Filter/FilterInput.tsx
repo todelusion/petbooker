@@ -272,7 +272,7 @@ function FilterInput({
       >
         {horizontal && (
           <p
-            className={`relative ${
+            className={`relative font-bold ${
               labelWidth === undefined ? "mr-5" : labelWidth
             }`}
           >

@@ -43,6 +43,7 @@ export interface IHotel {
 }
 
 const handleClick = (
+  auth: { authToken: string; identity: string },
   navigate: NavigateFunction,
   room: IRoom,
   selection: ISearchBarContextProps["selection"],
@@ -52,6 +53,14 @@ const handleClick = (
     dispatchPending({
       type: "IS_ERROR",
       payload: "入住日與退房日不得為空且不能相同",
+    });
+    setTimeout(() => dispatchPending({ type: "DONE" }), 1000);
+    return;
+  }
+  if (auth.authToken === "" || auth.identity === "hotel") {
+    dispatchPending({
+      type: "IS_ERROR",
+      payload: "請先登入一般會員",
     });
     setTimeout(() => dispatchPending({ type: "DONE" }), 1000);
     return;
@@ -68,6 +77,7 @@ function Hotel(): JSX.Element {
   const { id } = useParams();
   const { selection } = useSearchBar();
   const { dispatchPending } = useModal();
+  const { authToken, identity } = useContext(UserAuth);
 
   const navigate = useNavigate();
   // useRedirect(selection.startDate, selection.endDate);
@@ -119,7 +129,13 @@ function Hotel(): JSX.Element {
                 {data.Hotel[0].Room.map((room) => (
                   <Room
                     onClick={() =>
-                      handleClick(navigate, room, selection, dispatchPending)
+                      handleClick(
+                        { authToken, identity },
+                        navigate,
+                        room,
+                        selection,
+                        dispatchPending
+                      )
                     }
                     key={room.Id}
                     data={room}

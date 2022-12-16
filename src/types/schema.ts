@@ -103,7 +103,7 @@ export const UserInfoSchema = z.object({
   UserPhone: z.union([z.null(), z.string()]),
 });
 
-export const PostBookSchema = z.object({
+export const BookingSchema = z.object({
   PetCardId: z.number(),
   RoomId: z.number(),
   OrderedDate: z.string(),
@@ -116,7 +116,21 @@ export const PostBookSchema = z.object({
   Status: z.string(),
 });
 
-export type PostBook = z.infer<typeof PostBookSchema>;
+export const PetSchema = z.object({
+  PetName: z.string({ required_error: "寵物姓名必填" }),
+  PetType: z.string({ required_error: "寵物類型必填" }),
+  PetAge: z.string({ required_error: "寵物年齡必填" }),
+  PetSex: z.string({ required_error: "寵物性別必填" }),
+  FoodTypes: z.array(z.string({ required_error: "寵物飲食偏好必填" })),
+  PetPersonality: z.string().optional(),
+  PetMedicine: z.string().optional(),
+  PetNote: z.string().optional(),
+  ServiceTypes: z.array(z.string().optional()),
+});
+
+export type Pet = z.infer<typeof PetSchema>;
+
+export type Booking = z.infer<typeof BookingSchema>;
 
 export type UserInfo = z.infer<typeof UserInfoSchema>;
 
