@@ -38,7 +38,7 @@ interface IFilterInputProps {
   action?: FilterAction["type"];
   labelWidth?: string;
   onChange?: (e: React.MouseEvent<HTMLInputElement>) => void;
-  required?: boolean;
+  required?: true;
   horizontal?: true;
   checked?: string | string[];
   className?: string;

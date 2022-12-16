@@ -163,3 +163,44 @@ export const specialsLists = {
     },
   ],
 };
+
+// petCard Edit
+
+export const ageLists = {
+  keyname: "PetAge",
+  title: "年齡",
+  type: "radio",
+  contents: [
+    {
+      value: "幼年",
+      descript: "幼年",
+    },
+    {
+      value: "青年",
+      descript: "青年",
+    },
+    {
+      value: "壯年",
+      descript: "壯年",
+    },
+    {
+      value: "老年",
+      descript: "老年",
+    },
+  ],
+};
+export const sexLists = {
+  keyname: "PetSex",
+  title: "性別",
+  type: "radio",
+  contents: [
+    {
+      value: "公",
+      descript: "公",
+    },
+    {
+      value: "母",
+      descript: "母",
+    },
+  ],
+};
