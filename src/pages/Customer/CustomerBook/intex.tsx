@@ -1,19 +1,34 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { format } from "date-fns";
 import { AnimatePresence } from "framer-motion";
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, {
+  useContext,
+  useEffect,
+  useReducer,
+  useRef,
+  useState,
+} from "react";
 import { NavigateFunction, useNavigate, useParams } from "react-router-dom";
 import Button from "../../../components/Button";
+import { translatePet } from "../../../containers/Filter/data";
+import MotionFade from "../../../containers/MotionFade";
 import UserAuth from "../../../context/UserAuthContext";
 import useFilter from "../../../hooks/useFilter";
 import useModal from "../../../hooks/useModal";
 import { PendingAction } from "../../../hooks/usePending";
 import useSearchBar from "../../../hooks/useSearchBar";
 import { EditPath } from "../../../img/icons";
-import { Booking, Hotel, Pet, PetSchema } from "../../../types/schema";
+import {
+  Booking,
+  Hotel,
+  Pet,
+  PetSchema,
+  UserInfo,
+} from "../../../types/schema";
 import { useUserInfo } from "../../../utils/api/user";
 // import petCard from "../CustomerPet/data";
 import Edit from "../CustomerPet/Edit";
+import { initPet, petReducer } from "../CustomerPet/petReducer";
 import PetInfo from "./PetInfo";
 
 const handleClick = (
@@ -59,17 +74,31 @@ const useDisableScroll = (isShow: string | undefined): void => {
     }
   }, [body, isShow]);
 };
+const useTokenExpired = (
+  user: UserInfo | boolean | undefined,
+  navigate: NavigateFunction,
+  setAuthToken: React.Dispatch<React.SetStateAction<string>>
+): boolean => {
+  useEffect(() => {
+    if (user !== false) return;
+    setAuthToken("");
+    localStorage.setItem("token", "");
+    setTimeout(() => navigate("/login"), 2000);
+  });
+  if (user === false) return true;
+  return false;
+};
 
 function CustomerBook(): JSX.Element {
+  const [pet, dispatchPet] = useReducer(petReducer, initPet);
   const [isShow, setIsShow] = useState<"POST" | "PUT">();
-  const [pet, setPet] = useState<Pet>();
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const UserNameRef = useRef<HTMLInputElement>(null);
   const UserPhoneRef = useRef<HTMLInputElement>(null);
   const { id, room, price } = useParams();
 
-  const { authToken } = useContext(UserAuth);
+  const { authToken, setAuthToken } = useContext(UserAuth);
   const { data: user } = useUserInfo(authToken);
   const { selection } = useSearchBar();
   const { dispatchPending } = useModal();
@@ -77,14 +106,19 @@ function CustomerBook(): JSX.Element {
   const hotel = queryClient.getQueryData<Hotel>(["Hotel"])?.Hotel[0];
   const { PetType, FoodTypes, Facilities, Services, Specials } = useFilter();
 
-  useDisableScroll(isShow);
-  useEffect(() =>
-    // if (selection.startDate.getTime() === selection.endDate.getTime()) {
-    //   navigate(-1);
-    // }
+  useEffect(() => () => {
+    clearInterval(setTimeout(() => dispatchPending({ type: "DONE" }), 1000));
+    clearInterval(setTimeout(() => navigate("/login"), 2000));
+  });
 
-    clearInterval(setTimeout(() => dispatchPending({ type: "DONE" }), 1000))
-  );
+  useDisableScroll(isShow);
+  if (useTokenExpired(user, navigate, setAuthToken) || user === false)
+    return (
+      // 未來應該使用 404 頁面更改成 "登入閒置過久，請重新登入"
+      <MotionFade className="flex-center fixed left-1/2 top-1/2 z-20 -translate-x-1/2 -translate-y-1/2">
+        <p>登入閒置過久，請重新登入</p>
+      </MotionFade>
+    );
 
   return (
     <div className="flex-center pt-32 pb-28">
@@ -116,10 +150,14 @@ function CustomerBook(): JSX.Element {
 
           <ul className="mr-6 grid basis-4/12 grid-cols-1 content-start gap-y-2 border-r-2">
             <li className="mb-2 font-bold">寵物資訊</li>
-            <PetInfo label="寵物類型" require content={pet?.PetType} />
+            <PetInfo
+              label="寵物類型"
+              require
+              content={translatePet[pet?.PetType]}
+            />
             <PetInfo label="年齡" require content={pet?.PetAge} />
             <PetInfo label="性別" require content={pet?.PetSex} />
-            <PetInfo label="飲食偏好" require content={pet?.PetSex} />
+            <PetInfo label="飲食偏好" require content={pet?.FoodTypes} />
             <PetInfo label="個性" content={pet?.PetPersonality} />
             <PetInfo label="備用藥物" content={pet?.PetMedicine} />
             <PetInfo label="備註" content={pet?.PetNote} />
@@ -270,6 +308,8 @@ function CustomerBook(): JSX.Element {
       <AnimatePresence>
         {isShow !== undefined && (
           <Edit
+            pet={pet}
+            dispatchPet={dispatchPet}
             title="編輯寵物名片"
             type="PUT"
             key="EDIT"

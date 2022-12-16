@@ -35,12 +35,14 @@ import { Pet, POSTRoom, PostRoomSchema, Room } from "../../../types/schema";
 import { PendingAction } from "../../../hooks/usePending";
 import Input from "./Input";
 import { input, filterInput } from "./data";
-import { initPet, PetAction, petReducer } from "./petReducer";
+import { InitPet, initPet, PetAction, petReducer } from "./petReducer";
+import Button from "../../../components/Button";
 
 interface IEditProps {
+  pet: InitPet;
+  dispatchPet: React.Dispatch<PetAction>;
   title: string;
   onClick: () => void;
-  data?: Pet;
   type: "POST" | "PUT";
 }
 
@@ -183,159 +185,166 @@ const handleCheckBox = (
   }
 };
 
-function Edit({ title, onClick, data, type }: IEditProps): JSX.Element {
-  const [pet, dispatchPet] = useReducer(petReducer, initPet);
+const Edit = React.memo(
+  ({ pet, dispatchPet, title, onClick, type }: IEditProps): JSX.Element => {
+    const [formdata, setFormData] = useState<FormData>();
+    const { dispatchPending } = useModal();
+    const queryClient = useQueryClient();
+    const { authToken } = useContext(UserAuth);
+    console.log(pet);
 
-  const [formdata, setFormData] = useState<FormData>();
-  const { dispatchPending } = useModal();
-  const queryClient = useQueryClient();
-  const { authToken } = useContext(UserAuth);
-  console.log(pet.FoodTypes, pet.ServiceTypes);
+    // useInitState(setPet, data?.PetType);
 
-  // useInitState(setPet, data?.PetType);
+    return (
+      <MotionFade className="flex-center fixed left-0 top-0 z-10 h-screen w-full bg-black/50">
+        <MotionPopup className="scrollbar-thumb-h-1/2 relative h-[calc(100%-24px)] max-w-4xl overflow-scroll rounded-xl bg-white p-10 scrollbar-thin scrollbar-thumb-slate-700/50 scrollbar-thumb-rounded-3xl ">
+          <>
+            <button
+              type="button"
+              onClick={onClick}
+              className="absolute right-11 top-11 text-xl"
+            >
+              <img src={xPath} alt="" />
+            </button>
+            <p className="mb-4 text-center text-3xl font-bold">{title}</p>
+            <UploadImage
+              onChange={(file) => {
+                setFormData(toFormData(file));
+              }}
+              defaultImage={pet.RoomPhoto}
+              type="Room"
+              className="mb-6"
+            />
+            <Input
+              onChange={(e) =>
+                dispatchPet({ type: "PICK_PET_NAME", payload: e.target.value })
+              }
+              defaultValue={pet.PetName}
+              {...input.PetName}
+            />
+            <hr className=" my-6 block border-stone-300" />
+            <h2 className="mb-3 font-bold">寵物資訊</h2>
+            <FilterInput
+              onChange={(e) =>
+                dispatchPet({
+                  type: "PICK_PET_TYPE",
+                  payload: (e.target as HTMLInputElement).value,
+                })
+              }
+              filterList={petLists}
+              checked={pet.PetType}
+              {...filterInput}
+            />
+            <FilterInput
+              onChange={(e) =>
+                dispatchPet({
+                  type: "PICK_PET_AGE",
+                  payload: (e.target as HTMLInputElement).value,
+                })
+              }
+              filterList={ageLists}
+              checked={pet.PetAge}
+              {...filterInput}
+            />
+            <FilterInput
+              onChange={(e) =>
+                dispatchPet({
+                  type: "PICK_PET_SEX",
+                  payload: (e.target as HTMLInputElement).value,
+                })
+              }
+              filterList={sexLists}
+              checked={pet.PetSex}
+              {...filterInput}
+            />
+            <FilterInput
+              onChange={(e) =>
+                handleCheckBox(
+                  e.target as HTMLInputElement,
+                  { FoodTypes: pet.FoodTypes, ServiceTypes: pet.ServiceTypes },
+                  dispatchPet
+                )
+              }
+              filterList={foodLists}
+              checked={pet.FoodTypes}
+              {...filterInput}
+            />
 
-  return (
-    <MotionFade className="flex-center fixed left-0 top-0 z-10 h-screen w-full bg-black/50">
-      <MotionPopup className="scrollbar-thumb-h-1/2 relative h-[calc(100%-24px)] max-w-4xl overflow-scroll rounded-xl bg-white p-10 scrollbar-thin scrollbar-thumb-slate-700/50 scrollbar-thumb-rounded-3xl ">
-        <>
-          <button
-            type="button"
-            onClick={onClick}
-            className="absolute right-11 top-11 text-xl"
-          >
-            <img src={xPath} alt="" />
-          </button>
-          <p className="mb-4 text-center text-3xl font-bold">{title}</p>
-          <UploadImage
-            onChange={(file) => {
-              setFormData(toFormData(file));
-            }}
-            defaultImage={pet.RoomPhoto}
-            type="Room"
-            className="mb-6"
-          />
-          <Input
-            onChange={(e) =>
-              dispatchPet({ type: "PICK_PET_NAME", payload: e.target.value })
-            }
-            defaultValue={pet.PetName}
-            {...input.PetName}
-          />
-          <hr className=" my-6 block border-stone-300" />
-          <h2 className="mb-3 font-bold">寵物資訊</h2>
-          <FilterInput
-            onChange={(e) =>
-              dispatchPet({
-                type: "PICK_PET_TYPE",
-                payload: (e.target as HTMLInputElement).value,
-              })
-            }
-            filterList={petLists}
-            checked={pet.PetType}
-            {...filterInput}
-          />
-          <FilterInput
-            onChange={(e) =>
-              dispatchPet({
-                type: "PICK_PET_AGE",
-                payload: (e.target as HTMLInputElement).value,
-              })
-            }
-            filterList={ageLists}
-            checked={pet.PetAge}
-            {...filterInput}
-          />
-          <FilterInput
-            onChange={(e) =>
-              dispatchPet({
-                type: "PICK_PET_SEX",
-                payload: (e.target as HTMLInputElement).value,
-              })
-            }
-            filterList={sexLists}
-            checked={pet.PetSex}
-            {...filterInput}
-          />
-          <FilterInput
-            onChange={(e) =>
-              handleCheckBox(
-                e.target as HTMLInputElement,
-                { FoodTypes: pet.FoodTypes, ServiceTypes: pet.ServiceTypes },
-                dispatchPet
-              )
-            }
-            filterList={foodLists}
-            checked={pet.FoodTypes}
-            {...filterInput}
-          />
-
-          <Input
-            onChange={(e) =>
-              dispatchPet({
-                type: "PICK_PET_PRSONALITY",
-                payload: e.target.value,
-              })
-            }
-            defaultValue={pet.PetPersonality}
-            {...input.PetPersonality}
-          />
-          <Input
-            onChange={(e) =>
-              dispatchPet({
-                type: "PICK_PET_MEDICINE",
-                payload: e.target.value,
-              })
-            }
-            {...input.PetMedicine}
-          />
-          <Input
-            onChange={(e) =>
-              dispatchPet({ type: "PICK_PET_NOTE", payload: e.target.value })
-            }
-            {...input.PetNote}
-          />
-          <hr className=" my-6 block border-stone-300" />
-          <h2 className="mb-3 font-bold">旅館需求</h2>
-          <FilterInput
-            onChange={(e) =>
-              handleCheckBox(
-                e.target as HTMLInputElement,
-                { FoodTypes: pet.FoodTypes, ServiceTypes: pet.ServiceTypes },
-                dispatchPet
-              )
-            }
-            filterList={serviceLists}
-            checked={pet.FoodTypes}
-            {...filterInput}
-          />
-          <FilterInput
-            onChange={(e) =>
-              handleCheckBox(
-                e.target as HTMLInputElement,
-                { FoodTypes: pet.FoodTypes, ServiceTypes: pet.ServiceTypes },
-                dispatchPet
-              )
-            }
-            filterList={facilitiesLists}
-            checked={pet.FoodTypes}
-            {...filterInput}
-          />
-          <FilterInput
-            onChange={(e) =>
-              handleCheckBox(
-                e.target as HTMLInputElement,
-                { FoodTypes: pet.FoodTypes, ServiceTypes: pet.ServiceTypes },
-                dispatchPet
-              )
-            }
-            filterList={specialsLists}
-            checked={pet.FoodTypes}
-            {...filterInput}
-          />
-        </>
-      </MotionPopup>
-    </MotionFade>
-  );
-}
+            <Input
+              onChange={(e) =>
+                dispatchPet({
+                  type: "PICK_PET_PRSONALITY",
+                  payload: e.target.value,
+                })
+              }
+              defaultValue={pet.PetPersonality}
+              {...input.PetPersonality}
+            />
+            <Input
+              onChange={(e) =>
+                dispatchPet({
+                  type: "PICK_PET_MEDICINE",
+                  payload: e.target.value,
+                })
+              }
+              {...input.PetMedicine}
+            />
+            <Input
+              onChange={(e) =>
+                dispatchPet({ type: "PICK_PET_NOTE", payload: e.target.value })
+              }
+              {...input.PetNote}
+            />
+            <hr className=" my-6 block border-stone-300" />
+            <h2 className="mb-3 font-bold">旅館需求</h2>
+            <FilterInput
+              onChange={(e) =>
+                handleCheckBox(
+                  e.target as HTMLInputElement,
+                  { FoodTypes: pet.FoodTypes, ServiceTypes: pet.ServiceTypes },
+                  dispatchPet
+                )
+              }
+              filterList={serviceLists}
+              checked={pet.FoodTypes}
+              {...filterInput}
+            />
+            <FilterInput
+              onChange={(e) =>
+                handleCheckBox(
+                  e.target as HTMLInputElement,
+                  { FoodTypes: pet.FoodTypes, ServiceTypes: pet.ServiceTypes },
+                  dispatchPet
+                )
+              }
+              filterList={facilitiesLists}
+              checked={pet.FoodTypes}
+              {...filterInput}
+            />
+            <FilterInput
+              onChange={(e) =>
+                handleCheckBox(
+                  e.target as HTMLInputElement,
+                  { FoodTypes: pet.FoodTypes, ServiceTypes: pet.ServiceTypes },
+                  dispatchPet
+                )
+              }
+              filterList={specialsLists}
+              checked={pet.FoodTypes}
+              {...filterInput}
+              className="mb-10"
+            />
+            <Button
+              text="儲存"
+              type="Secondary"
+              className="w-full rounded-full py-2"
+              onClick={onClick}
+            />
+          </>
+        </MotionPopup>
+      </MotionFade>
+    );
+  }
+);
 
 export default Edit;

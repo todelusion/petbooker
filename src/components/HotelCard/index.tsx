@@ -40,8 +40,8 @@ const HotelCard = React.memo(({ data }: HotelCardProps): JSX.Element => {
             ) : (
               <div className="h-full w-full bg-gray-100" />
             )}
-            <div className="absolute left-6 top-6 rounded-3xl bg-primary p-4 text-4xl font-bold text-white">
-              {hotel?.HotelScore}
+            <div className="flex-center absolute left-6 top-6 min-h-[5rem] min-w-[6rem] rounded-3xl bg-primary p-4 text-4xl font-bold text-white">
+              <span>{Number(hotel?.HotelScore).toFixed(1)}</span>
             </div>
           </div>
           <ul className="flex basis-1/2 flex-col justify-between p-6 ">

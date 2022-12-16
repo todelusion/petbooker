@@ -60,7 +60,7 @@ const handleClick = (
   if (auth.authToken === "" || auth.identity === "hotel") {
     dispatchPending({
       type: "IS_ERROR",
-      payload: "請先登入一般會員",
+      payload: "請先登入飼主會員",
     });
     setTimeout(() => dispatchPending({ type: "DONE" }), 1000);
     return;

@@ -1,9 +1,10 @@
 import React from "react";
+import { translateFood } from "../../../containers/Filter/data";
 
 interface IPetInfoProps {
   label: string;
   require?: true;
-  content?: string;
+  content?: string | string[];
 }
 
 function PetInfo({ label, require, content }: IPetInfoProps): JSX.Element {
@@ -17,7 +18,16 @@ function PetInfo({ label, require, content }: IPetInfoProps): JSX.Element {
           </span>
         )}
       </span>
-      <span>{content}</span>
+      {Array.isArray(content) ? (
+        content.map((item, index, arr) => (
+          <>
+            <span>{translateFood[item]}</span>{" "}
+            {index + 1 < arr.length && <span>、</span>}
+          </>
+        ))
+      ) : (
+        <span>{content}</span>
+      )}
     </li>
   );
 }

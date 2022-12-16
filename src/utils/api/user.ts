@@ -18,10 +18,13 @@ export const useUserInfo = (token: string) => {
     const data = await AxiosTryCatch(async () =>
       axios.get(`${baseURL}/user/book`, header)
     );
+    console.log(data);
     const result = UserInfoSchema.safeParse(data.result);
     if (result.success) {
       return result.data;
     }
+    if (data.Status === false) return false;
+
     console.log(result.error.format());
     return undefined;
   });
