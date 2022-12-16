@@ -1,14 +1,12 @@
-const petCard = {
-  PetPhoto: null,
-  PetName: "阿比",
-  PetType: "string", // filter
-  PetAge: "青年",
-  PetSex: "公",
-  FoodTypes: ["wetFood, freshFood"], // filter
-  PetPersonality: "樂觀開朗",
-  PetMedicine: "無",
-  PetNote: "無",
-  ServiceTypes: ["24hrClerk"], // filter
+const input = {
+  PetName: {
+    required: true,
+    title: "寵物名子",
+    name: "PetName",
+    labelWidth: "min-w-[5rem]",
+    placeholder: "請填寫寵物名字",
+    classNames: { p: "font-bold" },
+  },
 };
 
-export default petCard;
+export default input;
