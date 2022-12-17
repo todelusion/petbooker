@@ -35,7 +35,7 @@ function PageNums({
   onClick,
   setCurrent,
 }: IPageNumsProps): JSX.Element {
-  console.log(current);
+  // console.log(current);
   // renderNums(total);
   return (
     <section className={className}>

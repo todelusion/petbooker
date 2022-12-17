@@ -167,6 +167,7 @@ function FilterInput({
     // eslint-disable-next-line react-hooks/rules-of-hooks
     return useFilter();
   };
+  // console.log("in FilterInput", checked);
   const queryClient = useQueryClient();
   const formRef = useRef<HTMLFormElement>(null);
   const FilterContextProps = isUseContext();
@@ -177,11 +178,13 @@ function FilterInput({
   const renderInput = (content: Content): JSX.Element => {
     switch (type) {
       case "radio": {
+        // console.log("inPetType", content.value === checked);
         return (
           <input
             key={content.value}
             data-action={action}
-            defaultChecked={content.value === checked}
+            onChange={(e) => e}
+            checked={content.value === checked}
             name={keyname}
             id={content.descript}
             value={content.value}
@@ -199,7 +202,7 @@ function FilterInput({
               // );
               if (onChange !== undefined) onChange(e);
             }}
-            type={type}
+            type="radio"
             className="h-5 w-5 cursor-pointer appearance-none rounded-full border-2 border-black duration-150 checked:border-4 checked:border-primary checked:ring-2 checked:ring-primary_Dark hover:border-primary"
           />
         );
@@ -268,7 +271,16 @@ function FilterInput({
 
   return (
     <div className={`${horizontal ? "" : "p-4"}${className}`}>
-      {!horizontal && <p className="relative font-bold">{title}</p>}
+      {!horizontal && (
+        <p className="relative font-bold">
+          {required && (
+            <span className="absolute -top-1 -left-3 text-lg text-[#ff4d4f]">
+              *
+            </span>
+          )}
+          {title}
+        </p>
+      )}
       <form
         ref={formRef}
         name={keyname}

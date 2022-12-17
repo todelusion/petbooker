@@ -35,7 +35,7 @@ function Home(): JSX.Element {
     Page: current,
     PageSize: 5,
   });
-  console.log(data);
+  console.log(PetType);
 
   return (
     <div className="relative flex w-full items-start justify-evenly px-20 pt-40 pb-20">
