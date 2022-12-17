@@ -41,9 +41,9 @@ export const parseServiceTypes = (
   };
 };
 
-export const toFormData = (file: File): FormData => {
+export const toFormData = (key: string, file: File): FormData => {
   const formdata = new FormData();
-  formdata.append("Image", file);
+  formdata.append(key, file);
 
   return formdata;
 };

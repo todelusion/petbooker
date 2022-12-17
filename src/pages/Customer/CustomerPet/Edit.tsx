@@ -8,6 +8,7 @@ import React, {
 } from "react";
 import axios from "axios";
 import { useQueryClient } from "@tanstack/react-query";
+import { useLocation } from "react-router-dom";
 import FilterInput from "../../../containers/Filter/FilterInput";
 import {
   petLists,
@@ -41,6 +42,7 @@ import Button from "../../../components/Button";
 interface IEditProps {
   pet: InitPet;
   dispatchPet: React.Dispatch<PetAction>;
+  setFormData: React.Dispatch<React.SetStateAction<FormData | undefined>>;
   title: string;
   onClick: () => void;
   type: "POST" | "PUT";
@@ -186,18 +188,31 @@ const handleCheckBox = (
 };
 
 const Edit = React.memo(
-  ({ pet, dispatchPet, title, onClick, type }: IEditProps): JSX.Element => {
-    const [formdata, setFormData] = useState<FormData>();
+  ({
+    pet,
+    dispatchPet,
+    title,
+    onClick,
+    setFormData,
+    type,
+  }: IEditProps): JSX.Element => {
+    /* 以下欄位因為牽涉到價格以及旅館是否提供的問題，所在路徑"/book"時受到隱藏
+    1. 寵物類型
+    2. 飲食偏好
+    3. 旅館需求
+    */
+    const { pathname } = useLocation();
+
     const { dispatchPending } = useModal();
     const queryClient = useQueryClient();
     const { authToken } = useContext(UserAuth);
-    console.log(pet);
+    // console.log(pet);
 
     // useInitState(setPet, data?.PetType);
 
     return (
       <MotionFade className="flex-center fixed left-0 top-0 z-10 h-screen w-full bg-black/50">
-        <MotionPopup className="scrollbar-thumb-h-1/2 relative h-[calc(100%-24px)] max-w-4xl overflow-scroll rounded-xl bg-white p-10 scrollbar-thin scrollbar-thumb-slate-700/50 scrollbar-thumb-rounded-3xl ">
+        <MotionPopup className="scrollbar-thumb-h-1/2 relative flex h-fit w-full max-w-4xl flex-col justify-center overflow-scroll rounded-xl bg-white p-10 scrollbar-thin scrollbar-thumb-slate-700/50 scrollbar-thumb-rounded-3xl ">
           <>
             <button
               type="button"
@@ -209,9 +224,9 @@ const Edit = React.memo(
             <p className="mb-4 text-center text-3xl font-bold">{title}</p>
             <UploadImage
               onChange={(file) => {
-                setFormData(toFormData(file));
+                setFormData(toFormData("photo", file));
               }}
-              defaultImage={pet.RoomPhoto}
+              defaultImage={pet.PetPhoto === "" ? undefined : pet.PetPhoto}
               type="Room"
               className="mb-6"
             />
@@ -224,17 +239,19 @@ const Edit = React.memo(
             />
             <hr className=" my-6 block border-stone-300" />
             <h2 className="mb-3 font-bold">寵物資訊</h2>
-            <FilterInput
-              onChange={(e) =>
-                dispatchPet({
-                  type: "PICK_PET_TYPE",
-                  payload: (e.target as HTMLInputElement).value,
-                })
-              }
-              filterList={petLists}
-              checked={pet.PetType}
-              {...filterInput}
-            />
+            {!pathname.includes("/book") && (
+              <FilterInput
+                onChange={(e) =>
+                  dispatchPet({
+                    type: "PICK_PET_TYPE",
+                    payload: (e.target as HTMLInputElement).value,
+                  })
+                }
+                filterList={petLists}
+                checked={pet.PetType}
+                {...filterInput}
+              />
+            )}
             <FilterInput
               onChange={(e) =>
                 dispatchPet({
@@ -257,18 +274,23 @@ const Edit = React.memo(
               checked={pet.PetSex}
               {...filterInput}
             />
-            <FilterInput
-              onChange={(e) =>
-                handleCheckBox(
-                  e.target as HTMLInputElement,
-                  { FoodTypes: pet.FoodTypes, ServiceTypes: pet.ServiceTypes },
-                  dispatchPet
-                )
-              }
-              filterList={foodLists}
-              checked={pet.FoodTypes}
-              {...filterInput}
-            />
+            {!pathname.includes("/book") && (
+              <FilterInput
+                onChange={(e) =>
+                  handleCheckBox(
+                    e.target as HTMLInputElement,
+                    {
+                      FoodTypes: pet.FoodTypes,
+                      ServiceTypes: pet.ServiceTypes,
+                    },
+                    dispatchPet
+                  )
+                }
+                filterList={foodLists}
+                checked={pet.FoodTypes}
+                {...filterInput}
+              />
+            )}
 
             <Input
               onChange={(e) =>
@@ -295,49 +317,64 @@ const Edit = React.memo(
               }
               {...input.PetNote}
             />
-            <hr className=" my-6 block border-stone-300" />
-            <h2 className="mb-3 font-bold">旅館需求</h2>
-            <FilterInput
-              onChange={(e) =>
-                handleCheckBox(
-                  e.target as HTMLInputElement,
-                  { FoodTypes: pet.FoodTypes, ServiceTypes: pet.ServiceTypes },
-                  dispatchPet
-                )
-              }
-              filterList={serviceLists}
-              checked={pet.FoodTypes}
-              {...filterInput}
-            />
-            <FilterInput
-              onChange={(e) =>
-                handleCheckBox(
-                  e.target as HTMLInputElement,
-                  { FoodTypes: pet.FoodTypes, ServiceTypes: pet.ServiceTypes },
-                  dispatchPet
-                )
-              }
-              filterList={facilitiesLists}
-              checked={pet.FoodTypes}
-              {...filterInput}
-            />
-            <FilterInput
-              onChange={(e) =>
-                handleCheckBox(
-                  e.target as HTMLInputElement,
-                  { FoodTypes: pet.FoodTypes, ServiceTypes: pet.ServiceTypes },
-                  dispatchPet
-                )
-              }
-              filterList={specialsLists}
-              checked={pet.FoodTypes}
-              {...filterInput}
-              className="mb-10"
-            />
+            {!pathname.includes("/book") && (
+              <>
+                <hr className=" my-6 block border-stone-300" />
+                <h2 className="mb-3 font-bold">旅館需求</h2>
+                <FilterInput
+                  onChange={(e) =>
+                    handleCheckBox(
+                      e.target as HTMLInputElement,
+                      {
+                        FoodTypes: pet.FoodTypes,
+                        ServiceTypes: pet.ServiceTypes,
+                      },
+                      dispatchPet
+                    )
+                  }
+                  filterList={serviceLists}
+                  checked={pet.FoodTypes}
+                  {...filterInput}
+                />
+                <FilterInput
+                  onChange={(e) =>
+                    handleCheckBox(
+                      e.target as HTMLInputElement,
+                      {
+                        FoodTypes: pet.FoodTypes,
+                        ServiceTypes: pet.ServiceTypes,
+                      },
+                      dispatchPet
+                    )
+                  }
+                  filterList={facilitiesLists}
+                  checked={pet.FoodTypes}
+                  {...filterInput}
+                />
+                <FilterInput
+                  onChange={(e) =>
+                    handleCheckBox(
+                      e.target as HTMLInputElement,
+                      {
+                        FoodTypes: pet.FoodTypes,
+                        ServiceTypes: pet.ServiceTypes,
+                      },
+                      dispatchPet
+                    )
+                  }
+                  filterList={specialsLists}
+                  checked={pet.FoodTypes}
+                  {...filterInput}
+                  className="mb-10"
+                />
+              </>
+            )}
             <Button
               text="儲存"
               type="Secondary"
-              className="w-full rounded-full py-2"
+              className={`${
+                !pathname.includes("/book") ? "" : "mt-10"
+              } w-full rounded-full py-2`}
               onClick={onClick}
             />
           </>

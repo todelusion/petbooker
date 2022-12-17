@@ -34,7 +34,7 @@ interface IFilterList {
 
 interface IFilterInputProps {
   filterList: IFilterList;
-  noContext: true;
+  noContext: boolean;
   action?: FilterAction["type"];
   labelWidth?: string;
   onChange?: (e: React.MouseEvent<HTMLInputElement>) => void;

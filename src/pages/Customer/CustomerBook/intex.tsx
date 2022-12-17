@@ -26,9 +26,10 @@ import {
   UserInfo,
 } from "../../../types/schema";
 import { useUserInfo } from "../../../utils/api/user";
+import { sortedServiceTypes } from "../../../utils/servicesTranslator";
 // import petCard from "../CustomerPet/data";
 import Edit from "../CustomerPet/Edit";
-import { initPet, petReducer } from "../CustomerPet/petReducer";
+import { initPet, PetAction, petReducer } from "../CustomerPet/petReducer";
 import PetInfo from "./PetInfo";
 
 const handleClick = (
@@ -61,6 +62,18 @@ const handleValidate = (pet: Pet): true | string => {
   if (!result.success) return result.error.message;
   return true;
 };
+const useRenderPhoto = (
+  formdata: FormData | undefined,
+  dispatchPet: React.Dispatch<PetAction>
+): void => {
+  useEffect(() => {
+    if (formdata === undefined) return;
+    const file = formdata.get("photo");
+    if (file === null) return;
+    const url = URL.createObjectURL(file as File);
+    dispatchPet({ type: "PICK_PET_PHOTO", payload: url });
+  }, [dispatchPet, formdata]);
+};
 
 const useDisableScroll = (isShow: string | undefined): void => {
   const body = document.querySelector("body");
@@ -88,9 +101,24 @@ const useTokenExpired = (
   if (user === false) return true;
   return false;
 };
+// const useContextToCurrent = (
+//   PetType: string,
+//   FoodTypes: string[],
+//   dispatchPet: React.Dispatch<PetAction>
+// ): void => {
+//   useEffect(() => {
+//     if (PetType !== "") {
+//       dispatchPet({ type: "PICK_PET_TYPE", payload: PetType });
+//     }
+//     if (FoodTypes[0] !== undefined) {
+//       dispatchPet({ type: "PICK_FOODTYPES", payload: FoodTypes });
+//     }
+//   }, [FoodTypes, PetType, dispatchPet]);
+// };
 
 function CustomerBook(): JSX.Element {
   const [pet, dispatchPet] = useReducer(petReducer, initPet);
+  const [formdata, setFormData] = useState<FormData>();
   const [isShow, setIsShow] = useState<"POST" | "PUT">();
   const queryClient = useQueryClient();
   const navigate = useNavigate();
@@ -102,16 +130,19 @@ function CustomerBook(): JSX.Element {
   const { data: user } = useUserInfo(authToken);
   const { selection } = useSearchBar();
   const { dispatchPending } = useModal();
+
   // useRedirect(selection.startDate, selection.endDate);
   const hotel = queryClient.getQueryData<Hotel>(["Hotel"])?.Hotel[0];
-  const { PetType, FoodTypes, Facilities, Services, Specials } = useFilter();
+  const { PetType, FoodTypes, Services, Specials, Facilities } = useFilter();
+
+  useDisableScroll(isShow);
+  useRenderPhoto(formdata, dispatchPet);
+  // useContextToCurrent(PetType, FoodTypes, dispatchPet);
 
   useEffect(() => () => {
     clearInterval(setTimeout(() => dispatchPending({ type: "DONE" }), 1000));
     clearInterval(setTimeout(() => navigate("/login"), 2000));
   });
-
-  useDisableScroll(isShow);
   if (useTokenExpired(user, navigate, setAuthToken) || user === false)
     return (
       // 未來應該使用 404 頁面更改成 "登入閒置過久，請重新登入"
@@ -133,31 +164,27 @@ function CustomerBook(): JSX.Element {
           >
             <img src={EditPath} alt="" />
           </button>
-          {/* <ul className="mr-7 basis-2/12">
+          <ul className="mr-7 basis-2/12">
             <li className=" mb-6 h-40">
-              {petCard.PetPhoto === null ? (
+              {pet.PetPhoto === "" ? (
                 <div className="h-full w-full bg-gray-200" />
               ) : (
                 <img
-                  src={petCard.PetPhoto}
+                  src={pet.PetPhoto}
                   alt=""
                   className="h-full w-full object-cover"
                 />
               )}
             </li>
-            <li className="text-xl font-bold">{petCard.PetName}</li>
-          </ul> */}
+            <li className="text-xl font-bold">{pet.PetName}</li>
+          </ul>
 
           <ul className="mr-6 grid basis-4/12 grid-cols-1 content-start gap-y-2 border-r-2">
             <li className="mb-2 font-bold">寵物資訊</li>
-            <PetInfo
-              label="寵物類型"
-              require
-              content={translatePet[pet?.PetType]}
-            />
+            <PetInfo label="寵物類型" require content={translatePet[PetType]} />
             <PetInfo label="年齡" require content={pet?.PetAge} />
             <PetInfo label="性別" require content={pet?.PetSex} />
-            <PetInfo label="飲食偏好" require content={pet?.FoodTypes} />
+            <PetInfo label="飲食偏好" require content={FoodTypes} />
             <PetInfo label="個性" content={pet?.PetPersonality} />
             <PetInfo label="備用藥物" content={pet?.PetMedicine} />
             <PetInfo label="備註" content={pet?.PetNote} />
@@ -307,9 +334,12 @@ function CustomerBook(): JSX.Element {
       </div>
       <AnimatePresence>
         {isShow !== undefined && (
+          // 旅館需求因為牽涉到價格問題，所以不能在訂單資料直接修改
+
           <Edit
             pet={pet}
             dispatchPet={dispatchPet}
+            setFormData={setFormData}
             title="編輯寵物名片"
             type="PUT"
             key="EDIT"

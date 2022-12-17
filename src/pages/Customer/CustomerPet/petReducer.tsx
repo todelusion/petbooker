@@ -1,6 +1,7 @@
 import { useReducer } from "react";
 
 export const initPet = {
+  PetPhoto: "",
   PetPersonality: "",
   PetMedicine: "",
   PetNote: "",
@@ -14,7 +15,11 @@ export const initPet = {
 
 export type InitPet = typeof initPet;
 
-type PetAction =
+export type PetAction =
+  | {
+      type: "PICK_PET_PHOTO";
+      payload: string;
+    }
   | {
       type: "PICK_PET_NAME";
       payload: string;
@@ -72,6 +77,8 @@ export const petReducer = (state: InitPet, action: PetAction): InitPet => {
       return { ...state, PetSex: action.payload };
     case "PICK_PET_TYPE":
       return { ...state, PetType: action.payload };
+    case "PICK_PET_PHOTO":
+      return { ...state, PetPhoto: action.payload };
     default:
       return state;
   }

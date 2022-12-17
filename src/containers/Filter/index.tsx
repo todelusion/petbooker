@@ -176,6 +176,7 @@ const Filter = React.memo(
       <>
         {!closePet && (
           <FilterInput
+            noContext={false}
             horizontal={horizontal}
             action="PICK-PetType"
             checked={initPetType}
@@ -185,6 +186,7 @@ const Filter = React.memo(
         )}
         {!closeFood && (
           <FilterInput
+            noContext={false}
             horizontal={horizontal}
             action="PICK-FoodTypes"
             filterList={foodLists}
@@ -194,6 +196,7 @@ const Filter = React.memo(
         )}
         {!closeRoomPrices && (
           <FilterInput
+            noContext={false}
             horizontal={horizontal}
             action="PICK-RoomPrices"
             filterList={pricesLists}
@@ -203,6 +206,7 @@ const Filter = React.memo(
         )}
         {!closeService && (
           <FilterInput
+            noContext={false}
             horizontal={horizontal}
             action="PICK-Services"
             filterList={serviceLists}
@@ -212,6 +216,7 @@ const Filter = React.memo(
         )}
         {!closeFacility && (
           <FilterInput
+            noContext={false}
             horizontal={horizontal}
             action="PICK-Facilities"
             filterList={facilitiesLists}
@@ -221,6 +226,7 @@ const Filter = React.memo(
         )}
         {!closeSpecial && (
           <FilterInput
+            noContext={false}
             horizontal={horizontal}
             action="PICK-Specials"
             filterList={specialsLists}
