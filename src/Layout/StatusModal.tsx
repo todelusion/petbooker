@@ -56,6 +56,27 @@ export default function PendingModal({
               </div>
             </MotionFade>
           )}
+          {status === "IS_ERROR_MULTI" && (
+            <MotionFade className="flex-center absolute min-h-full w-full bg-slate-900/50">
+              <div
+                key={status}
+                className="relative flex min-h-[150px] min-w-[200px] grow-0 flex-col items-center justify-between"
+              >
+                <img src={ErrorPath} alt="" className="mb-3 w-28" />
+                {Array.isArray(message) ? (
+                  <ul className="text-white">
+                    {message.map((item) => (
+                      <li key={item} className=" text-center">
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p>{message}</p>
+                )}
+              </div>
+            </MotionFade>
+          )}
         </AnimatePresence>
       </div>
       {children}

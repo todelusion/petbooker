@@ -20,10 +20,10 @@ function PetInfo({ label, require, content }: IPetInfoProps): JSX.Element {
       </span>
       {Array.isArray(content) ? (
         content.map((item, index, arr) => (
-          <>
+          <React.Fragment key={item}>
             <span>{translateFood[item]}</span>{" "}
             {index + 1 < arr.length && <span>、</span>}
-          </>
+          </React.Fragment>
         ))
       ) : (
         <span>{content}</span>

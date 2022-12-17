@@ -6,8 +6,8 @@ const initialPending = {
 };
 
 export interface InitialPending {
-  status: "IS_LOADING" | "IS_SUCCESS" | "IS_ERROR" | "DONE";
-  message: string;
+  status: "IS_LOADING" | "IS_SUCCESS" | "IS_ERROR" | "IS_ERROR_MULTI" | "DONE";
+  message: string | string[];
 }
 
 export interface IModalProps {
@@ -27,6 +27,10 @@ export type PendingAction =
   | {
       type: "IS_ERROR";
       payload?: string;
+    }
+  | {
+      type: "IS_ERROR_MULTI";
+      payload: string[];
     }
   | {
       type: "DONE";
@@ -51,6 +55,11 @@ const pendingReducer = (
       return {
         status: "IS_ERROR",
         message: action.payload ?? "",
+      };
+    case "IS_ERROR_MULTI":
+      return {
+        status: "IS_ERROR_MULTI",
+        message: action.payload ?? [],
       };
     case "DONE":
       return {

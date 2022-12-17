@@ -117,18 +117,40 @@ export const BookingSchema = z.object({
 });
 
 export const PetSchema = z.object({
-  Id: z.number(),
-  PetPhoto: z.union([z.null(), z.string()]),
-  PetName: z.string({ required_error: "寵物姓名不得為空" }),
-  PetType: z.string({ required_error: "寵物類型不得為空" }),
-  PetAge: z.string({ required_error: "寵物年齡不得為空" }),
-  PetSex: z.string({ required_error: "寵物性別不得為空" }),
-  FoodTypes: z.array(z.string({ required_error: "寵物飲食偏好不得為空" })),
+  Id: z.number().optional(),
+  PetPhoto: z.union([z.null(), z.string()]).optional(),
+  PetName: z.string().min(1, { message: "寵物姓名不得為空" }),
+  PetType: z.string().min(1, { message: "寵物類型不得為空" }),
+  PetAge: z.string().min(1, { message: "寵物年齡不得為空" }),
+  PetSex: z.string().min(1, { message: "寵物性別不得為空" }),
+  FoodTypes: z.array(z.string()).min(1, { message: "寵物飲食偏好不得為空" }),
   PetPersonality: z.string().optional(),
   PetMedicine: z.string().optional(),
   PetNote: z.string().optional(),
+
+  /* 
+  1. 需向後端反應同時具 ServiceTypes 與 ServiceType 兩種 key 卻相同value
+  2. 否則前端schema 過不了
+
+  */
   ServiceTypes: z.array(z.string().optional()),
 });
+
+export const PetListSchema = z.array(
+  z.object({
+    PetCardId: z.number().optional(),
+    PetPhoto: z.union([z.null(), z.string()]).optional(),
+    PetName: z.string().min(1, { message: "寵物姓名不得為空" }),
+    PetType: z.string().min(1, { message: "寵物類型不得為空" }),
+    PetAge: z.string().min(1, { message: "寵物年齡不得為空" }),
+    PetSex: z.string().min(1, { message: "寵物性別不得為空" }),
+    FoodTypes: z.array(z.string()).min(1, { message: "寵物飲食偏好不得為空" }),
+    PetPersonality: z.union([z.string(), z.null()]),
+    PetMedicine: z.union([z.string(), z.null()]),
+    PetNote: z.union([z.string(), z.null()]),
+    ServiceTypes: z.array(z.string().optional()),
+  })
+);
 
 export type Pet = z.infer<typeof PetSchema>;
 

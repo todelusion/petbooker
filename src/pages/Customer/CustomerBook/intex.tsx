@@ -17,7 +17,7 @@ import useFilter from "../../../hooks/useFilter";
 import useModal from "../../../hooks/useModal";
 import { PendingAction } from "../../../hooks/usePending";
 import useSearchBar from "../../../hooks/useSearchBar";
-import { EditPath } from "../../../img/icons";
+import { EditPath, LoadingCustom } from "../../../img/icons";
 import {
   Booking,
   Hotel,
@@ -25,6 +25,7 @@ import {
   PetSchema,
   UserInfo,
 } from "../../../types/schema";
+import { postPet } from "../../../utils/api/petCard";
 import { useUserInfo } from "../../../utils/api/user";
 import { sortedServiceTypes } from "../../../utils/servicesTranslator";
 // import petCard from "../CustomerPet/data";
@@ -32,7 +33,23 @@ import Edit from "../CustomerPet/Edit";
 import { initPet, PetAction, petReducer } from "../CustomerPet/petReducer";
 import PetInfo from "./PetInfo";
 
-const handleClick = (
+const validatePet = (
+  pet: Pet,
+  dispatchPending: React.Dispatch<PendingAction>
+): boolean => {
+  console.log("validatePet");
+  const result = PetSchema.safeParse(pet);
+  if (result.success) return true;
+
+  const errorMessages = Object.values(result.error.formErrors.fieldErrors).map(
+    (message) => message.toString()
+  );
+  dispatchPending({ type: "IS_ERROR_MULTI", payload: errorMessages });
+
+  return false;
+};
+
+const validateUserBook = (
   navigate: NavigateFunction,
   dispatchPending: React.Dispatch<PendingAction>,
   UserNameRef: React.RefObject<HTMLInputElement>,
@@ -57,11 +74,11 @@ const handleClick = (
     setTimeout(() => dispatchPending({ type: "DONE" }), 1000);
   }
 };
-const handleValidate = (pet: Pet): true | string => {
-  const result = PetSchema.safeParse(pet);
-  if (!result.success) return result.error.message;
-  return true;
-};
+// const handleValidate = (pet: Pet): true | string => {
+//   const result = PetSchema.safeParse(pet);
+//   if (!result.success) return result.error.message;
+//   return true;
+// };
 const useRenderPhoto = (
   formdata: FormData | undefined,
   dispatchPet: React.Dispatch<PetAction>
@@ -87,34 +104,44 @@ const useDisableScroll = (isShow: string | undefined): void => {
     }
   }, [body, isShow]);
 };
-const useTokenExpired = (
-  user: UserInfo | boolean | undefined,
+const useCheckBeforeMount = (
+  required: {
+    user: UserInfo | boolean | undefined;
+    PetType: string;
+    FoodTypes: string[];
+  },
   navigate: NavigateFunction,
   setAuthToken: React.Dispatch<React.SetStateAction<string>>
 ): boolean => {
+  const { user, FoodTypes, PetType } = required;
   useEffect(() => {
+    if (FoodTypes[0] !== undefined || PetType !== "") return;
+    setTimeout(() => navigate("/home"), 2000);
+
     if (user !== false) return;
     setAuthToken("");
     localStorage.setItem("token", "");
     setTimeout(() => navigate("/login"), 2000);
   });
-  if (user === false) return true;
-  return false;
+  if (user === false) return false;
+  if (FoodTypes[0] === undefined || PetType === "") return false;
+  return true;
 };
-// const useContextToCurrent = (
-//   PetType: string,
-//   FoodTypes: string[],
-//   dispatchPet: React.Dispatch<PetAction>
-// ): void => {
-//   useEffect(() => {
-//     if (PetType !== "") {
-//       dispatchPet({ type: "PICK_PET_TYPE", payload: PetType });
-//     }
-//     if (FoodTypes[0] !== undefined) {
-//       dispatchPet({ type: "PICK_FOODTYPES", payload: FoodTypes });
-//     }
-//   }, [FoodTypes, PetType, dispatchPet]);
-// };
+// const useRequired
+const useContextToCurrent = (
+  PetType: string,
+  FoodTypes: string[],
+  dispatchPet: React.Dispatch<PetAction>
+): void => {
+  useEffect(() => {
+    if (PetType !== "") {
+      dispatchPet({ type: "PICK_PET_TYPE", payload: PetType });
+    }
+    if (FoodTypes[0] !== undefined) {
+      dispatchPet({ type: "PICK_FOODTYPES", payload: FoodTypes });
+    }
+  }, [FoodTypes, PetType, dispatchPet]);
+};
 
 function CustomerBook(): JSX.Element {
   const [pet, dispatchPet] = useReducer(petReducer, initPet);
@@ -137,17 +164,35 @@ function CustomerBook(): JSX.Element {
 
   useDisableScroll(isShow);
   useRenderPhoto(formdata, dispatchPet);
-  // useContextToCurrent(PetType, FoodTypes, dispatchPet);
+  useContextToCurrent(PetType, FoodTypes, dispatchPet);
 
   useEffect(() => () => {
     clearInterval(setTimeout(() => dispatchPending({ type: "DONE" }), 1000));
     clearInterval(setTimeout(() => navigate("/login"), 2000));
   });
-  if (useTokenExpired(user, navigate, setAuthToken) || user === false)
+  if (
+    !useCheckBeforeMount({ user, PetType, FoodTypes }, navigate, setAuthToken)
+  )
     return (
       // 未來應該使用 404 頁面更改成 "登入閒置過久，請重新登入"
-      <MotionFade className="flex-center fixed left-1/2 top-1/2 z-20 -translate-x-1/2 -translate-y-1/2">
-        <p>登入閒置過久，請重新登入</p>
+      <MotionFade className="flex-col-center fixed left-1/2 top-1/2 z-20 -translate-x-1/2 -translate-y-1/2 text-xl">
+        <>
+          <LoadingCustom color="bg-accent" className=" mb-5" />
+          {user === false && <p>登入閒置過久，請重新登入</p>}
+          {PetType === "" && (
+            <p>
+              必須先選擇{" "}
+              <span className=" font-bold text-second">寵物類型</span>{" "}
+            </p>
+          )}
+          {FoodTypes[0] === undefined && (
+            <p>
+              必須先至少一個{" "}
+              <span className=" font-bold text-second">食物偏好</span>
+            </p>
+          )}
+          <LoadingCustom color="bg-accent" className=" mt-5" />
+        </>
       </MotionFade>
     );
 
@@ -199,7 +244,10 @@ function CustomerBook(): JSX.Element {
                 <p className="mb-4">服務內容：</p>
                 <p className="-ml-1">
                   {Services.map((service) => (
-                    <span className="mr-2 rounded-full border-2 border-black px-4 py-2">
+                    <span
+                      key={service}
+                      className="mr-2 rounded-full border-2 border-black px-4 py-2"
+                    >
                       {service}
                     </span>
                   ))}
@@ -211,7 +259,10 @@ function CustomerBook(): JSX.Element {
                 <p className="mb-4">設施條件：</p>
                 <p className="-ml-1">
                   {Facilities.map((facility) => (
-                    <span className="mr-2 rounded-full border-2 border-black px-4 py-2">
+                    <span
+                      key={facility}
+                      className="mr-2 rounded-full border-2 border-black px-4 py-2"
+                    >
                       {facility}
                     </span>
                   ))}
@@ -223,7 +274,10 @@ function CustomerBook(): JSX.Element {
                 <p className="mb-4">特殊需求：</p>
                 <p className="-ml-1">
                   {Specials.map((special) => (
-                    <span className="mr-2 rounded-full border-2 border-black px-4 py-2">
+                    <span
+                      key={special}
+                      className="mr-2 rounded-full border-2 border-black px-4 py-2"
+                    >
                       {special}
                     </span>
                   ))}
@@ -324,11 +378,11 @@ function CustomerBook(): JSX.Element {
           text="確認訂房"
           className="mx-auto py-2 px-10"
           onClick={async () => {
-            // await usePostPet()
-            // handleValidate({
+            if (!validatePet(pet, dispatchPending)) return;
 
-            // });
-            handleClick(navigate, dispatchPending, UserNameRef, UserPhoneRef);
+            // 必須判斷若寵物名稱重複則不得重複發 postPet
+            await postPet(pet, authToken);
+            console.log("next");
           }}
         />
       </div>
