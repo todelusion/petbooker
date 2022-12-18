@@ -24,6 +24,7 @@ import CustomerPet from "./pages/Customer/CustomerPet";
 import CustomerBook from "./pages/Customer/CustomerBook/intex";
 import Success from "./pages/Customer/CustomerBook/Success/Success";
 import CustomerOrder from "./pages/Customer/CustomerOrder";
+import CustomerComment from "./pages/Customer/CustomerComment";
 
 export default function Router(): JSX.Element {
   const client = new QueryClient();
@@ -50,7 +51,7 @@ export default function Router(): JSX.Element {
             <Route path="/customer/info" element={<CustomerInfo />} />
             <Route path="/customer/pet" element={<CustomerPet />} />
             <Route path="/customer/order" element={<CustomerOrder />} />
-
+            <Route path="/customer/comment" element={<CustomerComment />} />
             <Route path="/customer/OrderSuccess" element={<Success />} />
           </Route>
           <Route path="/login" element={<UserLogin />} />;

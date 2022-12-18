@@ -163,3 +163,23 @@ export const specialsLists = {
     },
   ],
 };
+
+export const commentRadio = {
+  keyname: "Score",
+  title: "評價分數",
+  type: "radio",
+  contents: [
+  { value: "1", descript: "1" },
+  { value: "2", descript: "2" },
+  { value: "3", descript: "3" },
+  { value: "4", descript: "4" },
+  { value: "5", descript: "5" },
+  { value: "6", descript: "6" },
+  { value: "7", descript: "7" },
+  { value: "8", descript: "8" },
+  { value: "9", descript: "9" },
+  { value: "10", descript: "10" },
+    
+    
+  ],
+};
