@@ -117,15 +117,16 @@ export const BookingSchema = z.object({
 });
 
 export const PetSchema = z.object({
-  PetName: z.string({ required_error: "寵物姓名不得為空" }),
-  PetType: z.string({ required_error: "寵物類型不得為空" }),
-  PetAge: z.string({ required_error: "寵物年齡不得為空" }),
-  PetSex: z.string({ required_error: "寵物性別不得為空" }),
-  FoodTypes: z.array(z.string({ required_error: "寵物飲食偏好不得為空" })),
+  PetName: z.union([z.null(), z.string({ required_error: "寵物姓名不得為空" })]),
+  PetType: z.union([z.null(), z.string({ required_error: "寵物姓名不得為空" })]),
+  PetAge: z.union([z.null(), z.string({ required_error: "寵物姓名不得為空" })]),
+  PetSex: z.union([z.null(), z.string({ required_error: "寵物姓名不得為空" })]),
+  FoodTypes: z.array(z.union([z.null(), z.string({ required_error: "寵物姓名不得為空" })])),
   PetPersonality: z.string().optional(),
-  PetMedicine: z.string().optional(),
-  PetNote: z.string().optional(),
-  ServiceTypes: z.array(z.string().optional()),
+  PetMedicine: z.union([z.null(), z.string().optional()]),
+  PetNote: z.union([z.null(), z.string().optional()]),
+  ServiceTypes:z.union([z.array(z.union([z.null(), z.string()])),z.null()]) ,
+  PetPhoto:z.union([z.null(), z.string().optional()])
 });
 
 export type Pet = z.infer<typeof PetSchema>;
@@ -189,3 +190,20 @@ export const OrderListSchema = z.array(
     })
   )
   export type ReservedList = z.infer<typeof OrderListSchema>;
+
+  export const customerOrderListSchema= z.array(
+      z.object({
+        OrderId: z.number(),
+        RoomPhoto: z.string(),
+        HotelName: z.string(),
+        RoomName: z.string(),
+        CheckInDate: z.string(),
+        CheckOutDate: z.string(),
+        Status: z.string(),
+        TotalPrice:z.number(),
+        PetCardId:z.number(),
+        PetPhoto:z.union([z.null(),z.string()]),
+        PetName:z.string()
+      })
+    )
+    export type customerOrder = z.infer<typeof customerOrderListSchema>;
