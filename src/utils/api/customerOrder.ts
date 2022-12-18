@@ -24,7 +24,7 @@ export const useCostomerOrder = (token:string) =>{
       }
       },
        {
-        queryKey:['cancel'],
+        queryKey:['cancelList'],
         queryFn: async () => {
           const response = await axios.get(`${baseURL}/user/cancelList`, header);
         return customerOrderListSchema.parse(response.data.result)
@@ -33,7 +33,7 @@ export const useCostomerOrder = (token:string) =>{
       }
       ,
        {
-        queryKey:['reserved'],
+        queryKey:['reservedList'],
         queryFn: async () => {
           const response = await axios.get(`${baseURL}/user/reservedList`, header);
         return customerOrderListSchema.parse(response.data.result);

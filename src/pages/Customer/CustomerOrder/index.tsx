@@ -10,16 +10,16 @@ import { useCostomerOrder } from "../../../utils/api/customerOrder";
 const CustomerOrder = () => {
   const { authToken } = useContext(UserAuth);
 
-  const [completeList, reserved, cancel] = useCostomerOrder(authToken);
-  const [dataStatus, setDataStatus] = useState(completeList.data);
-  const [select, setSelect] = useState("待入住");
+  const [completeList, cancelList, reservedList] = useCostomerOrder(authToken);
+  const [dataStatus, setDataStatus] = useState(reservedList.data);
+  const [select, setSelect] = useState("完成預約");
 
   useEffect(() => {
     if (select !== "完成預約") return;
-    if (reserved.data !== undefined) {
-      setDataStatus(reserved.data);
+    if (reservedList.data !== undefined) {
+      setDataStatus(reservedList.data);
     }
-  }, [reserved.data, select]);
+  }, [reservedList.data, select]);
 
   useEffect(() => {
     if (select !== "歷史預約") return;
@@ -28,17 +28,25 @@ const CustomerOrder = () => {
     }
   }, [completeList.data, select]);
 
+  useEffect(() => {
+    console.log(dataStatus);
+
+    setDataStatus(dataStatus);
+  }, []);
+
   const handleClick = (status: string): void => {
     switch (status) {
       case "完成預約":
         setSelect("完成預約");
-        setDataStatus(reserved.data);
+        setDataStatus(reservedList.data);
 
         break;
 
       case "取消預約":
+        console.log(dataStatus);
+
         setSelect("取消預約");
-        setDataStatus(cancel.data);
+        setDataStatus(cancelList.data);
 
         break;
       case "歷史預約":
@@ -47,9 +55,9 @@ const CustomerOrder = () => {
         break;
 
       default:
-        if (reserved.data !== undefined) {
+        if (reservedList.data !== undefined) {
           setDataStatus(
-            reserved.data.filter((order) => order.Status === "待入住")
+            reservedList.data.filter((order) => order.Status === "reserved")
           );
         }
 
@@ -59,9 +67,9 @@ const CustomerOrder = () => {
 
   return (
     <div className="px-10 ">
-      {(reserved.isFetching ||
+      {(reservedList.isFetching ||
         completeList.isFetching ||
-        cancel.isFetching) && (
+        cancelList.isFetching) && (
         <LoadingCustom className="absolute left-1/2" color="bg-second" />
       )}
       {
@@ -70,23 +78,23 @@ const CustomerOrder = () => {
             <Button
               onClick={() => handleClick("完成預約")}
               type="Transparent"
-              text="待入住"
+              text="完成預約"
               className="ml-4 py-3 px-6"
             />
             <Button
               onClick={() => handleClick("取消預約")}
               type="Transparent"
-              text="已入住"
+              text="取消預約"
               className="ml-4 py-3 px-6"
             />
             <Button
               onClick={() => handleClick("歷史預約")}
               type="Transparent"
-              text="完成訂單"
+              text="歷史預約"
               className="ml-4 py-3 px-6"
             />
           </nav>
-          {dataStatus != null && <Order data={dataStatus} />}
+          {dataStatus != undefined && <Order data={dataStatus} />}
         </>
       }
     </div>

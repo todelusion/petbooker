@@ -125,7 +125,7 @@ export const PetSchema = z.object({
   PetPersonality: z.string().optional(),
   PetMedicine: z.union([z.null(), z.string().optional()]),
   PetNote: z.union([z.null(), z.string().optional()]),
-  ServiceTypes: z.array(z.union([z.null(), z.string()])),
+  ServiceTypes:z.union([z.array(z.union([z.null(), z.string()])),z.null()]) ,
   PetPhoto:z.union([z.null(), z.string().optional()])
 });
 
@@ -193,13 +193,17 @@ export const OrderListSchema = z.array(
 
   export const customerOrderListSchema= z.array(
       z.object({
-        Id: z.number(),
+        OrderId: z.number(),
         RoomPhoto: z.string(),
         HotelName: z.string(),
         RoomName: z.string(),
         CheckInDate: z.string(),
         CheckOutDate: z.string(),
-        Status: z.string()
+        Status: z.string(),
+        TotalPrice:z.number(),
+        PetCardId:z.number(),
+        PetPhoto:z.union([z.null(),z.string()]),
+        PetName:z.string()
       })
     )
     export type customerOrder = z.infer<typeof customerOrderListSchema>;

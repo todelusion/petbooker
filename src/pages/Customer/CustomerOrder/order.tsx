@@ -24,7 +24,7 @@ function Order({ data }: IOrderProps): JSX.Element {
   const queryClient = useQueryClient();
   const [open, setOpen] = useState(false);
   const [petId, setPetId] = useState(0);
-  console.log(petId, "!");
+  console.log(petId);
 
   return (
     <div className=" overflow-hidden rounded-lg border-2 border-black">
@@ -48,7 +48,7 @@ function Order({ data }: IOrderProps): JSX.Element {
       </ul>
       {data.map((item) => (
         <ul
-          key={item.Id}
+          key={item.OrderId}
           className="grid grid-cols-8 items-center  justify-items-center gap-y-6 gap-x-14 border-b-2 py-6 px-7 text-center"
         >
           <li>
@@ -58,12 +58,11 @@ function Order({ data }: IOrderProps): JSX.Element {
           <li>{item.RoomName}</li>
           <li>{item.CheckInDate}</li>
           <li>{item.CheckOutDate}</li>
-          <li>{item.RoomPrice}</li>
+          <li>{item.TotalPrice}</li>
           <li>
             <button
               type="button"
               onClick={() => {
-                console.log("碰到拉！");
                 setPetId(item.PetCardId);
                 setOpen(true);
               }}
@@ -72,7 +71,7 @@ function Order({ data }: IOrderProps): JSX.Element {
               <div className="h-8 w-8 overflow-hidden rounded-full border-2 border-black">
                 {item.PetPhoto !== "" ? (
                   <img
-                    src={item.PetPhoto}
+                    src={item.PetPhoto as string}
                     alt=""
                     className="h-full w-full object-cover"
                   />
