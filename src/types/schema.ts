@@ -153,9 +153,11 @@ export const PetListSchema = z.array(
     PetPersonality: z.union([z.string(), z.null()]),
     PetMedicine: z.union([z.string(), z.null()]),
     PetNote: z.union([z.string(), z.null()]),
-    ServiceTypes: z.array(z.string().optional()),
+    ServiceTypes: z.array(z.string()),
   })
 );
+
+export type PetList = z.infer<typeof PetListSchema>;
 
 export type Pet = z.infer<typeof PetSchema>;
 

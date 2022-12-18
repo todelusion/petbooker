@@ -32,113 +32,26 @@ import {
 } from "../../../utils";
 import { uploadRoomPhoto, putRoom, postRoom } from "../../../utils/api/cmsRoom";
 import UserAuth from "../../../context/UserAuthContext";
-import {
-  Pet,
-  PetList,
-  POSTRoom,
-  PostRoomSchema,
-  Room,
-} from "../../../types/schema";
+import { Pet, POSTRoom, PostRoomSchema, Room } from "../../../types/schema";
 import { PendingAction } from "../../../hooks/usePending";
-import Input from "./Input";
-import { input, filterInput } from "./data";
-import { InitPet, initPet, PetAction, petReducer } from "./petReducer";
+import Input from "../CustomerPet/Input";
+import { input, filterInput } from "../CustomerPet/data";
+import {
+  InitPet,
+  initPet,
+  PetAction,
+  petReducer,
+} from "../CustomerPet/petReducer";
 import Button from "../../../components/Button";
-import { usePetList } from "../../../utils/api/petCard";
 
 interface IEditProps {
-  onClick: () => void;
+  pet: InitPet;
+  dispatchPet: React.Dispatch<PetAction>;
+  setFormData: React.Dispatch<React.SetStateAction<FormData | undefined>>;
   title: string;
+  onClick: () => void;
   type: "POST" | "PUT";
-  data?: PetList[0];
 }
-
-const handleRequest = async (
-  type: "POST" | "PUT",
-  data: POSTRoom,
-  token: string,
-  id?: number,
-  formdata?: FormData
-): Promise<boolean | string> => {
-  console.log(type);
-
-  if (type === "POST") {
-    if (formdata === undefined) return "新增房型必須要有圖片";
-
-    const res = await AxiosTryCatch(async () => postRoom(data, token));
-    const { roomid } = res.result;
-    const result = await AxiosTryCatch(async () =>
-      uploadRoomPhoto(roomid, formdata, token)
-    );
-
-    if (result === undefined) return false;
-    return true;
-  }
-
-  if (type === "PUT" && id !== undefined) {
-    const result = await AxiosTryCatch(async () => putRoom(id, data, token));
-    if (result === undefined) return false;
-
-    if (formdata !== undefined) {
-      await uploadRoomPhoto(id, formdata, token);
-      return true;
-    }
-    return true;
-  }
-  return false;
-};
-
-const handleValidate = (
-  type: "POST" | "PUT",
-  dispatchPending: React.Dispatch<PendingAction>,
-  formdata?: FormData
-): void => {
-  if (type === "PUT") return;
-  if (formdata === undefined) {
-    dispatchPending({
-      type: "IS_ERROR",
-      payload: "必須上傳圖片",
-    });
-    setTimeout(() => dispatchPending({ type: "DONE" }), 1000);
-  }
-};
-
-const useInitPet = (
-  data: PetList[0] | undefined,
-  dispatchPet: React.Dispatch<PetAction>
-): void => {
-  useEffect(() => {
-    if (data === undefined) return;
-    dispatchPet({
-      type: "Init",
-      payload: {
-        FoodTypes: data.FoodTypes,
-        PetAge: data.PetAge,
-        PetMedicine: data.PetMedicine ?? "",
-        PetName: data.PetName,
-        PetNote: data.PetNote ?? "",
-        PetPersonality: data.PetPersonality ?? "",
-        PetPhoto: data.PetPhoto ?? "",
-        PetSex: data.PetSex,
-        PetType: data.PetType,
-        ServiceTypes: data.ServiceTypes,
-      },
-    });
-  }, [data, dispatchPet]);
-};
-
-const useRenderPhoto = (
-  formdata: FormData | undefined,
-  dispatchPet: React.Dispatch<PetAction>
-): void => {
-  useEffect(() => {
-    if (formdata === undefined) return;
-    const file = formdata.get("photo");
-    if (file === null) return;
-    const url = URL.createObjectURL(file as File);
-    dispatchPet({ type: "PICK_PET_PHOTO", payload: url });
-  }, [dispatchPet, formdata]);
-};
 
 const handleCheckBox = (
   element: HTMLInputElement,
@@ -219,14 +132,22 @@ const handleCheckBox = (
 };
 
 const Edit = React.memo(
-  ({ data, type, title, onClick }: IEditProps): JSX.Element => {
-    const [pet, dispatchPet] = useReducer(petReducer, initPet);
-    const [formdata, setFormData] = useState<FormData>();
-    const queryClient = useQueryClient();
+  ({
+    pet,
+    dispatchPet,
+    title,
+    onClick,
+    setFormData,
+  }: IEditProps): JSX.Element => {
+    /* 以下欄位因為牽涉到價格以及旅館是否提供的問題，所在路徑"/book"時受到隱藏
+    1. 寵物類型
+    2. 飲食偏好
+    3. 旅館需求
+    */
+    const { pathname } = useLocation();
+    // console.log(pet);
 
-    const { dispatchPending } = useModal();
-    useRenderPhoto(formdata, dispatchPet);
-    useInitPet(data, dispatchPet);
+    // useInitState(setPet, data?.PetType);
 
     return (
       <MotionFade className="flex-center fixed left-0 top-0 z-10 h-screen w-full bg-black/50">
@@ -257,18 +178,19 @@ const Edit = React.memo(
             />
             <hr className=" my-6 block border-stone-300" />
             <h2 className="mb-3 font-bold">寵物資訊</h2>
-            <FilterInput
-              onChange={(e) =>
-                dispatchPet({
-                  type: "PICK_PET_TYPE",
-                  payload: (e.target as HTMLInputElement).value,
-                })
-              }
-              filterList={petLists}
-              checked={pet.PetType}
-              {...filterInput}
-            />
-
+            {!pathname.includes("/book") && (
+              <FilterInput
+                onChange={(e) =>
+                  dispatchPet({
+                    type: "PICK_PET_TYPE",
+                    payload: (e.target as HTMLInputElement).value,
+                  })
+                }
+                filterList={petLists}
+                checked={pet.PetType}
+                {...filterInput}
+              />
+            )}
             <FilterInput
               onChange={(e) =>
                 dispatchPet({
@@ -291,21 +213,23 @@ const Edit = React.memo(
               checked={pet.PetSex}
               {...filterInput}
             />
-            <FilterInput
-              onChange={(e) =>
-                handleCheckBox(
-                  e.target as HTMLInputElement,
-                  {
-                    FoodTypes: pet.FoodTypes,
-                    ServiceTypes: pet.ServiceTypes,
-                  },
-                  dispatchPet
-                )
-              }
-              filterList={foodLists}
-              checked={pet.FoodTypes}
-              {...filterInput}
-            />
+            {!pathname.includes("/book") && (
+              <FilterInput
+                onChange={(e) =>
+                  handleCheckBox(
+                    e.target as HTMLInputElement,
+                    {
+                      FoodTypes: pet.FoodTypes,
+                      ServiceTypes: pet.ServiceTypes,
+                    },
+                    dispatchPet
+                  )
+                }
+                filterList={foodLists}
+                checked={pet.FoodTypes}
+                {...filterInput}
+              />
+            )}
 
             <Input
               onChange={(e) =>
@@ -332,60 +256,64 @@ const Edit = React.memo(
               }
               {...input.PetNote}
             />
-            <>
-              <hr className=" my-6 block border-stone-300" />
-              <h2 className="mb-3 font-bold">旅館需求</h2>
-              <FilterInput
-                onChange={(e) =>
-                  handleCheckBox(
-                    e.target as HTMLInputElement,
-                    {
-                      FoodTypes: pet.FoodTypes,
-                      ServiceTypes: pet.ServiceTypes,
-                    },
-                    dispatchPet
-                  )
-                }
-                filterList={serviceLists}
-                checked={pet.FoodTypes}
-                {...filterInput}
-              />
-              <FilterInput
-                onChange={(e) =>
-                  handleCheckBox(
-                    e.target as HTMLInputElement,
-                    {
-                      FoodTypes: pet.FoodTypes,
-                      ServiceTypes: pet.ServiceTypes,
-                    },
-                    dispatchPet
-                  )
-                }
-                filterList={facilitiesLists}
-                checked={pet.FoodTypes}
-                {...filterInput}
-              />
-              <FilterInput
-                onChange={(e) =>
-                  handleCheckBox(
-                    e.target as HTMLInputElement,
-                    {
-                      FoodTypes: pet.FoodTypes,
-                      ServiceTypes: pet.ServiceTypes,
-                    },
-                    dispatchPet
-                  )
-                }
-                filterList={specialsLists}
-                checked={pet.FoodTypes}
-                {...filterInput}
-                className="mb-10"
-              />
-            </>
+            {!pathname.includes("/book") && (
+              <>
+                <hr className=" my-6 block border-stone-300" />
+                <h2 className="mb-3 font-bold">旅館需求</h2>
+                <FilterInput
+                  onChange={(e) =>
+                    handleCheckBox(
+                      e.target as HTMLInputElement,
+                      {
+                        FoodTypes: pet.FoodTypes,
+                        ServiceTypes: pet.ServiceTypes,
+                      },
+                      dispatchPet
+                    )
+                  }
+                  filterList={serviceLists}
+                  checked={pet.FoodTypes}
+                  {...filterInput}
+                />
+                <FilterInput
+                  onChange={(e) =>
+                    handleCheckBox(
+                      e.target as HTMLInputElement,
+                      {
+                        FoodTypes: pet.FoodTypes,
+                        ServiceTypes: pet.ServiceTypes,
+                      },
+                      dispatchPet
+                    )
+                  }
+                  filterList={facilitiesLists}
+                  checked={pet.FoodTypes}
+                  {...filterInput}
+                />
+                <FilterInput
+                  onChange={(e) =>
+                    handleCheckBox(
+                      e.target as HTMLInputElement,
+                      {
+                        FoodTypes: pet.FoodTypes,
+                        ServiceTypes: pet.ServiceTypes,
+                      },
+                      dispatchPet
+                    )
+                  }
+                  filterList={specialsLists}
+                  checked={pet.FoodTypes}
+                  {...filterInput}
+                  className="mb-10"
+                />
+              </>
+            )}
             <Button
               text="儲存"
               type="Secondary"
-              className="mt-10 w-full rounded-full py-2"
+              className={`${
+                !pathname.includes("/book") ? "" : "mt-10"
+              } w-full rounded-full py-2`}
               onClick={onClick}
             />
           </>

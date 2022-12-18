@@ -17,6 +17,10 @@ export type InitPet = typeof initPet;
 
 export type PetAction =
   | {
+      type: "Init";
+      payload: InitPet;
+    }
+  | {
       type: "PICK_PET_PHOTO";
       payload: string;
     }
@@ -79,6 +83,8 @@ export const petReducer = (state: InitPet, action: PetAction): InitPet => {
       return { ...state, PetType: action.payload };
     case "PICK_PET_PHOTO":
       return { ...state, PetPhoto: action.payload };
+    case "Init":
+      return action.payload;
     default:
       return state;
   }

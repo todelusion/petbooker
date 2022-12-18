@@ -5,8 +5,8 @@ import { AxiosTryCatch, baseURL } from "..";
 import { Pet, PetListSchema, postPetResSchema } from "../../types/schema";
 import Header from "./Header";
 
-export const usePetCardList = (token: string) =>
-  useQuery(["PetCardList"], async () => {
+export const usePetList = (token: string) =>
+  useQuery(["PetList"], async () => {
     const header = new Header(token);
     const data = await AxiosTryCatch(async () =>
       axios.get(`${baseURL}/petcard/petcardlist`, header)

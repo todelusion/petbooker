@@ -37,7 +37,7 @@ import {
 } from "../../../utils/api/user";
 import { sortedServiceTypes } from "../../../utils/servicesTranslator";
 // import petCard from "../CustomerPet/data";
-import Edit from "../CustomerPet/Edit";
+import Edit from "./Edit";
 import { initPet, PetAction, petReducer } from "../CustomerPet/petReducer";
 import PetInfo from "./PetInfo";
 
@@ -208,7 +208,7 @@ function CustomerBook(): JSX.Element {
     );
 
   return (
-    <div className="flex-center pt-32 pb-28">
+    <div className="flex-center pt-48 pb-28">
       <div className="w-full max-w-6xl">
         <h2 className="mb-4 text-center text-4xl font-bold">預約資料確認</h2>
         <p className=" mb-4 text-2xl font-bold text-gray-500">寵物名片</p>
@@ -361,7 +361,7 @@ function CustomerBook(): JSX.Element {
               <li className="mb-4">
                 <p className="mb-1 font-bold">飼主資訊</p>
                 <span>Email：</span>
-                <span>{user?.UserAccount}</span>
+                <span>{user === false ? undefined : user?.UserAccount}</span>
               </li>
               <li className="mb-4">
                 <p className="relative mb-1 font-bold">

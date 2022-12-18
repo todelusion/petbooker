@@ -115,7 +115,7 @@ function Edit({ title, onClick, data, type }: IEditProps): JSX.Element {
           <p className="mb-4 text-center text-3xl font-bold">{title}</p>
           <UploadImage
             onChange={(file) => {
-              setFormData(toFormData(file));
+              setFormData(toFormData("Image", file));
             }}
             defaultImage={data?.RoomPhoto}
             type="Room"
