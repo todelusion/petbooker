@@ -67,7 +67,7 @@ export const HotelSchema = z.object({
         z.object({
           UserName: z.union([z.null(), z.string()]),
           UserPhoto: z.union([z.null(), z.string()]),
-          Score: z.number(),
+          Score: z.union([z.number(), z.null()]),
           Comment: z.union([z.null(), z.string()]),
         })
       ),
@@ -106,13 +106,12 @@ export const UserInfoSchema = z.object({
 export const BookingSchema = z.object({
   PetCardId: z.number(),
   RoomId: z.number(),
-  OrderedDate: z.string(),
   CheckInDate: z.string(),
   CheckOutDate: z.string(),
   TotalNight: z.number(),
   TotalPrice: z.number(),
-  UserName: z.string(),
-  UserPhone: z.string(),
+  UserName: z.string().min(1, { message: "必須輸入飼主名稱" }),
+  UserPhone: z.string().min(1, { message: "必須輸入飼主電話" }),
   Status: z.string(),
 });
 
@@ -134,6 +133,12 @@ export const PetSchema = z.object({
 
   */
   ServiceTypes: z.array(z.string().optional()),
+});
+
+export const postPetResSchema = z.object({
+  status: z.string(),
+  message: z.string(),
+  petid: z.number(),
 });
 
 export const PetListSchema = z.array(

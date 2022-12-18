@@ -20,13 +20,21 @@ import useSearchBar from "../../../hooks/useSearchBar";
 import { EditPath, LoadingCustom } from "../../../img/icons";
 import {
   Booking,
+  BookingSchema,
   Hotel,
   Pet,
   PetSchema,
   UserInfo,
 } from "../../../types/schema";
-import { postPet } from "../../../utils/api/petCard";
-import { useUserInfo } from "../../../utils/api/user";
+import { AxiosTryCatch } from "../../../utils";
+import { postPet, postPetPhoto } from "../../../utils/api/petCard";
+import {
+  PostBook,
+  postBooking,
+  PostBooking,
+  usePostBook,
+  useUserInfo,
+} from "../../../utils/api/user";
 import { sortedServiceTypes } from "../../../utils/servicesTranslator";
 // import petCard from "../CustomerPet/data";
 import Edit from "../CustomerPet/Edit";
@@ -50,35 +58,39 @@ const validatePet = (
 };
 
 const validateUserBook = (
-  navigate: NavigateFunction,
-  dispatchPending: React.Dispatch<PendingAction>,
-  UserNameRef: React.RefObject<HTMLInputElement>,
-  UserPhoneRef: React.RefObject<HTMLInputElement>
-): void => {
-  console.log(UserNameRef.current?.value);
+  body: Partial<Booking>,
+  dispatchPending: React.Dispatch<PendingAction>
+): Booking | undefined => {
+  const result = BookingSchema.safeParse(body);
+  if (result.success) return result.data;
 
-  if (UserNameRef.current?.value === "") {
-    dispatchPending({
-      type: "IS_ERROR",
-      payload: "必須輸入飼主姓名",
-    });
-    setTimeout(() => dispatchPending({ type: "DONE" }), 1000);
-    return;
-  }
+  console.log(result.error);
 
-  if (!Number.isNaN(Number(UserPhoneRef.current?.value))) {
-    dispatchPending({
-      type: "IS_ERROR",
-      payload: "必須輸入正確的電話號碼格式",
-    });
-    setTimeout(() => dispatchPending({ type: "DONE" }), 1000);
-  }
+  const errorMessages = Object.values(result.error.formErrors.fieldErrors).map(
+    (message) => message.toString()
+  );
+
+  dispatchPending({ type: "IS_ERROR_MULTI", payload: errorMessages });
+  return undefined;
+
+  // if (UserNameRef.current?.value === "") {
+  //   dispatchPending({
+  //     type: "IS_ERROR",
+  //     payload: "必須輸入飼主姓名",
+  //   });
+  //   setTimeout(() => dispatchPending({ type: "DONE" }), 1000);
+  //   return;
+  // }
+
+  // if (!Number.isNaN(Number(UserPhoneRef.current?.value))) {
+  //   dispatchPending({
+  //     type: "IS_ERROR",
+  //     payload: "必須輸入正確的電話號碼格式",
+  //   });
+  //   setTimeout(() => dispatchPending({ type: "DONE" }), 1000);
+  // }
 };
-// const handleValidate = (pet: Pet): true | string => {
-//   const result = PetSchema.safeParse(pet);
-//   if (!result.success) return result.error.message;
-//   return true;
-// };
+
 const useRenderPhoto = (
   formdata: FormData | undefined,
   dispatchPet: React.Dispatch<PetAction>
@@ -144,14 +156,14 @@ const useContextToCurrent = (
 };
 
 function CustomerBook(): JSX.Element {
+  const UserNameRef = useRef<HTMLInputElement>(null);
+  const UserPhoneRef = useRef<HTMLInputElement>(null);
   const [pet, dispatchPet] = useReducer(petReducer, initPet);
   const [formdata, setFormData] = useState<FormData>();
   const [isShow, setIsShow] = useState<"POST" | "PUT">();
   const queryClient = useQueryClient();
   const navigate = useNavigate();
-  const UserNameRef = useRef<HTMLInputElement>(null);
-  const UserPhoneRef = useRef<HTMLInputElement>(null);
-  const { id, room, price } = useParams();
+  const { roomid, roomname, price } = useParams();
 
   const { authToken, setAuthToken } = useContext(UserAuth);
   const { data: user } = useUserInfo(authToken);
@@ -165,7 +177,6 @@ function CustomerBook(): JSX.Element {
   useDisableScroll(isShow);
   useRenderPhoto(formdata, dispatchPet);
   useContextToCurrent(PetType, FoodTypes, dispatchPet);
-
   useEffect(() => () => {
     clearInterval(setTimeout(() => dispatchPending({ type: "DONE" }), 1000));
     clearInterval(setTimeout(() => navigate("/login"), 2000));
@@ -310,7 +321,7 @@ function CustomerBook(): JSX.Element {
               <li className="mb-2 font-bold">訂房資訊</li>
               <li>
                 <span>房型：</span>
-                <span>{room}</span>
+                <span>{roomname}</span>
               </li>
               <li>
                 <span>入住日期：</span>
@@ -353,16 +364,26 @@ function CustomerBook(): JSX.Element {
                 <span>{user?.UserAccount}</span>
               </li>
               <li className="mb-4">
-                <p className="mb-1 font-bold">飼主名稱</p>
+                <p className="relative mb-1 font-bold">
+                  <span>飼主名稱</span>
+                  <span className=" absolute -left-2 -top-1 font-medium text-red-600">
+                    *
+                  </span>
+                </p>
                 <input
                   ref={UserNameRef}
                   type="text"
-                  defaultValue={user?.UserName}
+                  defaultValue={user === false ? undefined : user?.UserName}
                   className="w-full rounded-lg border-2 border-black px-2 py-2 outline-none"
                 />
               </li>
               <li className="mb-4">
-                <p className="mb-1 font-bold">連絡電話</p>
+                <p className="relative mb-1 font-bold">
+                  <span>連絡電話</span>
+                  <span className=" absolute -left-2 -top-1 font-medium text-red-600">
+                    *
+                  </span>
+                </p>
                 <input
                   ref={UserPhoneRef}
                   type="text"
@@ -379,10 +400,66 @@ function CustomerBook(): JSX.Element {
           className="mx-auto py-2 px-10"
           onClick={async () => {
             if (!validatePet(pet, dispatchPending)) return;
-
             // 必須判斷若寵物名稱重複則不得重複發 postPet
-            await postPet(pet, authToken);
-            console.log("next");
+            dispatchPending({ type: "IS_LOADING" });
+            const petResult = await postPet(pet, authToken);
+
+            if (petResult === undefined) {
+              dispatchPending({
+                type: "IS_ERROR",
+                payload: "系統錯誤，請重新再試",
+              });
+              setTimeout(() => dispatchPending({ type: "DONE" }), 1000);
+              return;
+            }
+
+            if (formdata !== undefined) {
+              const photoResult = await postPetPhoto(
+                petResult.petid,
+                formdata,
+                authToken
+              );
+              if (photoResult === undefined)
+                dispatchPending({
+                  type: "IS_ERROR",
+                  payload: "上傳寵物照片錯誤，請至「我的寵物名片」補上寵物照片",
+                });
+            }
+
+            const body = validateUserBook(
+              {
+                CheckInDate: format(selection.startDate, "yyyy/M/d"),
+                CheckOutDate: format(selection.endDate, "yyyy/M/d"),
+                PetCardId: petResult.petid,
+                UserName: UserNameRef.current?.value,
+                UserPhone: UserPhoneRef.current?.value,
+                RoomId: Number(roomid),
+                TotalNight:
+                  (selection.endDate.getTime() -
+                    selection.startDate.getTime()) /
+                  86400000,
+                TotalPrice:
+                  ((selection.endDate.getTime() -
+                    selection.startDate.getTime()) /
+                    86400000) *
+                  Number(price),
+                Status: "",
+              },
+              dispatchPending
+            );
+
+            if (body === undefined) return;
+
+            if ((await postBooking(body, authToken)) === undefined) {
+              dispatchPending({
+                type: "IS_ERROR",
+                payload: "系統錯誤，請重新再試",
+              });
+              setTimeout(() => dispatchPending({ type: "DONE" }), 1000);
+              return;
+            }
+            dispatchPending({ type: "DONE" });
+            navigate("/hotel/book/success");
           }}
         />
       </div>

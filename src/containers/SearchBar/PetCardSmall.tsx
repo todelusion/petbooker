@@ -27,9 +27,8 @@ const petList = [
 
 function PetCardSmall({ dispatchSearchBar }: IPetCardProps): JSX.Element {
   const { pet: selectedPet, dispatch } = useSearchBar();
-  const { authToken } = useContext(UserAuth);
+
   console.log(selectedPet);
-  usePetCardList(authToken);
 
   return (
     <div className="w-60 rounded-md border-2 border-black bg-white">

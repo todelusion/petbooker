@@ -3,12 +3,7 @@
 import { useQuery } from "@tanstack/react-query";
 import axios, { AxiosResponse } from "axios";
 import { AxiosTryCatch, baseURL } from "..";
-import {
-  HotelSchema,
-  PostBook,
-  UserInfo,
-  UserInfoSchema,
-} from "../../types/schema";
+import { Booking, UserInfoSchema } from "../../types/schema";
 import Header from "./Header";
 
 export const useUserInfo = (token: string) => {
@@ -30,20 +25,13 @@ export const useUserInfo = (token: string) => {
   });
 };
 
-export const usePostBook = async (
-  body: PostBook,
-  token: string
-): Promise<AxiosResponse<any, any>> => {
+export const postBooking = async (body: Booking, token: string) => {
   const header = new Header(token);
-
-  return axios
-    .post(`${baseURL}/user/book`, body, header)
-    .then((res) => {
-      console.log(res);
-      return res;
-    })
-    .catch((err) => {
-      console.log(err);
-      return err;
-    });
+  const data = await AxiosTryCatch<{
+    status: string;
+    orderId: number;
+    message: "預約成功";
+  }>(async () => axios.post(`${baseURL}/user/book`, body, header));
+  console.log(data);
+  return data;
 };

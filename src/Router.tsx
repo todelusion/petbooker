@@ -42,13 +42,13 @@ export default function Router(): JSX.Element {
           <Route path="/contextTest" element={<ContextTest />} />
           <Route path="/hotel/:id" element={<Hotel />} />
           <Route
-            path="/hotel/book/:id/:room/:price"
+            path="/hotel/book/:roomid/:roomname/:price"
             element={<CustomerBook />}
           />
+          <Route path="/hotel/book/success" element={<Success />} />
           <Route path="/customer" element={<NavBackend menus={customerMenu} />}>
             <Route path="/customer/info" element={<CustomerInfo />} />
             <Route path="/customer/pet" element={<CustomerPet />} />
-            <Route path="/customer/OrderSuccess" element={<Success />} />
           </Route>
           <Route path="/login" element={<UserLogin />} />;
           <Route path="/regist" element={<UserRegist />} />;

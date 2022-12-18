@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useReducer } from "react";
+import React, { useCallback, useContext, useEffect, useReducer } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronUp, faChevronDown } from "@fortawesome/free-solid-svg-icons";
 import { AnimatePresence, motion } from "framer-motion";
@@ -18,6 +18,8 @@ import PetCardSmall from "./PetCardSmall";
 import useSearchBar from "../../hooks/useSearchBar";
 import getCountry from "../../utils/getCountry";
 import { tryCatch } from "../../utils";
+import UserAuth from "../../context/UserAuthContext";
+import { usePetCardList } from "../../utils/api/petCard";
 
 export type SearchBarAction =
   | {
@@ -81,6 +83,8 @@ const SearchBar = React.memo(
     // console.log("renderSearchBar");
     const { pathname } = useLocation();
     const countryList = getCountry();
+    const { authToken } = useContext(UserAuth);
+    // usePetCardList(authToken);
     const queryClient = useQueryClient();
 
     const { area, selection, pet, dispatch } = useSearchBar();

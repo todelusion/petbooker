@@ -2,7 +2,7 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { AxiosTryCatch, baseURL } from "..";
-import { Pet, PetListSchema } from "../../types/schema";
+import { Pet, PetListSchema, postPetResSchema } from "../../types/schema";
 import Header from "./Header";
 
 export const usePetCardList = (token: string) =>
@@ -13,12 +13,11 @@ export const usePetCardList = (token: string) =>
     );
     console.log(data.petCardList);
     if (data.Status === false) {
-      throw new Error("GET request error in usePetCardList");
+      console.error("GET request error in usePetCardList");
     }
     const result = PetListSchema.safeParse(data.petCardList);
-    if (result.success) {
-      return result.data;
-    }
+    if (result.success) return result.data;
+
     console.log(result.error.format());
     return undefined;
   });
@@ -28,12 +27,31 @@ export const postPet = async (body: Pet, token: string) => {
   const data = await AxiosTryCatch(async () =>
     axios.post(`${baseURL}/petcard`, body, header)
   );
-  console.log(data);
+  if (data.Status === false) {
+    console.error("API error in postPet");
+  }
+
+  const result = postPetResSchema.safeParse(data.result);
+  if (result.success) return result.data;
+
+  console.error(result.error);
+  return undefined;
 };
-export const postPetPhoto = async (body: FormData, token: string) => {
+export const postPetPhoto = async (
+  petid: number,
+  body: FormData,
+  token: string
+) => {
   const header = new Header(token);
-  const data = await AxiosTryCatch(async () =>
-    axios.post(`${baseURL}/petcard/uploadpetphoto`, body, header)
+  const data = await AxiosTryCatch<{
+    Status: boolean;
+    Data: { FileName: string };
+  }>(async () =>
+    axios.post(
+      `${baseURL}/petcard/uploadpetphoto?petCardId=${petid}`,
+      body,
+      header
+    )
   );
-  console.log(data);
+  return data;
 };

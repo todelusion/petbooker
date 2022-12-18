@@ -40,7 +40,7 @@ export const useHotel = (id: string, startDate: Date, endDate: Date) => {
     if (result.success) {
       return result.data;
     }
-    console.log(result.error.format());
+    console.log(result.error);
     return undefined;
   });
 };
