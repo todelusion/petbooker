@@ -13,6 +13,7 @@ export interface InitialPending {
 export interface IModalProps {
   pending: InitialPending;
   dispatchPending: React.Dispatch<PendingAction>;
+  closeModal: (time: number) => NodeJS.Timeout;
 }
 
 export type PendingAction =
@@ -76,6 +77,8 @@ export default function usePending(): IModalProps {
     pendingReducer,
     initialPending as InitialPending
   );
+  const closeModal = (time: number): NodeJS.Timeout =>
+    setTimeout(() => dispatchPending({ type: "DONE" }), time);
 
-  return { pending, dispatchPending };
+  return { pending, dispatchPending, closeModal };
 }

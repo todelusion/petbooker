@@ -1,7 +1,11 @@
-import React from "react";
+import { useQueryClient } from "@tanstack/react-query";
+import React, { useContext } from "react";
 import { translatePet } from "../../../containers/Filter/data";
-import { EditPath } from "../../../img/icons";
+import UserAuth from "../../../context/UserAuthContext";
+import useModal from "../../../hooks/useModal";
+import { EditPath, TrashPath } from "../../../img/icons";
 import { Pet, PetList } from "../../../types/schema";
+import { deletePet } from "../../../utils/api/petCard";
 import { sortedServiceTypes } from "../../../utils/servicesTranslator";
 import PetInfo from "../CustomerBook/PetInfo";
 
@@ -12,17 +16,17 @@ interface IPetListProps {
 }
 
 const renderServiceTypes = (ServiceTypes: string[]): JSX.Element => {
-  if (ServiceTypes[0] === "") return <p>無</p>;
+  if (ServiceTypes.length < 2) return <p>無</p>;
 
   return (
     <>
       <li className="mb-4 ">
         <p className="mb-4">服務內容：</p>
-        <p className="-ml-1">
+        <p className="-ml-1 flex flex-wrap">
           {sortedServiceTypes(ServiceTypes, "Services").map((service) => (
             <span
               key={service}
-              className="mr-2 rounded-full border-2 border-black px-4 py-2"
+              className="mr-2 rounded-full border-2 border-black px-2 py-1 text-sm"
             >
               {service}
             </span>
@@ -31,11 +35,11 @@ const renderServiceTypes = (ServiceTypes: string[]): JSX.Element => {
       </li>
       <li className="mb-4">
         <p className="mb-4">設施條件：</p>
-        <p className="-ml-1">
+        <p className="-ml-1 flex flex-wrap">
           {sortedServiceTypes(ServiceTypes, "Facilities").map((facility) => (
             <span
               key={facility}
-              className="mr-2 rounded-full border-2 border-black px-4 py-2"
+              className="mr-2 rounded-full border-2 border-black px-2 py-1 text-sm"
             >
               {facility}
             </span>
@@ -44,11 +48,11 @@ const renderServiceTypes = (ServiceTypes: string[]): JSX.Element => {
       </li>
       <li>
         <p className="mb-4">特殊需求：</p>
-        <p className="-ml-1">
+        <p className="-ml-1 flex flex-wrap">
           {sortedServiceTypes(ServiceTypes, "Specials").map((special) => (
             <span
               key={special}
-              className="mr-2 rounded-full border-2 border-black px-4 py-2"
+              className="mr-2 rounded-full border-2 border-black px-2 py-1 text-sm"
             >
               {special}
             </span>
@@ -60,6 +64,10 @@ const renderServiceTypes = (ServiceTypes: string[]): JSX.Element => {
 };
 
 function PetCard({ data, setPet, setIsShow }: IPetListProps): JSX.Element {
+  const { dispatchPending, closeModal } = useModal();
+  const { authToken } = useContext(UserAuth);
+  const queryClient = useQueryClient();
+
   return (
     <>
       {data.map((pet) => (
@@ -75,7 +83,21 @@ function PetCard({ data, setPet, setIsShow }: IPetListProps): JSX.Element {
             type="button"
             className="absolute right-2 top-2 outline-none duration-75 hover:scale-110"
           >
-            <img src={EditPath} alt="" />
+            <img src={EditPath} alt="edit" />
+          </button>
+          <button
+            onClick={async () => {
+              if (pet.PetCardId === undefined) return;
+              dispatchPending({ type: "IS_LOADING" });
+              await deletePet(pet.PetCardId, authToken);
+              await queryClient.invalidateQueries(["PetList"]);
+
+              closeModal(0);
+            }}
+            type="button"
+            className="absolute right-11 top-2 outline-none duration-75 hover:scale-110"
+          >
+            <img src={TrashPath} alt="edit" />
           </button>
           <ul className="mr-7 basis-2/12">
             <li className=" mb-6 h-40">

@@ -33,7 +33,7 @@ function CustomerPet(): JSX.Element {
   const { authToken } = useContext(UserAuth);
   const { data } = usePetList(authToken);
   const [pet, setPet] = useState<PetList[0]>();
-  console.log(pet);
+  console.log(data);
 
   useDisableScroll(isShow);
 

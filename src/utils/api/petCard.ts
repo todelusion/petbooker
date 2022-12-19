@@ -37,6 +37,33 @@ export const postPet = async (body: Pet, token: string) => {
   console.error(result.error);
   return undefined;
 };
+export const putPet = async (petid: number, body: Pet, token: string) => {
+  console.log(petid);
+  const header = new Header(token);
+  const data = await AxiosTryCatch(async () =>
+    axios.put(`${baseURL}/petcard?petCardId=${petid}`, body, header)
+  );
+
+  if (data.Status === false) {
+    console.error("API error in putPet");
+    return undefined;
+  }
+  return data;
+};
+export const deletePet = async (petid: number, token: string) => {
+  const header = new Header(token);
+  console.log(petid, header);
+  const data = await AxiosTryCatch(async () =>
+    axios.delete(`${baseURL}/petcard?petCardId=${petid}`, header)
+  );
+  console.log(data);
+
+  if (data.Status === false) {
+    console.error("API error in deletePet");
+    return undefined;
+  }
+  return data;
+};
 export const postPetPhoto = async (
   petid: number,
   body: FormData,

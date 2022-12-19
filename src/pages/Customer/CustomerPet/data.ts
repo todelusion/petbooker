@@ -31,7 +31,6 @@ export const input = {
 
 export const filterInput = {
   noContext: true as true,
-  required: true as true,
   horizontal: true as true,
   labelWidth: "min-w-[5rem]",
   className: "mb-5",

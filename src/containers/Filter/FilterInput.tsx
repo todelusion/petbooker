@@ -218,6 +218,7 @@ function FilterInput({
             name={keyname}
             id={content.descript}
             value={content.value}
+            onChange={(e) => e}
             onClick={async (e: React.MouseEvent<HTMLInputElement>) => {
               if (FilterContextProps !== undefined)
                 dispatchContext(

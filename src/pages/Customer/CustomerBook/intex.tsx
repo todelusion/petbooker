@@ -387,7 +387,9 @@ function CustomerBook(): JSX.Element {
                 <input
                   ref={UserPhoneRef}
                   type="text"
-                  defaultValue={user?.UserPhone?.toString()}
+                  defaultValue={
+                    user === false ? undefined : user?.UserPhone?.toString()
+                  }
                   className="w-full rounded-lg border-2 border-black px-2 py-2 outline-none"
                 />
               </li>
@@ -443,7 +445,7 @@ function CustomerBook(): JSX.Element {
                     selection.startDate.getTime()) /
                     86400000) *
                   Number(price),
-                Status: "",
+                Status: "reserved",
               },
               dispatchPending
             );

@@ -35,6 +35,7 @@ import UserAuth from "../../../context/UserAuthContext";
 import {
   Pet,
   PetList,
+  PetSchema,
   POSTRoom,
   PostRoomSchema,
   Room,
@@ -44,7 +45,7 @@ import Input from "./Input";
 import { input, filterInput } from "./data";
 import { InitPet, initPet, PetAction, petReducer } from "./petReducer";
 import Button from "../../../components/Button";
-import { usePetList } from "../../../utils/api/petCard";
+import { postPet, postPetPhoto, putPet } from "../../../utils/api/petCard";
 
 interface IEditProps {
   onClick: () => void;
@@ -55,52 +56,81 @@ interface IEditProps {
 
 const handleRequest = async (
   type: "POST" | "PUT",
-  data: POSTRoom,
+  body: Pet,
   token: string,
+  closeModal: (time: number) => NodeJS.Timeout,
+  dispatchPending: React.Dispatch<PendingAction>,
   id?: number,
   formdata?: FormData
-): Promise<boolean | string> => {
+): Promise<boolean | string | undefined> => {
   console.log(type);
 
   if (type === "POST") {
-    if (formdata === undefined) return "新增房型必須要有圖片";
-
-    const res = await AxiosTryCatch(async () => postRoom(data, token));
-    const { roomid } = res.result;
-    const result = await AxiosTryCatch(async () =>
-      uploadRoomPhoto(roomid, formdata, token)
-    );
-
-    if (result === undefined) return false;
+    const petResult = await postPet(body, token);
+    if (petResult === undefined) {
+      dispatchPending({
+        type: "IS_ERROR",
+        payload: "系統錯誤，請重新再試",
+      });
+      closeModal(1000);
+      return false;
+    }
+    if (formdata !== undefined) {
+      const photoResult = await postPetPhoto(petResult.petid, formdata, token);
+      if (photoResult === undefined) {
+        dispatchPending({
+          type: "IS_ERROR",
+          payload: "上傳寵物照片錯誤，請稍後再試",
+        });
+        closeModal(1000);
+      }
+    }
     return true;
   }
 
   if (type === "PUT" && id !== undefined) {
-    const result = await AxiosTryCatch(async () => putRoom(id, data, token));
+    console.log(body);
+    const result = await putPet(id, body, token);
     if (result === undefined) return false;
 
     if (formdata !== undefined) {
-      await uploadRoomPhoto(id, formdata, token);
-      return true;
+      await postPetPhoto(id, formdata, token);
     }
     return true;
   }
   return false;
 };
 
-const handleValidate = (
+const validatePet = (
+  pet: Pet,
+  petList: PetList,
   type: "POST" | "PUT",
   dispatchPending: React.Dispatch<PendingAction>,
-  formdata?: FormData
-): void => {
-  if (type === "PUT") return;
-  if (formdata === undefined) {
+  closeModal: (time: number) => NodeJS.Timeout
+): Pet | undefined => {
+  console.log("validatePet", type);
+
+  if (
+    type === "POST" &&
+    petList.find((item) => item.PetName === pet.PetName) !== undefined
+  ) {
     dispatchPending({
       type: "IS_ERROR",
-      payload: "必須上傳圖片",
+      payload: "一位寵物只能建立一個名片喔！",
     });
-    setTimeout(() => dispatchPending({ type: "DONE" }), 1000);
+    closeModal(1000);
+    return undefined;
   }
+
+  const result = PetSchema.safeParse(pet);
+  if (result.success) return result.data;
+
+  const errorMessages = Object.values(result.error.formErrors.fieldErrors).map(
+    (message) => message.toString()
+  );
+  dispatchPending({ type: "IS_ERROR_MULTI", payload: errorMessages });
+
+  return undefined;
 };
 
 const useInitPet = (
@@ -109,6 +139,15 @@ const useInitPet = (
 ): void => {
   useEffect(() => {
     if (data === undefined) return;
+    console.log(data.ServiceTypes, data.FoodTypes);
+
+    if (data.ServiceTypes[0] === "") {
+      data.ServiceTypes.shift();
+    }
+    if (data.FoodTypes[0] === "") {
+      data.FoodTypes.shift();
+    }
+
     dispatchPet({
       type: "Init",
       payload: {
@@ -220,13 +259,18 @@ const handleCheckBox = (
 
 const Edit = React.memo(
   ({ data, type, title, onClick }: IEditProps): JSX.Element => {
+    console.log(data?.PetCardId);
+    const { authToken } = useContext(UserAuth);
     const [pet, dispatchPet] = useReducer(petReducer, initPet);
+    console.log(pet.ServiceTypes);
     const [formdata, setFormData] = useState<FormData>();
     const queryClient = useQueryClient();
+    const petList = queryClient.getQueryData<PetList>(["PetList"]);
 
-    const { dispatchPending } = useModal();
+    const { dispatchPending, closeModal } = useModal();
     useRenderPhoto(formdata, dispatchPet);
     useInitPet(data, dispatchPet);
+    useEffect(() => clearInterval(closeModal(1000)));
 
     return (
       <MotionFade className="flex-center fixed left-0 top-0 z-10 h-screen w-full bg-black/50">
@@ -258,6 +302,7 @@ const Edit = React.memo(
             <hr className=" my-6 block border-stone-300" />
             <h2 className="mb-3 font-bold">寵物資訊</h2>
             <FilterInput
+              required
               onChange={(e) =>
                 dispatchPet({
                   type: "PICK_PET_TYPE",
@@ -270,6 +315,7 @@ const Edit = React.memo(
             />
 
             <FilterInput
+              required
               onChange={(e) =>
                 dispatchPet({
                   type: "PICK_PET_AGE",
@@ -281,6 +327,7 @@ const Edit = React.memo(
               {...filterInput}
             />
             <FilterInput
+              required
               onChange={(e) =>
                 dispatchPet({
                   type: "PICK_PET_SEX",
@@ -292,6 +339,7 @@ const Edit = React.memo(
               {...filterInput}
             />
             <FilterInput
+              required
               onChange={(e) =>
                 handleCheckBox(
                   e.target as HTMLInputElement,
@@ -303,7 +351,7 @@ const Edit = React.memo(
                 )
               }
               filterList={foodLists}
-              checked={pet.FoodTypes}
+              checked={data?.FoodTypes}
               {...filterInput}
             />
 
@@ -347,7 +395,7 @@ const Edit = React.memo(
                   )
                 }
                 filterList={serviceLists}
-                checked={pet.FoodTypes}
+                checked={data?.ServiceTypes}
                 {...filterInput}
               />
               <FilterInput
@@ -362,7 +410,7 @@ const Edit = React.memo(
                   )
                 }
                 filterList={facilitiesLists}
-                checked={pet.FoodTypes}
+                checked={data?.ServiceTypes}
                 {...filterInput}
               />
               <FilterInput
@@ -377,7 +425,7 @@ const Edit = React.memo(
                   )
                 }
                 filterList={specialsLists}
-                checked={pet.FoodTypes}
+                checked={data?.ServiceTypes}
                 {...filterInput}
                 className="mb-10"
               />
@@ -386,7 +434,45 @@ const Edit = React.memo(
               text="儲存"
               type="Secondary"
               className="mt-10 w-full rounded-full py-2"
-              onClick={onClick}
+              onClick={async () => {
+                dispatchPending({ type: "IS_LOADING" });
+
+                // 比對petList 是否有相同的寵物名，初步避免使用者為同一隻寵物新增複數個卡片
+                if (petList === undefined) {
+                  dispatchPending({
+                    type: "IS_ERROR",
+                    payload: "請重新整理後再試一次",
+                  });
+                  closeModal(1000);
+                  return;
+                }
+
+                if (
+                  validatePet(
+                    pet,
+                    petList,
+                    type,
+                    dispatchPending,
+                    closeModal
+                  ) === undefined
+                )
+                  return;
+
+                await handleRequest(
+                  type,
+                  pet,
+                  authToken,
+                  closeModal,
+                  dispatchPending,
+                  data?.PetCardId,
+                  formdata
+                );
+
+                await queryClient.invalidateQueries(["PetList"]);
+                closeModal(1000);
+
+                onClick();
+              }}
             />
           </>
         </MotionPopup>
