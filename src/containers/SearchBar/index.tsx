@@ -84,7 +84,7 @@ const SearchBar = React.memo(
     const { pathname } = useLocation();
     const countryList = getCountry();
     const { authToken } = useContext(UserAuth);
-    usePetList(authToken);
+    const { data } = usePetList(authToken);
     const queryClient = useQueryClient();
 
     const { area, selection, pet, dispatch } = useSearchBar();
@@ -295,7 +295,10 @@ const SearchBar = React.memo(
                 transition={{ duration: 0.3, ease: [0.65, 0.05, 0.36, 1] }}
                 className="origin-top"
               >
-                <PetCardSmall dispatchSearchBar={dispatchSearchBar} />
+                <PetCardSmall
+                  data={data}
+                  dispatchSearchBar={dispatchSearchBar}
+                />
               </motion.div>
             )}
           </AnimatePresence>

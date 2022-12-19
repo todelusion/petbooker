@@ -142,7 +142,7 @@ const Filter = React.memo(
     //   Specials,
     //   Facilities,
     // });
-    console.log("in filter", initPetType);
+    // console.log("in filter", initPetType);
 
     if (data !== undefined) {
       useFilterDefault(
