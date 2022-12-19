@@ -190,7 +190,8 @@ export const OrderListSchema = z.array(
     })
   )
   export type ReservedList = z.infer<typeof OrderListSchema>;
-
+  export const CommentSchema = z.object({ Score: z.number(), Comment: z.string() })
+export type Comment = z.infer<typeof CommentSchema>;
   export const customerOrderListSchema= z.array(
       z.object({
         OrderId: z.number(),
@@ -207,3 +208,5 @@ export const OrderListSchema = z.array(
       })
     )
     export type customerOrder = z.infer<typeof customerOrderListSchema>;
+
+ 

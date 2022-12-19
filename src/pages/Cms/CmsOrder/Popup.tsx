@@ -21,17 +21,15 @@ function Popup({ open, onClose, id }: ModalProps): JSX.Element {
   const sortedServiceTypes = (
     ServiceTypes: string[] | null,
     categoryName: string
-  ) => {
+  ): [string] => {
     if (ServiceTypes === null || data?.ServiceTypes === undefined) return;
     if (ServiceTypes.length === 0) return;
     if (data.ServiceTypes === null) return;
     const result = data.ServiceTypes.filter((item) => {
       if (item === null) return;
-      console.log(sortService[item], "filter");
       return sortService[item] === categoryName;
     }).map((item) => {
       if (item === null) return;
-      console.log(item, "map");
 
       return translateService[item];
     });

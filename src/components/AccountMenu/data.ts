@@ -34,7 +34,7 @@ export const customerMenu = [
   {
     logo: messageSquarePath,
     content: "安心評價",
-    navigatePath: null,
+    navigatePath: '/customer/comment',
   },
   {
     logo: logOutPath,

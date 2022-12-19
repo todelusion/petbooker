@@ -7,7 +7,7 @@ import { LoadingCustom } from "../../../img/icons";
 
 import { useCostomerOrder } from "../../../utils/api/customerOrder";
 
-const CustomerOrder = () => {
+function CustomerOrder(): JSX.Element {
   const { authToken } = useContext(UserAuth);
 
   const [completeList, cancelList, reservedList] = useCostomerOrder(authToken);
@@ -72,33 +72,29 @@ const CustomerOrder = () => {
         cancelList.isFetching) && (
         <LoadingCustom className="absolute left-1/2" color="bg-second" />
       )}
-      {
-        <>
-          <nav className="mb-4 flex">
-            <Button
-              onClick={() => handleClick("完成預約")}
-              type="Transparent"
-              text="完成預約"
-              className="ml-4 py-3 px-6"
-            />
-            <Button
-              onClick={() => handleClick("取消預約")}
-              type="Transparent"
-              text="取消預約"
-              className="ml-4 py-3 px-6"
-            />
-            <Button
-              onClick={() => handleClick("歷史預約")}
-              type="Transparent"
-              text="歷史預約"
-              className="ml-4 py-3 px-6"
-            />
-          </nav>
-          {dataStatus != undefined && <Order data={dataStatus} />}
-        </>
-      }
+      <nav className="mb-4 flex">
+        <Button
+          onClick={() => handleClick("完成預約")}
+          type="Transparent"
+          text="完成預約"
+          className="ml-4 py-3 px-6"
+        />
+        <Button
+          onClick={() => handleClick("取消預約")}
+          type="Transparent"
+          text="取消預約"
+          className="ml-4 py-3 px-6"
+        />
+        <Button
+          onClick={() => handleClick("歷史預約")}
+          type="Transparent"
+          text="歷史預約"
+          className="ml-4 py-3 px-6"
+        />
+      </nav>
+      {dataStatus !== undefined && <Order data={dataStatus} />}
     </div>
   );
-};
+}
 
 export default CustomerOrder;
