@@ -25,6 +25,7 @@ import CustomerBook from "./pages/Customer/CustomerBook/intex";
 import Success from "./pages/Customer/CustomerBook/Success/Success";
 import CustomerOrder from "./pages/Customer/CustomerOrder";
 import CustomerComment from "./pages/Customer/CustomerComment";
+import Fail from "./pages/Customer/CustomerBook/Fail/Fail";
 
 export default function Router(): JSX.Element {
   const client = new QueryClient();
@@ -53,6 +54,7 @@ export default function Router(): JSX.Element {
             <Route path="/customer/order" element={<CustomerOrder />} />
             <Route path="/customer/comment" element={<CustomerComment />} />
             <Route path="/customer/OrderSuccess" element={<Success />} />
+            {/* <Route path="/customer/OrderFail" element={<Fail />} /> */}
           </Route>
           <Route path="/login" element={<UserLogin />} />;
           <Route path="/regist" element={<UserRegist />} />;
@@ -70,6 +72,7 @@ export default function Router(): JSX.Element {
             <Route path="/cms/order" element={<CmsOrder />} />
             <Route path="/cms/room" element={<CmsRoom />} />
           </Route>
+          <Route path="/customer/OrderFail" element={<Fail />} />
         </Route>
       </Routes>
       <ReactQueryDevtools />
