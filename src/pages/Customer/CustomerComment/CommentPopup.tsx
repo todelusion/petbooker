@@ -47,8 +47,8 @@ function CommentPopup({ open, onClose, id, Status }: ModalProps): JSX.Element {
       if (res.data.message === "送出評價成功") {
         onClose?.();
       }
-      await queryClient.invalidateQueries(["comment"]);
-      await queryClient.removeQueries(["comment"]);
+      await queryClient.invalidateQueries(["completeList"]);
+      queryClient.removeQueries(["completeList"]);
     } catch (error) {
       console.log(error);
     }
