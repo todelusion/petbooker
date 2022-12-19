@@ -112,6 +112,7 @@ function CmsInfo(): JSX.Element {
       FoodTypes,
       ServiceTypes: [...Services, ...Facilities, ...Specials],
     };
+
     delete result["range-time-picker"];
 
     // 將旅館照片打包成base64格式

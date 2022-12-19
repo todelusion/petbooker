@@ -1,18 +1,12 @@
 import React, { useContext, useState } from "react";
 import axios from "axios";
 import { useQueryClient } from "@tanstack/react-query";
-import {
-  buttonText,
-  translateState,
-  customerList,
-  commentList,
-} from "../../../components/Order/data";
-//該Order的Schema
+import { AnimatePresence } from "framer-motion";
+import { commentList } from "../../../components/Order/data";
 
 import UserAuth from "../../../context/UserAuthContext";
 import Button from "../../../components/Button";
-import { customerOrder, ReservedList } from "../../../types/schema";
-import { AnimatePresence } from "framer-motion";
+import { customerOrder } from "../../../types/schema";
 import CommentPopup from "./CommentPopup";
 
 interface ICommentProps {
@@ -25,7 +19,7 @@ function Comment({ data }: ICommentProps): JSX.Element {
   const [open, setOpen] = useState(false);
   const [orderId, setOrderId] = useState(0);
   const [selectState, setSelectState] = useState("checkOut");
-  const handleClick = (Orderid: number, Status: string) => {
+  const handleClick = (Orderid: number, Status: string): void => {
     console.log(Orderid, Status);
     setOpen(true);
     setOrderId(Orderid);
