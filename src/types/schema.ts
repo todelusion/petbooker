@@ -209,4 +209,11 @@ export type Comment = z.infer<typeof CommentSchema>;
     )
     export type customerOrder = z.infer<typeof customerOrderListSchema>;
 
- 
+    export const customerInfoSchema=z.object({
+        UserPhoto:z.union([z.null(),z.string()]),
+        UserAccount:z.string(),
+        UserName:z.string(),
+        UserPhone:z.union([z.null(),z.string()]),
+        UserAddress:z.union([z.null(),z.string()])
+      })
+      export type customerInfo = z.infer<typeof customerInfoSchema>;
