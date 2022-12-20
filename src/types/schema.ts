@@ -217,3 +217,17 @@ export type Comment = z.infer<typeof CommentSchema>;
         UserAddress:z.union([z.null(),z.string()])
       })
       export type customerInfo = z.infer<typeof customerInfoSchema>;
+
+      export const CmsCommentListSchema=z.array(
+    z.object({
+      Id: z.number(),
+      RoomName: z.string(),
+      checkInDateOnly: z.string(),
+      checkOutDateOnly: z.string(),
+      UserName: z.string(),
+      UserThumbnail: z.string(),
+      Comment: z.string(),
+      Score: z.number()
+    })
+  )
+      export type CmsCommentList = z.infer<typeof CmsCommentListSchema>;

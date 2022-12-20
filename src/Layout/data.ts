@@ -28,7 +28,7 @@ export const cmsMenu = [
   {
     logo: messageSquarePath,
     content: "查看評價",
-    navigatePath: null,
+    navigatePath: "/cms/commentList",
   },
   {
     logo: logOutPath,
