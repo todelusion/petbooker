@@ -52,7 +52,7 @@ function Button({
       className={`${renderButtonPropsType()} ${className} flex-center h-max rounded-full`}
     >
       {icon !== undefined && <img src={icon} alt="icon" className="mr-2" />}
-      <span className={textSize}>{text}</span>
+      <span className={`${textSize} whitespace-nowrap`}>{text}</span>
     </button>
   );
 }

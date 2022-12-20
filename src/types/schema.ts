@@ -115,7 +115,7 @@ export const BookingSchema = z.object({
   Status: z.string(),
 });
 
-export const PetSchema = z.object({
+export const PetCardSchema = z.object({
   Id: z.number().optional(),
   PetPhoto: z.union([z.null(), z.string()]).optional(),
   PetName: z.string().min(1, { message: "寵物姓名不得為空" }),
@@ -133,6 +133,27 @@ export const PetSchema = z.object({
 
   */
   ServiceTypes: z.array(z.string().optional()),
+});
+
+export const PetSchema = z.object({
+  PetName: z.union([
+    z.null(),
+    z.string({ required_error: "寵物姓名不得為空" }),
+  ]),
+  PetType: z.union([
+    z.null(),
+    z.string({ required_error: "寵物姓名不得為空" }),
+  ]),
+  PetAge: z.union([z.null(), z.string({ required_error: "寵物姓名不得為空" })]),
+  PetSex: z.union([z.null(), z.string({ required_error: "寵物姓名不得為空" })]),
+  FoodTypes: z.array(
+    z.union([z.null(), z.string({ required_error: "寵物姓名不得為空" })])
+  ),
+  PetPersonality: z.string().optional(),
+  PetMedicine: z.union([z.null(), z.string().optional()]),
+  PetNote: z.union([z.null(), z.string().optional()]),
+  ServiceTypes: z.union([z.array(z.union([z.null(), z.string()])), z.null()]),
+  PetPhoto: z.union([z.null(), z.string().optional()]),
 });
 
 export const postPetResSchema = z.object({
@@ -159,7 +180,7 @@ export const PetListSchema = z.array(
 
 export type PetList = z.infer<typeof PetListSchema>;
 
-export type Pet = z.infer<typeof PetSchema>;
+export type PetCard = z.infer<typeof PetCardSchema>;
 
 export type Booking = z.infer<typeof BookingSchema>;
 
@@ -220,3 +241,33 @@ export const OrderListSchema = z.array(
   })
 );
 export type ReservedList = z.infer<typeof OrderListSchema>;
+export const CommentSchema = z.object({
+  Score: z.number(),
+  Comment: z.string(),
+});
+export type Comment = z.infer<typeof CommentSchema>;
+export const customerOrderListSchema = z.array(
+  z.object({
+    OrderId: z.number(),
+    RoomPhoto: z.string(),
+    HotelName: z.string(),
+    RoomName: z.string(),
+    CheckInDate: z.string(),
+    CheckOutDate: z.string(),
+    Status: z.string(),
+    TotalPrice: z.number(),
+    PetCardId: z.number(),
+    PetPhoto: z.union([z.null(), z.string()]),
+    PetName: z.string(),
+  })
+);
+export type customerOrder = z.infer<typeof customerOrderListSchema>;
+
+export const customerInfoSchema = z.object({
+  UserPhoto: z.union([z.null(), z.string()]),
+  UserAccount: z.string(),
+  UserName: z.string(),
+  UserPhone: z.union([z.null(), z.string()]),
+  UserAddress: z.union([z.null(), z.string()]),
+});
+export type customerInfo = z.infer<typeof customerInfoSchema>;

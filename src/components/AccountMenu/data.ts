@@ -24,7 +24,7 @@ export const customerMenu = [
   {
     logo: fileTextPath,
     content: "查看我的訂單",
-    navigatePath: null,
+    navigatePath:  "/customer/Order",
   },
   {
     logo: heartPath,
@@ -34,7 +34,7 @@ export const customerMenu = [
   {
     logo: messageSquarePath,
     content: "安心評價",
-    navigatePath: null,
+    navigatePath: '/customer/comment',
   },
   {
     logo: logOutPath,

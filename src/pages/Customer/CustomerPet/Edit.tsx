@@ -34,6 +34,7 @@ import { uploadRoomPhoto, putRoom, postRoom } from "../../../utils/api/cmsRoom";
 import UserAuth from "../../../context/UserAuthContext";
 import {
   Pet,
+  PetCard,
   PetList,
   PetSchema,
   POSTRoom,
@@ -56,7 +57,7 @@ interface IEditProps {
 
 const handleRequest = async (
   type: "POST" | "PUT",
-  body: Pet,
+  body: PetCard,
   token: string,
   closeModal: (time: number) => NodeJS.Timeout,
   dispatchPending: React.Dispatch<PendingAction>,
@@ -102,12 +103,12 @@ const handleRequest = async (
 };
 
 const validatePet = (
-  pet: Pet,
+  pet: PetCard,
   petList: PetList,
   type: "POST" | "PUT",
   dispatchPending: React.Dispatch<PendingAction>,
   closeModal: (time: number) => NodeJS.Timeout
-): Pet | undefined => {
+): PetCard | undefined => {
   // console.log("validatePet", type);
 
   if (

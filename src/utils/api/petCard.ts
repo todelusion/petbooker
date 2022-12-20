@@ -2,7 +2,13 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { AxiosTryCatch, baseURL } from "..";
-import { Pet, PetListSchema, postPetResSchema } from "../../types/schema";
+import {
+  Pet,
+  PetListSchema,
+  postPetResSchema,
+  PetSchema,
+  PetCard,
+} from "../../types/schema";
 import Header from "./Header";
 
 export const usePetList = (token: string) =>
@@ -22,7 +28,7 @@ export const usePetList = (token: string) =>
     return undefined;
   });
 
-export const postPet = async (body: Pet, token: string) => {
+export const postPet = async (body: PetCard, token: string) => {
   const header = new Header(token);
   const data = await AxiosTryCatch(async () =>
     axios.post(`${baseURL}/petcard`, body, header)
@@ -37,7 +43,7 @@ export const postPet = async (body: Pet, token: string) => {
   console.error(result.error);
   return undefined;
 };
-export const putPet = async (petid: number, body: Pet, token: string) => {
+export const putPet = async (petid: number, body: PetCard, token: string) => {
   // console.log(petid);
   const header = new Header(token);
   const data = await AxiosTryCatch(async () =>
@@ -82,3 +88,17 @@ export const postPetPhoto = async (
   );
   return data;
 };
+
+export const usePetCard = (id: number) =>
+  useQuery(
+    ["PetcardInfo"],
+    async () => {
+      const response = await axios.get(
+        `${baseURL}/petcard/order?petCardId=${id}`
+      );
+      return PetSchema.parse(response.data.result);
+    },
+    {
+      onError: (err) => console.log("usePetCard錯誤", err),
+    }
+  );

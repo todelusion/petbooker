@@ -23,6 +23,8 @@ import {
   BookingSchema,
   Hotel,
   Pet,
+  PetCard,
+  PetCardSchema,
   PetSchema,
   UserInfo,
 } from "../../../types/schema";
@@ -42,11 +44,11 @@ import { initPet, PetAction, petReducer } from "../CustomerPet/petReducer";
 import PetInfo from "./PetInfo";
 
 const validatePet = (
-  pet: Pet,
+  pet: PetCard,
   dispatchPending: React.Dispatch<PendingAction>
 ): boolean => {
   console.log("validatePet");
-  const result = PetSchema.safeParse(pet);
+  const result = PetCardSchema.safeParse(pet);
   if (result.success) return true;
 
   const errorMessages = Object.values(result.error.formErrors.fieldErrors).map(

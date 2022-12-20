@@ -43,7 +43,8 @@ interface IFilterInputProps {
   checked?: string | string[];
   className?: string;
   classNames?: {
-    p: string;
+    p?: string;
+    commentRadio?: string;
   };
 }
 
@@ -202,8 +203,8 @@ function FilterInput({
               // );
               if (onChange !== undefined) onChange(e);
             }}
-            type="radio"
-            className="h-5 w-5 cursor-pointer appearance-none rounded-full border-2 border-black duration-150 checked:border-4 checked:border-primary checked:ring-2 checked:ring-primary_Dark hover:border-primary"
+            type={type}
+            className="h-5  w-5 cursor-pointer appearance-none rounded-full border-2 border-black duration-150 checked:border-4 checked:border-primary checked:ring-2 checked:ring-primary_Dark hover:border-primary"
           />
         );
       }
@@ -285,7 +286,9 @@ function FilterInput({
       <form
         ref={formRef}
         name={keyname}
-        className={horizontal === true ? "flex items-center" : ""}
+        className={`${horizontal === true ? "flex items-center" : ""}${
+          classNames?.commentRadio && "flex w-full justify-between"
+        } `}
       >
         {horizontal && (
           <p
