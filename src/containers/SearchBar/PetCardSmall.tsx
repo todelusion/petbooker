@@ -20,21 +20,6 @@ interface IPetCardProps {
   dispatchSearchBar: React.Dispatch<SearchBarAction>;
 }
 
-const petList = [
-  {
-    name: "阿比",
-    photo: undefined,
-  },
-  {
-    name: "小麻糬",
-    photo: undefined,
-  },
-  {
-    name: "Ruby",
-    photo: undefined,
-  },
-];
-
 const handleDispatchFilter = (
   pet: PetList[0],
   filterDispatch: React.Dispatch<FilterAction>
@@ -55,6 +40,9 @@ const handleDispatchFilter = (
     payload: getCategory(pet.ServiceTypes ?? [""], "Specials"),
   });
 };
+
+const dataController = (data: PetList): PetList =>
+  data.filter((pet) => pet.IsOrders === "沒訂單");
 
 function PetCardSmall({ dispatchSearchBar, data }: IPetCardProps): JSX.Element {
   const { pet: selectedPet, dispatch } = useSearchBar();
@@ -94,7 +82,7 @@ function PetCardSmall({ dispatchSearchBar, data }: IPetCardProps): JSX.Element {
               <span className=" ml-2">什麼都不選</span>
             </button>
           </li>
-          {data.map((pet) => (
+          {dataController(data).map((pet) => (
             <li
               key={pet.PetName}
               className="relative flex items-center justify-between py-2 px-4 hover:bg-gray-300"

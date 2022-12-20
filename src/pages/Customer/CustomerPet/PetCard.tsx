@@ -16,7 +16,7 @@ interface IPetListProps {
 }
 
 const renderServiceTypes = (ServiceTypes: string[] | null): JSX.Element => {
-  if (ServiceTypes === null || ServiceTypes.length < 2) return <p>無</p>;
+  if (ServiceTypes === null || ServiceTypes[0] === "") return <p>無</p>;
 
   return (
     <>

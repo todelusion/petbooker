@@ -52,7 +52,7 @@ const checkOwnPet = (
   setasked: React.Dispatch<React.SetStateAction<boolean>>,
   disPadispatchPending: React.Dispatch<PendingAction>,
   closeModal: (time: number) => NodeJS.Timeout
-): void => {
+): boolean => {
   if (petList === undefined) {
     disPadispatchPending({
       type: "IS_ERROR",
@@ -60,14 +60,17 @@ const checkOwnPet = (
     });
     closeModal(2000);
     navigate("/home");
-    return;
+    return false;
   }
 
   const ownPet = petList.filter((item) => item.IsOrders === "沒訂單");
-  if (ownPet.filter((item) => item.PetName === pet.PetName) !== undefined) {
+  if (ownPet.find((item) => item.PetName === pet.PetName) !== undefined) {
     // 偵測到我的寵物卡有相同寵物
     setasked(true);
+    return false;
   }
+
+  return true;
 };
 
 const validatePet = (
@@ -155,7 +158,8 @@ const useCheckBeforeMount = (
 const useContextToCurrent = (
   PetType: string,
   FoodTypes: string[],
-  dispatchPet: React.Dispatch<PetAction>
+  dispatchPet: React.Dispatch<PetAction>,
+  ownPet?: PetList
 ): void => {
   useEffect(() => {
     if (PetType !== "") {
@@ -164,7 +168,19 @@ const useContextToCurrent = (
     if (FoodTypes[0] !== undefined) {
       dispatchPet({ type: "PICK_FOODTYPES", payload: FoodTypes });
     }
-  }, [FoodTypes, PetType, dispatchPet]);
+    if (ownPet !== undefined) {
+      dispatchPet({ type: "PICK_PET_AGE", payload: ownPet[0].PetAge });
+      dispatchPet({
+        type: "PICK_PET_MEDICINE",
+        payload: ownPet[0].PetMedicine ?? "",
+      });
+      dispatchPet({ type: "PICK_PET_NAME", payload: ownPet[0].PetName });
+      dispatchPet({ type: "PICK_PET_NOTE", payload: ownPet[0].PetNote ?? "" });
+      dispatchPet({ type: "PICK_PET_PHOTO", payload: ownPet[0].PetAge });
+      dispatchPet({ type: "PICK_PET_PRSONALITY", payload: ownPet[0].PetAge });
+      dispatchPet({ type: "PICK_PET_SEX", payload: ownPet[0].PetSex });
+    }
+  }, [FoodTypes, PetType, dispatchPet, ownPet]);
 };
 
 function CustomerBook(): JSX.Element {
@@ -172,7 +188,7 @@ function CustomerBook(): JSX.Element {
   const [formdata, setFormData] = useState<FormData>();
   const [isShow, setIsShow] = useState<"POST" | "PUT">();
   const [asked, setasked] = useState(false);
-  const [confirmed, isConfirmed] = useState(false);
+  const [confirmed, setIsConfirmed] = useState(false);
 
   const UserNameRef = useRef<HTMLInputElement>(null);
   const UserPhoneRef = useRef<HTMLInputElement>(null);
@@ -182,46 +198,49 @@ function CustomerBook(): JSX.Element {
   const navigate = useNavigate();
 
   const { authToken, setAuthToken } = useContext(UserAuth);
-  const { data: user } = useUserInfo(authToken);
-  const { selection } = useSearchBar();
+  // const { data: user } = useUserInfo(authToken);
   const { dispatchPending, closeModal } = useModal();
 
   // useRedirect(selection.startDate, selection.endDate);
   const hotel = queryClient.getQueryData<Hotel>(["Hotel"])?.Hotel[0];
+  const { selection, pet: PetName } = useSearchBar();
   const { PetType, FoodTypes, Services, Specials, Facilities } = useFilter();
+
+  const ownPet = petList?.filter((item) => item.PetName === PetName);
+  console.log(ownPet);
 
   useDisableScroll(isShow);
   useRenderPhoto(formdata, dispatchPet);
-  useContextToCurrent(PetType, FoodTypes, dispatchPet);
+  useContextToCurrent(PetType, FoodTypes, dispatchPet, ownPet);
   useEffect(() => () => {
     clearInterval(setTimeout(() => dispatchPending({ type: "DONE" }), 1000));
     clearInterval(setTimeout(() => navigate("/login"), 2000));
   });
-  if (
-    !useCheckBeforeMount({ user, PetType, FoodTypes }, navigate, setAuthToken)
-  )
-    return (
-      // 未來應該使用 404 頁面更改成 "登入閒置過久，請重新登入"
-      <MotionFade className="flex-col-center fixed left-1/2 top-1/2 z-20 -translate-x-1/2 -translate-y-1/2 text-xl">
-        <>
-          <LoadingCustom color="bg-accent" className=" mb-5" />
-          {user === false && <p>登入閒置過久，請重新登入</p>}
-          {PetType === "" && (
-            <p>
-              必須先選擇{" "}
-              <span className=" font-bold text-second">寵物類型</span>{" "}
-            </p>
-          )}
-          {FoodTypes[0] === undefined && (
-            <p>
-              必須先至少一個{" "}
-              <span className=" font-bold text-second">食物偏好</span>
-            </p>
-          )}
-          <LoadingCustom color="bg-accent" className=" mt-5" />
-        </>
-      </MotionFade>
-    );
+  // if (
+  //   !useCheckBeforeMount({ user, PetType, FoodTypes }, navigate, setAuthToken)
+  // )
+  //   return (
+  //     // 未來應該使用 404 頁面更改成 "登入閒置過久，請重新登入"
+  //     <MotionFade className="flex-col-center fixed left-1/2 top-1/2 z-20 -translate-x-1/2 -translate-y-1/2 text-xl">
+  //       <>
+  //         <LoadingCustom color="bg-accent" className=" mb-5" />
+  //         {user === false && <p>登入閒置過久，請重新登入</p>}
+  //         {PetType === "" && (
+  //           <p>
+  //             必須先選擇{" "}
+  //             <span className=" font-bold text-second">寵物類型</span>{" "}
+  //           </p>
+  //         )}
+  //         {FoodTypes[0] === undefined && (
+  //           <p>
+  //             必須先至少一個{" "}
+  //             <span className=" font-bold text-second">食物偏好</span>
+  //           </p>
+  //         )}
+  //         <LoadingCustom color="bg-accent" className=" mt-5" />
+  //       </>
+  //     </MotionFade>
+  //   );
 
   return (
     <div className="flex-center pt-48 pb-28">
@@ -254,12 +273,12 @@ function CustomerBook(): JSX.Element {
           <ul className="mr-6 grid basis-4/12 grid-cols-1 content-start gap-y-2 border-r-2">
             <li className="mb-2 font-bold">寵物資訊</li>
             <PetInfo label="寵物類型" require content={translatePet[PetType]} />
-            <PetInfo label="年齡" require content={pet?.PetAge} />
-            <PetInfo label="性別" require content={pet?.PetSex} />
+            <PetInfo label="年齡" require content={pet.PetAge} />
+            <PetInfo label="性別" require content={pet.PetSex} />
             <PetInfo label="飲食偏好" require content={FoodTypes} />
-            <PetInfo label="個性" content={pet?.PetPersonality} />
-            <PetInfo label="備用藥物" content={pet?.PetMedicine} />
-            <PetInfo label="備註" content={pet?.PetNote} />
+            <PetInfo label="個性" content={pet.PetPersonality} />
+            <PetInfo label="備用藥物" content={pet.PetMedicine} />
+            <PetInfo label="備註" content={pet.PetNote} />
           </ul>
           <ul className="basis-6/12">
             <li className="mb-1 font-bold">旅館需求</li>
@@ -420,14 +439,18 @@ function CustomerBook(): JSX.Element {
             if (!validatePet(pet, dispatchPending)) return;
             dispatchPending({ type: "IS_LOADING" });
 
-            checkOwnPet(
-              pet,
-              petList,
-              navigate,
-              setasked,
-              dispatchPending,
-              closeModal
-            );
+            if (
+              checkOwnPet(
+                pet,
+                petList,
+                navigate,
+                setasked,
+                dispatchPending,
+                closeModal
+              )
+            ) {
+              await postPet(pet, authToken);
+            }
 
             const petResult = await postPet(pet, authToken);
 
@@ -504,7 +527,15 @@ function CustomerBook(): JSX.Element {
             onClick={() => setIsShow(undefined)}
           />
         )}
-        <AskedModal onClick={() => {}} />
+        {asked && (
+          <AskedModal
+            pet={pet}
+            token={authToken}
+            key="Asked"
+            setasked={setasked}
+            setIsConfirmed={setIsConfirmed}
+          />
+        )}
       </AnimatePresence>
     </div>
   );

@@ -264,7 +264,7 @@ const Edit = React.memo(
     console.log(data?.PetCardId);
     const { authToken } = useContext(UserAuth);
     const [pet, dispatchPet] = useReducer(petReducer, initPet);
-    // console.log(pet.ServiceTypes);
+    console.log(pet);
     const [formdata, setFormData] = useState<FormData>();
     const queryClient = useQueryClient();
     const petList = queryClient.getQueryData<PetList>(["PetList"]);
@@ -305,12 +305,12 @@ const Edit = React.memo(
             <h2 className="mb-3 font-bold">寵物資訊</h2>
             <FilterInput
               required
-              onChange={(e) =>
+              onChange={(e) => {
                 dispatchPet({
                   type: "PICK_PET_TYPE",
                   payload: (e.target as HTMLInputElement).value,
-                })
-              }
+                });
+              }}
               filterList={petLists}
               checked={pet.PetType}
               {...filterInput}

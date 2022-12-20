@@ -44,11 +44,12 @@ export const postPet = async (body: PetCard, token: string) => {
   return undefined;
 };
 export const putPet = async (petid: number, body: PetCard, token: string) => {
-  // console.log(petid);
+  console.log(petid, body);
   const header = new Header(token);
   const data = await AxiosTryCatch(async () =>
     axios.put(`${baseURL}/petcard?petCardId=${petid}`, body, header)
   );
+  console.log(data);
 
   if (data.Status === false) {
     console.error("API error in putPet");
