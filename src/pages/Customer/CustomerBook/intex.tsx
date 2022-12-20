@@ -25,6 +25,7 @@ import {
   Pet,
   PetCard,
   PetCardSchema,
+  PetList,
   PetSchema,
   UserInfo,
 } from "../../../types/schema";
@@ -42,6 +43,32 @@ import { sortedServiceTypes } from "../../../utils/servicesTranslator";
 import Edit from "./Edit";
 import { initPet, PetAction, petReducer } from "../CustomerPet/petReducer";
 import PetInfo from "./PetInfo";
+import AskedModal from "./AskedModal";
+
+const checkOwnPet = (
+  pet: PetCard,
+  petList: PetList | undefined,
+  navigate: NavigateFunction,
+  setasked: React.Dispatch<React.SetStateAction<boolean>>,
+  disPadispatchPending: React.Dispatch<PendingAction>,
+  closeModal: (time: number) => NodeJS.Timeout
+): void => {
+  if (petList === undefined) {
+    disPadispatchPending({
+      type: "IS_ERROR",
+      payload: "因為選擇條件涉及價格問題，請勿在訂單頁重新整理",
+    });
+    closeModal(2000);
+    navigate("/home");
+    return;
+  }
+
+  const ownPet = petList.filter((item) => item.IsOrders === "沒訂單");
+  if (ownPet.filter((item) => item.PetName === pet.PetName) !== undefined) {
+    // 偵測到我的寵物卡有相同寵物
+    setasked(true);
+  }
+};
 
 const validatePet = (
   pet: PetCard,
@@ -74,23 +101,6 @@ const validateUserBook = (
 
   dispatchPending({ type: "IS_ERROR_MULTI", payload: errorMessages });
   return undefined;
-
-  // if (UserNameRef.current?.value === "") {
-  //   dispatchPending({
-  //     type: "IS_ERROR",
-  //     payload: "必須輸入飼主姓名",
-  //   });
-  //   setTimeout(() => dispatchPending({ type: "DONE" }), 1000);
-  //   return;
-  // }
-
-  // if (!Number.isNaN(Number(UserPhoneRef.current?.value))) {
-  //   dispatchPending({
-  //     type: "IS_ERROR",
-  //     payload: "必須輸入正確的電話號碼格式",
-  //   });
-  //   setTimeout(() => dispatchPending({ type: "DONE" }), 1000);
-  // }
 };
 
 const useRenderPhoto = (
@@ -158,19 +168,23 @@ const useContextToCurrent = (
 };
 
 function CustomerBook(): JSX.Element {
-  const UserNameRef = useRef<HTMLInputElement>(null);
-  const UserPhoneRef = useRef<HTMLInputElement>(null);
   const [pet, dispatchPet] = useReducer(petReducer, initPet);
   const [formdata, setFormData] = useState<FormData>();
   const [isShow, setIsShow] = useState<"POST" | "PUT">();
+  const [asked, setasked] = useState(false);
+  const [confirmed, isConfirmed] = useState(false);
+
+  const UserNameRef = useRef<HTMLInputElement>(null);
+  const UserPhoneRef = useRef<HTMLInputElement>(null);
   const queryClient = useQueryClient();
-  const navigate = useNavigate();
+  const petList = queryClient.getQueryData<PetList>(["PetList"]);
   const { roomid, roomname, price } = useParams();
+  const navigate = useNavigate();
 
   const { authToken, setAuthToken } = useContext(UserAuth);
   const { data: user } = useUserInfo(authToken);
   const { selection } = useSearchBar();
-  const { dispatchPending } = useModal();
+  const { dispatchPending, closeModal } = useModal();
 
   // useRedirect(selection.startDate, selection.endDate);
   const hotel = queryClient.getQueryData<Hotel>(["Hotel"])?.Hotel[0];
@@ -404,8 +418,17 @@ function CustomerBook(): JSX.Element {
           className="mx-auto py-2 px-10"
           onClick={async () => {
             if (!validatePet(pet, dispatchPending)) return;
-            // 必須判斷若寵物名稱重複則不得重複發 postPet
             dispatchPending({ type: "IS_LOADING" });
+
+            checkOwnPet(
+              pet,
+              petList,
+              navigate,
+              setasked,
+              dispatchPending,
+              closeModal
+            );
+
             const petResult = await postPet(pet, authToken);
 
             if (petResult === undefined) {
@@ -481,6 +504,7 @@ function CustomerBook(): JSX.Element {
             onClick={() => setIsShow(undefined)}
           />
         )}
+        <AskedModal onClick={() => {}} />
       </AnimatePresence>
     </div>
   );

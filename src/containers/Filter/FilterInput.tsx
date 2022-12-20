@@ -2,6 +2,7 @@
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import { useQueryClient } from "@tanstack/react-query";
 import React, {
+  ChangeEventHandler,
   LegacyRef,
   MutableRefObject,
   RefObject,
@@ -37,7 +38,7 @@ interface IFilterInputProps {
   noContext: boolean;
   action?: FilterAction["type"];
   labelWidth?: string;
-  onChange?: (e: React.MouseEvent<HTMLInputElement>) => void;
+  onChange?: (e: React.MouseEvent<HTMLInputElement, MouseEvent>) => void;
   required?: true;
   horizontal?: true;
   checked?: string | string[];
@@ -215,12 +216,11 @@ function FilterInput({
             key={content.value}
             // ref={inputRef}
             data-action={action}
-            defaultChecked={checked?.includes(content.value)}
+            checked={checked?.includes(content.value)}
             name={keyname}
             id={content.descript}
             value={content.value}
-            onChange={(e) => e}
-            onClick={async (e: React.MouseEvent<HTMLInputElement>) => {
+            onChange={async (e) => {
               if (FilterContextProps !== undefined)
                 dispatchContext(
                   e.target as HTMLInputElement,
@@ -229,11 +229,8 @@ function FilterInput({
               await tryCatch(async () =>
                 queryClient.removeQueries(["HotelList"])
               );
-              // await tryCatch(async () =>
-              //   queryClient.invalidateQueries(["HotelList"])
-              // );
 
-              if (onChange !== undefined) onChange(e);
+              // if (onChange !== undefined) onChange(e);
             }}
             type={type}
             className="relative h-5 w-5 cursor-pointer appearance-none rounded-sm border-2 border-black duration-150 before:absolute before:top-1/2 before:-translate-y-1/2 before:text-white checked:border-4 checked:border-primary checked:bg-primary checked:ring-2 checked:ring-primary_Dark before:checked:content-['✔'] hover:border-primary"

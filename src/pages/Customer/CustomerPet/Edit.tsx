@@ -35,6 +35,7 @@ import UserAuth from "../../../context/UserAuthContext";
 import {
   Pet,
   PetCard,
+  PetCardSchema,
   PetList,
   PetSchema,
   POSTRoom,
@@ -123,7 +124,7 @@ const validatePet = (
     return undefined;
   }
 
-  const result = PetSchema.safeParse(pet);
+  const result = PetCardSchema.safeParse(pet);
   if (result.success) return result.data;
 
   const errorMessages = Object.values(result.error.formErrors.fieldErrors).map(
@@ -142,10 +143,10 @@ const useInitPet = (
     if (data === undefined) return;
     // console.log(data.ServiceTypes, data.FoodTypes);
 
-    if (data.ServiceTypes[0] === "") {
+    if (data.ServiceTypes !== null && data.ServiceTypes[0] === "") {
       data.ServiceTypes.shift();
     }
-    if (data.FoodTypes[0] === "") {
+    if (data.ServiceTypes !== null && data.FoodTypes[0] === "") {
       data.FoodTypes.shift();
     }
 
@@ -161,7 +162,7 @@ const useInitPet = (
         PetPhoto: data.PetPhoto ?? "",
         PetSex: data.PetSex,
         PetType: data.PetType,
-        ServiceTypes: data.ServiceTypes,
+        ServiceTypes: data.ServiceTypes ?? [],
       },
     });
   }, [data, dispatchPet]);
@@ -396,7 +397,7 @@ const Edit = React.memo(
                   )
                 }
                 filterList={serviceLists}
-                checked={data?.ServiceTypes}
+                checked={data?.ServiceTypes ?? []}
                 {...filterInput}
               />
               <FilterInput
@@ -411,7 +412,7 @@ const Edit = React.memo(
                   )
                 }
                 filterList={facilitiesLists}
-                checked={data?.ServiceTypes}
+                checked={data?.ServiceTypes ?? []}
                 {...filterInput}
               />
               <FilterInput
@@ -426,7 +427,7 @@ const Edit = React.memo(
                   )
                 }
                 filterList={specialsLists}
-                checked={data?.ServiceTypes}
+                checked={data?.ServiceTypes ?? []}
                 {...filterInput}
                 className="mb-10"
               />
@@ -438,7 +439,6 @@ const Edit = React.memo(
               onClick={async () => {
                 dispatchPending({ type: "IS_LOADING" });
 
-                // 比對petList 是否有相同的寵物名，初步避免使用者為同一隻寵物新增複數個卡片
                 if (petList === undefined) {
                   dispatchPending({
                     type: "IS_ERROR",
@@ -448,6 +448,7 @@ const Edit = React.memo(
                   return;
                 }
 
+                // 比對petList 是否有相同的寵物名，初步避免使用者為同一隻寵物新增複數個卡片
                 if (
                   validatePet(
                     pet,
