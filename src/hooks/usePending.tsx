@@ -6,13 +6,14 @@ const initialPending = {
 };
 
 export interface InitialPending {
-  status: "IS_LOADING" | "IS_SUCCESS" | "IS_ERROR" | "DONE";
-  message: string;
+  status: "IS_LOADING" | "IS_SUCCESS" | "IS_ERROR" | "IS_ERROR_MULTI" | "DONE";
+  message: string | string[];
 }
 
 export interface IModalProps {
   pending: InitialPending;
   dispatchPending: React.Dispatch<PendingAction>;
+  closeModal: (time: number) => NodeJS.Timeout;
 }
 
 export type PendingAction =
@@ -27,6 +28,10 @@ export type PendingAction =
   | {
       type: "IS_ERROR";
       payload?: string;
+    }
+  | {
+      type: "IS_ERROR_MULTI";
+      payload: string[];
     }
   | {
       type: "DONE";
@@ -52,6 +57,11 @@ const pendingReducer = (
         status: "IS_ERROR",
         message: action.payload ?? "",
       };
+    case "IS_ERROR_MULTI":
+      return {
+        status: "IS_ERROR_MULTI",
+        message: action.payload ?? [],
+      };
     case "DONE":
       return {
         status: "DONE",
@@ -67,6 +77,8 @@ export default function usePending(): IModalProps {
     pendingReducer,
     initialPending as InitialPending
   );
+  const closeModal = (time: number): NodeJS.Timeout =>
+    setTimeout(() => dispatchPending({ type: "DONE" }), time);
 
-  return { pending, dispatchPending };
+  return { pending, dispatchPending, closeModal };
 }

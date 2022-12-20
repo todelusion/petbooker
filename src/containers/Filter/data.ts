@@ -164,22 +164,108 @@ export const specialsLists = {
   ],
 };
 
+export const translatePet: { [index: string]: string } = {
+  smallDog: "小型犬 ( 體重 < 8 公斤 )",
+  mediumDog: "中型犬 ( 體重 8 - 20 公斤 )",
+  largeDog: "大型犬 ( 體重 > 20 公斤 )",
+  cat: "貓",
+};
+
+export const translateFood: { [index: string]: string } = {
+  wetFood: "濕食",
+  freshFood: "鮮食",
+  dryFood: "乾食",
+  myOwnFood: "自行攜帶",
+};
+
+export const translatePrices = {
+  0: "NTD 0 - NTD 499",
+  1: "NTD 500 - NTD 999",
+  2: "NTD 1,000 - NTD 1,499",
+  3: "NTD 1,500 - NTD 1,999",
+  4: "NTD 2,000 以上",
+};
+
+export const translateService: { [index: string]: string } = {
+  contract: "簽署合約",
+  shower: "洗澡服務",
+  walkdog: "遛狗服務",
+  pickup: "接送服務",
+  "24hrMonitor": "24小時寵物監視器",
+  "24hrClerks": "24小時人員駐店",
+  hospital: "與醫療院所配合",
+  lifeRecord: "提供寵物生活紀錄",
+  independentZone: "生活空間與其他寵物分開",
+  yard: "廣大庭院",
+};
+
+export const sortService: { [index: string]: string } = {
+  contract: "Services",
+  shower: "Services",
+  walkdog: "Services",
+  pickup: "Services",
+  "24hrMonitor": "Facilities",
+  "24hrClerks": "Facilities",
+  hospital: "Facilities",
+  lifeRecord: "Specials",
+  independentZone: "Specials",
+  yard: "Specials ",
+};
+
+// petCard Edit
+
+export const ageLists = {
+  keyname: "PetAge",
+  title: "年齡",
+  type: "radio",
+  contents: [
+    {
+      value: "幼年",
+      descript: "幼年",
+    },
+    {
+      value: "青年",
+      descript: "青年",
+    },
+    {
+      value: "壯年",
+      descript: "壯年",
+    },
+    {
+      value: "老年",
+      descript: "老年",
+    },
+  ],
+};
+export const sexLists = {
+  keyname: "PetSex",
+  title: "性別",
+  type: "radio",
+  contents: [
+    {
+      value: "公",
+      descript: "公",
+    },
+    {
+      value: "母",
+      descript: "母",
+    },
+  ],
+};
 export const commentRadio = {
   keyname: "Score",
   title: "評價分數",
   type: "radio",
   contents: [
-  { value: "1", descript: "1" },
-  { value: "2", descript: "2" },
-  { value: "3", descript: "3" },
-  { value: "4", descript: "4" },
-  { value: "5", descript: "5" },
-  { value: "6", descript: "6" },
-  { value: "7", descript: "7" },
-  { value: "8", descript: "8" },
-  { value: "9", descript: "9" },
-  { value: "10", descript: "10" },
-    
-    
+    { value: "1", descript: "1" },
+    { value: "2", descript: "2" },
+    { value: "3", descript: "3" },
+    { value: "4", descript: "4" },
+    { value: "5", descript: "5" },
+    { value: "6", descript: "6" },
+    { value: "7", descript: "7" },
+    { value: "8", descript: "8" },
+    { value: "9", descript: "9" },
+    { value: "10", descript: "10" },
   ],
 };

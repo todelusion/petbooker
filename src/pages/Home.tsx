@@ -24,6 +24,15 @@ function Home(): JSX.Element {
   const { Facilities, FoodTypes, PetType, RoomPrices, Services, Specials } =
     useFilter();
 
+  console.log({
+    Facilities,
+    FoodTypes,
+    PetType,
+    RoomPrices,
+    Services,
+    Specials,
+  });
+
   const { data } = useHotelList({
     AreaId: Number(area.value),
     PetType,
@@ -35,7 +44,6 @@ function Home(): JSX.Element {
     Page: current,
     PageSize: 5,
   });
-  console.log(data);
 
   return (
     <div className="relative flex w-full items-start justify-evenly px-20 pt-40 pb-20">

@@ -19,6 +19,9 @@ function CountryList({ countryList, onClick }: ICountryListProps): JSX.Element {
       id="country_select"
       className="w-40 rounded-md border-2 border-black outline-none scrollbar-thin scrollbar-thumb-gray-400 scrollbar-thumb-rounded-xl"
     >
+      <option value="0" className="py-3.5 px-4 hover:bg-gray-300">
+        全部
+      </option>
       {countryList.map((country) => (
         <option
           key={country.Id}

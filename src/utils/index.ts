@@ -41,9 +41,9 @@ export const parseServiceTypes = (
   };
 };
 
-export const toFormData = (file: File): FormData => {
+export const toFormData = (key: string, file: File): FormData => {
   const formdata = new FormData();
-  formdata.append("Image", file);
+  formdata.append(key, file);
 
   return formdata;
 };
@@ -60,7 +60,7 @@ export const AxiosTryCatch = async <T>(
 ): Promise<T | undefined> => {
   try {
     const res = await callback();
-    console.log(res);
+    // console.log(res);
     return res.data;
   } catch (error) {
     console.log(error);

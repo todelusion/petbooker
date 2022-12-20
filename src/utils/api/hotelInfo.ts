@@ -17,14 +17,11 @@ import Header from "./Header";
 export const useHotelInfo = (token: string) => {
   const header = new Header(token);
 
-  return useQuery(
-    ["Info"],
-    async () => {
-      const response = await axios.get(`${baseURL}/hotel`, header);
-      return HotelInfoSchema.parse(response.data.result);
-    },
-    {
-      onError: (err) => console.log("useHotelInfo錯誤", err),
-    }
-  );
+  return useQuery(["Info"], async () => {
+    const response = await axios.get(`${baseURL}/hotel`, header);
+    const result = HotelInfoSchema.safeParse(response.data.result);
+    if (result.success) return result.data;
+    console.error(result.error);
+    return undefined;
+  });
 };

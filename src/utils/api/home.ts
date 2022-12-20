@@ -14,7 +14,6 @@ import Header from "./Header";
 
 export const useHotelList = (body: Filter) =>
   useQuery(["HotelList"], async () => {
-    console.log("in useHotelList Hooks", body);
     const res = await axios.post(`${baseURL}/hotel/hotelFilter`, body);
     // console.log(res);
     const result = HotelListSchema.safeParse(res.data);
@@ -41,15 +40,7 @@ export const useHotel = (id: string, startDate: Date, endDate: Date) => {
     if (result.success) {
       return result.data;
     }
-    console.log(result.error.format());
+    console.log(result.error);
     return undefined;
   });
-};
-
-export const usePostPet = async (body: Pet, token: string) => {
-  const header = new Header(token);
-  const data = await AxiosTryCatch(async () =>
-    axios.post(`${baseURL}/petcard`, body, header)
-  );
-  console.log(data);
 };

@@ -67,7 +67,7 @@ export const HotelSchema = z.object({
         z.object({
           UserName: z.union([z.null(), z.string()]),
           UserPhoto: z.union([z.null(), z.string()]),
-          Score: z.number(),
+          Score: z.union([z.number(), z.null()]),
           Comment: z.union([z.null(), z.string()]),
         })
       ),
@@ -106,30 +106,82 @@ export const UserInfoSchema = z.object({
 export const BookingSchema = z.object({
   PetCardId: z.number(),
   RoomId: z.number(),
-  OrderedDate: z.string(),
   CheckInDate: z.string(),
   CheckOutDate: z.string(),
   TotalNight: z.number(),
   TotalPrice: z.number(),
-  UserName: z.string(),
-  UserPhone: z.string(),
+  UserName: z.string().min(1, { message: "必須輸入飼主名稱" }),
+  UserPhone: z.string().min(1, { message: "必須輸入飼主電話" }),
   Status: z.string(),
 });
 
+export const PetCardSchema = z.object({
+  Id: z.number().optional(),
+  PetPhoto: z.union([z.null(), z.string()]).optional(),
+  PetName: z.string().min(1, { message: "寵物姓名不得為空" }),
+  PetType: z.string().min(1, { message: "寵物類型不得為空" }),
+  PetAge: z.string().min(1, { message: "寵物年齡不得為空" }),
+  PetSex: z.string().min(1, { message: "寵物性別不得為空" }),
+  FoodTypes: z.array(z.string()).min(1, { message: "寵物飲食偏好不得為空" }),
+  PetPersonality: z.string().optional(),
+  PetMedicine: z.string().optional(),
+  PetNote: z.string().optional(),
+
+  /* 
+  1. 需向後端反應同時具 ServiceTypes 與 ServiceType 兩種 key 卻相同value
+  2. 否則前端schema 過不了
+
+  */
+  ServiceTypes: z.array(z.string().optional()),
+});
+
 export const PetSchema = z.object({
-  PetName: z.union([z.null(), z.string({ required_error: "寵物姓名不得為空" })]),
-  PetType: z.union([z.null(), z.string({ required_error: "寵物姓名不得為空" })]),
+  PetName: z.union([
+    z.null(),
+    z.string({ required_error: "寵物姓名不得為空" }),
+  ]),
+  PetType: z.union([
+    z.null(),
+    z.string({ required_error: "寵物姓名不得為空" }),
+  ]),
   PetAge: z.union([z.null(), z.string({ required_error: "寵物姓名不得為空" })]),
   PetSex: z.union([z.null(), z.string({ required_error: "寵物姓名不得為空" })]),
-  FoodTypes: z.array(z.union([z.null(), z.string({ required_error: "寵物姓名不得為空" })])),
+  FoodTypes: z.array(
+    z.union([z.null(), z.string({ required_error: "寵物姓名不得為空" })])
+  ),
   PetPersonality: z.string().optional(),
   PetMedicine: z.union([z.null(), z.string().optional()]),
   PetNote: z.union([z.null(), z.string().optional()]),
-  ServiceTypes:z.union([z.array(z.union([z.null(), z.string()])),z.null()]) ,
-  PetPhoto:z.union([z.null(), z.string().optional()])
+  ServiceTypes: z.union([z.array(z.union([z.null(), z.string()])), z.null()]),
+  PetPhoto: z.union([z.null(), z.string().optional()]),
 });
 
-export type Pet = z.infer<typeof PetSchema>;
+export const postPetResSchema = z.object({
+  status: z.string(),
+  message: z.string(),
+  petid: z.number(),
+});
+
+export const PetListSchema = z.array(
+  z.object({
+    IsOrders: z.enum(["沒訂單", "有訂單"]),
+    PetCardId: z.number().optional(),
+    PetPhoto: z.string(),
+    PetName: z.string().min(1, { message: "寵物姓名不得為空" }),
+    PetType: z.string().min(1, { message: "寵物類型不得為空" }),
+    PetAge: z.string().min(1, { message: "寵物年齡不得為空" }),
+    PetSex: z.string().min(1, { message: "寵物性別不得為空" }),
+    FoodTypes: z.array(z.string()).min(1, { message: "寵物飲食偏好不得為空" }),
+    PetPersonality: z.union([z.string(), z.null()]),
+    PetMedicine: z.union([z.string(), z.null()]),
+    PetNote: z.union([z.string(), z.null()]),
+    ServiceTypes: z.union([z.array(z.string()), z.null()]),
+  })
+);
+
+export type PetList = z.infer<typeof PetListSchema>;
+
+export type PetCard = z.infer<typeof PetCardSchema>;
 
 export type Booking = z.infer<typeof BookingSchema>;
 
@@ -177,57 +229,60 @@ export type HotelInfo = z.infer<typeof HotelInfoSchema>;
 // export type HotelPhotos = z.infer<typeof HotelInfoSchema["HotelPhotos"]>
 
 export const OrderListSchema = z.array(
-    z.object({
-      Id: z.number(),
-      UserName: z.string(),
-      PetCardId: z.number(),
-      PetPhoto: z.string(),
-      PetName: z.string(),
-      RoomName: z.string(),
-      checkInDateOnly: z.string(),
-      checkOutDateOnly: z.string(),
-      Status: z.string()
-    })
-  )
-  export type ReservedList = z.infer<typeof OrderListSchema>;
-  export const CommentSchema = z.object({ Score: z.number(), Comment: z.string() })
+  z.object({
+    Id: z.number(),
+    UserName: z.string(),
+    PetCardId: z.number(),
+    PetPhoto: z.string(),
+    PetName: z.string(),
+    RoomName: z.string(),
+    checkInDateOnly: z.string(),
+    checkOutDateOnly: z.string(),
+    Status: z.string(),
+  })
+);
+export type ReservedList = z.infer<typeof OrderListSchema>;
+export const CommentSchema = z.object({
+  Score: z.number(),
+  Comment: z.string(),
+});
 export type Comment = z.infer<typeof CommentSchema>;
-  export const customerOrderListSchema= z.array(
-      z.object({
-        OrderId: z.number(),
-        RoomPhoto: z.string(),
-        HotelName: z.string(),
-        RoomName: z.string(),
-        CheckInDate: z.string(),
-        CheckOutDate: z.string(),
-        Status: z.string(),
-        TotalPrice:z.number(),
-        PetCardId:z.number(),
-        PetPhoto:z.union([z.null(),z.string()]),
-        PetName:z.string()
-      })
-    )
-    export type customerOrder = z.infer<typeof customerOrderListSchema>;
+export const customerOrderListSchema = z.array(
+  z.object({
+    OrderId: z.number(),
+    RoomPhoto: z.string(),
+    HotelName: z.string(),
+    RoomName: z.string(),
+    CheckInDate: z.string(),
+    CheckOutDate: z.string(),
+    Status: z.string(),
+    TotalPrice: z.number(),
+    PetCardId: z.number(),
+    PetPhoto: z.union([z.null(), z.string()]),
+    PetName: z.string(),
+  })
+);
+export type customerOrder = z.infer<typeof customerOrderListSchema>;
 
-    export const customerInfoSchema=z.object({
-        UserPhoto:z.union([z.null(),z.string()]),
-        UserAccount:z.string(),
-        UserName:z.string(),
-        UserPhone:z.union([z.null(),z.string()]),
-        UserAddress:z.union([z.null(),z.string()])
-      })
-      export type customerInfo = z.infer<typeof customerInfoSchema>;
+export const customerInfoSchema = z.object({
+  UserPhoto: z.union([z.null(), z.string()]),
+  UserAccount: z.string(),
+  UserName: z.string(),
+  UserPhone: z.union([z.null(), z.string()]),
+  UserAddress: z.union([z.null(), z.string()]),
+});
+export type customerInfo = z.infer<typeof customerInfoSchema>;
 
-      export const CmsCommentListSchema=z.array(
-    z.object({
-      Id: z.number(),
-      RoomName: z.string(),
-      checkInDateOnly: z.string(),
-      checkOutDateOnly: z.string(),
-      UserName: z.string(),
-      UserThumbnail: z.string(),
-      Comment: z.string(),
-      Score: z.number()
-    })
-  )
-      export type CmsCommentList = z.infer<typeof CmsCommentListSchema>;
+export const CmsCommentListSchema = z.array(
+  z.object({
+    Id: z.number(),
+    RoomName: z.string(),
+    checkInDateOnly: z.string(),
+    checkOutDateOnly: z.string(),
+    UserName: z.string(),
+    UserThumbnail: z.string(),
+    Comment: z.string(),
+    Score: z.number(),
+  })
+);
+export type CmsCommentList = z.infer<typeof CmsCommentListSchema>;

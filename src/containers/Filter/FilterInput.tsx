@@ -2,6 +2,7 @@
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import { useQueryClient } from "@tanstack/react-query";
 import React, {
+  ChangeEventHandler,
   LegacyRef,
   MutableRefObject,
   RefObject,
@@ -34,11 +35,11 @@ interface IFilterList {
 
 interface IFilterInputProps {
   filterList: IFilterList;
-  noContext: true;
+  noContext: boolean;
   action?: FilterAction["type"];
   labelWidth?: string;
-  onChange?: (e: React.MouseEvent<HTMLInputElement>) => void;
-  required?: boolean;
+  onChange?: (e: React.MouseEvent<HTMLInputElement, MouseEvent>) => void;
+  required?: true;
   horizontal?: true;
   checked?: string | string[];
   className?: string;
@@ -168,6 +169,7 @@ function FilterInput({
     // eslint-disable-next-line react-hooks/rules-of-hooks
     return useFilter();
   };
+  // console.log("in FilterInput", checked);
   const queryClient = useQueryClient();
   const formRef = useRef<HTMLFormElement>(null);
   const FilterContextProps = isUseContext();
@@ -178,12 +180,13 @@ function FilterInput({
   const renderInput = (content: Content): JSX.Element => {
     switch (type) {
       case "radio": {
+        // console.log("inPetType", content.value === checked);
         return (
           <input
             key={content.value}
             data-action={action}
+            onChange={(e) => e}
             checked={content.value === checked}
-            defaultChecked={content.value === checked}
             name={keyname}
             id={content.descript}
             value={content.value}
@@ -213,11 +216,11 @@ function FilterInput({
             key={content.value}
             // ref={inputRef}
             data-action={action}
-            defaultChecked={checked?.includes(content.value)}
+            checked={checked?.includes(content.value)}
             name={keyname}
             id={content.descript}
             value={content.value}
-            onClick={async (e: React.MouseEvent<HTMLInputElement>) => {
+            onChange={async (e) => {
               if (FilterContextProps !== undefined)
                 dispatchContext(
                   e.target as HTMLInputElement,
@@ -226,11 +229,8 @@ function FilterInput({
               await tryCatch(async () =>
                 queryClient.removeQueries(["HotelList"])
               );
-              // await tryCatch(async () =>
-              //   queryClient.invalidateQueries(["HotelList"])
-              // );
 
-              if (onChange !== undefined) onChange(e);
+              // if (onChange !== undefined) onChange(e);
             }}
             type={type}
             className="relative h-5 w-5 cursor-pointer appearance-none rounded-sm border-2 border-black duration-150 before:absolute before:top-1/2 before:-translate-y-1/2 before:text-white checked:border-4 checked:border-primary checked:bg-primary checked:ring-2 checked:ring-primary_Dark before:checked:content-['✔'] hover:border-primary"
@@ -270,7 +270,16 @@ function FilterInput({
 
   return (
     <div className={`${horizontal ? "" : "p-4"}${className}`}>
-      {!horizontal && <p className="relative font-bold">{title}</p>}
+      {!horizontal && (
+        <p className="relative font-bold">
+          {required && (
+            <span className="absolute -top-1 -left-3 text-lg text-[#ff4d4f]">
+              *
+            </span>
+          )}
+          {title}
+        </p>
+      )}
       <form
         ref={formRef}
         name={keyname}

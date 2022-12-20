@@ -24,6 +24,7 @@ import useModal from "../../hooks/useModal";
 import { ISearchBarContextProps } from "../../context/SearchBarContext";
 import { PendingAction } from "../../hooks/usePending";
 import UserAuth from "../../context/UserAuthContext";
+import useFilter from "../../hooks/useFilter";
 
 export interface IHotel {
   Id: string;
@@ -60,7 +61,7 @@ const handleClick = (
   if (auth.authToken === "" || auth.identity === "hotel") {
     dispatchPending({
       type: "IS_ERROR",
-      payload: "請先登入一般會員",
+      payload: "請先登入飼主會員",
     });
     setTimeout(() => dispatchPending({ type: "DONE" }), 1000);
     return;
@@ -78,6 +79,8 @@ function Hotel(): JSX.Element {
   const { selection } = useSearchBar();
   const { dispatchPending } = useModal();
   const { authToken, identity } = useContext(UserAuth);
+  const { PetType } = useFilter();
+  console.log(PetType);
 
   const navigate = useNavigate();
   // useRedirect(selection.startDate, selection.endDate);

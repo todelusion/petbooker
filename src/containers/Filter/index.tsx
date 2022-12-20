@@ -72,42 +72,34 @@ const useFilterDefault = (
   );
 
   useEffect(() => {
-    console.log("in useFilterDefault useEffect");
+    // console.log("in useFilterDefault useEffect");
 
-    // setInitPetType(PetType);
     // setInitRoomPrices(RoomPrices);
+
+    if (initPet !== undefined) {
+      filterDispatch({ type: "PICK-PetType", payload: initPet });
+      setInitPetType(initPet);
+    }
 
     if (initFood !== undefined) {
       filterDispatch({ type: "PICK-FoodTypes", payload: initFood });
       setInitFoodTypes(initFood);
     }
-    // else {
-    //   setInitFoodTypes(FoodTypes);
-    // }
 
     if (initServices !== undefined) {
       filterDispatch({ type: "PICK-Services", payload: initServices });
       setInitServices(initServices);
     }
-    // else {
-    //   setInitServices(Services);
-    // }
 
     if (initFacilities !== undefined) {
       filterDispatch({ type: "PICK-Facilities", payload: initFacilities });
       setInitFacilities(initFacilities);
     }
-    // else {
-    //   setInitFacilities(Facilities);
-    // }
 
     if (initSpecials !== undefined) {
       filterDispatch({ type: "PICK-Specials", payload: initSpecials });
       setInitSpecials(initSpecials);
     }
-    // else {
-    //   setInitSpecials(Specials);
-    // }
   }, []);
 };
 
@@ -134,6 +126,7 @@ const Filter = React.memo(
       Facilities,
       filterDispatch,
     } = useFilter();
+    // console.log(PetType);
 
     const [initPetType, setInitPetType] = useState<string>();
     const [initRoomPrices, setInitRoomPrices] = useState<string[]>();
@@ -149,6 +142,7 @@ const Filter = React.memo(
     //   Specials,
     //   Facilities,
     // });
+    // console.log("in filter", initPetType);
 
     if (data !== undefined) {
       useFilterDefault(
@@ -176,6 +170,8 @@ const Filter = React.memo(
       <>
         {!closePet && (
           <FilterInput
+            required
+            noContext={false}
             horizontal={horizontal}
             action="PICK-PetType"
             checked={initPetType}
@@ -185,6 +181,8 @@ const Filter = React.memo(
         )}
         {!closeFood && (
           <FilterInput
+            required
+            noContext={false}
             horizontal={horizontal}
             action="PICK-FoodTypes"
             filterList={foodLists}
@@ -194,6 +192,7 @@ const Filter = React.memo(
         )}
         {!closeRoomPrices && (
           <FilterInput
+            noContext={false}
             horizontal={horizontal}
             action="PICK-RoomPrices"
             filterList={pricesLists}
@@ -203,6 +202,7 @@ const Filter = React.memo(
         )}
         {!closeService && (
           <FilterInput
+            noContext={false}
             horizontal={horizontal}
             action="PICK-Services"
             filterList={serviceLists}
@@ -212,6 +212,7 @@ const Filter = React.memo(
         )}
         {!closeFacility && (
           <FilterInput
+            noContext={false}
             horizontal={horizontal}
             action="PICK-Facilities"
             filterList={facilitiesLists}
@@ -221,6 +222,7 @@ const Filter = React.memo(
         )}
         {!closeSpecial && (
           <FilterInput
+            noContext={false}
             horizontal={horizontal}
             action="PICK-Specials"
             filterList={specialsLists}
