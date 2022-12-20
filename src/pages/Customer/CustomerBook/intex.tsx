@@ -30,7 +30,12 @@ import {
   UserInfo,
 } from "../../../types/schema";
 import { AxiosTryCatch } from "../../../utils";
-import { postPet, postPetPhoto } from "../../../utils/api/petCard";
+import {
+  postPet,
+  postPetPhoto,
+  usePetCard,
+  usePetList,
+} from "../../../utils/api/petCard";
 import {
   PostBook,
   postBooking,
@@ -45,32 +50,21 @@ import { initPet, PetAction, petReducer } from "../CustomerPet/petReducer";
 import PetInfo from "./PetInfo";
 import AskedModal from "./AskedModal";
 
-const checkOwnPet = (
+const checkPetExisted = (
   pet: PetCard,
-  petList: PetList | undefined,
-  navigate: NavigateFunction,
+  petList: PetList,
   setasked: React.Dispatch<React.SetStateAction<boolean>>,
-  disPadispatchPending: React.Dispatch<PendingAction>,
-  closeModal: (time: number) => NodeJS.Timeout
+  dispatchPending: React.Dispatch<PendingAction>
 ): boolean => {
-  if (petList === undefined) {
-    disPadispatchPending({
-      type: "IS_ERROR",
-      payload: "因為選擇條件涉及價格問題，請勿在訂單頁重新整理",
-    });
-    closeModal(2000);
-    navigate("/home");
-    return false;
-  }
-
   const ownPet = petList.filter((item) => item.IsOrders === "沒訂單");
   if (ownPet.find((item) => item.PetName === pet.PetName) !== undefined) {
     // 偵測到我的寵物卡有相同寵物
+    dispatchPending({ type: "DONE" });
     setasked(true);
-    return false;
+    return true;
   }
 
-  return true;
+  return false;
 };
 
 const validatePet = (
@@ -158,8 +152,9 @@ const useCheckBeforeMount = (
 const useContextToCurrent = (
   PetType: string,
   FoodTypes: string[],
+  ServiceTypes: string[],
   dispatchPet: React.Dispatch<PetAction>,
-  ownPet?: PetList
+  petCard?: PetCard
 ): void => {
   useEffect(() => {
     if (PetType !== "") {
@@ -168,19 +163,25 @@ const useContextToCurrent = (
     if (FoodTypes[0] !== undefined) {
       dispatchPet({ type: "PICK_FOODTYPES", payload: FoodTypes });
     }
-    if (ownPet !== undefined) {
-      dispatchPet({ type: "PICK_PET_AGE", payload: ownPet[0].PetAge });
+    if (ServiceTypes[0] !== undefined) {
+      dispatchPet({ type: "PICK_SERVICETYPES", payload: ServiceTypes });
+    }
+    if (petCard !== undefined) {
+      dispatchPet({ type: "PICK_PET_AGE", payload: petCard.PetAge });
       dispatchPet({
         type: "PICK_PET_MEDICINE",
-        payload: ownPet[0].PetMedicine ?? "",
+        payload: petCard.PetMedicine ?? "",
       });
-      dispatchPet({ type: "PICK_PET_NAME", payload: ownPet[0].PetName });
-      dispatchPet({ type: "PICK_PET_NOTE", payload: ownPet[0].PetNote ?? "" });
-      dispatchPet({ type: "PICK_PET_PHOTO", payload: ownPet[0].PetAge });
-      dispatchPet({ type: "PICK_PET_PRSONALITY", payload: ownPet[0].PetAge });
-      dispatchPet({ type: "PICK_PET_SEX", payload: ownPet[0].PetSex });
+      dispatchPet({ type: "PICK_PET_NAME", payload: petCard.PetName });
+      dispatchPet({ type: "PICK_PET_NOTE", payload: petCard.PetNote ?? "" });
+      dispatchPet({ type: "PICK_PET_PHOTO", payload: petCard.PetPhoto ?? "" });
+      dispatchPet({
+        type: "PICK_PET_PRSONALITY",
+        payload: petCard.PetPersonality ?? "",
+      });
+      dispatchPet({ type: "PICK_PET_SEX", payload: petCard.PetSex });
     }
-  }, [FoodTypes, PetType, dispatchPet, ownPet]);
+  }, [petCard]);
 };
 
 function CustomerBook(): JSX.Element {
@@ -188,331 +189,399 @@ function CustomerBook(): JSX.Element {
   const [formdata, setFormData] = useState<FormData>();
   const [isShow, setIsShow] = useState<"POST" | "PUT">();
   const [asked, setasked] = useState(false);
-  const [confirmed, setIsConfirmed] = useState(false);
 
   const UserNameRef = useRef<HTMLInputElement>(null);
   const UserPhoneRef = useRef<HTMLInputElement>(null);
   const queryClient = useQueryClient();
-  const petList = queryClient.getQueryData<PetList>(["PetList"]);
   const { roomid, roomname, price } = useParams();
   const navigate = useNavigate();
+  const { selection, pet: selectedPet } = useSearchBar();
+  const { PetType, FoodTypes, Services, Specials, Facilities } = useFilter();
+  // console.log(pet.ServiceTypes, Specials);
+  // console.log(sortedServiceTypes(Specials, "Specials"));
+  const { dispatchPending } = useModal();
 
   const { authToken, setAuthToken } = useContext(UserAuth);
-  // const { data: user } = useUserInfo(authToken);
-  const { dispatchPending, closeModal } = useModal();
+  const { data: petList } = usePetList(authToken);
+  const { data: user } = useUserInfo(authToken);
 
-  // useRedirect(selection.startDate, selection.endDate);
   const hotel = queryClient.getQueryData<Hotel>(["Hotel"])?.Hotel[0];
-  const { selection, pet: PetName } = useSearchBar();
-  const { PetType, FoodTypes, Services, Specials, Facilities } = useFilter();
 
-  const ownPet = petList?.filter((item) => item.PetName === PetName);
-  console.log(ownPet);
+  const handlePetCardRequest = async (): Promise<number | undefined> => {
+    const petResult = await postPet(pet, authToken);
+
+    if (petResult === undefined) {
+      dispatchPending({
+        type: "IS_ERROR",
+        payload: "系統錯誤，請重新再試",
+      });
+      setTimeout(() => dispatchPending({ type: "DONE" }), 1000);
+      return undefined;
+    }
+
+    if (formdata !== undefined) {
+      const photoResult = await postPetPhoto(
+        petResult.petid,
+        formdata,
+        authToken
+      );
+      if (photoResult === undefined)
+        dispatchPending({
+          type: "IS_ERROR",
+          payload: "上傳寵物照片錯誤，請至「我的寵物名片」補上寵物照片",
+        });
+    }
+    return petResult.petid;
+  };
+
+  const handleBookingRequest = async (petid: number): Promise<boolean> => {
+    const body = validateUserBook(
+      {
+        CheckInDate: format(selection.startDate, "yyyy/M/d"),
+        CheckOutDate: format(selection.endDate, "yyyy/M/d"),
+        PetCardId: petid,
+        UserName: UserNameRef.current?.value,
+        UserPhone: UserPhoneRef.current?.value,
+        RoomId: Number(roomid),
+        TotalNight:
+          (selection.endDate.getTime() - selection.startDate.getTime()) /
+          86400000,
+        TotalPrice:
+          ((selection.endDate.getTime() - selection.startDate.getTime()) /
+            86400000) *
+          Number(price),
+        Status: "reserved",
+      },
+      dispatchPending
+    );
+
+    if (body === undefined) return false;
+
+    if ((await postBooking(body, authToken)) === undefined) {
+      dispatchPending({
+        type: "IS_ERROR",
+        payload: "系統錯誤，請重新再試",
+      });
+      setTimeout(() => dispatchPending({ type: "DONE" }), 1000);
+      return false;
+    }
+    dispatchPending({ type: "DONE" });
+    return true;
+  };
+  const getPetCard = (): PetCard | undefined => {
+    if (selectedPet.id === 0) return undefined;
+    console.log(selectedPet);
+    const { data } = usePetCard(selectedPet.id, authToken);
+    return data;
+  };
 
   useDisableScroll(isShow);
   useRenderPhoto(formdata, dispatchPet);
-  useContextToCurrent(PetType, FoodTypes, dispatchPet, ownPet);
+  useContextToCurrent(
+    PetType,
+    FoodTypes,
+    [...Services, ...Facilities, ...Specials],
+    dispatchPet,
+    getPetCard()
+  );
   useEffect(() => () => {
     clearInterval(setTimeout(() => dispatchPending({ type: "DONE" }), 1000));
     clearInterval(setTimeout(() => navigate("/login"), 2000));
   });
-  // if (
-  //   !useCheckBeforeMount({ user, PetType, FoodTypes }, navigate, setAuthToken)
-  // )
-  //   return (
-  //     // 未來應該使用 404 頁面更改成 "登入閒置過久，請重新登入"
-  //     <MotionFade className="flex-col-center fixed left-1/2 top-1/2 z-20 -translate-x-1/2 -translate-y-1/2 text-xl">
-  //       <>
-  //         <LoadingCustom color="bg-accent" className=" mb-5" />
-  //         {user === false && <p>登入閒置過久，請重新登入</p>}
-  //         {PetType === "" && (
-  //           <p>
-  //             必須先選擇{" "}
-  //             <span className=" font-bold text-second">寵物類型</span>{" "}
-  //           </p>
-  //         )}
-  //         {FoodTypes[0] === undefined && (
-  //           <p>
-  //             必須先至少一個{" "}
-  //             <span className=" font-bold text-second">食物偏好</span>
-  //           </p>
-  //         )}
-  //         <LoadingCustom color="bg-accent" className=" mt-5" />
-  //       </>
-  //     </MotionFade>
-  //   );
 
+  if (
+    !useCheckBeforeMount({ user, PetType, FoodTypes }, navigate, setAuthToken)
+  )
+    return (
+      // 未來應該使用 404 頁面更改成 "登入閒置過久，請重新登入"
+      <MotionFade className="flex-col-center fixed left-1/2 top-1/2 z-20 -translate-x-1/2 -translate-y-1/2 text-xl">
+        <>
+          <LoadingCustom color="bg-accent" className=" mb-5" />
+          {user === false && <p>登入閒置過久，請重新登入</p>}
+          {PetType === "" && (
+            <p>
+              必須先選擇{" "}
+              <span className=" font-bold text-second">寵物類型</span>{" "}
+            </p>
+          )}
+          {FoodTypes[0] === undefined && (
+            <p>
+              必須先至少一個{" "}
+              <span className=" font-bold text-second">食物偏好</span>
+            </p>
+          )}
+          <LoadingCustom color="bg-accent" className=" mt-5" />
+        </>
+      </MotionFade>
+    );
+
+  if (petList === undefined || user === undefined)
+    return (
+      <AnimatePresence>
+        <LoadingCustom
+          key="Loading"
+          color="bg-second"
+          className="fixed left-1/2 top-1/2 -translate-x-1/2"
+        />
+      </AnimatePresence>
+    );
   return (
     <div className="flex-center pt-48 pb-28">
-      <div className="w-full max-w-6xl">
-        <h2 className="mb-4 text-center text-4xl font-bold">預約資料確認</h2>
-        <p className=" mb-4 text-2xl font-bold text-gray-500">寵物名片</p>
-        <section className="relative mb-12 flex h-80 rounded-sm border-2 border-gray-300 p-6">
-          <button
-            onClick={() => setIsShow("PUT")}
-            type="button"
-            className="absolute right-2 top-2 outline-none duration-75 hover:scale-110"
-          >
-            <img src={EditPath} alt="" />
-          </button>
-          <ul className="mr-7 basis-2/12">
-            <li className=" mb-6 h-40">
-              {pet.PetPhoto === "" ? (
-                <div className="h-full w-full bg-gray-200" />
-              ) : (
-                <img
-                  src={pet.PetPhoto}
-                  alt=""
-                  className="h-full w-full object-cover"
-                />
-              )}
-            </li>
-            <li className="text-xl font-bold">{pet.PetName}</li>
-          </ul>
+      <AnimatePresence>
+        <MotionFade key="Booking" className="w-full max-w-6xl">
+          <>
+            <h2 className="mb-4 text-center text-4xl font-bold">
+              預約資料確認
+            </h2>
+            <p className=" mb-4 text-2xl font-bold text-gray-500">寵物名片</p>
+            <section className="relative mb-12 flex h-80 rounded-sm border-2 border-gray-300 p-6">
+              <button
+                onClick={() => setIsShow("PUT")}
+                type="button"
+                className="absolute right-2 top-2 outline-none duration-75 hover:scale-110"
+              >
+                <img src={EditPath} alt="" />
+              </button>
+              <ul className="mr-7 basis-2/12">
+                <li className=" mb-6 h-40">
+                  {pet.PetPhoto === "" ? (
+                    <div className="h-full w-full bg-gray-200" />
+                  ) : (
+                    <img
+                      src={pet.PetPhoto}
+                      alt=""
+                      className="h-full w-full object-cover"
+                    />
+                  )}
+                </li>
+                <li className="text-xl font-bold">{pet.PetName}</li>
+              </ul>
 
-          <ul className="mr-6 grid basis-4/12 grid-cols-1 content-start gap-y-2 border-r-2">
-            <li className="mb-2 font-bold">寵物資訊</li>
-            <PetInfo label="寵物類型" require content={translatePet[PetType]} />
-            <PetInfo label="年齡" require content={pet.PetAge} />
-            <PetInfo label="性別" require content={pet.PetSex} />
-            <PetInfo label="飲食偏好" require content={FoodTypes} />
-            <PetInfo label="個性" content={pet.PetPersonality} />
-            <PetInfo label="備用藥物" content={pet.PetMedicine} />
-            <PetInfo label="備註" content={pet.PetNote} />
-          </ul>
-          <ul className="basis-6/12">
-            <li className="mb-1 font-bold">旅館需求</li>
-            {Services.length < 1 &&
-              Facilities.length < 1 &&
-              Specials.length < 1 && <p>無</p>}
-            {Services.length > 0 && (
-              <li className="mb-4 ">
-                <p className="mb-4">服務內容：</p>
-                <p className="-ml-1">
-                  {Services.map((service) => (
-                    <span
-                      key={service}
-                      className="mr-2 rounded-full border-2 border-black px-4 py-2"
-                    >
-                      {service}
-                    </span>
-                  ))}
-                </p>
-              </li>
-            )}
-            {Facilities.length > 0 && (
-              <li className="mb-4">
-                <p className="mb-4">設施條件：</p>
-                <p className="-ml-1">
-                  {Facilities.map((facility) => (
-                    <span
-                      key={facility}
-                      className="mr-2 rounded-full border-2 border-black px-4 py-2"
-                    >
-                      {facility}
-                    </span>
-                  ))}
-                </p>
-              </li>
-            )}
-            {Specials.length > 0 && (
-              <li>
-                <p className="mb-4">特殊需求：</p>
-                <p className="-ml-1">
-                  {Specials.map((special) => (
-                    <span
-                      key={special}
-                      className="mr-2 rounded-full border-2 border-black px-4 py-2"
-                    >
-                      {special}
-                    </span>
-                  ))}
-                </p>
-              </li>
-            )}
-          </ul>
-        </section>
-        <p className=" mb-4 text-2xl font-bold text-gray-500">預約資訊</p>
-        {hotel === undefined ? (
-          <p>無訂單資訊，請重新選擇房型</p>
-        ) : (
-          <section className="mb-12 flex h-80 rounded-sm border-2 border-gray-300 p-6">
-            <ul className="mr-5 basis-2/12">
-              <li className=" mb-6 h-40">
-                {hotel.HotelPhoto.length < 0 ? (
-                  <div className="h-full w-full bg-gray-200" />
-                ) : (
-                  <img
-                    src={hotel?.HotelPhoto[0]}
-                    alt=""
-                    className="h-full w-full object-cover"
-                  />
+              <ul className="mr-6 grid basis-4/12 grid-cols-1 content-start gap-y-2 border-r-2">
+                <li className="mb-2 font-bold">寵物資訊</li>
+                <PetInfo
+                  label="寵物類型"
+                  require
+                  content={translatePet[PetType]}
+                />
+                <PetInfo label="年齡" require content={pet.PetAge} />
+                <PetInfo label="性別" require content={pet.PetSex} />
+                <PetInfo label="飲食偏好" require content={FoodTypes} />
+                <PetInfo label="個性" content={pet.PetPersonality} />
+                <PetInfo label="備用藥物" content={pet.PetMedicine} />
+                <PetInfo label="備註" content={pet.PetNote} />
+              </ul>
+              <ul className="basis-6/12">
+                <li className="mb-1 font-bold">旅館需求</li>
+                {Services.length < 1 &&
+                  Facilities.length < 1 &&
+                  Specials.length < 1 && <p>無</p>}
+                {Services.length > 0 && (
+                  <li className="mb-4 ">
+                    <p className="mb-4">服務內容：</p>
+                    <p className="-ml-1">
+                      {sortedServiceTypes(Services, "Services").map(
+                        (service) => (
+                          <span
+                            key={service}
+                            className="mr-2 rounded-full border-2 border-black px-4 py-2"
+                          >
+                            {service}
+                          </span>
+                        )
+                      )}
+                    </p>
+                  </li>
                 )}
-              </li>
-              <li className="text-xl font-bold">{hotel.HotelName}</li>
-            </ul>
+                {Facilities.length > 0 && (
+                  <li className="mb-4">
+                    <p className="mb-4">設施條件：</p>
+                    <p className="-ml-1">
+                      {sortedServiceTypes(Facilities, "Facilities").map(
+                        (facility) => (
+                          <span
+                            key={facility}
+                            className="mr-2 rounded-full border-2 border-black px-4 py-2"
+                          >
+                            {facility}
+                          </span>
+                        )
+                      )}
+                    </p>
+                  </li>
+                )}
+                {Specials.length > 0 && (
+                  <li>
+                    <p className="mb-4">特殊需求：</p>
+                    <p className="-ml-1">
+                      {sortedServiceTypes(Specials, "Specials").map(
+                        (special) => (
+                          <span
+                            key={special}
+                            className="mr-2 rounded-full border-2 border-black px-4 py-2"
+                          >
+                            {special}
+                          </span>
+                        )
+                      )}
+                    </p>
+                  </li>
+                )}
+              </ul>
+            </section>
+            <p className=" mb-4 text-2xl font-bold text-gray-500">預約資訊</p>
+            {hotel === undefined ? (
+              <p>無訂單資訊，請重新選擇房型</p>
+            ) : (
+              <section className="mb-12 flex h-80 rounded-sm border-2 border-gray-300 p-6">
+                <ul className="mr-5 basis-2/12">
+                  <li className=" mb-6 h-40">
+                    {hotel.HotelPhoto.length < 0 ? (
+                      <div className="h-full w-full bg-gray-200" />
+                    ) : (
+                      <img
+                        src={hotel?.HotelPhoto[0]}
+                        alt=""
+                        className="h-full w-full object-cover"
+                      />
+                    )}
+                  </li>
+                  <li className="text-xl font-bold">{hotel.HotelName}</li>
+                </ul>
 
-            <ul className="mr-6 grid basis-4/12 grid-cols-1 content-start gap-y-1">
-              <li className="mb-2 font-bold">訂房資訊</li>
-              <li>
-                <span>房型：</span>
-                <span>{roomname}</span>
-              </li>
-              <li>
-                <span>入住日期：</span>
-                <span>{format(selection.startDate, "yyyy/MM/dd")}</span>
-              </li>
-              <li>
-                <span>退房日期：</span>
-                <span>{format(selection.endDate, "yyyy/MM/dd")}</span>
-              </li>
-              <li className=" mb-14">
-                <span>總計入住：</span>
-                <span>
-                  {(selection.endDate.getTime() -
-                    selection.startDate.getTime()) /
-                    86400000}
-                  晚
-                </span>
-              </li>
-              <li className="flex items-center">
-                <span>訂單總價格：</span>
-                <span className="text-lg font-bold text-primary">
-                  NTD &nbsp;
-                  {((selection.endDate.getTime() -
-                    selection.startDate.getTime()) /
-                    86400000) *
-                    Number(price)}
-                </span>
-              </li>
-            </ul>
-            <div className="flex-center h-full">
-              <hr
-                style={{ borderStyle: "solid" }}
-                className="mx-8 block h-[calc(100%-2rem)] border-r-2 border-stone-300"
-              />
-            </div>
-            <ul className="basis-6/12">
-              <li className="mb-4">
-                <p className="mb-1 font-bold">飼主資訊</p>
-                <span>Email：</span>
-                <span>{user === false ? undefined : user?.UserAccount}</span>
-              </li>
-              <li className="mb-4">
-                <p className="relative mb-1 font-bold">
-                  <span>飼主名稱</span>
-                  <span className=" absolute -left-2 -top-1 font-medium text-red-600">
-                    *
-                  </span>
-                </p>
-                <input
-                  ref={UserNameRef}
-                  type="text"
-                  defaultValue={user === false ? undefined : user?.UserName}
-                  className="w-full rounded-lg border-2 border-black px-2 py-2 outline-none"
-                />
-              </li>
-              <li className="mb-4">
-                <p className="relative mb-1 font-bold">
-                  <span>連絡電話</span>
-                  <span className=" absolute -left-2 -top-1 font-medium text-red-600">
-                    *
-                  </span>
-                </p>
-                <input
-                  ref={UserPhoneRef}
-                  type="text"
-                  defaultValue={
-                    user === false ? undefined : user?.UserPhone?.toString()
+                <ul className="mr-6 grid basis-4/12 grid-cols-1 content-start gap-y-1">
+                  <li className="mb-2 font-bold">訂房資訊</li>
+                  <li>
+                    <span>房型：</span>
+                    <span>{roomname}</span>
+                  </li>
+                  <li>
+                    <span>入住日期：</span>
+                    <span>{format(selection.startDate, "yyyy/MM/dd")}</span>
+                  </li>
+                  <li>
+                    <span>退房日期：</span>
+                    <span>{format(selection.endDate, "yyyy/MM/dd")}</span>
+                  </li>
+                  <li className=" mb-14">
+                    <span>總計入住：</span>
+                    <span>
+                      {(selection.endDate.getTime() -
+                        selection.startDate.getTime()) /
+                        86400000}
+                      晚
+                    </span>
+                  </li>
+                  <li className="flex items-center">
+                    <span>訂單總價格：</span>
+                    <span className="text-lg font-bold text-primary">
+                      NTD &nbsp;
+                      {((selection.endDate.getTime() -
+                        selection.startDate.getTime()) /
+                        86400000) *
+                        Number(price)}
+                    </span>
+                  </li>
+                </ul>
+                <div className="flex-center h-full">
+                  <hr
+                    style={{ borderStyle: "solid" }}
+                    className="mx-8 block h-[calc(100%-2rem)] border-r-2 border-stone-300"
+                  />
+                </div>
+                <ul className="basis-6/12">
+                  <li className="mb-4">
+                    <p className="mb-1 font-bold">飼主資訊</p>
+                    <span>Email：</span>
+                    <span>
+                      {user === false ? undefined : user?.UserAccount}
+                    </span>
+                  </li>
+                  <li className="mb-4">
+                    <p className="relative mb-1 font-bold">
+                      <span>飼主名稱</span>
+                      <span className=" absolute -left-2 -top-1 font-medium text-red-600">
+                        *
+                      </span>
+                    </p>
+                    <input
+                      ref={UserNameRef}
+                      type="text"
+                      defaultValue={user === false ? undefined : user?.UserName}
+                      className="w-full rounded-lg border-2 border-black px-2 py-2 outline-none"
+                    />
+                  </li>
+                  <li className="mb-4">
+                    <p className="relative mb-1 font-bold">
+                      <span>連絡電話</span>
+                      <span className=" absolute -left-2 -top-1 font-medium text-red-600">
+                        *
+                      </span>
+                    </p>
+                    <input
+                      ref={UserPhoneRef}
+                      type="text"
+                      defaultValue={
+                        user === false ? undefined : user?.UserPhone?.toString()
+                      }
+                      className="w-full rounded-lg border-2 border-black px-2 py-2 outline-none"
+                    />
+                  </li>
+                </ul>
+              </section>
+            )}
+
+            {petList === undefined ? (
+              <LoadingCustom color="bg-second" />
+            ) : (
+              <Button
+                type="Secondary"
+                text="確認訂房"
+                className="mx-auto py-2 px-10"
+                onClick={async () => {
+                  if (!validatePet(pet, dispatchPending)) return;
+                  if (hotel === undefined) {
+                    dispatchPending({
+                      type: "IS_ERROR",
+                      payload: "無訂單資訊，請重新選擇房型",
+                    });
+
+                    return;
                   }
-                  className="w-full rounded-lg border-2 border-black px-2 py-2 outline-none"
-                />
-              </li>
-            </ul>
-          </section>
-        )}
-        <Button
-          type="Secondary"
-          text="確認訂房"
-          className="mx-auto py-2 px-10"
-          onClick={async () => {
-            if (!validatePet(pet, dispatchPending)) return;
-            dispatchPending({ type: "IS_LOADING" });
+                  dispatchPending({ type: "IS_LOADING" });
 
-            if (
-              checkOwnPet(
-                pet,
-                petList,
-                navigate,
-                setasked,
-                dispatchPending,
-                closeModal
-              )
-            ) {
-              await postPet(pet, authToken);
-            }
+                  const isPetCardExisted = checkPetExisted(
+                    pet,
+                    petList,
+                    setasked,
+                    dispatchPending
+                  );
+                  if (isPetCardExisted) return;
+                  // 若不存在重複，則先 POST一張給自己
+                  await handlePetCardRequest();
 
-            const petResult = await postPet(pet, authToken);
+                  // 承上，繼續 POST 一張給旅館
+                  const petid = await handlePetCardRequest();
 
-            if (petResult === undefined) {
-              dispatchPending({
-                type: "IS_ERROR",
-                payload: "系統錯誤，請重新再試",
-              });
-              setTimeout(() => dispatchPending({ type: "DONE" }), 1000);
-              return;
-            }
+                  if (petid === undefined) {
+                    dispatchPending({
+                      type: "IS_ERROR",
+                      payload: "系統錯誤，請稍後再試",
+                    });
+                    return;
+                  }
 
-            if (formdata !== undefined) {
-              const photoResult = await postPetPhoto(
-                petResult.petid,
-                formdata,
-                authToken
-              );
-              if (photoResult === undefined)
-                dispatchPending({
-                  type: "IS_ERROR",
-                  payload: "上傳寵物照片錯誤，請至「我的寵物名片」補上寵物照片",
-                });
-            }
-
-            const body = validateUserBook(
-              {
-                CheckInDate: format(selection.startDate, "yyyy/M/d"),
-                CheckOutDate: format(selection.endDate, "yyyy/M/d"),
-                PetCardId: petResult.petid,
-                UserName: UserNameRef.current?.value,
-                UserPhone: UserPhoneRef.current?.value,
-                RoomId: Number(roomid),
-                TotalNight:
-                  (selection.endDate.getTime() -
-                    selection.startDate.getTime()) /
-                  86400000,
-                TotalPrice:
-                  ((selection.endDate.getTime() -
-                    selection.startDate.getTime()) /
-                    86400000) *
-                  Number(price),
-                Status: "reserved",
-              },
-              dispatchPending
-            );
-
-            if (body === undefined) return;
-
-            if ((await postBooking(body, authToken)) === undefined) {
-              dispatchPending({
-                type: "IS_ERROR",
-                payload: "系統錯誤，請重新再試",
-              });
-              setTimeout(() => dispatchPending({ type: "DONE" }), 1000);
-              return;
-            }
-            dispatchPending({ type: "DONE" });
-            navigate("/hotel/book/success");
-          }}
-        />
-      </div>
+                  if (await handleBookingRequest(petid)) {
+                    navigate("/hotel/book/success");
+                  } else {
+                    navigate("/hotel/book/fail");
+                  }
+                }}
+              />
+            )}
+          </>
+        </MotionFade>
+      </AnimatePresence>
       <AnimatePresence>
         {isShow !== undefined && (
           // 旅館需求因為牽涉到價格問題，所以不能在訂單資料直接修改
@@ -530,10 +599,14 @@ function CustomerBook(): JSX.Element {
         {asked && (
           <AskedModal
             pet={pet}
+            petList={petList}
             token={authToken}
             key="Asked"
+            formdata={formdata}
+            navigate={navigate}
             setasked={setasked}
-            setIsConfirmed={setIsConfirmed}
+            handlePetCardRequest={handlePetCardRequest}
+            handleBookingRequest={handleBookingRequest}
           />
         )}
       </AnimatePresence>

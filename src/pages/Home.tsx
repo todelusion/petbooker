@@ -24,14 +24,15 @@ function Home(): JSX.Element {
   const { Facilities, FoodTypes, PetType, RoomPrices, Services, Specials } =
     useFilter();
 
-  console.log({
-    Facilities,
-    FoodTypes,
-    PetType,
-    RoomPrices,
-    Services,
-    Specials,
-  });
+  // console.log(pet);
+  // console.log({
+  //   Facilities,
+  //   FoodTypes,
+  //   PetType,
+  //   RoomPrices,
+  //   Services,
+  //   Specials,
+  // });
 
   const { data } = useHotelList({
     AreaId: Number(area.value),

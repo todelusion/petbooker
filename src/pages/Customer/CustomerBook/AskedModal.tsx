@@ -1,36 +1,50 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { NavigateFunction } from "react-router-dom";
 import Button from "../../../components/Button";
 import MotionFade from "../../../containers/MotionFade";
 import MotionPopup from "../../../containers/MotionPopup";
+import useModal from "../../../hooks/useModal";
 import { PetCard, PetList } from "../../../types/schema";
-import { putPet } from "../../../utils/api/petCard";
+import { postPetPhoto, putPet } from "../../../utils/api/petCard";
 
 interface AskedModalProps {
   pet: PetCard;
   petList: PetList | undefined;
   token: string;
-  setIsConfirmed: React.Dispatch<React.SetStateAction<boolean>>;
+  formdata: FormData | undefined;
+  navigate: NavigateFunction;
+  handlePetCardRequest: () => Promise<number | undefined>;
+  handleBookingRequest: (petid: number) => Promise<boolean>;
   setasked: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const findOwnPet = (
+const findExistedPet = (
   pet: PetCard,
   petList: PetList | undefined
 ): number | undefined => {
-  if (petList === undefined) return;
+  if (petList === undefined) return undefined;
   const ownPet = petList.filter((item) => item.IsOrders === "沒訂單");
-  const samePet = ownPet.filter((item) => item.PetName === pet.PetName);
-  console.log(samePet);
+  const existedPet = ownPet.find((item) => item.PetName === pet.PetName);
+  if (existedPet === undefined) return undefined;
+  return existedPet.PetCardId;
 };
 
 function AskedModal({
   pet,
   petList,
   token,
+  formdata,
+  navigate,
+  handleBookingRequest,
+  handlePetCardRequest,
   setasked,
-  setIsConfirmed,
 }: AskedModalProps): JSX.Element {
-  findOwnPet(pet, petList);
+  const existedPetId = findExistedPet(pet, petList);
+  const { dispatchPending, closeModal } = useModal();
+  // useDisableScroll(asked);
+  console.log(existedPetId);
+  useEffect(() => clearInterval(closeModal(1000)));
+  console.log(formdata);
 
   return (
     <MotionFade className="flex-center fixed left-0 top-0 z-10 h-screen w-full bg-black/50">
@@ -46,9 +60,39 @@ function AskedModal({
               className="px-5 py-3 duration-100 hover:border-black hover:bg-primary"
               textSize="text-xl font-bold"
               onClick={async () => {
-                // await putPet();
-                setIsConfirmed(true);
                 setasked(false);
+                dispatchPending({ type: "IS_LOADING" });
+                await putPet(existedPetId as number, pet, token);
+                if (formdata !== undefined) {
+                  const photoResult = await postPetPhoto(
+                    existedPetId as number,
+                    formdata,
+                    token
+                  );
+                  if (photoResult === undefined)
+                    dispatchPending({
+                      type: "IS_ERROR",
+                      payload:
+                        "上傳寵物照片錯誤，請至「我的寵物名片」補上寵物照片",
+                    });
+                  closeModal(1000);
+                }
+
+                const petid = await handlePetCardRequest();
+
+                if (petid === undefined) {
+                  dispatchPending({
+                    type: "IS_ERROR",
+                    payload: "系統錯誤，請稍後再試",
+                  });
+                  return;
+                }
+
+                if (await handleBookingRequest(petid)) {
+                  navigate("/hotel/book/success");
+                } else {
+                  navigate("/hotel/book/fail");
+                }
               }}
             />
             <Button
@@ -56,9 +100,23 @@ function AskedModal({
               text="否"
               className="ml-10 px-5 py-3"
               textSize="text-xl font-bold"
-              onClick={() => {
-                setIsConfirmed(false);
+              onClick={async () => {
                 setasked(false);
+                const petid = await handlePetCardRequest();
+
+                if (petid === undefined) {
+                  dispatchPending({
+                    type: "IS_ERROR",
+                    payload: "系統錯誤，請稍後再試",
+                  });
+                  return;
+                }
+
+                if (await handleBookingRequest(petid)) {
+                  navigate("/hotel/book/success");
+                } else {
+                  navigate("/hotel/book/fail");
+                }
               }}
             />
           </div>

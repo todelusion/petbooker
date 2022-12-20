@@ -61,6 +61,10 @@ export const HotelSchema = z.object({
       HotelPhoto: z.array(z.string()),
       HotelScore: z.number(),
       HotelName: z.string(),
+      HotelAddress: z.string(),
+      HotelPhone: z.string(),
+      HotelStartTime: z.string(),
+      HotelEndTime: z.string(),
       HotelInfo: z.string(),
       HotelService: z.array(z.string()),
       HotelComment: z.array(
@@ -165,7 +169,7 @@ export const postPetResSchema = z.object({
 export const PetListSchema = z.array(
   z.object({
     IsOrders: z.enum(["沒訂單", "有訂單"]),
-    PetCardId: z.number().optional(),
+    PetCardId: z.number(),
     PetPhoto: z.string(),
     PetName: z.string().min(1, { message: "寵物姓名不得為空" }),
     PetType: z.string().min(1, { message: "寵物類型不得為空" }),

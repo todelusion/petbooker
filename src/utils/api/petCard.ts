@@ -8,6 +8,7 @@ import {
   postPetResSchema,
   PetSchema,
   PetCard,
+  PetCardSchema,
 } from "../../types/schema";
 import Header from "./Header";
 
@@ -90,16 +91,17 @@ export const postPetPhoto = async (
   return data;
 };
 
-export const usePetCard = (id: number) =>
-  useQuery(
-    ["PetcardInfo"],
-    async () => {
-      const response = await axios.get(
-        `${baseURL}/petcard/order?petCardId=${id}`
-      );
-      return PetSchema.parse(response.data.result);
-    },
-    {
-      onError: (err) => console.log("usePetCard錯誤", err),
-    }
-  );
+export const usePetCard = (id: number, token: string) =>
+  useQuery(["PetcardInfo"], async () => {
+    const header = new Header(token);
+    const response = await axios.get(
+      `${baseURL}/petcard?petCardId=${id}`,
+      header
+    );
+
+    const result = PetCardSchema.safeParse(response.data.result);
+    if (result.success) return result.data;
+
+    console.error(result.error);
+    return undefined;
+  });
