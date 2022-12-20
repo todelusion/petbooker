@@ -15,8 +15,8 @@ interface IPetListProps {
   setIsShow: React.Dispatch<React.SetStateAction<"POST" | "PUT" | undefined>>;
 }
 
-const renderServiceTypes = (ServiceTypes: string[]): JSX.Element => {
-  if (ServiceTypes.length < 2) return <p>無</p>;
+const renderServiceTypes = (ServiceTypes: string[] | null): JSX.Element => {
+  if (ServiceTypes === null || ServiceTypes.length < 2) return <p>無</p>;
 
   return (
     <>
@@ -26,7 +26,7 @@ const renderServiceTypes = (ServiceTypes: string[]): JSX.Element => {
           {sortedServiceTypes(ServiceTypes, "Services").map((service) => (
             <span
               key={service}
-              className="mr-2 rounded-full border-2 border-black px-2 py-1 text-sm"
+              className="mr-2 mb-2 rounded-full border-2 border-black px-2 py-1 text-sm"
             >
               {service}
             </span>

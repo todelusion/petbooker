@@ -85,6 +85,7 @@ const SearchBar = React.memo(
     const countryList = getCountry();
     const { authToken } = useContext(UserAuth);
     const { data } = usePetList(authToken);
+    console.log(data);
     const queryClient = useQueryClient();
 
     const { area, selection, pet, dispatch } = useSearchBar();

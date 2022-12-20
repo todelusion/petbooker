@@ -17,14 +17,14 @@ export const usePetList = (token: string) =>
     const data = await AxiosTryCatch(async () =>
       axios.get(`${baseURL}/petcard/petcardlist`, header)
     );
-    // console.log(data.petCardList);
+    // console.log(data);
     if (data.Status === false) {
       console.error("GET request error in usePetCardList");
     }
     const result = PetListSchema.safeParse(data.petCardList);
     if (result.success) return result.data;
 
-    console.log(result.error.format());
+    console.error(result.error);
     return undefined;
   });
 

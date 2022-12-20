@@ -44,15 +44,15 @@ const handleDispatchFilter = (
 
   filterDispatch({
     type: "PICK-Services",
-    payload: getCategory(pet.ServiceTypes, "Services"),
+    payload: getCategory(pet.ServiceTypes ?? [""], "Services"),
   });
   filterDispatch({
     type: "PICK-Facilities",
-    payload: getCategory(pet.ServiceTypes, "Facilities"),
+    payload: getCategory(pet.ServiceTypes ?? [""], "Facilities"),
   });
   filterDispatch({
     type: "PICK-Specials",
-    payload: getCategory(pet.ServiceTypes, "Specials"),
+    payload: getCategory(pet.ServiceTypes ?? [""], "Specials"),
   });
 };
 
@@ -73,9 +73,27 @@ function PetCardSmall({ dispatchSearchBar, data }: IPetCardProps): JSX.Element {
         </div>
       </button>
       {data === undefined ? (
-        <p>讀取中，請稍後再試</p>
+        <p>系統錯誤，請稍後再試</p>
       ) : (
         <ul>
+          <li className="relative flex items-center justify-between py-2 px-4 hover:bg-gray-300">
+            <button
+              type="button"
+              className="flex h-full w-full items-center text-left"
+              onClick={() => {
+                dispatch({ type: "PICK_PET", payload: "" });
+                filterDispatch({ type: "CLEAR" });
+                dispatchSearchBar({
+                  type: "TOGGLE_PETCARD-SMALL",
+                  payload: false,
+                });
+                queryClient.removeQueries(["HotelList"]);
+              }}
+            >
+              <div className="h-8 w-8 rounded-full border-2 object-cover" />
+              <span className=" ml-2">什麼都不選</span>
+            </button>
+          </li>
           {data.map((pet) => (
             <li
               key={pet.PetName}

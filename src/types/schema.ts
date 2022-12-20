@@ -164,8 +164,9 @@ export const postPetResSchema = z.object({
 
 export const PetListSchema = z.array(
   z.object({
+    IsOrders: z.enum(["沒訂單", "有訂單"]),
     PetCardId: z.number().optional(),
-    PetPhoto: z.union([z.null(), z.string()]).optional(),
+    PetPhoto: z.string(),
     PetName: z.string().min(1, { message: "寵物姓名不得為空" }),
     PetType: z.string().min(1, { message: "寵物類型不得為空" }),
     PetAge: z.string().min(1, { message: "寵物年齡不得為空" }),
@@ -174,7 +175,7 @@ export const PetListSchema = z.array(
     PetPersonality: z.union([z.string(), z.null()]),
     PetMedicine: z.union([z.string(), z.null()]),
     PetNote: z.union([z.string(), z.null()]),
-    ServiceTypes: z.array(z.string()),
+    ServiceTypes: z.union([z.array(z.string()), z.null()]),
   })
 );
 
