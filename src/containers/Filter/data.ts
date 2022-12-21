@@ -129,7 +129,7 @@ export const facilitiesLists = {
       logo: EyePath,
     },
     {
-      value: "24hrClerk",
+      value: "24hrClerks",
       descript: "24小時人員駐店",
       logo: userPath,
     },
@@ -162,6 +162,51 @@ export const specialsLists = {
       logo: GrassPath,
     },
   ],
+};
+
+export const translateServicesLogos: {
+  [index: string]: { descript: string; logo: string };
+} = {
+  contract: {
+    descript: "簽署合約",
+    logo: fileTextPath,
+  },
+  shower: {
+    descript: "洗澡服務",
+    logo: ShowerPath,
+  },
+  walkdog: {
+    descript: "遛狗服務",
+    logo: PetsPath,
+  },
+  pickup: {
+    descript: "接送服務",
+    logo: HomePath,
+  },
+  "24hrMonitor": {
+    descript: "24小時寵物監視器",
+    logo: EyePath,
+  },
+  "24hrClerks": {
+    descript: "24小時人員駐店",
+    logo: userPath,
+  },
+  hospital: {
+    descript: "與醫療院所配合",
+    logo: ClinicPath,
+  },
+  lifeRecord: {
+    descript: "提供寵物生活紀錄",
+    logo: CameraPath,
+  },
+  independentZone: {
+    descript: "生活空間與其他寵物分開",
+    logo: boxPath,
+  },
+  yard: {
+    descript: "廣大庭院",
+    logo: GrassPath,
+  },
 };
 
 export const translatePet: { [index: string]: string } = {
@@ -209,7 +254,7 @@ export const sortService: { [index: string]: string } = {
   hospital: "Facilities",
   lifeRecord: "Specials",
   independentZone: "Specials",
-  yard: "Specials ",
+  yard: "Specials",
 };
 
 // petCard Edit

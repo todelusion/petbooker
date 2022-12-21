@@ -1,6 +1,9 @@
-import { sortService, translateService } from "../containers/Filter/data";
+import {
+  sortService,
+  translateService,
+  translateServicesLogos,
+} from "../containers/Filter/data";
 
-/* eslint-disable import/prefer-default-export */
 export const sortedServiceTypes = (
   ServiceTypes: string[],
   categoryName: "Services" | "Facilities" | "Specials"
@@ -8,6 +11,16 @@ export const sortedServiceTypes = (
   const result = ServiceTypes.filter(
     (item) => sortService[item] === categoryName
   ).map((item) => translateService[item]);
+  return result;
+};
+
+export const sortedServiceTypesLogos = (
+  ServiceTypes: string[],
+  categoryName: "Services" | "Facilities" | "Specials"
+): Array<{ descript: string; logo: string }> => {
+  const result = ServiceTypes.filter(
+    (item) => sortService[item] === categoryName
+  ).map((item) => translateServicesLogos[item]);
   return result;
 };
 

@@ -4,9 +4,9 @@ import { faPlus, faCheck } from "@fortawesome/free-solid-svg-icons";
 import { useQueryClient } from "@tanstack/react-query";
 import useSearchBar from "../../hooks/useSearchBar";
 import type { SearchBarAction } from ".";
-import { usePetCardList } from "../../utils/api/petCard";
+import { usePetList } from "../../utils/api/petCard";
 import UserAuth from "../../context/UserAuthContext";
-import { Pet, PetList } from "../../types/schema";
+import { PetList } from "../../types/schema";
 import useFilter from "../../hooks/useFilter";
 import { FilterAction } from "../../context/FilterContext";
 import {
@@ -14,26 +14,11 @@ import {
   sortedServiceTypes,
 } from "../../utils/servicesTranslator";
 import { sortService } from "../Filter/data";
+import { LoadingCustom } from "../../img/icons";
 
 interface IPetCardProps {
-  data: PetList | undefined;
   dispatchSearchBar: React.Dispatch<SearchBarAction>;
 }
-
-const petList = [
-  {
-    name: "阿比",
-    photo: undefined,
-  },
-  {
-    name: "小麻糬",
-    photo: undefined,
-  },
-  {
-    name: "Ruby",
-    photo: undefined,
-  },
-];
 
 const handleDispatchFilter = (
   pet: PetList[0],
@@ -56,10 +41,28 @@ const handleDispatchFilter = (
   });
 };
 
-function PetCardSmall({ dispatchSearchBar, data }: IPetCardProps): JSX.Element {
+const dataController = (data: PetList): PetList =>
+  data.filter((pet) => pet.IsOrders === "沒訂單");
+
+function PetCardSmall({ dispatchSearchBar }: IPetCardProps): JSX.Element {
   const { pet: selectedPet, dispatch } = useSearchBar();
   const { filterDispatch } = useFilter();
+  const { authToken } = useContext(UserAuth);
+
+  let petList;
+  if (authToken !== "") {
+    const { data } = usePetList(authToken);
+    petList = data;
+  }
+
   const queryClient = useQueryClient();
+
+  if (authToken === "")
+    return (
+      <div className="w-60 rounded-md border-2 border-black bg-white py-7 text-center">
+        請先登入會員
+      </div>
+    );
 
   return (
     <div className="w-60 rounded-md border-2 border-black bg-white">
@@ -72,8 +75,8 @@ function PetCardSmall({ dispatchSearchBar, data }: IPetCardProps): JSX.Element {
           <span className="ml-3 font-bold">新增寵物名片</span>
         </div>
       </button>
-      {data === undefined ? (
-        <p>系統錯誤，請稍後再試</p>
+      {petList === undefined ? (
+        <LoadingCustom color="bg-second" className="p-4" />
       ) : (
         <ul>
           <li className="relative flex items-center justify-between py-2 px-4 hover:bg-gray-300">
@@ -81,7 +84,7 @@ function PetCardSmall({ dispatchSearchBar, data }: IPetCardProps): JSX.Element {
               type="button"
               className="flex h-full w-full items-center text-left"
               onClick={() => {
-                dispatch({ type: "PICK_PET", payload: "" });
+                dispatch({ type: "PICK_PET", payload: { id: 0, name: "" } });
                 filterDispatch({ type: "CLEAR" });
                 dispatchSearchBar({
                   type: "TOGGLE_PETCARD-SMALL",
@@ -94,14 +97,17 @@ function PetCardSmall({ dispatchSearchBar, data }: IPetCardProps): JSX.Element {
               <span className=" ml-2">什麼都不選</span>
             </button>
           </li>
-          {data.map((pet) => (
+          {dataController(petList).map((pet) => (
             <li
               key={pet.PetName}
               className="relative flex items-center justify-between py-2 px-4 hover:bg-gray-300"
             >
               <button
                 onClick={async () => {
-                  dispatch({ type: "PICK_PET", payload: pet.PetName });
+                  dispatch({
+                    type: "PICK_PET",
+                    payload: { id: pet.PetCardId, name: pet.PetName },
+                  });
                   handleDispatchFilter(pet, filterDispatch);
                   dispatchSearchBar({
                     type: "TOGGLE_PETCARD-SMALL",
@@ -112,20 +118,18 @@ function PetCardSmall({ dispatchSearchBar, data }: IPetCardProps): JSX.Element {
                 type="button"
                 className="flex w-full items-center"
               >
-                {pet.PetPhoto !== null &&
-                pet.PetPhoto !== undefined &&
-                pet.PetPhoto !== "" ? (
+                {pet.PetPhoto !== "" ? (
                   <img
                     src={pet.PetPhoto}
                     alt={pet.PetName}
-                    className="h-8 w-8 border-2 border-black object-cover"
+                    className="h-8 w-8 rounded-full border-2 border-black object-cover"
                   />
                 ) : (
                   <div className="h-8 w-8 rounded-full border-2 border-black bg-slate-500 object-cover" />
                 )}
                 <span className="ml-2">{pet.PetName}</span>
               </button>
-              {pet.PetName === selectedPet && (
+              {pet.PetName === selectedPet.name && (
                 <FontAwesomeIcon
                   className="text-lg text-primary"
                   icon={faCheck}
