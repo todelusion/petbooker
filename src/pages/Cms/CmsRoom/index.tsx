@@ -10,6 +10,7 @@ import { useRoomList } from "../../../utils/api/cmsRoom";
 import RoomCard from "./Room";
 import Edit from "./Edit";
 import { Room } from "../../../types/schema";
+import EmptyScreen from "../../../components/EmptyScreen";
 
 const useDisableScroll = (isEdit: boolean): void => {
   const body = document.querySelector("body");
@@ -33,6 +34,7 @@ function CmsRoom(): JSX.Element {
   useDisableScroll(isShow !== undefined);
   const { data: datas } = useRoomList(authToken);
   // const roomList = useSetRoomList(data);
+  console.log(datas);
 
   return (
     <div className="flex w-full max-w-5xl flex-col items-end ">
@@ -46,6 +48,13 @@ function CmsRoom(): JSX.Element {
         }}
       />
       <AnimatePresence>
+        {datas?.length === 0 && (
+          <div className="flex w-full justify-center  ">
+            {" "}
+            <EmptyScreen text="尚無房型" />
+          </div>
+        )}
+
         {datas === undefined ? (
           <div key="Loading" className="relative w-full">
             <LoadingCustom className="absolute left-1/2" color="bg-second" />

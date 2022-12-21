@@ -11,6 +11,7 @@ import RoomCard from "./Room";
 import Edit from "./Edit";
 import { Room } from "../../../types/schema";
 import { useCmsCommentList } from "../../../utils/api/cmsCommentList";
+import EmptyScreen from "../../../components/EmptyScreen";
 
 function CmsCommentList(): JSX.Element {
   const { authToken } = useContext(UserAuth);
@@ -18,8 +19,9 @@ function CmsCommentList(): JSX.Element {
   console.log(data);
 
   return (
-    <div className="flex w-full max-w-5xl flex-col items-end ">
+    <div className="flex w-full max-w-5xl flex-col items-center ">
       <AnimatePresence />
+      {data?.length === 0 && <EmptyScreen text="尚無評價" />}
       <ul className="w-full">
         {data?.map((item) => (
           <li className="relative mb-4 flex h-40  justify-between rounded-xl border-2 p-6">
