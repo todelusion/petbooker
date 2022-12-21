@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import Button from "../../../components/Button";
+import { LoadingScreen } from "../../../components/LoadingModal";
 import Order from "../../../components/Order";
 
 import UserAuth from "../../../context/UserAuthContext";
@@ -75,7 +76,7 @@ function CmsOrder(): JSX.Element {
       checkin.isFetching ||
       checkout.isFetching ||
       cancel.isFetching ? (
-        <LoadingCustom className="absolute left-1/2" color="bg-second" />
+        <LoadingScreen />
       ) : (
         (reserve.isSuccess ||
           checkin.isSuccess ||

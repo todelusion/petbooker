@@ -29,6 +29,18 @@
   .flex-col-center {
     @apply flex flex-col items-center justify-center;
   }
+  .animation-delay-75 {
+    animation-delay: 0.1s;
+  }
+  .animation-delay-100 {
+    animation-delay: 0.2s;
+  }
+  .animation-delay-150 {
+    animation-delay: 0.3s;
+  }
+  .animation-delay-200 {
+    animation-delay: 0.4s;
+  }
 }
 
 :root {

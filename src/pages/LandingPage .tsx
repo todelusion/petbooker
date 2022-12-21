@@ -9,6 +9,7 @@ import TitleImg from "../img/Title.png";
 import PetcityIcon from "../img/PetcityIcon.svg";
 import Divider1 from "../img/Divider1.svg";
 import Divider2 from "../img/Divider2.svg";
+import { LoadingScreen } from "../components/LoadingModal";
 
 function LandingPage(): JSX.Element {
   const navigate = useNavigate();
