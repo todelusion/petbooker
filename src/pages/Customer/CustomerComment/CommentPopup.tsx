@@ -18,8 +18,8 @@ import Header from "../../../utils/api/Header";
 interface ModalProps {
   open: boolean;
   onClose?: () => void;
-  id?: number;
-  Status?: string;
+  id: number;
+  Status: string;
 }
 
 function CommentPopup({ open, onClose, id, Status }: ModalProps): JSX.Element {

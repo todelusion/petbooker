@@ -32,7 +32,7 @@ import {
 } from "../../../utils";
 import { uploadRoomPhoto, putRoom, postRoom } from "../../../utils/api/cmsRoom";
 import UserAuth from "../../../context/UserAuthContext";
-import { Pet, POSTRoom, PostRoomSchema, Room } from "../../../types/schema";
+import { POSTRoom, PostRoomSchema, Room } from "../../../types/schema";
 import { PendingAction } from "../../../hooks/usePending";
 import Input from "../CustomerPet/Input";
 import { input, filterInput } from "../CustomerPet/data";

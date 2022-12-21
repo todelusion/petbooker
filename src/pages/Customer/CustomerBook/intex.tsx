@@ -22,7 +22,6 @@ import {
   Booking,
   BookingSchema,
   Hotel,
-  Pet,
   PetCard,
   PetCardSchema,
   PetList,
@@ -36,13 +35,7 @@ import {
   usePetCard,
   usePetList,
 } from "../../../utils/api/petCard";
-import {
-  PostBook,
-  postBooking,
-  PostBooking,
-  usePostBook,
-  useUserInfo,
-} from "../../../utils/api/user";
+import { postBooking, useUserInfo } from "../../../utils/api/user";
 import { sortedServiceTypes } from "../../../utils/servicesTranslator";
 // import petCard from "../CustomerPet/data";
 import Edit from "./Edit";

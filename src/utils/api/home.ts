@@ -7,10 +7,8 @@ import {
   Hotel,
   HotelListSchema,
   HotelSchema,
-  Pet,
 } from "../../types/schema";
 import { AxiosTryCatch, baseURL } from "../index";
-import Header from "./Header";
 
 export const useHotelList = (body: Filter) =>
   useQuery(["HotelList"], async () => {

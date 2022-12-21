@@ -4,7 +4,7 @@ import { translatePet } from "../../../containers/Filter/data";
 import UserAuth from "../../../context/UserAuthContext";
 import useModal from "../../../hooks/useModal";
 import { EditPath, TrashPath } from "../../../img/icons";
-import { Pet, PetList } from "../../../types/schema";
+import { PetList } from "../../../types/schema";
 import { deletePet } from "../../../utils/api/petCard";
 import { sortedServiceTypes } from "../../../utils/servicesTranslator";
 import PetInfo from "../CustomerBook/PetInfo";

@@ -3,7 +3,6 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { AxiosTryCatch, baseURL } from "..";
 import {
-  Pet,
   PetListSchema,
   postPetResSchema,
   PetSchema,
@@ -100,6 +99,19 @@ export const usePetCard = (id: number, token: string) =>
     );
 
     const result = PetCardSchema.safeParse(response.data.result);
+    if (result.success) return result.data;
+
+    console.error(result.error);
+    return undefined;
+  });
+
+export const usePetCardNotToken = (id: number) =>
+  useQuery(["PetcardInfoNoToken"], async () => {
+    const response = await axios.get(
+      `${baseURL}/petcard/order?petCardId=${id}`
+    );
+
+    const result = PetSchema.safeParse(response.data.result);
     if (result.success) return result.data;
 
     console.error(result.error);

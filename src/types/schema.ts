@@ -136,7 +136,7 @@ export const PetCardSchema = z.object({
   2. 否則前端schema 過不了
 
   */
-  ServiceTypes: z.array(z.string().optional()),
+  ServiceTypes: z.array(z.string()),
 });
 
 export const PetSchema = z.object({
@@ -154,10 +154,11 @@ export const PetSchema = z.object({
     z.union([z.null(), z.string({ required_error: "寵物姓名不得為空" })])
   ),
   PetPersonality: z.string().optional(),
-  PetMedicine: z.union([z.null(), z.string().optional()]),
-  PetNote: z.union([z.null(), z.string().optional()]),
-  ServiceTypes: z.union([z.array(z.union([z.null(), z.string()])), z.null()]),
-  PetPhoto: z.union([z.null(), z.string().optional()]),
+  PetMedicine: z.union([z.null(), z.string()]),
+  PetNote: z.union([z.null(), z.string()]),
+  // ServiceTypes: z.union([z.array(z.union([z.null(), z.string()])), z.null()]),
+  ServiceTypes: z.array(z.string()),
+  PetPhoto: z.union([z.null(), z.string()]),
 });
 
 export const postPetResSchema = z.object({
@@ -182,6 +183,8 @@ export const PetListSchema = z.array(
     ServiceTypes: z.union([z.array(z.string()), z.null()]),
   })
 );
+
+export type Pet = z.infer<typeof PetSchema>;
 
 export type PetList = z.infer<typeof PetListSchema>;
 

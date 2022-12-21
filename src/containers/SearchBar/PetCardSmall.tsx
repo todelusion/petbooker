@@ -4,9 +4,9 @@ import { faPlus, faCheck } from "@fortawesome/free-solid-svg-icons";
 import { useQueryClient } from "@tanstack/react-query";
 import useSearchBar from "../../hooks/useSearchBar";
 import type { SearchBarAction } from ".";
-import { usePetCardList, usePetList } from "../../utils/api/petCard";
+import { usePetList } from "../../utils/api/petCard";
 import UserAuth from "../../context/UserAuthContext";
-import { Pet, PetList } from "../../types/schema";
+import { PetList } from "../../types/schema";
 import useFilter from "../../hooks/useFilter";
 import { FilterAction } from "../../context/FilterContext";
 import {

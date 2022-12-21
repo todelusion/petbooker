@@ -4,7 +4,8 @@ import { string } from "zod";
 import MotionFade from "../../../containers/MotionFade";
 import MotionPopup from "../../../containers/MotionPopup";
 import { LoadingCustom } from "../../../img/icons";
-import { usePetCard } from "../../../utils/api/petCard";
+import { usePetCardNotToken } from "../../../utils/api/petCard";
+import { sortedServiceTypes } from "../../../utils/servicesTranslator";
 import { sortService, translateService } from "./petData";
 
 interface ModalProps {
@@ -14,39 +15,39 @@ interface ModalProps {
 }
 
 function Popup({ open, onClose, id }: ModalProps): JSX.Element {
-  const { data, isSuccess, isFetching } = usePetCard(id);
+  const { data, isSuccess, isFetching } = usePetCardNotToken(id);
 
   console.log(id);
 
-  const sortedServiceTypes = (
-    ServiceTypes: string[] | null,
-    categoryName: string
-  ): [string] => {
-    if (ServiceTypes === null || data?.ServiceTypes === undefined) return;
-    if (ServiceTypes.length === 0) return;
-    if (data.ServiceTypes === null) return;
-    const result = data.ServiceTypes.filter((item) => {
-      if (item === null) return;
-      return sortService[item] === categoryName;
-    }).map((item) => {
-      if (item === null) return;
+  // const sortedServiceTypes = (
+  //   ServiceTypes: string[],
+  //   categoryName: string
+  // ): string[] => {
+  //   // if (ServiceTypes === null || data?.ServiceTypes === undefined)
+  //   //   return undefined;
+  //   // if (ServiceTypes.length === 0) return undefined;
+  //   // if (data.ServiceTypes === null) return undefined;
+  //   const result = ServiceTypes.filter(
+  //     (item) => sortService[item] === categoryName
+  //   ).map((item) => translateService[item]);
+  //   return result;
+  // };
 
-      return translateService[item];
-    });
-    return result;
-  };
+  // const Services = sortedServiceTypes(
+  //   data.ServiceTypes as string[],
+  //   "Services"
+  // );
+  // const Facilities =
+  //   sortedServiceTypes(
+  //     (data?.ServiceTypes as string[]) || null,
+  //     "Facilities"
+  //   ) != null || [];
+  // const Specials =
+  //   sortedServiceTypes((data?.ServiceTypes as string[]) || null, "Specials") !=
+  //     null || [];
 
-  const Services =
-    sortedServiceTypes((data?.ServiceTypes as string[]) || null, "Services") ||
-    [];
-  const Facilities =
-    sortedServiceTypes(
-      (data?.ServiceTypes as string[]) || null,
-      "Facilities"
-    ) || [];
-  const Specials =
-    sortedServiceTypes((data?.ServiceTypes as string[]) || null, "Specials") ||
-    [];
+  if (data === undefined)
+    return <LoadingCustom className="absolute left-1/2" color="bg-second" />;
 
   return (
     <>
@@ -123,14 +124,20 @@ function Popup({ open, onClose, id }: ModalProps): JSX.Element {
                     </ul>
                     <ul className="basis-6/12">
                       <li className="mb-1 font-bold">旅館需求</li>
-                      {Services.length < 1 &&
-                        Facilities.length < 1 &&
-                        Specials.length < 1 && <p>無</p>}
-                      {Services.length > 0 && (
+                      {sortedServiceTypes(data.ServiceTypes, "Services")
+                        .length < 1 &&
+                        sortedServiceTypes(data.ServiceTypes, "Facilities")
+                          .length < 1 &&
+                        sortedServiceTypes(data.ServiceTypes, "Specials")
+                          .length < 1 && <p>無</p>}
+                      {data.ServiceTypes.length > 0 && (
                         <li className="mb-4 ">
                           <p className="mb-4">服務內容：</p>
                           <p className="-ml-1">
-                            {Services.map((service) => (
+                            {sortedServiceTypes(
+                              data.ServiceTypes,
+                              "Services"
+                            ).map((service) => (
                               <span className="mr-2 rounded-full border-2 border-black px-4 py-2">
                                 {service}
                               </span>
@@ -138,11 +145,15 @@ function Popup({ open, onClose, id }: ModalProps): JSX.Element {
                           </p>
                         </li>
                       )}
-                      {Facilities.length > 0 && (
+                      {sortedServiceTypes(data.ServiceTypes, "Facilities")
+                        .length > 0 && (
                         <li className="mb-4">
                           <p className="mb-4">設施條件：</p>
                           <p className="-ml-1">
-                            {Facilities.map((facility) => (
+                            {sortedServiceTypes(
+                              data.ServiceTypes,
+                              "Facilities"
+                            ).map((facility) => (
                               <span className="mr-2 rounded-full border-2 border-black px-4 py-2">
                                 {facility}
                               </span>
@@ -150,11 +161,15 @@ function Popup({ open, onClose, id }: ModalProps): JSX.Element {
                           </p>
                         </li>
                       )}
-                      {Specials.length > 0 && (
+                      {sortedServiceTypes(data.ServiceTypes, "Specials")
+                        .length > 0 && (
                         <li>
                           <p className="mb-4">特殊需求：</p>
                           <p className="-ml-1">
-                            {Specials.map((special) => (
+                            {sortedServiceTypes(
+                              data.ServiceTypes,
+                              "Specials"
+                            ).map((special) => (
                               <span className="mr-2 rounded-full border-2 border-black px-4 py-2">
                                 {special}
                               </span>

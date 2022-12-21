@@ -33,7 +33,6 @@ import {
 import { uploadRoomPhoto, putRoom, postRoom } from "../../../utils/api/cmsRoom";
 import UserAuth from "../../../context/UserAuthContext";
 import {
-  Pet,
   PetCard,
   PetCardSchema,
   PetList,
