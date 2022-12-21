@@ -10,7 +10,10 @@ const initSearchBarState = {
     name: "",
     value: "",
   },
-  pet: "",
+  pet: {
+    id: 0,
+    name: "",
+  },
   selection: {
     startDate: new Date(),
     endDate: new Date(),
@@ -38,7 +41,10 @@ type SearchBarAction =
     }
   | {
       type: "PICK_PET";
-      payload: string;
+      payload: {
+        name: string;
+        id: number;
+      };
     };
 
 const searchBarReducer = (
@@ -51,7 +57,10 @@ const searchBarReducer = (
     case "PICK_COUNTRY":
       return { ...state, area: action.payload };
     case "PICK_PET":
-      return { ...state, pet: action.payload };
+      return {
+        ...state,
+        pet: { id: action.payload.id, name: action.payload.name },
+      };
     default:
       return state;
   }

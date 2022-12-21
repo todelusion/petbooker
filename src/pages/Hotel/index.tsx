@@ -4,6 +4,7 @@ import { Navigation } from "swiper";
 import { AnimatePresence } from "framer-motion";
 import React, { useContext, useEffect, useLayoutEffect } from "react";
 import { format } from "date-fns";
+import { useQueryClient } from "@tanstack/react-query";
 import { Hotels } from "../../components/HotelCard/data";
 import Comment from "./Comment";
 import { Comments as comments, IRoom, Rooms as rooms } from "./data";
@@ -80,6 +81,7 @@ function Hotel(): JSX.Element {
   const { dispatchPending } = useModal();
   const { authToken, identity } = useContext(UserAuth);
   const { PetType } = useFilter();
+  const queryClient = useQueryClient();
   console.log(PetType);
 
   const navigate = useNavigate();
@@ -113,7 +115,7 @@ function Hotel(): JSX.Element {
                   modules={[Navigation]}
                   className="flex w-full"
                 >
-                  {comments.map((comment) => (
+                  {data.Hotel[0].HotelComment.map((comment) => (
                     <SwiperSlide key={comment.UserName}>
                       <Comment data={comment} className="mx-auto" />
                     </SwiperSlide>
@@ -131,15 +133,16 @@ function Hotel(): JSX.Element {
               <section className="flex flex-col">
                 {data.Hotel[0].Room.map((room) => (
                   <Room
-                    onClick={() =>
+                    onClick={() => {
                       handleClick(
                         { authToken, identity },
                         navigate,
                         room,
                         selection,
                         dispatchPending
-                      )
-                    }
+                      );
+                      queryClient.removeQueries(["PetcardInfo"]);
+                    }}
                     key={room.Id}
                     data={room}
                   />

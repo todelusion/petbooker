@@ -221,11 +221,18 @@ function CmsInfo(): JSX.Element {
   //   setInitImage();
   // }, []);
 
+  if (data === undefined)
+    return (
+      <LoadingCustom
+        className="fixed left-1/2 top-1/2 -translate-x-1/2"
+        color="bg-second"
+      />
+    );
   return (
     <div className="relative flex flex-col ">
-      {isFetching && (
+      {/* {isFetching && (
         <LoadingCustom className="absolute left-1/2" color="bg-second" />
-      )}
+      )} */}
       {isSuccess && defaultImagefileList != null && (
         <>
           <div className="mb-10 flex justify-center ">

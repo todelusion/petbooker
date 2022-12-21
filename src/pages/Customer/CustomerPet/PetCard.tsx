@@ -4,7 +4,7 @@ import { translatePet } from "../../../containers/Filter/data";
 import UserAuth from "../../../context/UserAuthContext";
 import useModal from "../../../hooks/useModal";
 import { EditPath, TrashPath } from "../../../img/icons";
-import { Pet, PetList } from "../../../types/schema";
+import { PetList } from "../../../types/schema";
 import { deletePet } from "../../../utils/api/petCard";
 import { sortedServiceTypes } from "../../../utils/servicesTranslator";
 import PetInfo from "../CustomerBook/PetInfo";
@@ -16,7 +16,7 @@ interface IPetListProps {
 }
 
 const renderServiceTypes = (ServiceTypes: string[] | null): JSX.Element => {
-  if (ServiceTypes === null || ServiceTypes.length < 2) return <p>無</p>;
+  if (ServiceTypes === null || ServiceTypes[0] === "") return <p>無</p>;
 
   return (
     <>

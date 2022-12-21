@@ -4,7 +4,7 @@ import React, { useContext, useEffect, useReducer, useState } from "react";
 import Button from "../../../components/Button";
 import UserAuth from "../../../context/UserAuthContext";
 import { LoadingCustom, PlusPath } from "../../../img/icons";
-import { Pet, PetList } from "../../../types/schema";
+import { PetList } from "../../../types/schema";
 import { usePetList } from "../../../utils/api/petCard";
 import Edit from "./Edit";
 import PetCard from "./PetCard";

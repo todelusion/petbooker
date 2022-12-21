@@ -170,6 +170,7 @@ function FilterInput({
     return useFilter();
   };
   // console.log("in FilterInput", checked);
+  const { pathname } = useLocation();
   const queryClient = useQueryClient();
   const formRef = useRef<HTMLFormElement>(null);
   const FilterContextProps = isUseContext();
@@ -211,16 +212,43 @@ function FilterInput({
       }
 
       case "checkbox": {
+        if (pathname.includes("/home")) {
+          return (
+            <input
+              key={content.value}
+              // ref={inputRef}
+              data-action={action}
+              checked={checked?.includes(content.value)}
+              name={keyname}
+              id={content.descript}
+              value={content.value}
+              onClick={async (e) => {
+                if (FilterContextProps !== undefined)
+                  dispatchContext(
+                    e.target as HTMLInputElement,
+                    FilterContextProps
+                  );
+                await tryCatch(async () =>
+                  queryClient.removeQueries(["HotelList"])
+                );
+
+                if (onChange !== undefined) onChange(e);
+              }}
+              type={type}
+              className="relative h-5 w-5 cursor-pointer appearance-none rounded-sm border-2 border-black duration-150 before:absolute before:top-1/2 before:-translate-y-1/2 before:text-white checked:border-4 checked:border-primary checked:bg-primary checked:ring-2 checked:ring-primary_Dark before:checked:content-['✔'] hover:border-primary"
+            />
+          );
+        }
         return (
           <input
             key={content.value}
             // ref={inputRef}
             data-action={action}
-            checked={checked?.includes(content.value)}
+            defaultChecked={checked?.includes(content.value)}
             name={keyname}
             id={content.descript}
             value={content.value}
-            onChange={async (e) => {
+            onClick={async (e) => {
               if (FilterContextProps !== undefined)
                 dispatchContext(
                   e.target as HTMLInputElement,
@@ -230,7 +258,7 @@ function FilterInput({
                 queryClient.removeQueries(["HotelList"])
               );
 
-              // if (onChange !== undefined) onChange(e);
+              if (onChange !== undefined) onChange(e);
             }}
             type={type}
             className="relative h-5 w-5 cursor-pointer appearance-none rounded-sm border-2 border-black duration-150 before:absolute before:top-1/2 before:-translate-y-1/2 before:text-white checked:border-4 checked:border-primary checked:bg-primary checked:ring-2 checked:ring-primary_Dark before:checked:content-['✔'] hover:border-primary"

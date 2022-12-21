@@ -50,6 +50,7 @@ export default function Router(): JSX.Element {
             element={<CustomerBook />}
           />
           <Route path="/hotel/book/success" element={<Success />} />
+          <Route path="/hotel/book/fail" element={<Fail />} />
           <Route path="/customer" element={<NavBackend menus={customerMenu} />}>
             <Route path="/customer/info" element={<CustomerInfo />} />
             <Route path="/customer/pet" element={<CustomerPet />} />
@@ -75,7 +76,6 @@ export default function Router(): JSX.Element {
             <Route path="/cms/room" element={<CmsRoom />} />
             <Route path="/cms/commentList" element={<CmsCommentList />} />
           </Route>
-          <Route path="/customer/OrderFail" element={<Fail />} />
         </Route>
       </Routes>
       <ReactQueryDevtools />

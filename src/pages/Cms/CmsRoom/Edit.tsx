@@ -123,12 +123,15 @@ function Edit({ title, onClick, data, type }: IEditProps): JSX.Element {
           />
 
           <FilterInput
-            onChange={(e) => setPetType((e.target as HTMLInputElement).value)}
+            onChange={(e) => {
+              console.log(e);
+              setPetType((e.target as HTMLInputElement).value);
+            }}
             noContext
             required
             horizontal
             filterList={petLists}
-            checked={data?.PetType}
+            checked={petType}
             className="mb-5 ml-3"
           />
           <div>
