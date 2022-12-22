@@ -27,11 +27,11 @@ export const postRoom = async (
   return axios
     .post(`${baseURL}/hotel/room`, body, header)
     .then((res) => {
-      console.log(res);
+   
       return res;
     })
     .catch((err) => {
-      console.log(err);
+     
       return err;
     });
 };
@@ -72,11 +72,9 @@ export const useRoomList = (token: string) => {
       if (result.success) {
         return result.data;
       }
-      console.log(result.error);
+     
       return undefined;
     },
-    {
-      onError: (err) => console.log("GETRoomList錯誤", err),
-    }
+  
   );
 };

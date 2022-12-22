@@ -29,8 +29,6 @@ function CustomerOrder(): JSX.Element {
   }, [completeList.data, select]);
 
   useEffect(() => {
-    console.log(dataStatus);
-
     setDataStatus(dataStatus);
   }, []);
 
@@ -43,8 +41,6 @@ function CustomerOrder(): JSX.Element {
         break;
 
       case "取消預約":
-        console.log(dataStatus);
-
         setSelect("取消預約");
         setDataStatus(cancelList.data);
 

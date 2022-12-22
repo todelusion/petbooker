@@ -72,10 +72,6 @@ const useFilterDefault = (
   );
 
   useEffect(() => {
-    // console.log("in useFilterDefault useEffect");
-
-    // setInitRoomPrices(RoomPrices);
-
     if (initPet !== undefined) {
       filterDispatch({ type: "PICK-PetType", payload: initPet });
       setInitPetType(initPet);
@@ -115,8 +111,6 @@ const Filter = React.memo(
     closeSpecial,
     closeRoomPrices,
   }: IFilterProps): JSX.Element => {
-    // console.log("render Filter");
-
     const {
       FoodTypes,
       PetType,
@@ -126,7 +120,6 @@ const Filter = React.memo(
       Facilities,
       filterDispatch,
     } = useFilter();
-    // console.log(PetType);
 
     const [initPetType, setInitPetType] = useState<string>();
     const [initRoomPrices, setInitRoomPrices] = useState<string[]>();
@@ -134,15 +127,6 @@ const Filter = React.memo(
     const [initServices, setInitServices] = useState<string[]>();
     const [initFacilities, setInitFacilities] = useState<string[]>();
     const [initSpecials, setInitSpecials] = useState<string[]>();
-    // console.log({
-    //   FoodTypes,
-    //   PetType,
-    //   RoomPrices,
-    //   Services,
-    //   Specials,
-    //   Facilities,
-    // });
-    // console.log("in filter", initPetType);
 
     if (data !== undefined) {
       useFilterDefault(

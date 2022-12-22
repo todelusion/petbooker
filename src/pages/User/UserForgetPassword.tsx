@@ -21,7 +21,7 @@ export default function UserForgetPassword(): JSX.Element {
 
     setInputValue((prventValue) => ({ ...prventValue, [name]: value }));
   };
-  console.log(identity, inputValue);
+
   const setidentity = (event: React.FormEvent): void => {
     const { value } = event.target as HTMLInputElement;
     setIdentity(value);

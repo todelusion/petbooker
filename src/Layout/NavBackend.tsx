@@ -21,7 +21,7 @@ interface INavBackendProps {
 const useCheckIdentity = (): boolean => {
   const navigate = useNavigate();
   const { pathname } = useLocation();
-  console.log(pathname);
+
   const { authToken, identity } = useContext(UserAuth);
   const { dispatchPending } = useModal();
   if (authToken === "") {

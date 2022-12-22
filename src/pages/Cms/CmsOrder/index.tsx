@@ -14,8 +14,6 @@ function CmsOrder(): JSX.Element {
   const [dataStatus, setDataStatus] = useState(reserve.data);
   const [select, setSelect] = useState("待入住");
 
-  console.log(dataStatus);
-
   useEffect(() => {
     if (select !== "已入住") return;
     if (checkin.data !== undefined) {
@@ -36,8 +34,6 @@ function CmsOrder(): JSX.Element {
   // }, [checkin.data]);
 
   const handleClick = (status: string): void => {
-    console.log(status);
-
     switch (status) {
       case "待入住":
         setSelect("待入住");

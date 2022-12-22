@@ -29,8 +29,6 @@ const handleRequest = async (
   id?: number,
   formdata?: FormData
 ): Promise<boolean | string> => {
-  console.log(type);
-
   if (type === "POST") {
     if (formdata === undefined) return "新增房型必須要有圖片";
 
@@ -77,7 +75,6 @@ const useInitState = (
   state?: string
 ): void => {
   useEffect(() => {
-    console.log("useInit");
     if (state === undefined) return;
     setState(state);
   }, [setState, state]);
@@ -91,8 +88,6 @@ function Edit({ title, onClick, data, type }: IEditProps): JSX.Element {
   const queryClient = useQueryClient();
   const { authToken } = useContext(UserAuth);
 
-  // console.log("render Edit");
-  // console.log(data.RoomPhoto);
   useInitState(setPetType, data?.PetType);
 
   return (
@@ -118,7 +113,6 @@ function Edit({ title, onClick, data, type }: IEditProps): JSX.Element {
 
           <FilterInput
             onChange={(e) => {
-              console.log(e);
               setPetType((e.target as HTMLInputElement).value);
             }}
             noContext
@@ -141,7 +135,6 @@ function Edit({ title, onClick, data, type }: IEditProps): JSX.Element {
               }}
               autoComplete="on"
               onFinish={async (values) => {
-                // console.log(values);
                 handleValidate(type, dispatchPending);
 
                 const parse = PostRoomSchema.safeParse({
@@ -150,7 +143,6 @@ function Edit({ title, onClick, data, type }: IEditProps): JSX.Element {
                 });
 
                 if (parse.success) {
-                  console.log(parse.data);
                   dispatchPending({
                     type: "IS_LOADING",
                   });
@@ -192,7 +184,7 @@ function Edit({ title, onClick, data, type }: IEditProps): JSX.Element {
                   });
                 }
               }}
-              onFinishFailed={(errorInfo) => console.log("Failed", errorInfo)}
+              onFinishFailed={(errorInfo) => {}}
               labelAlign="left"
             >
               <Form.Item

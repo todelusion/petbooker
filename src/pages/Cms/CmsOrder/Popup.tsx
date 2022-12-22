@@ -17,35 +17,6 @@ interface ModalProps {
 function Popup({ open, onClose, id }: ModalProps): JSX.Element {
   const { data, isSuccess, isFetching } = usePetCardNotToken(id);
 
-  console.log(id);
-
-  // const sortedServiceTypes = (
-  //   ServiceTypes: string[],
-  //   categoryName: string
-  // ): string[] => {
-  //   // if (ServiceTypes === null || data?.ServiceTypes === undefined)
-  //   //   return undefined;
-  //   // if (ServiceTypes.length === 0) return undefined;
-  //   // if (data.ServiceTypes === null) return undefined;
-  //   const result = ServiceTypes.filter(
-  //     (item) => sortService[item] === categoryName
-  //   ).map((item) => translateService[item]);
-  //   return result;
-  // };
-
-  // const Services = sortedServiceTypes(
-  //   data.ServiceTypes as string[],
-  //   "Services"
-  // );
-  // const Facilities =
-  //   sortedServiceTypes(
-  //     (data?.ServiceTypes as string[]) || null,
-  //     "Facilities"
-  //   ) != null || [];
-  // const Specials =
-  //   sortedServiceTypes((data?.ServiceTypes as string[]) || null, "Specials") !=
-  //     null || [];
-
   if (data === undefined)
     return <LoadingCustom className="absolute left-1/2" color="bg-second" />;
 

@@ -19,7 +19,6 @@ function Order({ data }: IOrderProps): JSX.Element {
   const queryClient = useQueryClient();
   const [open, setOpen] = useState(false);
   const [petId, setPetId] = useState(0);
-  console.log(petId);
 
   const putCheckIn = async (id: number): Promise<void> => {
     await axios.put(
@@ -37,7 +36,6 @@ function Order({ data }: IOrderProps): JSX.Element {
   };
 
   const handleCheckIn = (id: number, Status: string): void => {
-    console.log(Status);
     // eslint-disable-next-line default-case
     switch (Status) {
       case "reserved": {
@@ -85,7 +83,6 @@ function Order({ data }: IOrderProps): JSX.Element {
             open={open}
             onClose={() => {
               setOpen(false);
-              console.log(open);
             }}
           />
         )}
@@ -105,7 +102,6 @@ function Order({ data }: IOrderProps): JSX.Element {
             <button
               type="button"
               onClick={() => {
-                console.log("碰到拉！");
                 setPetId(item.PetCardId);
                 setOpen(true);
               }}

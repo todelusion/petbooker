@@ -60,7 +60,7 @@ function RoomCard({ datas, className, onClick }: IRoomProps): JSX.Element {
                     dispatchPending({ type: "DONE" });
                   } catch (error) {
                     const err = assertIsError(error);
-                    console.log(err);
+
                     dispatchPending({ type: "IS_ERROR" });
                     setTimeout(() => dispatchPending({ type: "DONE" }), 1000);
                   }

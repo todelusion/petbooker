@@ -55,40 +55,19 @@ function AntdUploadImage(props: IAntdUploadImageProps): JSX.Element {
     }
     setPreviewImage(file.url ?? (file.preview as string));
     setPreviewOpen(true);
-    // const result =
-    //   file.name.length > 0 ||
-    //   eslint-disable-next-line no-unsafe-optional-chaining
-    //   file.url?.substring(file.url?.lastIndexOf("/") + 1);
 
     setPreviewTitle("");
   };
 
   const handleChange: UploadProps["onChange"] = ({ fileList: newFileList }) => {
-    // const PhotoFormData = new FormData();
-    // ImagefileList.forEach((file) =>
-    //   PhotoFormData.append("file", file.originFileObj)
-    // );
-    // console.log(newFileList);
-    // newFileList.forEach((item) => {
-    //   console.log(item?.thumbUrl);
-    // });
-    // const ary = newFileList.map((item) => item);
-    // console.log(ary);
-    // const resultary = ary.map((item) => item.thumbUrl?.split(",")[1]);
-    // console.log(resultary);
     setImageFileList(newFileList);
   };
 
   const handleRemove = (file: UploadFile): void => {
-    // const result = file.thumbUrl?.split(",")[1];
-    // defaultFileList;
-    console.log(file.uid);
-
     setDelImage((prventValue) => [
       ...prventValue,
       file.uid as unknown as number,
     ]);
-    console.log(DelImage);
   };
   const uploadButton = (
     <div>
@@ -100,32 +79,25 @@ function AntdUploadImage(props: IAntdUploadImageProps): JSX.Element {
     <>
       <Upload
         listType="picture-card"
-        // fileList={defaultFileList as unknown as Array<UploadFile<any>>}
         fileList={ImagefileList}
         onPreview={handlePreview}
         onChange={handleChange}
         onRemove={handleRemove}
         maxCount={5}
         beforeUpload={() => false}
-        // defaultFileList={defaultFileList as unknown as Array<UploadFile<any>>}
-        // defaultFileList={defaultImage as unknown as Array<UploadFile<any>>}
-        // defaultFileList={defalutImageOwn as unknown as Array<UploadFile<any>>}
       >
-        {// eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
-        (
-          defaultFileList?.length
-            ? defaultFileList.length === 5 && ImagefileList?.length >= 5
-            : 0
-        )
-          ? null
-          : uploadButton}
+        {
+          // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
+          (
+            defaultFileList?.length
+              ? defaultFileList.length === 5 && ImagefileList?.length >= 5
+              : 0
+          )
+            ? null
+            : uploadButton
+        }
       </Upload>
-      <Modal
-        open={previewOpen}
-        // title={previewTitle}
-        footer={null}
-        onCancel={handleCancel}
-      >
+      <Modal open={previewOpen} footer={null} onCancel={handleCancel}>
         <img
           alt="HotelPhoto.png"
           style={{ width: "100%" }}

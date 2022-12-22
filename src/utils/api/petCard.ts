@@ -17,7 +17,7 @@ export const usePetList = (token: string) =>
     const data = await AxiosTryCatch(async () =>
       axios.get(`${baseURL}/petcard/petcardlist`, header)
     );
-    // console.log(data);
+    
     if (data.Status === false) {
       console.error("GET request error in usePetCardList");
     }
@@ -44,12 +44,12 @@ export const postPet = async (body: PetCard, token: string) => {
   return undefined;
 };
 export const putPet = async (petid: number, body: PetCard, token: string) => {
-  console.log(petid, body);
+ 
   const header = new Header(token);
   const data = await AxiosTryCatch(async () =>
     axios.put(`${baseURL}/petcard?petCardId=${petid}`, body, header)
   );
-  console.log(data);
+  
 
   if (data.Status === false) {
     console.error("API error in putPet");
@@ -59,11 +59,11 @@ export const putPet = async (petid: number, body: PetCard, token: string) => {
 };
 export const deletePet = async (petid: number, token: string) => {
   const header = new Header(token);
-  // console.log(petid, header);
+  
   const data = await AxiosTryCatch(async () =>
     axios.delete(`${baseURL}/petcard?petCardId=${petid}`, header)
   );
-  // console.log(data);
+  
 
   if (data.Status === false) {
     console.error("API error in deletePet");

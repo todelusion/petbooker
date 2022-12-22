@@ -20,7 +20,6 @@ function Comment({ data }: ICommentProps): JSX.Element {
   const [orderId, setOrderId] = useState(0);
   const [selectState, setSelectState] = useState("checkOut");
   const handleClick = (Orderid: number, Status: string): void => {
-    console.log(Orderid, Status);
     setOpen(true);
     setOrderId(Orderid);
     setSelectState(Status);

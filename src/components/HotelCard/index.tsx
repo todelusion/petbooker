@@ -77,12 +77,10 @@ const handleNavigate = (
 };
 
 const HotelCard = React.memo(({ data }: HotelCardProps): JSX.Element => {
-  // console.log(typeof data[0]?.HotelPhoto);
-  // console.log(data);
   const queryClient = useQueryClient();
   const { selection } = useSearchBar();
   const { FoodTypes, PetType } = useFilter();
-  // console.log(PetType);
+
   const { dispatchPending } = useModal();
   useEffect(() =>
     clearInterval(setTimeout(() => dispatchPending({ type: "DONE" }), 1000))

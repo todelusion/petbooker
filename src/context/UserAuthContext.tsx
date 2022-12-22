@@ -33,7 +33,6 @@ export function UserAuthContetxt({ children }: UserAuthProps): JSX.Element {
     }),
     [authToken, identity]
   );
-  console.log({ authToken, identity });
 
   useEffect(() => {
     localStorage.setItem("token", authToken);

@@ -17,7 +17,7 @@ function CustomerInfo(): JSX.Element {
   const navigate = useNavigate();
   const header = new Header(authToken);
   const { data, isLoading, isSuccess } = useCustormerInfo(authToken);
-  console.log(Thumbnail?.getAll("Image"));
+
   const queryClient = useQueryClient();
   const defaultThumbnail: string | undefined | null = data?.UserPhoto;
 
@@ -27,27 +27,19 @@ function CustomerInfo(): JSX.Element {
     }
   }, []);
   const onFinish = async (fieldsValue: any): Promise<void> => {
-    console.log(fieldsValue);
-
     await axios.put(`${baseURL}/user`, fieldsValue, header);
-    // .then((res) => console.log("傳送資訊成功", res))
-    // .catch((err) => console.log("傳送資訊失敗", err));
+
     try {
       if (Thumbnail?.has("Image") ?? false) {
         await axios.post(`${baseURL}/user//uploadprofile`, Thumbnail, header);
-        console.log("成功大頭貼上傳");
       }
-    } catch (error) {
-      console.log("失敗", error);
-    }
+    } catch (error) {}
 
     await queryClient.invalidateQueries(["custormerInfo"]);
     queryClient.removeQueries(["custormerInfo"]);
   };
 
-  const onFinishFailed = (errorInfo: any): void => {
-    console.log("Failed:", errorInfo);
-  };
+  const onFinishFailed = (errorInfo: any): void => {};
   return (
     <div className=" w-full px-10">
       {isLoading && (
@@ -58,9 +50,7 @@ function CustomerInfo(): JSX.Element {
           <div className="mb-10 flex w-full justify-center ">
             <UploadImage
               type="Avatar"
-              onChange={(event) => {
-                console.log(event);
-              }}
+              onChange={(event) => {}}
               defaultImage={defaultThumbnail}
               setThumbnail={setThumbnail}
             />

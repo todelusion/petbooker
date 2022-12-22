@@ -80,15 +80,9 @@ const searchBarReducer = (
 
 const SearchBar = React.memo(
   ({ className }: { className?: string }): JSX.Element => {
-    // console.log("renderSearchBar");
     const { pathname } = useLocation();
     const countryList = getCountry();
 
-    // let petList;
-    // if (authToken !== "") {
-    //   const { data } = usePetList(authToken);
-    //   petList = data;
-    // }
     const queryClient = useQueryClient();
 
     const { area, selection, pet, dispatch } = useSearchBar();

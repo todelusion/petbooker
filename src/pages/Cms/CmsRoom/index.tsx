@@ -26,12 +26,11 @@ const useDisableScroll = (isEdit: boolean): void => {
 function CmsRoom(): JSX.Element {
   const [isShow, setIsShow] = useState<"POST" | "PUT">();
   const [room, setRoom] = useState<Room>();
-  // console.log(room);
+
   const { authToken } = useContext(UserAuth);
 
   useDisableScroll(isShow !== undefined);
   const { data: datas, isFetching } = useRoomList(authToken);
-  // const roomList = useSetRoomList(data);
 
   return (
     <div className="flex w-full max-w-5xl flex-col items-end ">

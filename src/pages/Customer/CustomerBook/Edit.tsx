@@ -145,7 +145,6 @@ const Edit = React.memo(
     3. 旅館需求
     */
     const { pathname } = useLocation();
-    // console.log(pet);
 
     // useInitState(setPet, data?.PetType);
 

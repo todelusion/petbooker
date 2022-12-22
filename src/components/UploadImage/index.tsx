@@ -22,7 +22,6 @@ const renderUploadImage = (
 ): JSX.Element => {
   switch (type) {
     case "Room": {
-      console.log();
       if (previewImage !== undefined)
         return (
           <img
@@ -105,9 +104,7 @@ function UploadImage({
     // eslint-disable-next-line no-param-reassign
     event.target.value = "";
   };
-  useEffect(() => {
-    console.log("in UploadImage component", previewImage);
-  }, [previewImage]);
+
   return (
     <div
       className={`relative ${className ?? ""} ${

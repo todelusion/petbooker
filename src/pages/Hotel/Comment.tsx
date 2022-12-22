@@ -8,7 +8,6 @@ interface ICommentProps {
 }
 
 function Comment({ data, className }: ICommentProps): JSX.Element {
-  console.log(data);
   return (
     <div
       className={`h-40 max-w-[400px] rounded-xl border-2 p-6 ${

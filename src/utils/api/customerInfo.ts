@@ -17,8 +17,6 @@ export const useCustormerInfo = (token: string) => {
       const response = await axios.get(`${baseURL}/user`, header);
       return customerInfoSchema.parse(response.data.result);
     },
-    {
-      onError: (err) => console.log("useCustormerInfo錯誤", err),
-    }
+ 
   );
 };

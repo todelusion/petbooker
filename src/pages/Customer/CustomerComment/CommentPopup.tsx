@@ -23,7 +23,6 @@ interface ModalProps {
 }
 
 function CommentPopup({ open, onClose, id, Status }: ModalProps): JSX.Element {
-  console.log(Status, id);
   const { authToken } = useContext(UserAuth);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const header = new Header(authToken);
@@ -42,7 +41,6 @@ function CommentPopup({ open, onClose, id, Status }: ModalProps): JSX.Element {
         },
         header
       );
-      console.log(res);
 
       if (res.data.message === "送出評價成功") {
         onClose?.();

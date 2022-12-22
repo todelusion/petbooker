@@ -82,12 +82,10 @@ function Hotel(): JSX.Element {
   const { authToken, identity } = useContext(UserAuth);
   const { PetType } = useFilter();
   const queryClient = useQueryClient();
-  console.log(PetType);
 
   const navigate = useNavigate();
   // useRedirect(selection.startDate, selection.endDate);
   const { data } = useHotel(id ?? "", selection.startDate, selection.endDate);
-  console.log(data);
 
   useEffect(() =>
     clearInterval(setTimeout(() => dispatchPending({ type: "DONE" }), 1000))

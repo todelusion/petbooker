@@ -83,16 +83,13 @@ function CmsInfo(): JSX.Element {
     await axios.put(putInfo, result, {
       headers: { Authorization: `Bearer ${authToken}` },
     });
-    // .then((res) => console.log("傳送資訊成功", res))
-    // .catch((err) => console.log("傳送資訊失敗", err));
+
     try {
       await axios.post(postImage, postImagebae64, {
         headers: { Authorization: `Bearer ${authToken}` },
       });
     } catch (error) {}
 
-    // .then((res) => console.log("傳送照片成功", res))
-    // .catch((err) => console.log("傳送照片失敗", err));
     try {
       if (Thumbnail?.has("Image") ?? false) {
         await axios.post(postThumbnail, Thumbnail, {
@@ -103,14 +100,9 @@ function CmsInfo(): JSX.Element {
 
     await queryClient.invalidateQueries(["Info"]);
     queryClient.removeQueries(["Info"]);
-
-    // await queryClient.setQueryData(["Info"]);
-    // location.reload();
   };
 
-  const onFinishFailed = (errorInfo: any): void => {
-    console.log("Failed:", errorInfo);
-  };
+  const onFinishFailed = (errorInfo: any): void => {};
 
   const prefixSelector = (
     <Form.Item name="areaid" noStyle initialValue={data?.HotelArea}>
@@ -124,7 +116,6 @@ function CmsInfo(): JSX.Element {
     </Form.Item>
   );
   const normFile = (event: ChangeEvent<HTMLInputElement>): FileList => {
-    console.log("Upload event:", event);
     if (Array.isArray(event)) {
       return event as any;
     }

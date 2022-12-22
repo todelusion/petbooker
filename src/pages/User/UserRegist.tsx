@@ -21,7 +21,6 @@ export default function UserRegist(): JSX.Element {
 
   function regist(event: React.FormEvent): void {
     event.preventDefault();
-    console.log(inputValue, identity);
 
     if (Object.values(inputValue).length < 4) {
       dispatchPending({ type: "IS_ERROR", payload: "有欄位尚未填寫" });
@@ -77,7 +76,6 @@ export default function UserRegist(): JSX.Element {
         identity === "User" ? Userdata : Hoteldata
       )
       .then((res) => {
-        console.log(res);
         dispatchPending({ type: "DONE" });
         navigate("/login");
       })
