@@ -78,7 +78,6 @@ export default function Router(): JSX.Element {
           </Route>
         </Route>
       </Routes>
-      <ReactQueryDevtools />
     </QueryClientProvider>
   );
 }

@@ -8,7 +8,7 @@ import useModal from "../../hooks/useModal";
 
 export default function UserModifyPassword(): JSX.Element {
   const { identity } = useContext(UserAuth);
-  console.log("in UserModified", identity);
+
   const { dispatchPending } = useModal();
   const { id } = useParams();
   const navigate = useNavigate();
@@ -56,7 +56,6 @@ export default function UserModifyPassword(): JSX.Element {
                 }
               )
               .then((res) => {
-                console.log(res);
                 dispatchPending({ type: "DONE" });
                 navigate("/login");
               })

@@ -29,12 +29,13 @@ export const GETRoomListSchema = z.object({
 export const RoomListSchema = z.array(
   z.object({
     Id: z.number(),
+    IsOrders:z.string(),
     RoomPhoto: z.string(),
     RoomName: z.string(),
     PetType: z.string(),
     RoomPrice: z.number(),
     RoomInfo: z.string(),
-    HotelId: z.null(),
+    HotelId: z.undefined(),
   })
 );
 export const HotelListSchema = z.object({
@@ -157,7 +158,7 @@ export const PetSchema = z.object({
   PetMedicine: z.union([z.null(), z.string()]),
   PetNote: z.union([z.null(), z.string()]),
   // ServiceTypes: z.union([z.array(z.union([z.null(), z.string()])), z.null()]),
-  ServiceTypes: z.array(z.string()),
+  ServiceTypes: z.union([z.array(z.string()),z.null()]) ,
   PetPhoto: z.union([z.null(), z.string()]),
 });
 

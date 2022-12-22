@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-import axios, { AxiosResponse, AxiosStatic } from "axios";
+import axios, { AxiosResponse} from "axios";
 import { useQuery } from "@tanstack/react-query";
 import Header from "./Header";
-import { AxiosTryCatch, baseURL, tryCatch } from "../index";
+import { AxiosTryCatch, baseURL } from "../index";
 import { POSTRoom, RoomListSchema } from "../../types/schema";
 
 export const uploadRoomPhoto = async (
@@ -27,11 +27,11 @@ export const postRoom = async (
   return axios
     .post(`${baseURL}/hotel/room`, body, header)
     .then((res) => {
-      console.log(res);
+   
       return res;
     })
     .catch((err) => {
-      console.log(err);
+     
       return err;
     });
 };
@@ -68,15 +68,13 @@ export const useRoomList = (token: string) => {
       const data = await AxiosTryCatch(async () =>
         axios.get(`${baseURL}/hotel/room/list`, header)
       );
-      const result = RoomListSchema.safeParse(data.roomList);
+      const result = RoomListSchema.safeParse(data.rooms);
       if (result.success) {
         return result.data;
       }
-      console.log(result.error.format());
+     
       return undefined;
     },
-    {
-      onError: (err) => console.log("GETRoomList錯誤", err),
-    }
+  
   );
 };

@@ -82,19 +82,17 @@ function Hotel(): JSX.Element {
   const { authToken, identity } = useContext(UserAuth);
   const { PetType } = useFilter();
   const queryClient = useQueryClient();
-  console.log(PetType);
 
   const navigate = useNavigate();
   // useRedirect(selection.startDate, selection.endDate);
   const { data } = useHotel(id ?? "", selection.startDate, selection.endDate);
-  console.log(data);
 
   useEffect(() =>
     clearInterval(setTimeout(() => dispatchPending({ type: "DONE" }), 1000))
   );
 
   return (
-    <div className="px-20 pt-40">
+    <div className=" px-18 pt-40">
       <AnimatePresence>
         {data === undefined ? (
           <LoadingCustom
@@ -109,14 +107,15 @@ function Hotel(): JSX.Element {
                 <SearchBar className="mb-12" />
                 <Photo data={data.Hotel[0].HotelPhoto} className="mb-12" />
                 <Info hotel={data.Hotel[0]} className="mb-12" />
+
                 <Swiper
                   slidesPerView={3}
                   navigation
                   modules={[Navigation]}
-                  className="flex w-full"
+                  className=" relative flex w-full"
                 >
                   {data.Hotel[0].HotelComment.map((comment) => (
-                    <SwiperSlide key={comment.UserName}>
+                    <SwiperSlide key={comment.UserName} className="mr-3 ">
                       <Comment data={comment} className="mx-auto" />
                     </SwiperSlide>
                   ))}

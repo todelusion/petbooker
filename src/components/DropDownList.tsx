@@ -7,7 +7,7 @@ interface IDropDownListProps {
 
 const DropDownList = React.memo(
   ({ className }: IDropDownListProps): JSX.Element => (
-    // console.log("render DropDownList");
+   
     <select
       name="sort"
       id="sort_select"

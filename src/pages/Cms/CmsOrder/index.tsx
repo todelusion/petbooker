@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import Button from "../../../components/Button";
+import LoadingScreen from "../../../components/LoadingModal";
 import Order from "../../../components/Order";
 
 import UserAuth from "../../../context/UserAuthContext";
@@ -12,8 +13,6 @@ function CmsOrder(): JSX.Element {
 
   const [dataStatus, setDataStatus] = useState(reserve.data);
   const [select, setSelect] = useState("待入住");
-
-  console.log(dataStatus);
 
   useEffect(() => {
     if (select !== "已入住") return;
@@ -35,8 +34,6 @@ function CmsOrder(): JSX.Element {
   // }, [checkin.data]);
 
   const handleClick = (status: string): void => {
-    console.log(status);
-
     switch (status) {
       case "待入住":
         setSelect("待入住");
@@ -75,7 +72,7 @@ function CmsOrder(): JSX.Element {
       checkin.isFetching ||
       checkout.isFetching ||
       cancel.isFetching ? (
-        <LoadingCustom className="absolute left-1/2" color="bg-second" />
+        <LoadingScreen />
       ) : (
         (reserve.isSuccess ||
           checkin.isSuccess ||

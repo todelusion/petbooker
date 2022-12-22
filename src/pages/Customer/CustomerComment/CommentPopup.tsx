@@ -23,7 +23,6 @@ interface ModalProps {
 }
 
 function CommentPopup({ open, onClose, id, Status }: ModalProps): JSX.Element {
-  console.log(Status, id);
   const { authToken } = useContext(UserAuth);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const header = new Header(authToken);
@@ -42,19 +41,14 @@ function CommentPopup({ open, onClose, id, Status }: ModalProps): JSX.Element {
         },
         header
       );
-      console.log(res);
 
       if (res.data.message === "送出評價成功") {
         onClose?.();
       }
       await queryClient.invalidateQueries(["completeList"]);
       queryClient.removeQueries(["completeList"]);
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
-
-  console.log(data);
 
   useEffect(() => {
     if (Status === "checkOutComment") {

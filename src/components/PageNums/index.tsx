@@ -35,8 +35,6 @@ function PageNums({
   onClick,
   setCurrent,
 }: IPageNumsProps): JSX.Element {
-  // console.log(current);
-  // renderNums(total);
   return (
     <section className={className}>
       <div className="flex items-center">

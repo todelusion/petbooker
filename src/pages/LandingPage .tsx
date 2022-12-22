@@ -9,6 +9,7 @@ import TitleImg from "../img/Title.png";
 import PetcityIcon from "../img/PetcityIcon.svg";
 import Divider1 from "../img/Divider1.svg";
 import Divider2 from "../img/Divider2.svg";
+import { LoadingScreen } from "../components/LoadingModal";
 
 function LandingPage(): JSX.Element {
   const navigate = useNavigate();
@@ -37,9 +38,9 @@ function LandingPage(): JSX.Element {
           <p className="top-0 float-left mr-8  text-9xl text-primary ">
             {index + 1}
           </p>
-          <h2 className="mt-1 text-2xl">
+          <h2 className="mt-1 text-2xl font-semibold">
             {loadingPageInfo[index].title}
-            <span className="block text-base">
+            <span className="mt-3 block text-base font-normal">
               {loadingPageInfo[index].text}
             </span>
           </h2>
@@ -58,12 +59,12 @@ function LandingPage(): JSX.Element {
           className="h-full w-full object-cover"
         />
         <div className="absolute top-1/2 left-1/2 flex w-full -translate-x-1/2 -translate-y-1/4 flex-col items-center  ">
-          <h1 className="text-5.5xl  text-white">
+          <h1 className="text-5.5xl  font-bold text-white">
             一個專為寵物量身打造的訂房平台
           </h1>
           <button
             type="button"
-            className="ml-8 w-40 rounded-3xl bg-second px-2  py-1.5"
+            className="ml-8 mt-8 w-40 rounded-3xl bg-second px-2  py-1.5"
             onClick={() => navigate("/regist")}
           >
             <img src={PetsImg} alt="PetImg" className="y-6 inline-block w-6" />

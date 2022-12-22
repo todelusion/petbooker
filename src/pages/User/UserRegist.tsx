@@ -21,7 +21,6 @@ export default function UserRegist(): JSX.Element {
 
   function regist(event: React.FormEvent): void {
     event.preventDefault();
-    console.log(inputValue, identity);
 
     if (Object.values(inputValue).length < 4) {
       dispatchPending({ type: "IS_ERROR", payload: "有欄位尚未填寫" });
@@ -77,7 +76,6 @@ export default function UserRegist(): JSX.Element {
         identity === "User" ? Userdata : Hoteldata
       )
       .then((res) => {
-        console.log(res);
         dispatchPending({ type: "DONE" });
         navigate("/login");
       })
@@ -186,7 +184,10 @@ export default function UserRegist(): JSX.Element {
         <span className="mt-3 flex justify-center">
           <span>
             已有帳號？{" "}
-            <Link to="/login" className="underline">
+            <Link
+              to="/login"
+              className="text-second underline decoration-second"
+            >
               登入
             </Link>
           </span>

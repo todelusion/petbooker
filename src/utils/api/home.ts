@@ -13,19 +13,19 @@ import { AxiosTryCatch, baseURL } from "../index";
 export const useHotelList = (body: Filter) =>
   useQuery(["HotelList"], async () => {
     const res = await axios.post(`${baseURL}/hotel/hotelFilter`, body);
-    // console.log(res);
+   
     const result = HotelListSchema.safeParse(res.data);
     if (result.success) {
       return result.data;
     }
-    console.log(result.error.format());
+  
     return undefined;
   });
 
 export const useHotel = (id: string, startDate: Date, endDate: Date) => {
   const start = format(startDate, "yyyy/MM/dd");
   const end = format(endDate, "yyyy/MM/dd");
-  console.log(startDate.getDate(), endDate.getDate());
+  
 
   return useQuery(["Hotel"], async () => {
     const data = await AxiosTryCatch<Hotel>(async () =>
@@ -33,12 +33,12 @@ export const useHotel = (id: string, startDate: Date, endDate: Date) => {
         `${baseURL}/hotel/hotelInfo?hotelId=${id}&startDate=${start}&endDate=${end}`
       )
     );
-    // console.log(data);
+  
     const result = HotelSchema.safeParse(data);
     if (result.success) {
       return result.data;
     }
-    console.log(result.error);
+    
     return undefined;
   });
 };

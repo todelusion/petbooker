@@ -33,10 +33,7 @@ function ContextTest(): JSX.Element {
     <div className="flex-col-center min-h-screen pt-40">
       {/* <Link to="/home">點此返回home頁</Link> */}
       {countryList !== undefined && (
-        <CountryList
-          onClick={(e) => console.log((e.target as HTMLSelectElement).value)}
-          countryList={countryList}
-        />
+        <CountryList onClick={(e) => {}} countryList={countryList} />
       )}
       <Filter
         data={{
@@ -51,15 +48,14 @@ function ContextTest(): JSX.Element {
         className="mb-5 p-5"
         type="Primary"
         onClick={() => {
-          console.log("test");
           axios
             .post("https://petcity.rocket-coding.com/user/login", {
               UserAccount: "qqq123gmail.com",
               UserPassWord: "Wang1234",
               Identity: "customer",
             })
-            .then((res) => console.log(res))
-            .catch((err) => console.log(err));
+            .then((res) => {})
+            .catch((err) => {});
         }}
       />
 
@@ -68,53 +64,15 @@ function ContextTest(): JSX.Element {
         className="p-5"
         type="Secondary"
         onClick={() => {
-          axios
-            .post("https://petcity.rocket-coding.com/user/signup", {
-              UserAccount: "fasFSDF31WE7fwer@gmail.com",
-              UserName: "fasFSDF31WE7fwer",
-              UserPassWord: "fasFSDF31WE7fwer",
-              ConfirmedPassword: "fasFSDF31WE7fwer",
-              Identity: "customer",
-            })
-            .then((res) => console.log(res))
-            .catch((err) => console.log(err));
+          axios.post("https://petcity.rocket-coding.com/user/signup", {
+            UserAccount: "fasFSDF31WE7fwer@gmail.com",
+            UserName: "fasFSDF31WE7fwer",
+            UserPassWord: "fasFSDF31WE7fwer",
+            ConfirmedPassword: "fasFSDF31WE7fwer",
+            Identity: "customer",
+          });
         }}
       />
-
-      {/* <FilterInput
-        action="PICK-PetType"
-        filterList={petLists}
-        checked={PetType}
-      />
-      <FilterInput
-        action="PICK-FoodTypes"
-        filterList={foodLists}
-        checked={FoodTypes}
-      />
-      {serviceLists.map((list) => {
-        let checkArray = [""];
-        switch (list.keyname) {
-          case "services":
-            checkArray = ServiceTypes.services;
-            break;
-          case "facilities":
-            checkArray = ServiceTypes.facilities;
-            break;
-          case "specials":
-            checkArray = ServiceTypes.specials;
-            break;
-          default:
-            break;
-        }
-        return (
-          <FilterInput
-            action="PICK-ServiceTypes"
-            filterList={list}
-            checked={checkArray}
-            key={list.keyname}
-          />
-        );
-      })} */}
     </div>
   );
 }

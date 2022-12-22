@@ -41,10 +41,8 @@ function AskedModal({
 }: AskedModalProps): JSX.Element {
   const existedPetId = findExistedPet(pet, petList);
   const { dispatchPending, closeModal } = useModal();
-  // useDisableScroll(asked);
-  console.log(existedPetId);
+
   useEffect(() => clearInterval(closeModal(1000)));
-  console.log(formdata);
 
   return (
     <MotionFade className="flex-center fixed left-0 top-0 z-10 h-screen w-full bg-black/50">

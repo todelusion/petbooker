@@ -39,7 +39,6 @@ function DatePicker({ onChange }: IDatePickerProps): JSX.Element {
   const onDateChange = (item: IDateRangePickerOutput): void => {
     dispatch({ type: "PICK_DATERANGE", payload: item });
   };
-  // console.log(selection);
 
   const onNavigatorRenderer: NavigatorRenderer = (
     currFocusedDate,
@@ -142,22 +141,6 @@ function DatePicker({ onChange }: IDatePickerProps): JSX.Element {
         rangeColors={["#B9C850"]}
         className="max-w rounded-sm border-2 border-black bg-white py-4"
       />
-      {/* <Calendar
-        onChange={(item) => console.log(item)}
-        date={selection.startDate}
-        className="max-w-md border-2 border-black pt-2 pb-5"
-        color="#B9C850"
-        minDate={new Date()}
-        navigatorRenderer={onCalendarRenderer}
-      />
-      <Calendar
-        onChange={(item) => console.log(item)}
-        date={selection.endDate}
-        className="max-w-md border-2 border-black pt-2 pb-5"
-        color="#B9C850"
-        minDate={new Date()}
-        navigatorRenderer={onCalendarRenderer}
-      /> */}
     </>
   );
 }

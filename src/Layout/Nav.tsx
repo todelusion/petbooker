@@ -1,14 +1,12 @@
-import { Link, Outlet, useOutletContext } from "react-router-dom";
-import { useContext, useEffect, useMemo } from "react";
-import { AnimatePresence } from "framer-motion";
+import { Link, Outlet } from "react-router-dom";
+import { useContext } from "react";
+
 import logoSubtitlePath from "../img/logo-subtitle.svg";
 import Button from "../components/Button";
 import AccountMenu from "../components/AccountMenu";
 import Footer from "./Footer";
 import UserAuth from "../context/UserAuthContext";
 import StatusModal from "./StatusModal";
-import MotionFade from "../containers/MotionFade";
-import useModal from "../hooks/useModal";
 
 function Nav(): JSX.Element {
   // 根據有無 token 來顯示會員選單與否
@@ -17,15 +15,11 @@ function Nav(): JSX.Element {
   return (
     <StatusModal>
       <>
-        <nav className="absolute top-0 z-10 flex w-full items-center justify-between bg-white py-6 px-20 shadow-md">
+        <nav className="absolute top-0 z-10 flex w-full items-center justify-between bg-white py-2 px-20 shadow-md">
           <Link to="/home">
-            <img src={logoSubtitlePath} alt="logo" className=" w-60" />
+            <img src={logoSubtitlePath} alt="logo" className=" w-48" />
           </Link>
-          <Link to="/contextTest">
-            <span className=" rounded-3xl bg-slate-800 p-2 text-white">
-              Context Test
-            </span>
-          </Link>
+
           {authToken === "" ? (
             <div className="flex-center pt-5">
               <Button

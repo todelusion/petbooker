@@ -18,10 +18,7 @@ return useQuery(
      const response = await axios.get(`${baseURL}/hotel/commentList`,header);
       return CmsCommentListSchema.parse(response.data.result);
     },
-    {
-      onError: (err) => console.log("useComment錯誤", err),
-      
-    }
+ 
   );
 
 }

@@ -30,11 +30,7 @@ export const cmsMenu = [
     content: "查看評價",
     navigatePath: "/cms/commentList",
   },
-  {
-    logo: logOutPath,
-    content: "登出",
-    navigatePath: null,
-  },
+  
 ];
 
 export { customerMenu };

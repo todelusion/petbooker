@@ -24,16 +24,6 @@ function Home(): JSX.Element {
   const { Facilities, FoodTypes, PetType, RoomPrices, Services, Specials } =
     useFilter();
 
-  // console.log(pet);
-  // console.log({
-  //   Facilities,
-  //   FoodTypes,
-  //   PetType,
-  //   RoomPrices,
-  //   Services,
-  //   Specials,
-  // });
-
   const { data } = useHotelList({
     AreaId: Number(area.value),
     PetType,
@@ -47,7 +37,7 @@ function Home(): JSX.Element {
   });
 
   return (
-    <div className="relative flex w-full items-start justify-evenly px-20 pt-40 pb-20">
+    <div className="relative flex w-full items-start justify-evenly px-20 pt-40 pb-28">
       <section className=" basis-2/12 rounded-md border-2 border-black">
         <p className="bg-black py-2 text-center text-xl text-white">
           透過以下分類搜尋

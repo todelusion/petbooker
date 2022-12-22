@@ -12,7 +12,6 @@ interface ITyppingValue {
 }
 
 export default function UserLogin(): JSX.Element {
-  console.log("render Login");
   const { dispatchPending } = useModal();
   const {
     authToken,
@@ -21,7 +20,7 @@ export default function UserLogin(): JSX.Element {
   } = useContext(UserAuth);
   const [inputValue, setInputValue] = useState<ITyppingValue>({});
   const [identity, setIdentity] = useState<string>("");
-  console.log(identity);
+
   const navigate = useNavigate();
   const inputValueHandler = (event: React.FormEvent): void => {
     const { name, value } = event.target as HTMLInputElement;
@@ -79,7 +78,6 @@ export default function UserLogin(): JSX.Element {
             }
       )
       .then((res) => {
-        console.log(res);
         setAuthToken(res.data.JwtToken);
         setIdentityContext(identity);
 
@@ -92,7 +90,6 @@ export default function UserLogin(): JSX.Element {
           payload: err.response.data.Message,
         });
         setTimeout(() => dispatchPending({ type: "DONE" }), 1000);
-        console.log(err);
       });
   };
   const setidentity = (event: React.FormEvent): void => {
@@ -156,15 +153,21 @@ export default function UserLogin(): JSX.Element {
         >
           登入
         </button>
-        <span className="mt-3 flex justify-between">
+        <span className="mt-5 flex flex-col items-center">
           <span>
             還沒有帳號？{" "}
-            <Link to="/regist" className="underline">
+            <Link
+              to="/regist"
+              className="text-second underline decoration-second"
+            >
               註冊
             </Link>
           </span>
-          <span>
-            <Link to="/forgetPassword" className="underline">
+          <span className="mt-3 ">
+            <Link
+              to="/forgetPassword"
+              className=" text-second underline decoration-second"
+            >
               忘記密碼
             </Link>
           </span>

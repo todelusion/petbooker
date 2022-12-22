@@ -37,8 +37,6 @@ function CustomerComment(): JSX.Element {
         break;
 
       case "已完成評價":
-        console.log(dataStatus);
-
         setSelect("已完成評價");
         setDataStatus(
           completeList.data?.filter((item) => item.Status === "checkOutComment")

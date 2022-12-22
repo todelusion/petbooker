@@ -64,8 +64,6 @@ const handleRequest = async (
   id?: number,
   formdata?: FormData
 ): Promise<boolean | string | undefined> => {
-  // console.log(type);
-
   if (type === "POST") {
     const petResult = await postPet(body, token);
     if (petResult === undefined) {
@@ -90,7 +88,6 @@ const handleRequest = async (
   }
 
   if (type === "PUT" && id !== undefined) {
-    console.log(body);
     const result = await putPet(id, body, token);
     if (result === undefined) return false;
 
@@ -109,8 +106,6 @@ const validatePet = (
   dispatchPending: React.Dispatch<PendingAction>,
   closeModal: (time: number) => NodeJS.Timeout
 ): PetCard | undefined => {
-  // console.log("validatePet", type);
-
   if (
     type === "POST" &&
     petList.find((item) => item.PetName === pet.PetName) !== undefined
@@ -140,7 +135,6 @@ const useInitPet = (
 ): void => {
   useEffect(() => {
     if (data === undefined) return;
-    // console.log(data.ServiceTypes, data.FoodTypes);
 
     if (data.ServiceTypes !== null && data.ServiceTypes[0] === "") {
       data.ServiceTypes.shift();
@@ -260,10 +254,9 @@ const handleCheckBox = (
 
 const Edit = React.memo(
   ({ data, type, title, onClick }: IEditProps): JSX.Element => {
-    console.log(data?.PetCardId);
     const { authToken } = useContext(UserAuth);
     const [pet, dispatchPet] = useReducer(petReducer, initPet);
-    console.log(pet);
+
     const [formdata, setFormData] = useState<FormData>();
     const queryClient = useQueryClient();
     const petList = queryClient.getQueryData<PetList>(["PetList"]);

@@ -19,7 +19,7 @@ return useQuery(
       return CommentSchema.parse(response.data.result);
     },
     {
-      onError: (err) => console.log("useComment錯誤", err),
+     
       enabled:status==='checkOutComment'
     }
   );

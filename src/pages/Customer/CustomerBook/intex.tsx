@@ -64,7 +64,6 @@ const validatePet = (
   pet: PetCard,
   dispatchPending: React.Dispatch<PendingAction>
 ): boolean => {
-  console.log("validatePet");
   const result = PetCardSchema.safeParse(pet);
   if (result.success) return true;
 
@@ -82,8 +81,6 @@ const validateUserBook = (
 ): Booking | undefined => {
   const result = BookingSchema.safeParse(body);
   if (result.success) return result.data;
-
-  console.log(result.error);
 
   const errorMessages = Object.values(result.error.formErrors.fieldErrors).map(
     (message) => message.toString()
@@ -190,8 +187,7 @@ function CustomerBook(): JSX.Element {
   const navigate = useNavigate();
   const { selection, pet: selectedPet } = useSearchBar();
   const { PetType, FoodTypes, Services, Specials, Facilities } = useFilter();
-  // console.log(pet.ServiceTypes, Specials);
-  // console.log(sortedServiceTypes(Specials, "Specials"));
+
   const { dispatchPending } = useModal();
 
   const { authToken, setAuthToken } = useContext(UserAuth);
@@ -263,7 +259,7 @@ function CustomerBook(): JSX.Element {
   };
   const getPetCard = (): PetCard | undefined => {
     if (selectedPet.id === 0) return undefined;
-    console.log(selectedPet);
+
     const { data } = usePetCard(selectedPet.id, authToken);
     return data;
   };
@@ -443,7 +439,7 @@ function CustomerBook(): JSX.Element {
                 </ul>
 
                 <ul className="mr-6 grid basis-4/12 grid-cols-1 content-start gap-y-1">
-                  <li className="mb-2 font-bold">訂房資訊</li>
+                  <li className="mb-2 text-lg font-bold">訂房資訊</li>
                   <li>
                     <span>房型：</span>
                     <span>{roomname}</span>

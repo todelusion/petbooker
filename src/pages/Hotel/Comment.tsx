@@ -8,7 +8,6 @@ interface ICommentProps {
 }
 
 function Comment({ data, className }: ICommentProps): JSX.Element {
-  console.log(data);
   return (
     <div
       className={`h-40 max-w-[400px] rounded-xl border-2 p-6 ${
@@ -19,7 +18,7 @@ function Comment({ data, className }: ICommentProps): JSX.Element {
         <li className="mb-4 flex justify-between">
           <div className="flex items-center">
             <div className="h-12 w-12 overflow-hidden rounded-full border-2 border-black">
-              {/* {data.UserPhoto !== null ? (
+              {data.UserPhoto !== null ? (
                 <img
                   src={data.UserPhoto}
                   alt=""
@@ -27,7 +26,7 @@ function Comment({ data, className }: ICommentProps): JSX.Element {
                 />
               ) : (
                 <div className=" h-full w-full bg-gray-200" />
-              )} */}
+              )}
 
               <div className=" h-full w-full bg-gray-200" />
             </div>

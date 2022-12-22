@@ -52,7 +52,7 @@ export const hotelMemberMenu = [
   {
     logo: fileTextPath,
     content: "我的房間管理",
-    navigatePath: "/cms",
+    navigatePath: "/cms/info",
   },
   {
     logo: logOutPath,
