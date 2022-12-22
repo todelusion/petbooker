@@ -92,7 +92,7 @@ const HotelCard = React.memo(({ data }: HotelCardProps): JSX.Element => {
       {data.map((hotel) => (
         <div
           key={hotel?.HotelName}
-          className="mb-6 flex border-2 duration-150  hover:scale-105 lg:h-96"
+          className="mb-6 ml-20 flex border-2 duration-150  hover:scale-105 lg:h-96"
         >
           <div className="relative basis-1/2 ">
             {hotel?.HotelPhoto !== "" ? (
