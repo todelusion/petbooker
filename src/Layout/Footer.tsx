@@ -4,7 +4,7 @@ import { Pets2Path } from "../img/icons";
 
 function Footer(): JSX.Element {
   return (
-    <footer className="flex-col-center relative h-80 bg-primary_A11y text-white">
+    <footer className="flex-col-center relative bg-primary_A11y pb-20 pt-10 text-white">
       <div className="flex w-1/2 items-center">
         <img src={logoWhitePath} alt="logo" />
         <p className="ml-10">

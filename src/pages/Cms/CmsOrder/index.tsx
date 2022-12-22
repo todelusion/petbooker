@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import Button from "../../../components/Button";
-import { LoadingScreen } from "../../../components/LoadingModal";
+import LoadingScreen from "../../../components/LoadingModal";
 import Order from "../../../components/Order";
 
 import UserAuth from "../../../context/UserAuthContext";

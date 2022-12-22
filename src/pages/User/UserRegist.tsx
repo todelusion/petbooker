@@ -186,7 +186,10 @@ export default function UserRegist(): JSX.Element {
         <span className="mt-3 flex justify-center">
           <span>
             已有帳號？{" "}
-            <Link to="/login" className="underline">
+            <Link
+              to="/login"
+              className="text-second underline decoration-second"
+            >
               登入
             </Link>
           </span>

@@ -29,12 +29,13 @@ export const GETRoomListSchema = z.object({
 export const RoomListSchema = z.array(
   z.object({
     Id: z.number(),
+    IsOrders:z.string(),
     RoomPhoto: z.string(),
     RoomName: z.string(),
     PetType: z.string(),
     RoomPrice: z.number(),
     RoomInfo: z.string(),
-    HotelId: z.null(),
+    HotelId: z.undefined(),
   })
 );
 export const HotelListSchema = z.object({

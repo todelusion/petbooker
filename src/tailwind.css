@@ -74,3 +74,13 @@
 .ant-btn-primary:not(:disabled):hover {
   background-color: #ffb423;
 }
+.swiper-button-next {
+  top: 50%;
+
+  z-index: 30;
+}
+.swiper-button-prev {
+  top: 50%;
+  left: 10px;
+  z-index: 30;
+}

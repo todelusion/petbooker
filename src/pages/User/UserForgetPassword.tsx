@@ -60,7 +60,6 @@ export default function UserForgetPassword(): JSX.Element {
             }
       )
       .then((res) => {
-        console.log(res);
         setIdentityContext(identity);
         dispatchPending({ type: "DONE" });
         navigate("/login");

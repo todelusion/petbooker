@@ -47,7 +47,7 @@ function Home(): JSX.Element {
   });
 
   return (
-    <div className="relative flex w-full items-start justify-evenly px-20 pt-40 pb-20">
+    <div className="relative flex w-full items-start justify-evenly px-20 pt-40 pb-28">
       <section className=" basis-2/12 rounded-md border-2 border-black">
         <p className="bg-black py-2 text-center text-xl text-white">
           透過以下分類搜尋

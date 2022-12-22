@@ -1,16 +1,14 @@
-import { useQuery } from "@tanstack/react-query";
 import { AnimatePresence } from "framer-motion";
 import React, { useContext, useEffect, useState } from "react";
 import Button from "../../../components/Button";
-import MotionFade from "../../../containers/MotionFade";
 import UserAuth from "../../../context/UserAuthContext";
-import useModal from "../../../hooks/useModal";
-import { LoadingCustom, LoadingPath, PlusPath } from "../../../img/icons";
+import { LoadingCustom, PlusPath } from "../../../img/icons";
 import { useRoomList } from "../../../utils/api/cmsRoom";
 import RoomCard from "./Room";
 import Edit from "./Edit";
 import { Room } from "../../../types/schema";
 import EmptyScreen from "../../../components/EmptyScreen";
+import LoadingScreen from "../../../components/LoadingModal";
 
 const useDisableScroll = (isEdit: boolean): void => {
   const body = document.querySelector("body");
@@ -32,9 +30,8 @@ function CmsRoom(): JSX.Element {
   const { authToken } = useContext(UserAuth);
 
   useDisableScroll(isShow !== undefined);
-  const { data: datas } = useRoomList(authToken);
+  const { data: datas, isFetching } = useRoomList(authToken);
   // const roomList = useSetRoomList(data);
-  console.log(datas);
 
   return (
     <div className="flex w-full max-w-5xl flex-col items-end ">
@@ -57,7 +54,7 @@ function CmsRoom(): JSX.Element {
 
         {datas === undefined ? (
           <div key="Loading" className="relative w-full">
-            <LoadingCustom className="absolute left-1/2" color="bg-second" />
+            <AnimatePresence>{isFetching && <LoadingScreen />}</AnimatePresence>
           </div>
         ) : (
           <RoomCard

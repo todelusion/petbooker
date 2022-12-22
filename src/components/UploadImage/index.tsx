@@ -28,7 +28,7 @@ const renderUploadImage = (
           <img
             src={previewImage}
             alt="previewImage"
-            className="h-80 w-full object-cover"
+            className="h-80 w-full object-contain"
           />
         );
       if (defaultImage !== null && defaultImage !== undefined)

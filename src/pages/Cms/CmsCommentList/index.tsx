@@ -10,14 +10,15 @@ import { useRoomList } from "../../../utils/api/cmsRoom";
 import { Room } from "../../../types/schema";
 import { useCmsCommentList } from "../../../utils/api/cmsCommentList";
 import EmptyScreen from "../../../components/EmptyScreen";
+import LoadingScreen from "../../../components/LoadingModal";
 
 function CmsCommentList(): JSX.Element {
   const { authToken } = useContext(UserAuth);
-  const { data } = useCmsCommentList(authToken);
-  console.log(data);
+  const { data, isFetching } = useCmsCommentList(authToken);
 
   return (
     <div className="flex w-full max-w-5xl flex-col items-center ">
+      <AnimatePresence>{isFetching && <LoadingScreen />}</AnimatePresence>
       <AnimatePresence />
       {data?.length === 0 && <EmptyScreen text="尚無評價" />}
       <ul className="w-full">

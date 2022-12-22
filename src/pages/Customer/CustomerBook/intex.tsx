@@ -443,7 +443,7 @@ function CustomerBook(): JSX.Element {
                 </ul>
 
                 <ul className="mr-6 grid basis-4/12 grid-cols-1 content-start gap-y-1">
-                  <li className="mb-2 font-bold">訂房資訊</li>
+                  <li className="mb-2 text-lg font-bold">訂房資訊</li>
                   <li>
                     <span>房型：</span>
                     <span>{roomname}</span>

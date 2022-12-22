@@ -1,16 +1,12 @@
 import axios from "axios";
-import React, {
-  ChangeEvent,
-  useContext,
-  useEffect,
-  useLayoutEffect,
-  useState,
-} from "react";
+import { ChangeEvent, useContext, useEffect, useState } from "react";
 import { Button, Form, Input, Select, TimePicker } from "antd";
 import type { UploadFile } from "antd/es/upload/interface";
 import { useNavigate } from "react-router-dom";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import dayjs from "dayjs";
+import { AnimatePresence } from "framer-motion";
+import TextArea from "antd/es/input/TextArea";
 import UploadImage from "../../../components/UploadImage";
 import { CountyList } from "../../../types/schema";
 import Filter from "../../../containers/Filter";
@@ -18,14 +14,13 @@ import AntdUploadImage from "./AntdUploadImage";
 import getCountry from "../../../utils/getCountry";
 import useFilter from "../../../hooks/useFilter";
 import UserAuth from "../../../context/UserAuthContext";
-import useModal from "../../../hooks/useModal";
 import { useHotelInfo } from "../../../utils/api/hotelInfo";
-import { LoadingCustom } from "../../../img/icons";
+
+import LoadingScreen from "../../../components/LoadingModal";
 
 type LayoutType = Parameters<typeof Form>[0]["layout"];
 
 function CmsInfo(): JSX.Element {
-  const { dispatchPending } = useModal();
   // 若無Token則返回/home
   const { authToken } = useContext(UserAuth);
   const navigate = useNavigate();
@@ -38,49 +33,7 @@ function CmsInfo(): JSX.Element {
     useState<UploadFile[]>();
 
   const { data, isSuccess, isFetching } = useHotelInfo(authToken);
-  console.log(data);
 
-  useEffect(() => {
-    console.log("近來Efeect");
-
-    if (data !== undefined) {
-      console.log("觸發setstae");
-
-      const result = data.HotelPhotos.map((item) => {
-        if (item === null) return [{ uid: "", name: "" }];
-        return {
-          uid: item.ImageId,
-          name: "image.png",
-          thumbUrl: `data:image/png;base64,${item.Base64}`,
-          status: "done",
-          url: item.ImageUrl,
-        };
-      });
-      setdefaultImagefileList(result as unknown as Array<UploadFile<any>>);
-      setImageFileList(result as unknown as Array<UploadFile<any>>);
-    }
-  }, [data]);
-
-  // 獲取資料
-  // const { data, isFetching, isSuccess } = useQuery(["Info"], async () => {
-  //   const response = await axios.get(getInfo, {
-  //     headers: { Authorization: `Bearer ${authToken}` },
-  //   });
-  //   setdefaultImagefileList(
-  //     response.data.result.HotelPhotos.map((item) => ({
-  //       uid: item.ImageId,
-  //       thumbUrl: `data:image/png;base64,${item.Base64}`,
-  //       name: "image.png",
-  //       status: "done",
-  //       url: `${item.ImageUrl}`,
-  //     }))
-  //   );
-  //   return HotelInfoSchema.parse(response.data.result);
-  // });
-  // if (isFetching) {
-  //   dispatchPending({ type: "IS_LOADING" });
-  // }
-  console.log("defaultImagefileList", defaultImagefileList);
   // 引入antd Form
   const [form] = Form.useForm();
   const [formLayout, setFormLayout] = useState<LayoutType>("horizontal");
@@ -94,7 +47,6 @@ function CmsInfo(): JSX.Element {
   const [Thumbnail, setThumbnail] = useState<FormData>();
   const defaultThumbnail: string | undefined | null = data?.HotelThumbnail;
   const queryClient = useQueryClient();
-  // console.log(DelImage);
 
   // antd表單驗證成功時
   const onFinish = async (fieldsValue: any): Promise<void> => {
@@ -123,8 +75,6 @@ function CmsInfo(): JSX.Element {
       Extension: "png",
     }));
 
-    console.log(DelImage);
-
     const postImagebae64 = {
       AddImage,
       DelImage,
@@ -139,10 +89,7 @@ function CmsInfo(): JSX.Element {
       await axios.post(postImage, postImagebae64, {
         headers: { Authorization: `Bearer ${authToken}` },
       });
-      console.log("成功");
-    } catch (error) {
-      console.log("失敗", error);
-    }
+    } catch (error) {}
 
     // .then((res) => console.log("傳送照片成功", res))
     // .catch((err) => console.log("傳送照片失敗", err));
@@ -151,14 +98,11 @@ function CmsInfo(): JSX.Element {
         await axios.post(postThumbnail, Thumbnail, {
           headers: { Authorization: `Bearer ${authToken}` },
         });
-        console.log("成功大頭貼上傳");
       }
-    } catch (error) {
-      console.log("失敗", error);
-    }
+    } catch (error) {}
 
     await queryClient.invalidateQueries(["Info"]);
-    await queryClient.removeQueries(["Info"]);
+    queryClient.removeQueries(["Info"]);
 
     // await queryClient.setQueryData(["Info"]);
     // location.reload();
@@ -187,60 +131,39 @@ function CmsInfo(): JSX.Element {
     return (event as any).fileList;
   };
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (authToken === "") {
       navigate("/home");
     }
   }, []);
-  // useEffect(() => {
-  //   function setInitImage(): void {
-  //     if (isSuccess) {
-  //       // if (data?.HotelPhotos.length === 0) return;
-  //       data.HotelPhotos.forEach((item) => {
-  //         console.log(item.ImageId);
-  //       });
-  //       const resultAry = data.HotelPhotos.map((item) => ({
-  //         uid: item.ImageId,
-  //         thumbUrl: `data:image/png;base64,${item.Base64}`,
-  //         name: "image.png",
-  //         status: "done",
-  //         url: `${item.ImageUrl}`,
-  //       }));
-  //       setImageFileList(resultAry);
-  //       setImageFileList([
-  //         {
-  //           uid: "-1",
-  //           name: "image.png",
-  //           status: "done",
-  //           url: "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png",
-  //         },
-  //       ]);
-  //       console.log(resultAry);
-  //     }
-  //   }
-  //   setInitImage();
-  // }, []);
 
-  if (data === undefined)
-    return (
-      <LoadingCustom
-        className="fixed left-1/2 top-1/2 -translate-x-1/2"
-        color="bg-second"
-      />
-    );
+  useEffect(() => {
+    if (data !== undefined) {
+      const result = data.HotelPhotos.map((item) => {
+        if (item === null) return [{ uid: "", name: "" }];
+        return {
+          uid: item.ImageId,
+          name: "image.png",
+          thumbUrl: `data:image/png;base64,${item.Base64}`,
+          status: "done",
+          url: item.ImageUrl,
+        };
+      });
+      setdefaultImagefileList(result as unknown as Array<UploadFile<any>>);
+      setImageFileList(result as unknown as Array<UploadFile<any>>);
+    }
+  }, [data]);
+
+  if (data === undefined) return <LoadingScreen />;
   return (
     <div className="relative flex flex-col ">
-      {/* {isFetching && (
-        <LoadingCustom className="absolute left-1/2" color="bg-second" />
-      )} */}
+      <AnimatePresence>{isFetching && <LoadingScreen />}</AnimatePresence>
       {isSuccess && defaultImagefileList != null && (
         <>
           <div className="mb-10 flex justify-center ">
             <UploadImage
               type="Avatar"
-              onChange={(event) => {
-                console.log(event);
-              }}
+              onChange={(event) => {}}
               defaultImage={defaultThumbnail}
               setThumbnail={setThumbnail}
             />
@@ -248,7 +171,7 @@ function CmsInfo(): JSX.Element {
 
           <Form
             labelCol={{ span: 4 }}
-            wrapperCol={{ span: 14 }}
+            wrapperCol={{ span: 19 }}
             layout={formLayout}
             form={form}
             initialValues={{ layout: formLayout }}
@@ -291,6 +214,8 @@ function CmsInfo(): JSX.Element {
             </Form.Item>
 
             <Form.Item
+              // style={{}}
+
               name="range-time-picker"
               label="營業時間"
               rules={[{ required: true, message: "必填項目" }]}
@@ -312,7 +237,7 @@ function CmsInfo(): JSX.Element {
               rules={[{ required: true, message: "必填項目" }]}
               initialValue={data.HotelInfo}
             >
-              <Input showCount maxLength={500} />
+              <TextArea rows={4} showCount maxLength={500} />
             </Form.Item>
 
             <Form.Item

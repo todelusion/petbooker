@@ -1,7 +1,6 @@
 import { Button, Form, Input } from "antd";
-import { motion } from "framer-motion";
-import React, { useContext, useEffect, useLayoutEffect, useState } from "react";
-import axios from "axios";
+import React, { useContext, useEffect, useState } from "react";
+
 import { useQueryClient } from "@tanstack/react-query";
 import FilterInput from "../../../containers/Filter/FilterInput";
 import { petLists } from "../../../containers/Filter/data";
@@ -10,12 +9,7 @@ import MotionPopup from "../../../containers/MotionPopup";
 import useModal from "../../../hooks/useModal";
 import UploadImage from "../../../components/UploadImage";
 import { xPath } from "../../../img/icons";
-import {
-  assertIsError,
-  toFormData,
-  AxiosTryCatch,
-  tryCatch,
-} from "../../../utils";
+import { toFormData, AxiosTryCatch, tryCatch } from "../../../utils";
 import { uploadRoomPhoto, putRoom, postRoom } from "../../../utils/api/cmsRoom";
 import UserAuth from "../../../context/UserAuthContext";
 import { POSTRoom, PostRoomSchema, Room } from "../../../types/schema";

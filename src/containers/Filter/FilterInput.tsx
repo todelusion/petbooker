@@ -297,11 +297,11 @@ function FilterInput({
   };
 
   return (
-    <div className={`${horizontal ? "" : "p-4"}${className}`}>
+    <div className={`${horizontal ? "" : "my-3"} ${className}`}>
       {!horizontal && (
-        <p className="relative font-bold">
+        <p className="relative w-max pl-4 font-bold ">
           {required && (
-            <span className="absolute -top-1 -left-3 text-lg text-[#ff4d4f]">
+            <span className="absolute -right-3 -top-1 text-lg text-[#ff4d4f]">
               *
             </span>
           )}

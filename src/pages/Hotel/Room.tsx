@@ -38,7 +38,7 @@ function Room({ data, onClick }: IRoomProps): JSX.Element {
           </h4>
           <Button
             text="立即預定"
-            className="px-5 py-2"
+            className="mt-2 px-5 py-2"
             type="Secondary"
             textSize="text-sm lg:text-base"
             onClick={onClick}

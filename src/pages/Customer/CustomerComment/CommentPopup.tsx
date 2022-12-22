@@ -49,12 +49,8 @@ function CommentPopup({ open, onClose, id, Status }: ModalProps): JSX.Element {
       }
       await queryClient.invalidateQueries(["completeList"]);
       queryClient.removeQueries(["completeList"]);
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
-
-  console.log(data);
 
   useEffect(() => {
     if (Status === "checkOutComment") {
