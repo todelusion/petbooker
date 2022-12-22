@@ -19,7 +19,8 @@ function Popup({ open, onClose, id }: ModalProps): JSX.Element {
 
   if (data === undefined)
     return <LoadingCustom className="absolute left-1/2" color="bg-second" />;
-
+  if (data.ServiceTypes === null)
+    return <LoadingCustom className="absolute left-1/2" color="bg-second" />;
   return (
     <>
       {isFetching && (
