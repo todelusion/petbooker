@@ -2,7 +2,7 @@ import { AnimatePresence } from "framer-motion";
 import React, { useContext, useEffect, useState } from "react";
 import Button from "../../../components/Button";
 import UserAuth from "../../../context/UserAuthContext";
-import { LoadingCustom, PlusPath } from "../../../img/icons";
+import { PlusPath } from "../../../img/icons";
 import { useRoomList } from "../../../utils/api/cmsRoom";
 import RoomCard from "./Room";
 import Edit from "./Edit";

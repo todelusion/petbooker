@@ -283,8 +283,8 @@ const Edit = React.memo(
                 setFormData(toFormData("photo", file));
               }}
               defaultImage={pet.PetPhoto === "" ? undefined : pet.PetPhoto}
-              type="Room"
-              className="mb-6"
+              type="petcard"
+              className="mb-6 w-full"
             />
             <Input
               onChange={(e) =>

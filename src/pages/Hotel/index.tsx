@@ -18,7 +18,7 @@ import type {
 } from "../../containers/Filter/data";
 import Room from "./Room";
 import { useHotel } from "../../utils/api/home";
-import { LoadingCustom } from "../../img/icons";
+
 import MotionFade from "../../containers/MotionFade";
 import useSearchBar from "../../hooks/useSearchBar";
 import useModal from "../../hooks/useModal";
@@ -26,6 +26,7 @@ import { ISearchBarContextProps } from "../../context/SearchBarContext";
 import { PendingAction } from "../../hooks/usePending";
 import UserAuth from "../../context/UserAuthContext";
 import useFilter from "../../hooks/useFilter";
+import LoadingScreen from "../../components/LoadingModal";
 
 export interface IHotel {
   Id: string;
@@ -95,11 +96,9 @@ function Hotel(): JSX.Element {
     <div className=" px-18 pt-40">
       <AnimatePresence>
         {data === undefined ? (
-          <LoadingCustom
-            key="Loading"
-            className="absolute left-1/2 top-1/2"
-            color="bg-second"
-          />
+          <AnimatePresence>
+            <LoadingScreen />
+          </AnimatePresence>
         ) : (
           <MotionFade key="Hotel">
             <>

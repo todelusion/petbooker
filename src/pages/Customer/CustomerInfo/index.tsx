@@ -1,11 +1,12 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { Button, Form, Input } from "antd";
 import axios from "axios";
+import { AnimatePresence } from "framer-motion";
 import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import LoadingScreen from "../../../components/LoadingModal";
 import UploadImage from "../../../components/UploadImage";
 import UserAuth from "../../../context/UserAuthContext";
-import { LoadingCustom } from "../../../img/icons";
 import { baseURL } from "../../../utils";
 import { useCustormerInfo } from "../../../utils/api/customerInfo";
 import Header from "../../../utils/api/Header";
@@ -43,7 +44,9 @@ function CustomerInfo(): JSX.Element {
   return (
     <div className=" w-full px-10">
       {isLoading && (
-        <LoadingCustom className="absolute left-1/2" color="bg-second" />
+        <AnimatePresence>
+          <LoadingScreen />
+        </AnimatePresence>
       )}
       {isSuccess && (
         <>

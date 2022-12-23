@@ -1,7 +1,7 @@
 export const input = {
   PetName: {
     required: true,
-    title: "寵物名子",
+    title: "寵物名字",
     name: "PetName",
     labelWidth: "min-w-[5rem]",
     placeholder: "請填寫寵物名字",

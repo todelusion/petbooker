@@ -13,9 +13,10 @@ import useSearchBar from "../hooks/useSearchBar";
 import { ISearchBarContextProps } from "../context/SearchBarContext";
 import { IFilterContextProps } from "../context/FilterContext";
 import { useHotelList } from "../utils/api/home";
-import { LoadingCustom } from "../img/icons";
+
 import MotionFade from "../containers/MotionFade";
 import PageNums from "../components/PageNums";
+import LoadingScreen from "../components/LoadingModal";
 
 function Home(): JSX.Element {
   const [current, setCurrent] = useState(1);
@@ -50,11 +51,9 @@ function Home(): JSX.Element {
           <DropDownList className="absolute right-0 -top-12" />
           <AnimatePresence>
             {data === undefined ? (
-              <LoadingCustom
-                key="Loading"
-                className="absolute left-1/2"
-                color="bg-second"
-              />
+              <AnimatePresence>
+                <LoadingScreen />
+              </AnimatePresence>
             ) : (
               <MotionFade key="HotelCard">
                 <>

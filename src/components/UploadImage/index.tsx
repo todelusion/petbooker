@@ -5,7 +5,7 @@ import { useLocation } from "react-router-dom";
 import { string } from "zod";
 import { UploadRoomPath } from "../../img/icons";
 
-type Type = "Avatar" | "Room";
+type Type = "Avatar" | "Room" | "petcard";
 
 interface IUploadImageProps {
   type: Type;
@@ -41,10 +41,34 @@ const renderUploadImage = (
 
       return (
         <div className="flex-center h-80 w-full bg-slate-200">
-          <p className="font-bold text-slate-700">上傳寵物房型照片</p>
+          <p className="font-bold text-slate-700">上傳旅館照片</p>
         </div>
       );
     }
+    case "petcard":
+      if (previewImage !== undefined)
+        return (
+          <img
+            src={previewImage}
+            alt="previewImage"
+            className="h-80 w-full object-contain"
+          />
+        );
+      if (defaultImage !== null && defaultImage !== undefined)
+        return (
+          <img
+            src={defaultImage}
+            alt="defaultImage"
+            className="h-80 w-full object-cover"
+          />
+        );
+
+      return (
+        <div className="flex-center h-80 w-full bg-slate-200">
+          <p className="font-bold text-slate-700">上傳寵物照片</p>
+        </div>
+      );
+
     case "Avatar":
       // eslint-disable-next-line no-nested-ternary
       return previewImage !== undefined ? (
@@ -108,7 +132,7 @@ function UploadImage({
   return (
     <div
       className={`relative ${className ?? ""} ${
-        type === "Room" ? "" : "w-max"
+        type === "Room" || type === "petcard" ? "" : "w-max"
       }`}
     >
       <label

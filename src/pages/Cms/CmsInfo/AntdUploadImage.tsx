@@ -6,24 +6,6 @@ import type { UploadFile } from "antd/es/upload/interface";
 import axios from "axios";
 import UserAuth from "../../../context/UserAuthContext";
 
-const defaultImage = [
-  {
-    uid: "98",
-    name: "image.png",
-    status: "done",
-    url: "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png",
-  },
-];
-
-const defalutImageOwn = [
-  {
-    name: "image.png",
-    status: "done",
-    uid: 151,
-    url: "https://petcity.rocket-coding.com/upload/profile/HotelPhoto2bfd64eb-00b8-4219-9148-cf2b968c60f220221213022759.png",
-  },
-];
-
 interface IAntdUploadImageProps {
   ImagefileList: UploadFile[];
   setImageFileList: React.Dispatch<React.SetStateAction<UploadFile[]>>;
@@ -88,11 +70,9 @@ function AntdUploadImage(props: IAntdUploadImageProps): JSX.Element {
       >
         {
           // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
-          (
-            defaultFileList?.length
-              ? defaultFileList.length === 5 && ImagefileList?.length >= 5
-              : 0
-          )
+          (defaultFileList?.length
+            ? defaultFileList.length === 5 && ImagefileList?.length >= 5
+            : false) || ImagefileList.length === 5
             ? null
             : uploadButton
         }

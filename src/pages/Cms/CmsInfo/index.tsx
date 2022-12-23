@@ -197,7 +197,7 @@ function CmsInfo(): JSX.Element {
 
             <Form.Item
               name="HotelAddress"
-              label="飯店地址"
+              label="旅館地址"
               rules={[{ required: true, message: "必填項目" }]}
               initialValue={data.HotelAddress}
             >
