@@ -36,7 +36,7 @@ function Order({ data }: IOrderProps): JSX.Element {
     // setData(checkin.data);
   };
 
-  const handleCheckIn = async (id: number, Status: string): void => {
+  const handleCheckIn = async (id: number, Status: string): Promise<void> => {
     // eslint-disable-next-line default-case
     switch (Status) {
       case "reserved": {
