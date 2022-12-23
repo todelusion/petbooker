@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import orderSuccess from "../../../../img/OrderSuccess.svg";
 import Divider1 from "../../../../img/Divider1.svg";
 import Button from "../../../../components/Button";
@@ -10,6 +11,7 @@ import {
 } from "../../../../img/OrderConfirmation";
 
 function Success(): JSX.Element {
+  const navigate = useNavigate();
   return (
     <div className="flex-col-center pt-44 pb-20">
       <div className="mx-auto flex max-w-5xl flex-col items-center">
@@ -19,11 +21,16 @@ function Success(): JSX.Element {
         <p className=" text-md mb-12 text-center">
           系統會自動發送一封預約成功信至您的信箱中，再煩請您確認信箱。
         </p>
+
         <Button
           text="查看我的訂單"
           className="mb-12 py-2 px-5"
           type="Secondary"
+          onClick={() => {
+            navigate("/customer/Order");
+          }}
         />
+
         <img src={orderSuccess} alt="Success.png" className="-ml-1 mb-12" />
         <img src={Divider1} alt="Success.png" />
         <p className="my-12 text-[40px] font-bold">預約注意事項</p>
