@@ -14,7 +14,7 @@ interface AskedModalProps {
   formdata: FormData | undefined;
   navigate: NavigateFunction;
   handlePetCardRequest: () => Promise<number | undefined>;
-  handleBookingRequest: (petid: number) => Promise<boolean>;
+  handleBookingRequest: (petid: number) => Promise<boolean | undefined>;
   setasked: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
@@ -86,9 +86,14 @@ function AskedModal({
                   return;
                 }
 
-                if (await handleBookingRequest(petid)) {
+                const result = await handleBookingRequest(petid);
+
+                if (result === true) {
                   navigate("/hotel/book/success");
-                } else {
+                  return;
+                }
+
+                if (result === false) {
                   navigate("/hotel/book/fail");
                 }
               }}
