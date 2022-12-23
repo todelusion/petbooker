@@ -1,7 +1,7 @@
 import axios from "axios";
 import { ChangeEvent, useContext, useEffect, useState } from "react";
 import { Button, Form, Input, Select, TimePicker } from "antd";
-import type { UploadFile } from "antd/es/upload/interface";
+import type { RcFile, UploadFile } from "antd/es/upload/interface";
 import { useNavigate } from "react-router-dom";
 import { useQueryClient } from "@tanstack/react-query";
 import dayjs from "dayjs";
@@ -48,6 +48,15 @@ function CmsInfo(): JSX.Element {
   const defaultThumbnail: string | undefined | null = data?.HotelThumbnail;
   const queryClient = useQueryClient();
 
+  //傳換成base64格式
+  const getBase64 = (file: RcFile): Promise<string> =>
+    new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result as string);
+      reader.onerror = (error) => reject(error);
+    });
+
   // antd表單驗證成功時
   const onFinish = async (fieldsValue: any): Promise<void> => {
     // 將Timepicker 轉換格式
@@ -68,12 +77,20 @@ function CmsInfo(): JSX.Element {
     delete result["range-time-picker"];
 
     // 將旅館照片打包成base64格式
-    const AddImage = ImagefileList?.filter(
-      (file) => typeof file.uid !== "number"
-    ).map((file) => ({
-      Base64: file.thumbUrl?.split(",")[1],
-      Extension: "png",
-    }));
+
+    const AddImage = await Promise.all(
+      ImagefileList?.filter((file) => typeof file.uid !== "number").map(
+        async (file) => {
+          if (file.originFileObj === undefined) return;
+          const base64 = await getBase64(file.originFileObj);
+          const Base64 = base64.split(",")[1];
+          return {
+            Base64,
+            Extension: "png",
+          };
+        }
+      )
+    );
 
     const postImagebae64 = {
       AddImage,
