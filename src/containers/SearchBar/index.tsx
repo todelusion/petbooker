@@ -176,7 +176,9 @@ const SearchBar = React.memo(
           )}
           <button
             type="button"
-            className="flex-center outline-none"
+            className={`flex-center outline-none ${
+              !pathname.includes("/hotel") ? "" : "my-4 h-10"
+            }`}
             onClick={() =>
               dispatchSearchBar({
                 type: "TOGGLE_CALENDAR",
@@ -190,28 +192,33 @@ const SearchBar = React.memo(
               icon={showCalendar ? faChevronUp : faChevronDown}
             />
           </button>
-          <hr
-            style={{ borderStyle: "solid" }}
-            className="my-3 mx-4 block h-10 border-r-2"
-          />
-          <button
-            onClick={() =>
-              dispatchSearchBar({
-                type: "TOGGLE_PETCARD-SMALL",
-                payload: !showPetCardSmall,
-              })
-            }
-            type="button"
-            className="flex-center"
-          >
-            <img src={creditCardPath} alt="creditCard" />
-            <span className="px-3 text-sm xl:text-base">
-              {pet.name === "" ? "選擇寵物名片" : pet.name}
-            </span>
-            <FontAwesomeIcon
-              icon={showPetCardSmall ? faChevronUp : faChevronDown}
-            />
-          </button>
+          {!pathname.includes("/hotel") && (
+            <>
+              <hr
+                style={{ borderStyle: "solid" }}
+                className="my-3 mx-4 block h-10 border-r-2"
+              />
+
+              <button
+                onClick={() =>
+                  dispatchSearchBar({
+                    type: "TOGGLE_PETCARD-SMALL",
+                    payload: !showPetCardSmall,
+                  })
+                }
+                type="button"
+                className="flex-center"
+              >
+                <img src={creditCardPath} alt="creditCard" />
+                <span className="px-3 text-sm xl:text-base">
+                  {pet.name === "" ? "選擇寵物名片" : pet.name}
+                </span>
+                <FontAwesomeIcon
+                  icon={showPetCardSmall ? faChevronUp : faChevronDown}
+                />
+              </button>
+            </>
+          )}
           {/* <Button
             text="搜尋"
             type="Secondary"
