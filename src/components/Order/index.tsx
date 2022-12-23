@@ -2,6 +2,7 @@ import React, { useContext, useState } from "react";
 import axios from "axios";
 import { useQueryClient } from "@tanstack/react-query";
 import { AnimatePresence } from "framer-motion";
+
 import Button from "../Button";
 import { buttonText, cmsList, translateState } from "./data";
 import { ReservedList } from "../../types/schema";
@@ -35,7 +36,7 @@ function Order({ data }: IOrderProps): JSX.Element {
     // setData(checkin.data);
   };
 
-  const handleCheckIn = (id: number, Status: string): void => {
+  const handleCheckIn = async (id: number, Status: string): Promise<void> => {
     // eslint-disable-next-line default-case
     switch (Status) {
       case "reserved": {
@@ -44,7 +45,7 @@ function Order({ data }: IOrderProps): JSX.Element {
       }
 
       case "checkIn":
-        void axios.put(
+        await axios.put(
           `https://petcity.rocket-coding.com/hotel/checkOut?orderId=${id}`,
           { CheckOut: "checkOut" },
           {
@@ -52,8 +53,8 @@ function Order({ data }: IOrderProps): JSX.Element {
           }
         );
 
-        void queryClient.invalidateQueries(["checkIn"]);
-        void queryClient.invalidateQueries(["checkOut"]);
+        await queryClient.invalidateQueries(["checkIn"]);
+        await queryClient.invalidateQueries(["checkOut"]);
         queryClient.removeQueries(["checkIn"]);
         queryClient.removeQueries(["checkOut"]);
         break;

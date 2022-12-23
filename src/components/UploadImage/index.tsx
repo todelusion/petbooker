@@ -1,5 +1,5 @@
 import axios from "axios";
-import { log } from "console";
+
 import React, { ChangeEvent, useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { string } from "zod";
