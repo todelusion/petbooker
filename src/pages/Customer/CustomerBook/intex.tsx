@@ -224,7 +224,9 @@ function CustomerBook(): JSX.Element {
     return petResult.petid;
   };
 
-  const handleBookingRequest = async (petid: number): Promise<boolean> => {
+  const handleBookingRequest = async (
+    petid: number
+  ): Promise<boolean | undefined> => {
     const body = validateUserBook(
       {
         CheckInDate: format(selection.startDate, "yyyy/M/d"),
@@ -245,7 +247,7 @@ function CustomerBook(): JSX.Element {
       dispatchPending
     );
 
-    if (body === undefined) return false;
+    if (body === undefined) return undefined;
 
     if ((await postBooking(body, authToken)) === undefined) {
       dispatchPending({
@@ -566,10 +568,14 @@ function CustomerBook(): JSX.Element {
                     });
                     return;
                   }
+                  const result = await handleBookingRequest(petid);
 
-                  if (await handleBookingRequest(petid)) {
+                  if (result === true) {
                     navigate("/hotel/book/success");
-                  } else {
+                    return;
+                  }
+
+                  if (result === false) {
                     navigate("/hotel/book/fail");
                   }
                 }}
