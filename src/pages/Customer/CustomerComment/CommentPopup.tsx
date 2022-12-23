@@ -61,10 +61,12 @@ function CommentPopup({ open, onClose, id, Status }: ModalProps): JSX.Element {
 
   return (
     <>
-      <AnimatePresence>
-        {" "}
-        <LoadingScreen />
-      </AnimatePresence>
+      {isFetching && (
+        <AnimatePresence>
+          <LoadingScreen />
+        </AnimatePresence>
+      )}
+
       <MotionFade className="flex-center fixed left-0 top-0 z-10 h-screen w-full bg-black/50">
         <MotionPopup className="scrollbar-thumb-h-1/2 relative h-[calc(60%-24px)] w-[90%] max-w-[90%] overflow-scroll rounded-xl bg-white p-10 scrollbar-thin scrollbar-thumb-slate-700/50 scrollbar-thumb-rounded-3xl ">
           <div className="  h-full   w-full ">
