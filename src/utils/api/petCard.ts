@@ -18,13 +18,11 @@ export const usePetList = (token: string) =>
       axios.get(`${baseURL}/petcard/petcardlist`, header)
     );
     
-    if (data.Status === false) {
-      console.error("GET request error in usePetCardList");
-    }
+  
     const result = PetListSchema.safeParse(data.petCardList);
     if (result.success) return result.data;
 
-    console.error(result.error);
+   
     return undefined;
   });
 
@@ -33,14 +31,12 @@ export const postPet = async (body: PetCard, token: string) => {
   const data = await AxiosTryCatch(async () =>
     axios.post(`${baseURL}/petcard`, body, header)
   );
-  if (data.Status === false) {
-    console.error("API error in postPet");
-  }
+ 
 
   const result = postPetResSchema.safeParse(data.result);
   if (result.success) return result.data;
 
-  console.error(result.error);
+  
   return undefined;
 };
 export const putPet = async (petid: number, body: PetCard, token: string) => {
@@ -52,7 +48,7 @@ export const putPet = async (petid: number, body: PetCard, token: string) => {
   
 
   if (data.Status === false) {
-    console.error("API error in putPet");
+
     return undefined;
   }
   return data;
@@ -66,7 +62,7 @@ export const deletePet = async (petid: number, token: string) => {
   
 
   if (data.Status === false) {
-    console.error("API error in deletePet");
+ 
     return undefined;
   }
   return data;
@@ -101,7 +97,7 @@ export const usePetCard = (id: number, token: string) =>
     const result = PetCardSchema.safeParse(response.data.result);
     if (result.success) return result.data;
 
-    console.error(result.error);
+   
     return undefined;
   });
 
@@ -114,6 +110,6 @@ export const usePetCardNotToken = (id: number) =>
     const result = PetSchema.safeParse(response.data.result);
     if (result.success) return result.data;
 
-    console.error(result.error);
+   
     return undefined;
   });

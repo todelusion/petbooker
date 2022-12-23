@@ -21,7 +21,7 @@ export const useHotelInfo = (token: string) => {
     const response = await axios.get(`${baseURL}/hotel`, header);
     const result = HotelInfoSchema.safeParse(response.data.result);
     if (result.success) return result.data;
-    console.error(result.error);
+  
     return undefined;
   });
 };
