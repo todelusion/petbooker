@@ -1,11 +1,12 @@
 import React, { useContext, useEffect, useState } from "react";
+import { AnimatePresence } from "framer-motion";
 import Button from "../../../components/Button";
 import Order from "./order";
 
 import UserAuth from "../../../context/UserAuthContext";
-import { LoadingCustom } from "../../../img/icons";
 
 import { useCostomerOrder } from "../../../utils/api/customerOrder";
+import LoadingScreen from "../../../components/LoadingModal";
 
 function CustomerOrder(): JSX.Element {
   const { authToken } = useContext(UserAuth);
@@ -66,7 +67,9 @@ function CustomerOrder(): JSX.Element {
       {(reservedList.isFetching ||
         completeList.isFetching ||
         cancelList.isFetching) && (
-        <LoadingCustom className="absolute left-1/2" color="bg-second" />
+        <AnimatePresence>
+          <LoadingScreen />
+        </AnimatePresence>
       )}
       <nav className="mb-4 flex">
         <Button

@@ -6,7 +6,7 @@ import useFilter from "../../hooks/useFilter";
 import useModal from "../../hooks/useModal";
 import { PendingAction } from "../../hooks/usePending";
 import useSearchBar from "../../hooks/useSearchBar";
-import { LoadingCustom } from "../../img/icons";
+
 import { HorelList } from "../../types/schema";
 import { useHotelList } from "../../utils/api/home";
 import Button from "../Button";

@@ -1,11 +1,12 @@
 import React, { useContext, useEffect, useState } from "react";
+import { AnimatePresence } from "framer-motion";
 import Button from "../../../components/Button";
 import Comment from "./Comment";
 
 import UserAuth from "../../../context/UserAuthContext";
-import { LoadingCustom } from "../../../img/icons";
 
 import { useCostomerOrder } from "../../../utils/api/customerOrder";
+import LoadingScreen from "../../../components/LoadingModal";
 
 function CustomerComment(): JSX.Element {
   const { authToken } = useContext(UserAuth);
@@ -58,7 +59,9 @@ function CustomerComment(): JSX.Element {
   return (
     <div className="px-10 ">
       {completeList.isFetching && (
-        <LoadingCustom className="absolute left-1/2" color="bg-second" />
+        <AnimatePresence>
+          <LoadingScreen />
+        </AnimatePresence>
       )}
       <nav className="mb-4 flex">
         <Button

@@ -49,7 +49,7 @@ function RoomCard({ datas, className, onClick }: IRoomProps): JSX.Element {
               </p>
             </li>
             <li className=" absolute right-6 top-6">
-              <button
+              {/* <button
                 type="button"
                 onClick={async () => {
                   dispatchPending({ type: "IS_LOADING" });
@@ -67,7 +67,7 @@ function RoomCard({ datas, className, onClick }: IRoomProps): JSX.Element {
                 }}
               >
                 <img src={TrashPath} alt="delete" />
-              </button>
+              </button> */}
               <button
                 onClick={() => {
                   if (onClick === undefined) return;

@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faCheck } from "@fortawesome/free-solid-svg-icons";
 import { useQueryClient } from "@tanstack/react-query";
+import { AnimatePresence } from "framer-motion";
 import useSearchBar from "../../hooks/useSearchBar";
 import type { SearchBarAction } from ".";
 import { usePetList } from "../../utils/api/petCard";
@@ -14,7 +15,7 @@ import {
   sortedServiceTypes,
 } from "../../utils/servicesTranslator";
 import { sortService } from "../Filter/data";
-import { LoadingCustom } from "../../img/icons";
+import LoadingScreen from "../../components/LoadingModal";
 
 interface IPetCardProps {
   dispatchSearchBar: React.Dispatch<SearchBarAction>;
@@ -76,7 +77,9 @@ function PetCardSmall({ dispatchSearchBar }: IPetCardProps): JSX.Element {
         </div>
       </button>
       {petList === undefined ? (
-        <LoadingCustom color="bg-second" className="p-4" />
+        <AnimatePresence>
+          <LoadingScreen />
+        </AnimatePresence>
       ) : (
         <ul>
           <li className="relative flex items-center justify-between py-2 px-4 hover:bg-gray-300">

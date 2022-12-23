@@ -4,7 +4,7 @@ import LoadingScreen from "../../../components/LoadingModal";
 import Order from "../../../components/Order";
 
 import UserAuth from "../../../context/UserAuthContext";
-import { LoadingCustom } from "../../../img/icons";
+
 import useOrderList from "../../../utils/api/orderList";
 
 function CmsOrder(): JSX.Element {
