@@ -28,7 +28,7 @@ import {
   PetSchema,
   UserInfo,
 } from "../../../types/schema";
-import { AxiosTryCatch } from "../../../utils";
+import { AxiosTryCatch, createFile, toFormData } from "../../../utils";
 import {
   postPet,
   postPetPhoto,
@@ -174,6 +174,26 @@ const useContextToCurrent = (
     }
   }, [petCard]);
 };
+const useFormdataInit = (
+  url: PetCard["PetPhoto"],
+  setFormData: React.Dispatch<React.SetStateAction<FormData | undefined>>
+): void => {
+  useEffect(() => {
+    const getFormdata = async (): Promise<FormData | undefined> => {
+      if (url === undefined || url === null) return undefined;
+      const file = await createFile(url);
+      const result = toFormData("photo", file);
+      return result;
+    };
+
+    getFormdata()
+      .then((result) => {
+        if (result === undefined || result === null) return;
+        setFormData(result);
+      })
+      .catch((err) => err);
+  }, [setFormData, url]);
+};
 
 function CustomerBook(): JSX.Element {
   const [pet, dispatchPet] = useReducer(petReducer, initPet);
@@ -269,6 +289,7 @@ function CustomerBook(): JSX.Element {
 
   useDisableScroll(isShow);
   useRenderPhoto(formdata, dispatchPet);
+  useFormdataInit(getPetCard()?.PetPhoto, setFormData);
   useContextToCurrent(
     PetType,
     FoodTypes,
