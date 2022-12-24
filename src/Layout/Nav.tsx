@@ -15,31 +15,33 @@ function Nav(): JSX.Element {
   return (
     <StatusModal>
       <>
-        <nav className="absolute top-0 z-10 flex w-full items-center justify-between bg-white py-2 px-20 shadow-md">
-          <Link to="/home">
-            <img src={logoSubtitlePath} alt="logo" className=" w-48" />
-          </Link>
+        <nav className="absolute top-0 z-10 flex w-full items-center justify-between bg-white py-4 px-20 shadow-md">
+          <div className="mx-auto flex w-full max-w-[1440px] items-center justify-between">
+            <Link to="/home">
+              <img src={logoSubtitlePath} alt="logo" className=" w-48" />
+            </Link>
 
-          {authToken === "" ? (
-            <div className="flex-center pt-5">
-              <Button
-                type="Primary"
-                text="登入"
-                navigatePath="/login"
-                className="px-4 py-2"
-              />
-              <Button
-                type="Secondary"
-                text="註冊"
-                className="ml-4 px-4 py-2"
-                navigatePath="/regist"
-              />
-            </div>
-          ) : (
-            <div className="pt-5">
-              <AccountMenu />
-            </div>
-          )}
+            {authToken === "" ? (
+              <div className="flex-center">
+                <Button
+                  type="Primary"
+                  text="登入"
+                  navigatePath="/login"
+                  className="px-4 py-2"
+                />
+                <Button
+                  type="Secondary"
+                  text="註冊"
+                  className="ml-4 px-4 py-2"
+                  navigatePath="/regist"
+                />
+              </div>
+            ) : (
+              <div>
+                <AccountMenu />
+              </div>
+            )}
+          </div>
         </nav>
 
         <div className="relative mx-auto min-h-screen max-w-[1440px]">
