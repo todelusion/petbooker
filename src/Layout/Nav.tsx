@@ -42,7 +42,7 @@ function Nav(): JSX.Element {
           )}
         </nav>
 
-        <div className="relative min-h-screen">
+        <div className="relative mx-auto min-h-screen max-w-[1440px]">
           <Outlet />
         </div>
         <Footer />

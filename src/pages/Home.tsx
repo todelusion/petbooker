@@ -39,7 +39,7 @@ function Home(): JSX.Element {
 
   return (
     <div className="relative flex w-full items-start justify-evenly px-20 pt-40 pb-28">
-      <section className=" basis-2/12 rounded-md border-2 border-black">
+      <section className=" rounded-md border-2 border-black">
         <p className="bg-black py-2 text-center text-xl text-white">
           透過以下分類搜尋
         </p>
@@ -47,8 +47,8 @@ function Home(): JSX.Element {
       </section>
       <div className="flex max-w-2xl basis-10/12 flex-col items-center xl:max-w-4xl">
         <SearchBar className="mb-20" />
-        <div className="relative w-full pt-10">
-          <DropDownList className="absolute right-0 -top-12" />
+        <div className="relative pt-10">
+          {/* <DropDownList className="absolute right-0 -top-12" /> */}
           <AnimatePresence>
             {data === undefined ? (
               <AnimatePresence>
