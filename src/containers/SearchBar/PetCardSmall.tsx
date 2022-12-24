@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faCheck } from "@fortawesome/free-solid-svg-icons";
 import { useQueryClient } from "@tanstack/react-query";
 import { AnimatePresence } from "framer-motion";
+import { Link } from "react-router-dom";
 import useSearchBar from "../../hooks/useSearchBar";
 import type { SearchBarAction } from ".";
 import { usePetList } from "../../utils/api/petCard";
@@ -71,10 +72,10 @@ function PetCardSmall({ dispatchSearchBar }: IPetCardProps): JSX.Element {
         type="button"
         className="flex w-full justify-start border-b-2 py-3.5 px-4"
       >
-        <div className="ml-2">
+        <Link to="/customer/pet" className="ml-2">
           <FontAwesomeIcon icon={faPlus} />
           <span className="ml-3 font-bold">新增寵物名片</span>
-        </div>
+        </Link>
       </button>
       {petList === undefined ? (
         <AnimatePresence>
