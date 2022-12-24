@@ -37,14 +37,12 @@ function Nav(): JSX.Element {
                 />
               </div>
             ) : (
-              <div>
-                <AccountMenu />
-              </div>
+              <AccountMenu />
             )}
           </div>
         </nav>
 
-        <div className="relative mx-auto min-h-screen max-w-[1440px]">
+        <div className="relative min-h-screen">
           <Outlet />
         </div>
         <Footer />
