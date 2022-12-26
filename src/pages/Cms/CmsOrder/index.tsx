@@ -4,7 +4,7 @@ import LoadingScreen from "../../../components/LoadingModal";
 import Order from "../../../components/Order";
 
 import UserAuth from "../../../context/UserAuthContext";
-import { LoadingCustom } from "../../../img/icons";
+
 import useOrderList from "../../../utils/api/orderList";
 
 function CmsOrder(): JSX.Element {
@@ -14,24 +14,53 @@ function CmsOrder(): JSX.Element {
   const [dataStatus, setDataStatus] = useState(reserve.data);
   const [select, setSelect] = useState("待入住");
 
-  useEffect(() => {
-    if (select !== "已入住") return;
-    if (checkin.data !== undefined) {
-      setDataStatus(checkin.data);
+  // eslint-disable-next-line react-hooks/exhaustive-deps, @typescript-eslint/no-shadow
+  const setApiData = (select: string): void => {
+    switch (select) {
+      case "已入住":
+        if (checkin.data !== undefined) {
+          setDataStatus(checkin.data);
+        }
+        break;
+      case "待入住":
+        if (reserve.data !== undefined) {
+          setDataStatus(reserve.data);
+        }
+        break;
+      case "完成訂單":
+        if (checkout.data !== undefined) {
+          setDataStatus(checkout.data);
+        }
+        break;
+      default:
+        break;
     }
-  }, [checkin.data, select]);
+  };
 
-  useEffect(() => {
-    if (select !== "待入住") return;
-    if (reserve.data !== undefined) {
-      setDataStatus(reserve.data);
-    }
-  }, [reserve.data, select]);
   // useEffect(() => {
+  //   if (select !== "已入住") return;
   //   if (checkin.data !== undefined) {
   //     setDataStatus(checkin.data);
   //   }
-  // }, [checkin.data]);
+  // }, [checkin.data, select]);
+
+  // useEffect(() => {
+  //   if (select !== "待入住") return;
+  //   if (reserve.data !== undefined) {
+  //     setDataStatus(reserve.data);
+  //   }
+  // }, [reserve.data, select]);
+
+  // useEffect(() => {
+  //   if (select !== "完成訂單") return;
+  //   if (checkout.data !== undefined) {
+  //     setDataStatus(checkout.data);
+  //   }
+  // }, [checkout.data, select]);
+
+  useEffect(() => {
+    setApiData(select);
+  }, [checkin.data, reserve.data, checkout.data, select, setApiData]);
 
   const handleClick = (status: string): void => {
     switch (status) {
@@ -47,6 +76,7 @@ function CmsOrder(): JSX.Element {
         break;
       case "完成訂單":
         setSelect("完成訂單");
+
         setDataStatus(checkout.data);
 
         break;

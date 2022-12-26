@@ -60,10 +60,9 @@ export const AxiosTryCatch = async <T>(
 ): Promise<T | undefined> => {
   try {
     const res = await callback();
-  
+
     return res.data;
   } catch (error) {
-  
     return undefined;
   }
 };
@@ -75,7 +74,20 @@ export const tryCatch = async <T>(
   try {
     return await callback();
   } catch (error) {
-  
     return defaultValue;
   }
+};
+
+export const createFile = async (url: string): Promise<File> => {
+  const result = url.replace(
+    "https://petcity.rocket-coding.com/upload/profile/",
+    ""
+  );
+  const response = await fetch(url);
+  const data = await response.blob();
+  const metadata = {
+    type: "image/jpeg",
+  };
+  const file = new File([data], result, metadata);
+  return file;
 };

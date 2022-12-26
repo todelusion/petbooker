@@ -43,7 +43,7 @@ function AccountMenu(): JSX.Element {
         onClick={() => toggleAccountMenuSet(!toggleAccountMenu)}
         className="outline-none"
       >
-        <img src={accountMenuPath} alt="accountMenu" className="mb-2 w-10" />
+        <img src={accountMenuPath} alt="accountMenu" className="w-10" />
       </button>
       <AnimatePresence>
         {toggleAccountMenu && (

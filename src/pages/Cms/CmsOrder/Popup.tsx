@@ -1,12 +1,14 @@
-import Item from "antd/es/list/Item";
+import { AnimatePresence } from "framer-motion";
 import React from "react";
-import { string } from "zod";
+import LoadingScreen from "../../../components/LoadingModal";
+import {
+  translateFood,
+  translatePetCard,
+} from "../../../containers/Filter/data";
 import MotionFade from "../../../containers/MotionFade";
 import MotionPopup from "../../../containers/MotionPopup";
-import { LoadingCustom } from "../../../img/icons";
 import { usePetCardNotToken } from "../../../utils/api/petCard";
 import { sortedServiceTypes } from "../../../utils/servicesTranslator";
-import { sortService, translateService } from "./petData";
 
 interface ModalProps {
   open: boolean;
@@ -18,12 +20,15 @@ function Popup({ open, onClose, id }: ModalProps): JSX.Element {
   const { data, isSuccess, isFetching } = usePetCardNotToken(id);
 
   if (data === undefined)
-    return <LoadingCustom className="absolute left-1/2" color="bg-second" />;
-
+    return <AnimatePresence>{isFetching && <LoadingScreen />}</AnimatePresence>;
+  if (data.ServiceTypes === null)
+    return <AnimatePresence>{isFetching && <LoadingScreen />}</AnimatePresence>;
   return (
     <>
       {isFetching && (
-        <LoadingCustom className="absolute left-1/2" color="bg-second" />
+        <AnimatePresence>
+          <LoadingScreen />
+        </AnimatePresence>
       )}
       {isSuccess && (
         <MotionFade className="flex-center fixed left-0 top-0 z-10 h-screen w-full bg-black/50">
@@ -61,7 +66,7 @@ function Popup({ open, onClose, id }: ModalProps): JSX.Element {
                       <li className="mb-2 font-bold">寵物資訊</li>
                       <li>
                         <span>寵物類型：</span>
-                        <span>{data.PetType}</span>
+                        <span>{translatePetCard[data.PetType as string]}</span>
                       </li>
                       <li>
                         <span>年齡：</span>
@@ -75,7 +80,7 @@ function Popup({ open, onClose, id }: ModalProps): JSX.Element {
                         <span>飲食偏好：</span>
                         {data.FoodTypes.map((food, index, arr) => (
                           <React.Fragment key={food}>
-                            <span>{food}</span>
+                            <span>{translateFood[food as string]}</span>
                             {index < arr.length - 1 && <span>、</span>}
                           </React.Fragment>
                         ))}

@@ -2,8 +2,9 @@ import { useQueryClient } from "@tanstack/react-query";
 import { AnimatePresence } from "framer-motion";
 import React, { useContext, useEffect, useReducer, useState } from "react";
 import Button from "../../../components/Button";
+import LoadingScreen from "../../../components/LoadingModal";
 import UserAuth from "../../../context/UserAuthContext";
-import { LoadingCustom, PlusPath } from "../../../img/icons";
+import { PlusPath } from "../../../img/icons";
 import { PetList } from "../../../types/schema";
 import { usePetList } from "../../../utils/api/petCard";
 import Edit from "./Edit";
@@ -54,7 +55,9 @@ function CustomerPet(): JSX.Element {
       <AnimatePresence>
         {data === undefined ? (
           <div key="Loading" className="relative w-full">
-            <LoadingCustom className="absolute left-1/2" color="bg-second" />
+            <AnimatePresence>
+              <LoadingScreen />
+            </AnimatePresence>
           </div>
         ) : (
           <PetCard

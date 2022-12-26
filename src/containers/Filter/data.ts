@@ -215,6 +215,12 @@ export const translatePet: { [index: string]: string } = {
   largeDog: "大型犬 ( 體重 > 20 公斤 )",
   cat: "貓",
 };
+export const translatePetCard: { [index: string]: string } = {
+  smallDog: "小型犬",
+  mediumDog: "中型犬",
+  largeDog: "大型犬",
+  cat: "貓",
+};
 
 export const translateFood: { [index: string]: string } = {
   wetFood: "濕食",

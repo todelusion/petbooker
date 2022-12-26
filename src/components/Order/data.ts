@@ -42,7 +42,7 @@ export  const translateState:ItranslateState={
   checkOut:"已完成",
   checkIn:"已入住",
   reserved:"已預約",
-  checkOutComment:"查看評論"
+  checkOutComment:"完成評論"
   
 }
 export  const buttonText:IbuttonText={

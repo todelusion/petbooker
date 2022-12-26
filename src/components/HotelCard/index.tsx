@@ -6,7 +6,7 @@ import useFilter from "../../hooks/useFilter";
 import useModal from "../../hooks/useModal";
 import { PendingAction } from "../../hooks/usePending";
 import useSearchBar from "../../hooks/useSearchBar";
-import { LoadingCustom } from "../../img/icons";
+
 import { HorelList } from "../../types/schema";
 import { useHotelList } from "../../utils/api/home";
 import Button from "../Button";
@@ -14,6 +14,7 @@ import { fakeText, Hotels as hotelList } from "./data";
 
 interface HotelCardProps {
   data: HorelList["Data"];
+  className?: string;
 }
 
 const handleValidate = (
@@ -76,76 +77,78 @@ const handleNavigate = (
   return `/hotel/${HotelId ?? ""}`;
 };
 
-const HotelCard = React.memo(({ data }: HotelCardProps): JSX.Element => {
-  const queryClient = useQueryClient();
-  const { selection } = useSearchBar();
-  const { FoodTypes, PetType } = useFilter();
+const HotelCard = React.memo(
+  ({ data, className }: HotelCardProps): JSX.Element => {
+    const queryClient = useQueryClient();
+    const { selection } = useSearchBar();
+    const { FoodTypes, PetType } = useFilter();
 
-  const { dispatchPending } = useModal();
-  useEffect(() =>
-    clearInterval(setTimeout(() => dispatchPending({ type: "DONE" }), 1000))
-  );
-  if (data.length < 1) return <p>未找到適合您寵物的旅店</p>;
+    const { dispatchPending } = useModal();
+    useEffect(() =>
+      clearInterval(setTimeout(() => dispatchPending({ type: "DONE" }), 1000))
+    );
+    if (data.length < 1) return <p>未找到適合您寵物的旅店</p>;
 
-  return (
-    <>
-      {data.map((hotel) => (
-        <div
-          key={hotel?.HotelName}
-          className="mb-6 flex border-2 duration-150  hover:scale-105 lg:h-96"
-        >
-          <div className="relative basis-1/2 ">
-            {hotel?.HotelPhoto !== "" ? (
-              <img
-                src={hotel?.HotelPhoto}
-                alt="thumbnail"
-                className="h-full w-full object-cover"
-              />
-            ) : (
-              <div className="h-full w-full bg-gray-100" />
-            )}
-            <div className=" flex-center absolute left-6 top-6 min-h-[5rem] min-w-[5rem] rounded-xl bg-primary  text-4xl font-bold text-white">
-              {Number(hotel?.HotelScore).toFixed(1)}
+    return (
+      <div className={className}>
+        {data.map((hotel) => (
+          <div
+            key={hotel?.HotelName}
+            className="mb-6 flex border-2 duration-150  hover:scale-105 lg:h-96"
+          >
+            <div className="relative basis-1/2 ">
+              {hotel?.HotelPhoto !== "" ? (
+                <img
+                  src={hotel?.HotelPhoto}
+                  alt="thumbnail"
+                  className="h-full w-full object-cover"
+                />
+              ) : (
+                <div className="h-full w-full bg-gray-100" />
+              )}
+              <div className=" flex-center absolute left-6 top-6 min-h-[5rem] min-w-[5rem] rounded-xl bg-primary  text-4xl font-bold text-white">
+                {Number(hotel?.HotelScore).toFixed(1)}
+              </div>
             </div>
-          </div>
-          <ul className="flex basis-1/2 flex-col justify-between p-6 ">
-            <li className="text-2xl font-bold">{hotel?.HotelName}</li>
-            <li className="mb-4 line-clamp-[7]">{hotel?.HotelInfo}</li>
-            <li className="inline-flex items-center justify-between">
-              <p className="text-xl font-bold tracking-wide text-gray-600">
-                NTD&nbsp;&nbsp;{hotel?.RoomLowPrice}
-                &nbsp;起&nbsp;/日
-              </p>
-              <Button
-                type="Secondary"
-                text="選擇房間"
-                className="py-2 px-5 text-sm"
-                navigatePath={handleNavigate(
-                  selection,
-                  PetType,
-                  FoodTypes,
-                  hotel?.HotelId
-                )}
-                onClick={() => {
-                  if (
-                    !handleValidate(
-                      selection,
-                      PetType,
-                      FoodTypes,
-                      dispatchPending
+            <ul className="flex basis-1/2 flex-col justify-between p-6 ">
+              <li className="text-2xl font-bold">{hotel?.HotelName}</li>
+              <li className="mb-4 line-clamp-[7]">{hotel?.HotelInfo}</li>
+              <li className="inline-flex items-center justify-between">
+                <p className="text-xl font-bold tracking-wide text-gray-600">
+                  NTD&nbsp;&nbsp;{hotel?.RoomLowPrice}
+                  &nbsp;起&nbsp;/日
+                </p>
+                <Button
+                  type="Secondary"
+                  text="選擇房間"
+                  className="py-2 px-5 text-sm"
+                  navigatePath={handleNavigate(
+                    selection,
+                    PetType,
+                    FoodTypes,
+                    hotel?.HotelId
+                  )}
+                  onClick={() => {
+                    if (
+                      !handleValidate(
+                        selection,
+                        PetType,
+                        FoodTypes,
+                        dispatchPending
+                      )
                     )
-                  )
-                    return;
+                      return;
 
-                  queryClient.removeQueries(["Hotel"]);
-                }}
-              />
-            </li>
-          </ul>
-        </div>
-      ))}
-    </>
-  );
-});
+                    queryClient.removeQueries(["Hotel"]);
+                  }}
+                />
+              </li>
+            </ul>
+          </div>
+        ))}
+      </div>
+    );
+  }
+);
 
 export default HotelCard;

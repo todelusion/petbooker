@@ -4,6 +4,7 @@ import { number } from "zod";
 
 import { QueryCache, QueryClient, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
+import { AnimatePresence } from "framer-motion";
 import Button from "../../../components/Button";
 import Filter from "../../../containers/Filter";
 import { commentRadio } from "../../../containers/Filter/data";
@@ -11,9 +12,10 @@ import FilterInput from "../../../containers/Filter/FilterInput";
 import MotionFade from "../../../containers/MotionFade";
 import MotionPopup from "../../../containers/MotionPopup";
 import UserAuth from "../../../context/UserAuthContext";
-import { LoadingCustom } from "../../../img/icons";
+
 import { useComment } from "../../../utils/api/comment";
 import Header from "../../../utils/api/Header";
+import LoadingScreen from "../../../components/LoadingModal";
 
 interface ModalProps {
   open: boolean;
@@ -60,8 +62,11 @@ function CommentPopup({ open, onClose, id, Status }: ModalProps): JSX.Element {
   return (
     <>
       {isFetching && (
-        <LoadingCustom className="absolute left-1/2" color="bg-second" />
+        <AnimatePresence>
+          <LoadingScreen />
+        </AnimatePresence>
       )}
+
       <MotionFade className="flex-center fixed left-0 top-0 z-10 h-screen w-full bg-black/50">
         <MotionPopup className="scrollbar-thumb-h-1/2 relative h-[calc(60%-24px)] w-[90%] max-w-[90%] overflow-scroll rounded-xl bg-white p-10 scrollbar-thin scrollbar-thumb-slate-700/50 scrollbar-thumb-rounded-3xl ">
           <div className="  h-full   w-full ">

@@ -158,19 +158,19 @@ export default function UserLogin(): JSX.Element {
             還沒有帳號？{" "}
             <Link
               to="/regist"
-              className="text-second underline decoration-second"
+              className="mr-2 text-second underline decoration-second"
             >
               註冊
             </Link>
-          </span>
-          <span className="mt-3 ">
+            <span className="text-second">/</span>
             <Link
               to="/forgetPassword"
-              className=" text-second underline decoration-second"
+              className=" ml-2 text-second underline decoration-second"
             >
               忘記密碼
             </Link>
           </span>
+          <span className="mt-3 "></span>
         </span>
         <div className=" relative text-center">
           {/* <div

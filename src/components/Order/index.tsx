@@ -2,6 +2,7 @@ import React, { useContext, useState } from "react";
 import axios from "axios";
 import { useQueryClient } from "@tanstack/react-query";
 import { AnimatePresence } from "framer-motion";
+
 import Button from "../Button";
 import { buttonText, cmsList, translateState } from "./data";
 import { ReservedList } from "../../types/schema";
@@ -35,7 +36,7 @@ function Order({ data }: IOrderProps): JSX.Element {
     // setData(checkin.data);
   };
 
-  const handleCheckIn = (id: number, Status: string): void => {
+  const handleCheckIn = async (id: number, Status: string): Promise<void> => {
     // eslint-disable-next-line default-case
     switch (Status) {
       case "reserved": {
@@ -44,7 +45,7 @@ function Order({ data }: IOrderProps): JSX.Element {
       }
 
       case "checkIn":
-        void axios.put(
+        await axios.put(
           `https://petcity.rocket-coding.com/hotel/checkOut?orderId=${id}`,
           { CheckOut: "checkOut" },
           {
@@ -52,8 +53,8 @@ function Order({ data }: IOrderProps): JSX.Element {
           }
         );
 
-        void queryClient.invalidateQueries(["checkIn"]);
-        void queryClient.invalidateQueries(["checkOut"]);
+        await queryClient.invalidateQueries(["checkIn"]);
+        await queryClient.invalidateQueries(["checkOut"]);
         queryClient.removeQueries(["checkIn"]);
         queryClient.removeQueries(["checkOut"]);
         break;
@@ -126,28 +127,30 @@ function Order({ data }: IOrderProps): JSX.Element {
           <li>{item.checkOutDateOnly}</li>
           <li>{translateState[item.Status]}</li>
           <li>
-            {item.Status !== "cancel" && item.Status !== "checkOut" && (
-              <>
-                <Button
-                  text={buttonText[item.Status]}
-                  className="mb-2 whitespace-nowrap py-2 px-5"
-                  type="Secondary"
-                  onClick={() => {
-                    handleCheckIn(item.Id, item.Status);
-                  }}
-                />
-                {item.Status === "reserved" && (
+            {item.Status !== "cancel" &&
+              item.Status !== "checkOut" &&
+              item.Status !== "checkOutComment" && (
+                <>
                   <Button
-                    text="取消入住"
-                    className="py-2 px-5"
-                    type="Primary"
+                    text={buttonText[item.Status]}
+                    className="mb-2 whitespace-nowrap py-2 px-5"
+                    type="Secondary"
                     onClick={() => {
-                      handleCancel(item.Id);
+                      handleCheckIn(item.Id, item.Status).catch((err) => err);
                     }}
                   />
-                )}
-              </>
-            )}
+                  {item.Status === "reserved" && (
+                    <Button
+                      text="取消入住"
+                      className="py-2 px-5"
+                      type="Primary"
+                      onClick={() => {
+                        handleCancel(item.Id);
+                      }}
+                    />
+                  )}
+                </>
+              )}
           </li>
         </ul>
       ))}

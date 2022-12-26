@@ -17,7 +17,7 @@ import useFilter from "../../../hooks/useFilter";
 import useModal from "../../../hooks/useModal";
 import { PendingAction } from "../../../hooks/usePending";
 import useSearchBar from "../../../hooks/useSearchBar";
-import { EditPath, LoadingCustom } from "../../../img/icons";
+import { EditPath } from "../../../img/icons";
 import {
   Booking,
   BookingSchema,
@@ -28,7 +28,7 @@ import {
   PetSchema,
   UserInfo,
 } from "../../../types/schema";
-import { AxiosTryCatch } from "../../../utils";
+import { AxiosTryCatch, createFile, toFormData } from "../../../utils";
 import {
   postPet,
   postPetPhoto,
@@ -42,6 +42,7 @@ import Edit from "./Edit";
 import { initPet, PetAction, petReducer } from "../CustomerPet/petReducer";
 import PetInfo from "./PetInfo";
 import AskedModal from "./AskedModal";
+import LoadingScreen from "../../../components/LoadingModal";
 
 const checkPetExisted = (
   pet: PetCard,
@@ -173,6 +174,26 @@ const useContextToCurrent = (
     }
   }, [petCard]);
 };
+const useFormdataInit = (
+  url: PetCard["PetPhoto"],
+  setFormData: React.Dispatch<React.SetStateAction<FormData | undefined>>
+): void => {
+  useEffect(() => {
+    const getFormdata = async (): Promise<FormData | undefined> => {
+      if (url === undefined || url === null) return undefined;
+      const file = await createFile(url);
+      const result = toFormData("photo", file);
+      return result;
+    };
+
+    getFormdata()
+      .then((result) => {
+        if (result === undefined || result === null) return;
+        setFormData(result);
+      })
+      .catch((err) => err);
+  }, [setFormData, url]);
+};
 
 function CustomerBook(): JSX.Element {
   const [pet, dispatchPet] = useReducer(petReducer, initPet);
@@ -223,7 +244,9 @@ function CustomerBook(): JSX.Element {
     return petResult.petid;
   };
 
-  const handleBookingRequest = async (petid: number): Promise<boolean> => {
+  const handleBookingRequest = async (
+    petid: number
+  ): Promise<boolean | undefined> => {
     const body = validateUserBook(
       {
         CheckInDate: format(selection.startDate, "yyyy/M/d"),
@@ -244,7 +267,7 @@ function CustomerBook(): JSX.Element {
       dispatchPending
     );
 
-    if (body === undefined) return false;
+    if (body === undefined) return undefined;
 
     if ((await postBooking(body, authToken)) === undefined) {
       dispatchPending({
@@ -266,6 +289,7 @@ function CustomerBook(): JSX.Element {
 
   useDisableScroll(isShow);
   useRenderPhoto(formdata, dispatchPet);
+  useFormdataInit(getPetCard()?.PetPhoto, setFormData);
   useContextToCurrent(
     PetType,
     FoodTypes,
@@ -285,7 +309,10 @@ function CustomerBook(): JSX.Element {
       // 未來應該使用 404 頁面更改成 "登入閒置過久，請重新登入"
       <MotionFade className="flex-col-center fixed left-1/2 top-1/2 z-20 -translate-x-1/2 -translate-y-1/2 text-xl">
         <>
-          <LoadingCustom color="bg-accent" className=" mb-5" />
+          <AnimatePresence>
+            {" "}
+            <LoadingScreen />
+          </AnimatePresence>
           {user === false && <p>登入閒置過久，請重新登入</p>}
           {PetType === "" && (
             <p>
@@ -299,7 +326,10 @@ function CustomerBook(): JSX.Element {
               <span className=" font-bold text-second">食物偏好</span>
             </p>
           )}
-          <LoadingCustom color="bg-accent" className=" mt-5" />
+          <AnimatePresence>
+            {" "}
+            <LoadingScreen />
+          </AnimatePresence>
         </>
       </MotionFade>
     );
@@ -307,11 +337,8 @@ function CustomerBook(): JSX.Element {
   if (petList === undefined || user === undefined)
     return (
       <AnimatePresence>
-        <LoadingCustom
-          key="Loading"
-          color="bg-second"
-          className="fixed left-1/2 top-1/2 -translate-x-1/2"
-        />
+        {" "}
+        <LoadingScreen />
       </AnimatePresence>
     );
   return (
@@ -521,7 +548,10 @@ function CustomerBook(): JSX.Element {
             )}
 
             {petList === undefined ? (
-              <LoadingCustom color="bg-second" />
+              <AnimatePresence>
+                {" "}
+                <LoadingScreen />
+              </AnimatePresence>
             ) : (
               <Button
                 type="Secondary"
@@ -559,10 +589,14 @@ function CustomerBook(): JSX.Element {
                     });
                     return;
                   }
+                  const result = await handleBookingRequest(petid);
 
-                  if (await handleBookingRequest(petid)) {
+                  if (result === true) {
                     navigate("/hotel/book/success");
-                  } else {
+                    return;
+                  }
+
+                  if (result === false) {
                     navigate("/hotel/book/fail");
                   }
                 }}

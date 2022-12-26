@@ -9,7 +9,6 @@ import TitleImg from "../img/Title.png";
 import PetcityIcon from "../img/PetcityIcon.svg";
 import Divider1 from "../img/Divider1.svg";
 import Divider2 from "../img/Divider2.svg";
-import { LoadingScreen } from "../components/LoadingModal";
 
 function LandingPage(): JSX.Element {
   const navigate = useNavigate();
@@ -52,7 +51,7 @@ function LandingPage(): JSX.Element {
 
   return (
     <div className="flex flex-col items-center">
-      <header className=" relative mt-[114px] h-160 w-full">
+      <header className=" relative h-160 w-full">
         <img
           src={Benner}
           alt="BennerImg"
