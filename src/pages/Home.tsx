@@ -66,7 +66,7 @@ function Home(): JSX.Element {
                     total={data.Totalpage}
                     className="flex-center absolute -top-12 mb-10 w-full"
                   />
-                  <HotelCard data={data.Data} />
+                  <HotelCard data={data.hotelInfo} />
                 </>
               </MotionFade>
             )}

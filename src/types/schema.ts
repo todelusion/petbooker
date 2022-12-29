@@ -29,7 +29,7 @@ export const GETRoomListSchema = z.object({
 export const RoomListSchema = z.array(
   z.object({
     Id: z.number(),
-    IsOrders:z.string(),
+    IsOrders: z.string(),
     RoomPhoto: z.string(),
     RoomName: z.string(),
     PetType: z.string(),
@@ -39,7 +39,7 @@ export const RoomListSchema = z.array(
   })
 );
 export const HotelListSchema = z.object({
-  Data: z.array(
+  hotelInfo: z.array(
     z
       .object({
         RoomLowPrice: z.union([z.number(), z.null()]),
@@ -158,7 +158,7 @@ export const PetSchema = z.object({
   PetMedicine: z.union([z.null(), z.string()]),
   PetNote: z.union([z.null(), z.string()]),
   // ServiceTypes: z.union([z.array(z.union([z.null(), z.string()])), z.null()]),
-  ServiceTypes: z.union([z.array(z.string()),z.null()]) ,
+  ServiceTypes: z.union([z.array(z.string()), z.null()]),
   PetPhoto: z.union([z.null(), z.string()]),
 });
 
