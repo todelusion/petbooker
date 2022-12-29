@@ -15,7 +15,6 @@ export const useHotelList = (body: Filter) =>
     const data = await AxiosTryCatch(async () =>
       axios.post(`${baseURL}/hotel/hotelFilter`, body)
     );
-    console.log(data);
 
     const result = HotelListSchema.safeParse(data);
     if (result.success) {
