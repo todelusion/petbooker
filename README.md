@@ -7,11 +7,12 @@
 <h1 align="center" style="font-weight: 700">寵物坊城市</h1>
 
 <div align="center">
-
-<p style="margin-bottom: 16px">
 <a href="https://bit.ly/3hXSrfs" style="display: block ;background-color: #E7ECC4; color: black; font-weight: 700; border-radius: 9999px; margin-bottom: 16px">
+<p>
 📙簡報介紹📙
-</a>
+</p>
+</a><br>
+<p>
 一個飼主友善的寵物旅館訂房平台
 </p>
 <img src="https://i.imgur.com/SHcXsBt.jpg">
