@@ -1,16 +1,19 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { format } from "date-fns";
 import { AnimatePresence } from "framer-motion";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
+import { useLocation } from "react-router-dom";
+
+import UserAuth from "../../context/UserAuthContext";
 import useFilter from "../../hooks/useFilter";
 import useModal from "../../hooks/useModal";
 import { PendingAction } from "../../hooks/usePending";
 import useSearchBar from "../../hooks/useSearchBar";
+import { FavoriteDisablePath } from "../../img/icons";
 
 import { HorelList } from "../../types/schema";
-import { useHotelList } from "../../utils/api/home";
+import { postFavorite } from "../../utils/api/user";
 import Button from "../Button";
-import { fakeText, Hotels as hotelList } from "./data";
 
 interface HotelCardProps {
   data: HorelList["hotelInfo"];
@@ -76,12 +79,42 @@ const handleNavigate = (
 
   return `/hotel/${HotelId ?? ""}`;
 };
+const renderFavorite = (
+  identity: string,
+  hotelId: number | undefined,
+  token: string,
+  dispatchPending: React.Dispatch<PendingAction>
+): JSX.Element | undefined => {
+  if (
+    identity === "" ||
+    identity === "hotel" ||
+    token === "" ||
+    hotelId === undefined
+  )
+    return undefined;
+  return (
+    <button
+      onClick={async () => {
+        dispatchPending({ type: "IS_LOADING" });
+        await postFavorite(hotelId, token);
+        dispatchPending({ type: "DONE" });
+      }}
+      type="button"
+      className="absolute right-6 top-6"
+    >
+      <img src={FavoriteDisablePath} alt="toggle favorite" />
+    </button>
+  );
+};
 
 const HotelCard = React.memo(
   ({ data, className }: HotelCardProps): JSX.Element => {
     const queryClient = useQueryClient();
     const { selection } = useSearchBar();
     const { FoodTypes, PetType } = useFilter();
+    const { identity, authToken } = useContext(UserAuth);
+    const { pathname } = useLocation();
+    // 待撰寫在收藏頁查看單一旅館資訊頁的 handleClick
 
     const { dispatchPending } = useModal();
     useEffect(() =>
@@ -94,8 +127,14 @@ const HotelCard = React.memo(
         {data.map((hotel) => (
           <div
             key={hotel?.HotelName}
-            className="mb-6 flex border-2 duration-150  hover:scale-105 lg:h-96"
+            className="relative mb-6 flex border-2 duration-150  hover:scale-105 lg:h-96"
           >
+            {renderFavorite(
+              identity,
+              hotel?.HotelId,
+              authToken,
+              dispatchPending
+            )}
             <div className="relative basis-1/2 ">
               {hotel?.HotelPhoto !== "" ? (
                 <img
@@ -114,13 +153,19 @@ const HotelCard = React.memo(
               <li className="text-2xl font-bold">{hotel?.HotelName}</li>
               <li className="mb-4 line-clamp-[7]">{hotel?.HotelInfo}</li>
               <li className="inline-flex items-center justify-between">
-                <p className="text-xl font-bold tracking-wide text-gray-600">
+                <p
+                  className={`text-xl font-bold tracking-wide text-gray-600 ${
+                    hotel?.RoomLowPrice === undefined ? "invisible" : "visible"
+                  }`}
+                >
                   NTD&nbsp;&nbsp;{hotel?.RoomLowPrice}
                   &nbsp;起&nbsp;/日
                 </p>
                 <Button
                   type="Secondary"
-                  text="選擇房間"
+                  text={
+                    pathname.includes("/favorite") ? "查看旅館頁面" : "選擇房間"
+                  }
                   className="py-2 px-5 text-sm"
                   navigatePath={handleNavigate(
                     selection,

@@ -42,7 +42,7 @@ export const HotelListSchema = z.object({
   hotelInfo: z.array(
     z
       .object({
-        RoomLowPrice: z.union([z.number(), z.null()]),
+        RoomLowPrice: z.union([z.number(), z.null()]).optional(),
         HotelId: z.number(),
         HotelName: z.string(),
         HotelPhoto: z.string(),
@@ -184,6 +184,17 @@ export const PetListSchema = z.array(
     ServiceTypes: z.union([z.array(z.string()), z.null()]),
   })
 );
+export const FavoriteListSchema = z.array(
+  z.object({
+    HotelId: z.number(),
+    HotelName: z.string(),
+    HotelPhoto: z.string(),
+    HotelScore: z.number(),
+    HotelInfo: z.string(),
+  })
+);
+
+export type FavoriteList = z.infer<typeof FavoriteListSchema>;
 
 export type Pet = z.infer<typeof PetSchema>;
 

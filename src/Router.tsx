@@ -27,6 +27,7 @@ import CustomerOrder from "./pages/Customer/CustomerOrder";
 import CustomerComment from "./pages/Customer/CustomerComment";
 import Fail from "./pages/Customer/CustomerBook/Fail/Fail";
 import CmsCommentList from "./pages/Cms/CmsCommentList";
+import CustomerFavorite from "./pages/Customer/CustomerFavorite";
 
 export default function Router(): JSX.Element {
   const client = new QueryClient();
@@ -55,6 +56,7 @@ export default function Router(): JSX.Element {
             <Route path="/customer/info" element={<CustomerInfo />} />
             <Route path="/customer/pet" element={<CustomerPet />} />
             <Route path="/customer/order" element={<CustomerOrder />} />
+            <Route path="/customer/favorite" element={<CustomerFavorite />} />
             <Route path="/customer/comment" element={<CustomerComment />} />
             <Route path="/customer/OrderSuccess" element={<Success />} />
             {/* <Route path="/customer/OrderFail" element={<Fail />} /> */}

@@ -36,6 +36,7 @@ function Home(): JSX.Element {
     Page: current,
     PageSize: 5,
   });
+  console.log(data);
 
   return (
     <div className="relative mx-auto flex w-full max-w-[1440px] items-start justify-evenly px-20 pt-40 pb-28">

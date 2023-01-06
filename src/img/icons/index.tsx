@@ -26,6 +26,8 @@ import xPath from "./X.svg";
 import MotionFade from "../../containers/MotionFade";
 import EditPath from "./Edit.svg";
 import TrashPath from "./Trash.svg";
+import FavoriteActivePath from "./favorite_active.svg";
+import FavoriteDisablePath from "./favorite_disable.svg";
 
 interface ILoadingProps {
   className?: string;
@@ -94,4 +96,6 @@ export {
   xPath,
   EditPath,
   TrashPath,
+  FavoriteActivePath,
+  FavoriteDisablePath,
 };
