@@ -6,13 +6,11 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
-README.md
 .devcontainer/
 .eslintrc.json
 node_modules
 dist
 dist-ssr
-README.md
 *.local
 
 # Editor directories and files

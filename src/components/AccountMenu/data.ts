@@ -24,17 +24,17 @@ export const customerMenu = [
   {
     logo: fileTextPath,
     content: "查看我的訂單",
-    navigatePath:  "/customer/Order",
+    navigatePath: "/customer/Order",
   },
-  {
-    logo: heartPath,
-    content: "收藏店家",
-    navigatePath: null,
-  },
+  // {
+  //   logo: heartPath,
+  //   content: "收藏店家",
+  //   navigatePath: null,
+  // },
   {
     logo: messageSquarePath,
     content: "安心評價",
-    navigatePath: '/customer/comment',
+    navigatePath: "/customer/comment",
   },
   {
     logo: logOutPath,
