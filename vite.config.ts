@@ -8,6 +8,6 @@ export default defineConfig({
   ],
   base: "./"
 
-  // for github pages
+  // for github pages //
   // base: '/RocketTeam-10th/'
 });
