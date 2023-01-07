@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-// import { boolean } from "zod";
 import Alerttriangle from "../../img/icons/Icon/Alert-triangle.svg";
 import Alertvector from "../../img/icons/Icon/Alert-vector.svg";
 import Regex from "./data";

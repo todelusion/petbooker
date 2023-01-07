@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-// import { string } from "zod"
 import axios from "axios";
 import UserInput from "../../components/Input";
 import InputRegex from "../../components/Input/data";

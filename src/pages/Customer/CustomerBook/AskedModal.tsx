@@ -115,7 +115,7 @@ function AskedModal({
                   return;
                 }
 
-                if (await handleBookingRequest(petid)) {
+                if ((await handleBookingRequest(petid)) === true) {
                   navigate("/hotel/book/success");
                 } else {
                   navigate("/hotel/book/fail");

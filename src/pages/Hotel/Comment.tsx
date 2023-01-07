@@ -1,6 +1,4 @@
-import React from "react";
 import { Hotel } from "../../types/schema";
-import { IComment } from "./data";
 
 interface ICommentProps {
   data: Hotel["Hotel"][0]["HotelComment"][0];

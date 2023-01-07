@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from "framer-motion";
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import UserAuth from "../../context/UserAuthContext";
 import { customerMenu, hotelMemberMenu, accountMenuPath } from "./data";

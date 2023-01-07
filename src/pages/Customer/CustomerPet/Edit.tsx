@@ -1,14 +1,5 @@
-import { motion } from "framer-motion";
-import React, {
-  useContext,
-  useEffect,
-  useLayoutEffect,
-  useReducer,
-  useState,
-} from "react";
-import axios from "axios";
+import React, { useContext, useEffect, useReducer, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
-import { useLocation } from "react-router-dom";
 import FilterInput from "../../../containers/Filter/FilterInput";
 import {
   petLists,
@@ -24,27 +15,13 @@ import MotionPopup from "../../../containers/MotionPopup";
 import useModal from "../../../hooks/useModal";
 import UploadImage from "../../../components/UploadImage";
 import { xPath } from "../../../img/icons";
-import {
-  assertIsError,
-  toFormData,
-  AxiosTryCatch,
-  tryCatch,
-} from "../../../utils";
-import { uploadRoomPhoto, putRoom, postRoom } from "../../../utils/api/cmsRoom";
+import { toFormData } from "../../../utils";
 import UserAuth from "../../../context/UserAuthContext";
-import {
-  PetCard,
-  PetCardSchema,
-  PetList,
-  PetSchema,
-  POSTRoom,
-  PostRoomSchema,
-  Room,
-} from "../../../types/schema";
+import { PetCard, PetCardSchema, PetList } from "../../../types/schema";
 import { PendingAction } from "../../../hooks/usePending";
 import Input from "./Input";
 import { input, filterInput } from "./data";
-import { InitPet, initPet, PetAction, petReducer } from "./petReducer";
+import { initPet, PetAction, petReducer } from "./petReducer";
 import Button from "../../../components/Button";
 import { postPet, postPetPhoto, putPet } from "../../../utils/api/petCard";
 

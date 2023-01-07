@@ -2,7 +2,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { Button, Form, Input } from "antd";
 import axios from "axios";
 import { AnimatePresence } from "framer-motion";
-import React, { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import LoadingScreen from "../../../components/LoadingModal";
 import UploadImage from "../../../components/UploadImage";

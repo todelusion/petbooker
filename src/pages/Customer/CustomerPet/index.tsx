@@ -1,6 +1,5 @@
-import { useQueryClient } from "@tanstack/react-query";
 import { AnimatePresence } from "framer-motion";
-import React, { useContext, useEffect, useReducer, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Button from "../../../components/Button";
 import LoadingScreen from "../../../components/LoadingModal";
 import UserAuth from "../../../context/UserAuthContext";
@@ -9,7 +8,6 @@ import { PetList } from "../../../types/schema";
 import { usePetList } from "../../../utils/api/petCard";
 import Edit from "./Edit";
 import PetCard from "./PetCard";
-import { initPet, petReducer } from "./petReducer";
 
 export interface IShow {
   type: "POST" | "PUT";

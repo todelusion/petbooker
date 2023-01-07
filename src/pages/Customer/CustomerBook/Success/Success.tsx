@@ -1,4 +1,3 @@
-import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import orderSuccess from "../../../../img/OrderSuccess.svg";
 import Divider1 from "../../../../img/Divider1.svg";

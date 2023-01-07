@@ -1,6 +1,5 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import { useQueryClient } from "@tanstack/react-query";
-import Button from "../../../components/Button";
 import MotionFade from "../../../containers/MotionFade";
 import { RoomList, Room } from "../../../types/schema";
 import { EditPath, TrashPath } from "../../../img/icons";
@@ -60,7 +59,7 @@ function RoomCard({ datas, className, onClick }: IRoomProps): JSX.Element {
                     dispatchPending({ type: "DONE" });
                   } catch (error) {
                     const err = assertIsError(error);
-                    console.log(err)
+                    console.log(err);
 
                     dispatchPending({ type: "IS_ERROR" });
                     setTimeout(() => dispatchPending({ type: "DONE" }), 1000);

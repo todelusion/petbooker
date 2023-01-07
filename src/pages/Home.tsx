@@ -1,17 +1,12 @@
-import React, { useEffect, useState } from "react";
+import { useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { format } from "date-fns";
 import { AnimatePresence } from "framer-motion";
-import DropDownList from "../components/DropDownList";
 import Filter from "../containers/Filter";
 import HotelCard from "../components/HotelCard";
 import SearchBar from "../containers/SearchBar";
-import StatusModal from "../Layout/StatusModal";
-import useModal from "../hooks/useModal";
 import useFilter from "../hooks/useFilter";
 import useSearchBar from "../hooks/useSearchBar";
-import { ISearchBarContextProps } from "../context/SearchBarContext";
-import { IFilterContextProps } from "../context/FilterContext";
 import { useHotelList } from "../utils/api/home";
 
 import MotionFade from "../containers/MotionFade";

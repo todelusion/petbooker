@@ -1,14 +1,5 @@
-import { motion } from "framer-motion";
-import React, {
-  useContext,
-  useEffect,
-  useLayoutEffect,
-  useReducer,
-  useState,
-} from "react";
-import axios from "axios";
-import { useQueryClient } from "@tanstack/react-query";
 import { useLocation } from "react-router-dom";
+import React from "react";
 import FilterInput from "../../../containers/Filter/FilterInput";
 import {
   petLists,
@@ -21,27 +12,12 @@ import {
 } from "../../../containers/Filter/data";
 import MotionFade from "../../../containers/MotionFade";
 import MotionPopup from "../../../containers/MotionPopup";
-import useModal from "../../../hooks/useModal";
 import UploadImage from "../../../components/UploadImage";
 import { xPath } from "../../../img/icons";
-import {
-  assertIsError,
-  toFormData,
-  AxiosTryCatch,
-  tryCatch,
-} from "../../../utils";
-import { uploadRoomPhoto, putRoom, postRoom } from "../../../utils/api/cmsRoom";
-import UserAuth from "../../../context/UserAuthContext";
-import { POSTRoom, PostRoomSchema, Room } from "../../../types/schema";
-import { PendingAction } from "../../../hooks/usePending";
+import { toFormData } from "../../../utils";
 import Input from "../CustomerPet/Input";
 import { input, filterInput } from "../CustomerPet/data";
-import {
-  InitPet,
-  initPet,
-  PetAction,
-  petReducer,
-} from "../CustomerPet/petReducer";
+import { InitPet, PetAction } from "../CustomerPet/petReducer";
 import Button from "../../../components/Button";
 
 interface IEditProps {
