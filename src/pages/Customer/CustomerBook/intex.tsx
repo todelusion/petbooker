@@ -25,10 +25,9 @@ import {
   PetCard,
   PetCardSchema,
   PetList,
-  PetSchema,
   UserInfo,
 } from "../../../types/schema";
-import { AxiosTryCatch, createFile, toFormData } from "../../../utils";
+import { createFile, toFormData } from "../../../utils";
 import {
   postPet,
   postPetPhoto,

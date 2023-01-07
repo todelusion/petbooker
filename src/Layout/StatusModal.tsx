@@ -1,7 +1,6 @@
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence } from "framer-motion";
 import MotionFade from "../containers/MotionFade";
 import useModal from "../hooks/useModal";
-import type { InitialPending } from "../hooks/usePending";
 import { SuccessPath, ErrorPath, LoadingPath, Loading } from "../img/icons";
 
 interface IPendingModalProps {

@@ -1,8 +1,4 @@
-import axios from "axios";
-
-import React, { ChangeEvent, useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
-import { string } from "zod";
+import React, { ChangeEvent, useState } from "react";
 import { UploadRoomPath } from "../../img/icons";
 
 type Type = "Avatar" | "Room" | "petcard";

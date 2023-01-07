@@ -1,16 +1,12 @@
-import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { format } from "date-fns";
-import { AnimatePresence } from "framer-motion";
-import React, { useEffect, useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
+import React, { useEffect } from "react";
 import useFilter from "../../hooks/useFilter";
 import useModal from "../../hooks/useModal";
 import { PendingAction } from "../../hooks/usePending";
 import useSearchBar from "../../hooks/useSearchBar";
 
 import { HorelList } from "../../types/schema";
-import { useHotelList } from "../../utils/api/home";
 import Button from "../Button";
-import { fakeText, Hotels as hotelList } from "./data";
 
 interface HotelCardProps {
   data: HorelList["hotelInfo"];

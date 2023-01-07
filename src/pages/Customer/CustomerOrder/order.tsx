@@ -1,17 +1,9 @@
-import React, { useContext, useState } from "react";
-import axios from "axios";
-import { useQueryClient } from "@tanstack/react-query";
-import {
-  buttonText,
-  translateState,
-  customerList,
-} from "../../../components/Order/data";
-//該Order的Schema
-
-import UserAuth from "../../../context/UserAuthContext";
-import Button from "../../../components/Button";
-import { customerOrder } from "../../../types/schema";
+import { useState } from "react";
 import { AnimatePresence } from "framer-motion";
+import { translateState, customerList } from "../../../components/Order/data";
+// 該Order的Schema
+
+import { customerOrder } from "../../../types/schema";
 import Popup from "../../Cms/CmsOrder/Popup";
 
 interface IOrderProps {
@@ -19,9 +11,6 @@ interface IOrderProps {
 }
 
 function Order({ data }: IOrderProps): JSX.Element {
-  const { authToken } = useContext(UserAuth);
-
-  const queryClient = useQueryClient();
   const [open, setOpen] = useState(false);
   const [petId, setPetId] = useState(0);
 

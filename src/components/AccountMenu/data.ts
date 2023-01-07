@@ -1,7 +1,6 @@
 import {
   creditCardPath,
   fileTextPath,
-  heartPath,
   logOutPath,
   messageSquarePath,
   userPath,

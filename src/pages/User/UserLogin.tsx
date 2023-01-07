@@ -1,8 +1,8 @@
-import React, { useContext, useEffect, useLayoutEffect, useState } from "react";
+import React, { useContext, useLayoutEffect, useState } from "react";
 // import { string } from "zod"
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import UserAuth, { UserAuthContetxt } from "../../context/UserAuthContext";
+import UserAuth from "../../context/UserAuthContext";
 import UserInput from "../../components/Input";
 import InputRegex from "../../components/Input/data";
 import useModal from "../../hooks/useModal";
@@ -170,7 +170,7 @@ export default function UserLogin(): JSX.Element {
               忘記密碼
             </Link>
           </span>
-          <span className="mt-3 "></span>
+          <span className="mt-3 " />
         </span>
         <div className=" relative text-center">
           {/* <div

@@ -1,6 +1,6 @@
 /* eslint-disable react/require-default-props */
-import React, { useCallback, useEffect, useState } from "react";
-import { FilterAction, IinitFilter } from "../../context/FilterContext";
+import React, { useEffect, useState } from "react";
+import { FilterAction } from "../../context/FilterContext";
 import useFilter from "../../hooks/useFilter";
 import {
   foodLists,

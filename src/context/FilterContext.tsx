@@ -1,5 +1,4 @@
-import React, { createContext, useEffect, useMemo, useReducer } from "react";
-import { useLocation } from "react-router-dom";
+import React, { createContext, useMemo, useReducer } from "react";
 
 interface IFilterProviderProps {
   children: JSX.Element;
@@ -78,7 +77,6 @@ const filterReducer = (
 export function FilterProvider({
   children,
 }: IFilterProviderProps): JSX.Element {
-  const { pathname } = useLocation();
   const [filter, filterDispatch] = useReducer(filterReducer, initFilter);
 
   const value = useMemo(() => ({ ...filter, filterDispatch }), [filter]);

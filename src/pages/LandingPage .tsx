@@ -1,5 +1,4 @@
-// import { Outlet } from "react-router-dom";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import PetsImg from "../img/Pets.png";
 import Benner from "../img/Benner.png";
 import PetCardImg from "../img/PetCardImg.png";

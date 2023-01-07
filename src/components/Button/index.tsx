@@ -1,4 +1,3 @@
-import React from "react";
 import { useNavigate } from "react-router-dom";
 import buttonStyle from "./style";
 
@@ -52,7 +51,7 @@ function Button({
       className={`${renderButtonPropsType()} ${className} flex-center h-max rounded-full`}
     >
       {icon !== undefined && <img src={icon} alt="icon" className="mr-2" />}
-      <span className={`${textSize} whitespace-nowrap`}>{text}</span>
+      <span className={`${textSize ?? ""} whitespace-nowrap`}>{text}</span>
     </button>
   );
 }

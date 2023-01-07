@@ -11,11 +11,7 @@ import UserAuth from "../../context/UserAuthContext";
 import { PetList } from "../../types/schema";
 import useFilter from "../../hooks/useFilter";
 import { FilterAction } from "../../context/FilterContext";
-import {
-  getCategory,
-  sortedServiceTypes,
-} from "../../utils/servicesTranslator";
-import { sortService } from "../Filter/data";
+import { getCategory } from "../../utils/servicesTranslator";
 import LoadingScreen from "../../components/LoadingModal";
 
 interface IPetCardProps {

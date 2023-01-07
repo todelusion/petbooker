@@ -1,12 +1,5 @@
-import React from "react";
-import { serviceLists } from "../../containers/Filter/data";
 import { Hotel } from "../../types/schema";
-import {
-  getCategory,
-  sortedServiceTypes,
-  sortedServiceTypesLogos,
-} from "../../utils/servicesTranslator";
-import type { IHotel } from "./index";
+import { sortedServiceTypesLogos } from "../../utils/servicesTranslator";
 
 interface IInfoProps {
   hotel: Hotel["Hotel"][0];

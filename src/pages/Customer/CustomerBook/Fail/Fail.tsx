@@ -1,8 +1,6 @@
-import React from "react";
 import { useNavigate } from "react-router-dom";
 import Button from "../../../../components/Button";
 import failbook from "../../../../img/failbook.svg";
-// import Divider1 from "../img/Divider1.svg";
 
 function Fail(): JSX.Element {
   const navigate = useNavigate();

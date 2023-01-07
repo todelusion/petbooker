@@ -1,5 +1,5 @@
 import { AnimatePresence } from "framer-motion";
-import React, { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Button from "../../../components/Button";
 import UserAuth from "../../../context/UserAuthContext";
 import { PlusPath } from "../../../img/icons";
