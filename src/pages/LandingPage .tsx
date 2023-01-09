@@ -1,13 +1,22 @@
 import { useNavigate } from "react-router-dom";
+
+import { useEffect } from "react";
+import Aos from "aos";
 import PetsImg from "../img/Pets.png";
 import Benner from "../img/Benner.png";
 import PetCardImg from "../img/PetCardImg.png";
 import SearchFiliterImg from "../img/SearchFiliterImg.png";
 import Evaluation from "../img/Evaluation.png";
-import TitleImg from "../img/Title.png";
 import PetcityIcon from "../img/PetcityIcon.svg";
 import Divider1 from "../img/Divider1.svg";
 import Divider2 from "../img/Divider2.svg";
+import painTitlepeople from "../img/painTitlepeople.svg";
+import ChatBubble2 from "../img/ChatBubble2.svg";
+import ChatBubble3 from "../img/ChatBubble3.svg";
+
+import ChatBubble1 from "../img/ChatBubble1.svg";
+
+import "aos/dist/aos.css";
 
 function LandingPage(): JSX.Element {
   const navigate = useNavigate();
@@ -28,10 +37,9 @@ function LandingPage(): JSX.Element {
       img: Evaluation,
     },
   ];
-
   function renderInfo(index: number): JSX.Element {
     return (
-      <section className="mt-20 flex w-4/5 flex-col ">
+      <section data-aos="fade-up" className="mt-20 flex w-4/5 flex-col ">
         <div className="flex w-full items-center">
           <p className="top-0 float-left mr-8  text-9xl text-primary ">
             {index + 1}
@@ -47,7 +55,9 @@ function LandingPage(): JSX.Element {
       </section>
     );
   }
-
+  useEffect(() => {
+    Aos.init();
+  }, []);
   return (
     <div className="flex flex-col items-center">
       <header className=" relative h-160 w-full">
@@ -71,9 +81,28 @@ function LandingPage(): JSX.Element {
         </div>
       </header>
 
-      <main className="flex max-w-[1440px] flex-col items-center px-28 ">
-        <section className="mt-28 max-w-3xl">
-          <img src={TitleImg} alt="Titleimg" />
+      <main className="flex max-w-[1176px] flex-col  px-28 ">
+        <section className="mt-28 flex  flex-col">
+          <div data-aos="zoom-in" className="flex justify-center">
+            <img
+              src={ChatBubble1}
+              alt="Titleimg"
+              className=" h-[124px] max-w-[668px]"
+            />
+          </div>
+          <div className="mt-8 flex ">
+            <div data-aos="zoom-in" className=" inline-block max-w-[432px]">
+              <img src={ChatBubble2} alt="Titleimg" className="h-[124px]" />
+            </div>
+            <div
+              data-aos="zoom-in"
+              data-aos-delay="100"
+              className="mt-8 inline-block max-w-[560px] pl-4"
+            >
+              <img src={ChatBubble3} alt="Titleimg" />
+            </div>
+          </div>
+          <img src={painTitlepeople} alt="Titleimg" className=" p-8 " />
         </section>
 
         <section className="mt-80 flex flex-col items-center">
@@ -82,11 +111,13 @@ function LandingPage(): JSX.Element {
             我們為提供您能更安心選擇寵物旅館
           </p>
         </section>
-        {renderInfo(0)}
-        <img src={Divider1} alt="brimg" className="mt-24" />
-        {renderInfo(1)}
-        <img src={Divider2} alt="brimg" className="mt-24" />
-        {renderInfo(2)}
+        <div className="flex flex-col items-center">
+          {renderInfo(0)}
+          <img src={Divider1} alt="brimg" className="mt-24" />
+          {renderInfo(1)}
+          <img src={Divider2} alt="brimg" className="mt-24" />
+          {renderInfo(2)}
+        </div>
       </main>
 
       <div className="my-36 flex flex-col items-center">
