@@ -4,7 +4,7 @@ import ComponentProvicer from "./context";
 
 import Nav from "./Layout/Nav";
 import Home from "./pages/Home";
-import LandingPage from "./pages/LandingPage ";
+import LandingPage from "./pages/LandingPage/index";
 import UserForgetPassword from "./pages/User/UserForgetPassword";
 import UserLogin from "./pages/User/UserLogin";
 import UserModifyPassword from "./pages/User/UserModifyPassword";
