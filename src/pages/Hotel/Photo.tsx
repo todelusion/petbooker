@@ -1,4 +1,3 @@
-import React from "react";
 import type { IHotel } from "./index";
 
 interface IPhotoProps {

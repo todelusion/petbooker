@@ -1,10 +1,8 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Routes, Route } from "react-router-dom";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import ComponentProvicer from "./context";
 
 import Nav from "./Layout/Nav";
-import ContextTest from "./pages/ContextTest";
 import Home from "./pages/Home";
 import LandingPage from "./pages/LandingPage ";
 import UserForgetPassword from "./pages/User/UserForgetPassword";
@@ -42,8 +40,17 @@ export default function Router(): JSX.Element {
           }
         >
           <Route path="/" element={<LandingPage />} />
+          <Route
+            path="*"
+            element={
+              <Fail
+                title="伺服器施工中"
+                text="伺服器施工中，如有造成不便敬請見諒"
+                button
+              />
+            }
+          />
           <Route path="/home" element={<Home />} />
-          <Route path="/contextTest" element={<ContextTest />} />
           <Route path="/hotel/:id" element={<Hotel />} />
           <Route
             path="/hotel/book/:roomid/:roomname/:price"

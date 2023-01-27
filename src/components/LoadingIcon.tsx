@@ -1,5 +1,3 @@
-import { AnimatePresence } from "framer-motion";
-import React from "react";
 import MotionFade from "../containers/MotionFade";
 import { LoadingPath, Loading } from "../img/icons";
 

@@ -1,22 +1,20 @@
-import React, { useEffect, useState } from "react";
+import { useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { format } from "date-fns";
 import { AnimatePresence } from "framer-motion";
-import DropDownList from "../components/DropDownList";
+import { useNavigate } from "react-router-dom";
 import Filter from "../containers/Filter";
 import HotelCard from "../components/HotelCard";
 import SearchBar from "../containers/SearchBar";
-import StatusModal from "../Layout/StatusModal";
-import useModal from "../hooks/useModal";
 import useFilter from "../hooks/useFilter";
 import useSearchBar from "../hooks/useSearchBar";
-import { ISearchBarContextProps } from "../context/SearchBarContext";
-import { IFilterContextProps } from "../context/FilterContext";
 import { useHotelList } from "../utils/api/home";
 
 import MotionFade from "../containers/MotionFade";
 import PageNums from "../components/PageNums";
 import LoadingScreen from "../components/LoadingModal";
+import Fail from "./Customer/CustomerBook/Fail/Fail";
+import errorNavigate from "../hooks/errorNavigate";
 
 function Home(): JSX.Element {
   const [current, setCurrent] = useState(1);
@@ -25,7 +23,7 @@ function Home(): JSX.Element {
   const { Facilities, FoodTypes, PetType, RoomPrices, Services, Specials } =
     useFilter();
 
-  const { data } = useHotelList({
+  const { data, isError } = useHotelList({
     AreaId: Number(area.value),
     PetType,
     FoodTypes,
@@ -36,6 +34,8 @@ function Home(): JSX.Element {
     Page: current,
     PageSize: 5,
   });
+
+  errorNavigate(isError);
 
   return (
     <div className="relative mx-auto flex w-full max-w-[1440px] items-start justify-evenly px-20 pt-40 pb-28">

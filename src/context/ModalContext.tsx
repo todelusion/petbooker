@@ -1,4 +1,4 @@
-import React, { createContext, useMemo } from "react";
+import { createContext, useMemo } from "react";
 import usePending, { IModalProps } from "../hooks/usePending";
 
 export const ModalContext = createContext<IModalProps | null>(null);

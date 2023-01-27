@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import { useContext } from "react";
 import { FilterContext, IFilterContextProps } from "../context/FilterContext";
 
 const useFilter = (): IFilterContextProps => {

@@ -1,4 +1,3 @@
-import React from "react";
 import { FilterProvider } from "./FilterContext";
 import { SearchBarProvider } from "./SearchBarContext";
 

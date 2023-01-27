@@ -1,10 +1,7 @@
-import React, { useContext, useState } from "react";
-import axios from "axios";
-import { useQueryClient } from "@tanstack/react-query";
+import { useState } from "react";
 import { AnimatePresence } from "framer-motion";
 import { commentList } from "../../../components/Order/data";
 
-import UserAuth from "../../../context/UserAuthContext";
 import Button from "../../../components/Button";
 import { customerOrder } from "../../../types/schema";
 import CommentPopup from "./CommentPopup";
@@ -14,8 +11,6 @@ interface ICommentProps {
 }
 
 function Comment({ data }: ICommentProps): JSX.Element {
-  const { authToken } = useContext(UserAuth);
-
   const [open, setOpen] = useState(false);
   const [orderId, setOrderId] = useState(0);
   const [selectState, setSelectState] = useState("checkOut");

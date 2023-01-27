@@ -1,5 +1,3 @@
-import { useReducer } from "react";
-
 export const initPet = {
   PetPhoto: "",
   PetPersonality: "",

@@ -1,25 +1,17 @@
-import React, { useCallback, useContext, useEffect, useReducer } from "react";
+import React, { useCallback, useEffect, useReducer } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronUp, faChevronDown } from "@fortawesome/free-solid-svg-icons";
 import { AnimatePresence, motion } from "framer-motion";
 
 import { useLocation } from "react-router-dom";
 import { useQueryClient } from "@tanstack/react-query";
-import {
-  searchPath,
-  mapPinPath,
-  calendarPath,
-  creditCardPath,
-} from "../../img/icons";
-import Button from "../../components/Button";
+import { mapPinPath, calendarPath, creditCardPath } from "../../img/icons";
 import DatePicker from "./DatePicker";
 import CountryList from "./CountryList";
 import PetCardSmall from "./PetCardSmall";
 import useSearchBar from "../../hooks/useSearchBar";
 import getCountry from "../../utils/getCountry";
 import { tryCatch } from "../../utils";
-import UserAuth from "../../context/UserAuthContext";
-import { usePetList } from "../../utils/api/petCard";
 
 export type SearchBarAction =
   | {

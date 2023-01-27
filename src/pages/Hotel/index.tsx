@@ -2,12 +2,10 @@ import { NavigateFunction, useNavigate, useParams } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper";
 import { AnimatePresence } from "framer-motion";
-import React, { useContext, useEffect, useLayoutEffect } from "react";
-import { format } from "date-fns";
+import React, { useContext, useEffect } from "react";
 import { useQueryClient } from "@tanstack/react-query";
-import { Hotels } from "../../components/HotelCard/data";
 import Comment from "./Comment";
-import { Comments as comments, IRoom, Rooms as rooms } from "./data";
+import { IRoom } from "./data";
 import SearchBar from "../../containers/SearchBar";
 import Photo from "./Photo";
 import Info from "./Info";
@@ -25,7 +23,6 @@ import useModal from "../../hooks/useModal";
 import { ISearchBarContextProps } from "../../context/SearchBarContext";
 import { PendingAction } from "../../hooks/usePending";
 import UserAuth from "../../context/UserAuthContext";
-import useFilter from "../../hooks/useFilter";
 import LoadingScreen from "../../components/LoadingModal";
 
 export interface IHotel {
@@ -81,7 +78,6 @@ function Hotel(): JSX.Element {
   const { selection } = useSearchBar();
   const { dispatchPending } = useModal();
   const { authToken, identity } = useContext(UserAuth);
-  const { PetType } = useFilter();
   const queryClient = useQueryClient();
 
   const navigate = useNavigate();

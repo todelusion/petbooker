@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { AnimatePresence } from "framer-motion";
 import Button from "../../../components/Button";
 import Comment from "./Comment";

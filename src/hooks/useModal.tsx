@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import { ModalContext } from "../context/ModalContext";
-import { IModalProps, InitialPending } from "./usePending";
+import { IModalProps } from "./usePending";
 
 const useModal = (): IModalProps => {
   const context = useContext(ModalContext);
