@@ -35,6 +35,7 @@ function Home(): JSX.Element {
     Page: current,
     PageSize: 5,
   });
+  console.log(data, isError);
 
   if (isError) {
     navigae("/404");

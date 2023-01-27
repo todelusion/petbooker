@@ -13,20 +13,21 @@ import { AxiosTryCatch, baseURL } from "../index";
 
 export const useHotelList = (body: Filter) =>
   useQuery(["HotelList"], async () => {
-    try {
-      axiosMiddleware();
-      const res = await axios.post(`${baseURL}/hotel/hotelFilter`, body);
-
-      console.log(res, "start parse");
-      const result = HotelListSchema.safeParse(res.data);
-      if (result.success) {
-        return result.data;
-      }
-      return undefined;
-    } catch (error) {
-      console.log(error);
-      return undefined;
-    }
+    const instance = axios.create();
+    axiosMiddleware(instance);
+    return instance
+      .post(`${baseURL}/hotel/hotelFilter`, body)
+      .then((res) => {
+        const result = HotelListSchema.safeParse(res.data);
+        if (result.success) {
+          return result.data;
+        }
+        return undefined;
+      })
+      .catch((err) => {
+        console.log(err);
+        throw new Error(err);
+      });
   });
 
 export const useHotel = (id: string, startDate: Date, endDate: Date) => {

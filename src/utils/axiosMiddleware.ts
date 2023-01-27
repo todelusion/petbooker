@@ -1,10 +1,14 @@
-import axios from "axios";
+import { AxiosInstance } from "axios";
 
-const axiosMiddleware = (): void => {
-  axios.interceptors.response.use(
-    (response) => response,
+const axiosMiddleware = (instance: AxiosInstance): void => {
+  instance.interceptors.response.use(
+    (response) => {
+      console.log(response);
+      return response;
+    },
     async (error) => {
-      await Promise.reject(error);
+      console.log(error);
+      return Promise.reject(error);
     }
   );
 };
