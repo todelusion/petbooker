@@ -18,6 +18,7 @@ import errorNavigate from "../hooks/errorNavigate";
 
 function Home(): JSX.Element {
   const [current, setCurrent] = useState(1);
+  const navigae = useNavigate();
   const queryClient = useQueryClient();
   const { selection, area } = useSearchBar();
   const { Facilities, FoodTypes, PetType, RoomPrices, Services, Specials } =
@@ -35,7 +36,9 @@ function Home(): JSX.Element {
     PageSize: 5,
   });
 
-  errorNavigate(isError);
+  if (isError) {
+    navigae("/404");
+  }
 
   return (
     <div className="relative mx-auto flex w-full max-w-[1440px] items-start justify-evenly px-20 pt-40 pb-28">

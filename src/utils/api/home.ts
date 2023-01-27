@@ -8,22 +8,25 @@ import {
   HotelListSchema,
   HotelSchema,
 } from "../../types/schema";
+import axiosMiddleware from "../axiosMiddleware";
 import { AxiosTryCatch, baseURL } from "../index";
 
 export const useHotelList = (body: Filter) =>
   useQuery(["HotelList"], async () => {
-    const data = await AxiosTryCatch(async () =>
-      axios.post(`${baseURL}/hotel/hotelFilter`, body)
-    );
+    try {
+      axiosMiddleware();
+      const res = await axios.post(`${baseURL}/hotel/hotelFilter`, body);
 
-    if (data === undefined) return undefined;
-    const result = HotelListSchema.safeParse(data);
-    if (result.success) {
-      return result.data;
+      console.log(res, "start parse");
+      const result = HotelListSchema.safeParse(res.data);
+      if (result.success) {
+        return result.data;
+      }
+      return undefined;
+    } catch (error) {
+      console.log(error);
+      return undefined;
     }
-    console.error(result.error);
-
-    return undefined;
   });
 
 export const useHotel = (id: string, startDate: Date, endDate: Date) => {
