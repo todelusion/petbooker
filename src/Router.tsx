@@ -40,6 +40,16 @@ export default function Router(): JSX.Element {
           }
         >
           <Route path="/" element={<LandingPage />} />
+          <Route
+            path="*"
+            element={
+              <Fail
+                title="伺服器施工中"
+                text="伺服器施工中，如有造成不便敬請見諒"
+                button
+              />
+            }
+          />
           <Route path="/home" element={<Home />} />
           <Route path="/hotel/:id" element={<Hotel />} />
           <Route
