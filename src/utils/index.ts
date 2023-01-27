@@ -60,7 +60,6 @@ export const AxiosTryCatch = async <T>(
 ): Promise<T | undefined> => {
   try {
     const res = await callback();
-
     return res.data;
   } catch (error) {
     console.log(error);

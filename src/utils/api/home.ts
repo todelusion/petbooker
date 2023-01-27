@@ -16,6 +16,7 @@ export const useHotelList = (body: Filter) =>
       axios.post(`${baseURL}/hotel/hotelFilter`, body)
     );
 
+    if (data === undefined) return undefined;
     const result = HotelListSchema.safeParse(data);
     if (result.success) {
       return result.data;
