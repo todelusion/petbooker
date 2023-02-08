@@ -9,7 +9,7 @@ import Evaluation from "../../img/Evaluation.png";
 import PetcityIcon from "../../img/PetcityIcon.svg";
 import Divider1 from "../../img/Divider1.svg";
 import Divider2 from "../../img/Divider2.svg";
-import painTitlepeople from "../../img/painTitlepeople.svg";
+import painTitlepeople from "../../img/paintitlepeople.svg";
 import ChatBubble2 from "../../img/ChatBubble2.svg";
 import ChatBubble3 from "../../img/ChatBubble3.svg";
 import ChatBubble1 from "../../img/ChatBubble1.svg";
