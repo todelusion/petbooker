@@ -17,14 +17,13 @@ export const useHotelList = (body: Filter) =>
       axiosMiddleware();
       const res = await axios.post(`${baseURL}/hotel/hotelFilter`, body);
 
-      console.log(res, "start parse");
       const result = HotelListSchema.safeParse(res.data);
       if (result.success) {
         return result.data;
       }
       return undefined;
     } catch (error) {
-      console.log(error);
+      console.error(error);
       return undefined;
     }
   });
